@@ -17,11 +17,12 @@ const (
 )
 
 type Compiler struct {
-	pkgName    string
-	pkgNameDot string
-	outDir     string
-	uniq       map[string]bool
-	nodes      []*node
+	pkg     string
+	pkgDot  string
+	pkgName string
+	outDir  string
+	uniq    map[string]bool
+	nodes   []*node
 }
 
 type node struct {
@@ -35,12 +36,12 @@ type node struct {
 	slct *node
 }
 
-func NewCompiler(pkgName, outDir string) *Compiler {
+func NewCompiler(pkg, outDir string) *Compiler {
 	c := Compiler{
-		pkgName:    pkgName,
-		pkgNameDot: pkgName + ".",
-		outDir:     outDir,
-		uniq:       make(map[string]bool),
+		pkg:    pkg,
+		pkgDot: pkg + ".",
+		outDir: outDir,
+		uniq:   make(map[string]bool),
 	}
 	return &c
 }
@@ -51,13 +52,14 @@ func (c *Compiler) String() string {
 
 func (c *Compiler) Compile() error {
 	var conf loader.Config
-	conf.Import(c.pkgName)
+	conf.Import(c.pkg)
 	prog, err := conf.Load()
 	if err != nil {
 		return err
 	}
 
-	pkg := prog.Package(c.pkgName)
+	pkg := prog.Package(c.pkg)
+	c.pkgName = pkg.Pkg.Name()
 	err = c.parsePkg(pkg)
 	if err != nil {
 		return err
@@ -88,7 +90,7 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 func (c *Compiler) parseType(t types.Type) (*node, error) {
 	node := &node{
 		typ:  typeBasic,
-		typn: strings.Replace(t.String(), c.pkgNameDot, "", 1),
+		typn: strings.Replace(t.String(), c.pkgDot, "", 1),
 		ptr:  false,
 	}
 
