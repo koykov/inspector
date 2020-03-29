@@ -2,6 +2,7 @@ package inspector
 
 import (
 	"go/types"
+	"strings"
 
 	"golang.org/x/tools/go/loader"
 )
@@ -16,10 +17,11 @@ const (
 )
 
 type Compiler struct {
-	pkgName string
-	outDir  string
-	uniq    map[string]bool
-	nodes   []*node
+	pkgName    string
+	pkgNameDot string
+	outDir     string
+	uniq       map[string]bool
+	nodes      []*node
 }
 
 type node struct {
@@ -35,9 +37,10 @@ type node struct {
 
 func NewCompiler(pkgName, outDir string) *Compiler {
 	c := Compiler{
-		pkgName: pkgName,
-		outDir:  outDir,
-		uniq:    make(map[string]bool),
+		pkgName:    pkgName,
+		pkgNameDot: pkgName + ".",
+		outDir:     outDir,
+		uniq:       make(map[string]bool),
 	}
 	return &c
 }
@@ -85,7 +88,7 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 func (c *Compiler) parseType(t types.Type) (*node, error) {
 	node := &node{
 		typ:  typeBasic,
-		typn: t.String(),
+		typn: strings.Replace(t.String(), c.pkgNameDot, "", 1),
 		ptr:  false,
 	}
 
@@ -109,6 +112,9 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 				return node, err
 			}
 			ch.name = f.Name()
+			if ch.ptr {
+				ch.typn = "*" + ch.name
+			}
 			node.chld = append(node.chld, ch)
 		}
 		return node, nil
