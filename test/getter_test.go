@@ -1,10 +1,12 @@
-package inspector
+package test
 
 import (
 	"bytes"
 	"testing"
 
+	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
+	"github.com/koykov/inspector/testobj_ins"
 )
 
 var (
@@ -47,9 +49,7 @@ var (
 	expectComment = []byte("pay for domain")
 )
 
-func testReflect(t testing.TB) {
-	i := ReflectInspector{}
-
+func testGetter(t testing.TB, i inspector.Inspector) {
 	id := i.Get(testO, "Id")
 	if id.(string) != "foo" {
 		t.Error("object.Id: mismatch result and expectation")
@@ -87,12 +87,27 @@ func testReflect(t testing.TB) {
 }
 
 func TestReflectInspector_Get(t *testing.T) {
-	testReflect(t)
+	ins := &inspector.ReflectInspector{}
+	testGetter(t, ins)
 }
 
 func BenchmarkReflectInspector_Get(b *testing.B) {
+	ins := &inspector.ReflectInspector{}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		testReflect(b)
+		testGetter(b, ins)
+	}
+}
+
+func TestCompiledInspector_Get(t *testing.T) {
+	ins := &testobj_ins.TestObjectInspector{}
+	testGetter(t, ins)
+}
+
+func BenchmarkCompiledInspector_Get(b *testing.B) {
+	ins := &testobj_ins.TestObjectInspector{}
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		testGetter(b, ins)
 	}
 }

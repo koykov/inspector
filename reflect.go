@@ -6,9 +6,11 @@ import (
 	"strconv"
 )
 
-type ReflectInspector struct{}
+type ReflectInspector struct {
+	BaseInspector
+}
 
-func (i ReflectInspector) Get(src interface{}, path ...string) interface{} {
+func (i *ReflectInspector) Get(src interface{}, path ...string) interface{} {
 	var (
 		r interface{}
 		c int
@@ -24,11 +26,11 @@ func (i ReflectInspector) Get(src interface{}, path ...string) interface{} {
 	return r
 }
 
-func (i ReflectInspector) Set(dst, value interface{}, path ...string) {
+func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {
 	// Empty method, there is no way to update data using reflection.
 }
 
-func (i ReflectInspector) inspect(node interface{}, key string) interface{} {
+func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 	v := reflect.ValueOf(node)
 	switch v.Kind() {
 	case reflect.Ptr:

@@ -17,10 +17,11 @@ type TestFinance struct {
 }
 
 type TestObject struct {
-	Id         string
-	Name       []byte
-	Cost       float64
-	Permission *TestPermission
-	Flags      TestFlag
-	Finance    *TestFinance
+	Id          string
+	Name        []byte
+	Cost        float64
+	Permission  *TestPermission
+	HistoryTree map[string]*TestHistory
+	Flags       TestFlag
+	Finance     *TestFinance
 }
