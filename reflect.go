@@ -10,7 +10,7 @@ type ReflectInspector struct {
 	BaseInspector
 }
 
-func (i *ReflectInspector) Get(src, buf interface{}, path ...string) interface{} {
+func (i *ReflectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var (
 		r interface{}
 		c int
@@ -23,7 +23,13 @@ func (i *ReflectInspector) Get(src, buf interface{}, path ...string) interface{}
 	if c < len(path)-1 {
 		r = nil
 	}
-	return r
+	return r, nil
+}
+
+func (i *ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...string) error {
+	var err error
+	*buf, err = i.Get(src, path...)
+	return err
 }
 
 func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {

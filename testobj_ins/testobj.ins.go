@@ -141,12 +141,18 @@ type TestObjectInspector struct {
 	inspector.BaseInspector
 }
 
-func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interface{} {
+func (i3 *TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
+	var buf interface{}
+	err := i3.GetTo(src, &buf, path...)
+	return buf, err
+}
+
+func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if len(path) == 0 {
-		return nil
+		return
 	}
 	if src == nil {
-		return nil
+		return
 	}
 	var x *testobj.TestObject
 	if p, ok := src.(*testobj.TestObject); ok {
@@ -154,35 +160,35 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 	} else if v, ok := src.(testobj.TestObject); ok {
 		x = &v
 	} else {
-		return nil
+		return
 	}
 
 	if len(path) > 0 {
 		if path[0] == "Id" {
-			buf = &x.Id
-			return buf
+			*buf = &x.Id
+			return
 		}
 		if path[0] == "Name" {
-			buf = &x.Name
-			return buf
+			*buf = &x.Name
+			return
 		}
 		if path[0] == "Cost" {
-			buf = &x.Cost
-			return buf
+			*buf = &x.Cost
+			return
 		}
 		if path[0] == "Permission" {
 			x0 := x.Permission
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
-					return nil
+					return
 				}
 				j, _ := strconv.Atoi(path[1])
 				k := int32(j)
 				x1 := (*x0)[k]
 				_ = x1
-				buf = &x1
-				return buf
+				*buf = &x1
+				return
 			}
 		}
 		if path[0] == "HistoryTree" {
@@ -193,19 +199,19 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 					_ = x1
 					if len(path) > 2 {
 						if x1 == nil {
-							return buf
+							return
 						}
 						if path[2] == "DateUnix" {
-							buf = &x1.DateUnix
-							return buf
+							*buf = &x1.DateUnix
+							return
 						}
 						if path[2] == "Cost" {
-							buf = &x1.Cost
-							return buf
+							*buf = &x1.Cost
+							return
 						}
 						if path[2] == "Comment" {
-							buf = &x1.Comment
-							return buf
+							*buf = &x1.Comment
+							return
 						}
 					}
 				}
@@ -217,8 +223,8 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 			if len(path) > 1 {
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
-					buf = &x1
-					return buf
+					*buf = &x1
+					return
 				}
 			}
 		}
@@ -227,19 +233,19 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
-					return buf
+					return
 				}
 				if path[1] == "MoneyIn" {
-					buf = &x0.MoneyIn
-					return buf
+					*buf = &x0.MoneyIn
+					return
 				}
 				if path[1] == "MoneyOut" {
-					buf = &x0.MoneyOut
-					return buf
+					*buf = &x0.MoneyOut
+					return
 				}
 				if path[1] == "Balance" {
-					buf = &x0.Balance
-					return buf
+					*buf = &x0.Balance
+					return
 				}
 				if path[1] == "History" {
 					x1 := x0.History
@@ -253,16 +259,16 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
-									buf = &x2.DateUnix
-									return buf
+									*buf = &x2.DateUnix
+									return
 								}
 								if path[3] == "Cost" {
-									buf = &x2.Cost
-									return buf
+									*buf = &x2.Cost
+									return
 								}
 								if path[3] == "Comment" {
-									buf = &x2.Comment
-									return buf
+									*buf = &x2.Comment
+									return
 								}
 							}
 						}
@@ -271,7 +277,7 @@ func (i3 *TestObjectInspector) Get(src, buf interface{}, path ...string) interfa
 			}
 		}
 	}
-	return nil
+	return
 }
 
 func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) {

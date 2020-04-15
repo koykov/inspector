@@ -49,92 +49,90 @@ var (
 	expectComment = []byte("pay for domain")
 )
 
-func testGetter(t testing.TB, i inspector.Inspector, buf interface{}) {
-	id := i.Get(testO, buf, "Id")
+func testGetter(t testing.TB, i inspector.Inspector) {
+	id, _ := i.Get(testO, "Id")
 	if id.(string) != "foo" {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	name := i.Get(testO, buf, "Name")
+	name, _ := i.Get(testO, "Name")
 	if !bytes.Equal(name.([]byte), expectFoo) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	perm := i.Get(testO, buf, "Permission", "23")
+	perm, _ := i.Get(testO, "Permission", "23")
 	if perm.(bool) != false {
 		t.Error("object.Permission.23: mismatch result and expectation")
 	}
 
-	flag := i.Get(testO, buf, "Flags", "export")
+	flag, _ := i.Get(testO, "Flags", "export")
 	if flag.(int32) != 17 {
 		t.Error("object.Flags.export: mismatch result and expectation")
 	}
 
-	bal := i.Get(testO, buf, "Finance", "Balance")
+	bal, _ := i.Get(testO, "Finance", "Balance")
 	if bal.(float64) != 9000 {
 		t.Error("object.Finance.Balance: mismatch result and expectation")
 	}
 
-	date := i.Get(testO, buf, "Finance", "History", "1", "DateUnix")
+	date, _ := i.Get(testO, "Finance", "History", "1", "DateUnix")
 	if date.(int64) != 153465345246 {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	comment := i.Get(testO, buf, "Finance", "History", "0", "Comment")
+	comment, _ := i.Get(testO, "Finance", "History", "0", "Comment")
 	if !bytes.Equal(comment.([]byte), expectComment) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}
 }
 
 func testGetterPtr(t testing.TB, i inspector.Inspector, buf interface{}) {
-	buf = i.Get(testO, buf, "Id")
+	_ = i.GetTo(testO, &buf, "Id")
 	if *buf.(*string) != "foo" {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	name := i.Get(testO, buf, "Name")
-	if !bytes.Equal(*name.(*[]byte), expectFoo) {
+	_ = i.GetTo(testO, &buf, "Name")
+	if !bytes.Equal(*buf.(*[]byte), expectFoo) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	perm := i.Get(testO, buf, "Permission", "23")
-	if *perm.(*bool) != false {
+	_ = i.GetTo(testO, &buf, "Permission", "23")
+	if *buf.(*bool) != false {
 		t.Error("object.Permission.23: mismatch result and expectation")
 	}
 
-	flag := i.Get(testO, buf, "Flags", "export")
-	if *flag.(*int32) != 17 {
+	_ = i.GetTo(testO, &buf, "Flags", "export")
+	if *buf.(*int32) != 17 {
 		t.Error("object.Flags.export: mismatch result and expectation")
 	}
 
-	bal := i.Get(testO, buf, "Finance", "Balance")
-	if *bal.(*float64) != 9000 {
+	_ = i.GetTo(testO, &buf, "Finance", "Balance")
+	if *buf.(*float64) != 9000 {
 		t.Error("object.Finance.Balance: mismatch result and expectation")
 	}
 
-	date := i.Get(testO, buf, "Finance", "History", "1", "DateUnix")
-	if *date.(*int64) != 153465345246 {
+	_ = i.GetTo(testO, &buf, "Finance", "History", "1", "DateUnix")
+	if *buf.(*int64) != 153465345246 {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	comm := i.Get(testO, buf, "Finance", "History", "0", "Comment")
-	if !bytes.Equal(*comm.(*[]byte), expectComment) {
+	_ = i.GetTo(testO, &buf, "Finance", "History", "0", "Comment")
+	if !bytes.Equal(*buf.(*[]byte), expectComment) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}
 }
 
 func TestReflectInspector_Get(t *testing.T) {
-	var buf interface{}
 	ins := &inspector.ReflectInspector{}
-	testGetter(t, ins, buf)
+	testGetter(t, ins)
 }
 
 func BenchmarkReflectInspector_Get(b *testing.B) {
-	var buf interface{}
 	ins := &inspector.ReflectInspector{}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		testGetter(b, ins, buf)
+		testGetter(b, ins)
 	}
 }
 

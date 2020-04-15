@@ -3,7 +3,8 @@ package inspector
 import "errors"
 
 type Inspector interface {
-	Get(src, buf interface{}, path ...string) interface{}
+	Get(src interface{}, path ...string) (interface{}, error)
+	GetTo(src interface{}, buf *interface{}, path ...string) error
 	Set(dst, value interface{}, path ...string)
 }
 
