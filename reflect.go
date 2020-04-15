@@ -10,7 +10,7 @@ type ReflectInspector struct {
 	BaseInspector
 }
 
-func (i *ReflectInspector) Get(src interface{}, path ...string) interface{} {
+func (i *ReflectInspector) Get(src, buf interface{}, path ...string) interface{} {
 	var (
 		r interface{}
 		c int

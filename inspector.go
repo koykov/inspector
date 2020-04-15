@@ -3,11 +3,13 @@ package inspector
 import "errors"
 
 type Inspector interface {
-	Get(src interface{}, path ...string) interface{}
+	Get(src, buf interface{}, path ...string) interface{}
 	Set(dst, value interface{}, path ...string)
 }
 
-type BaseInspector struct{}
+type BaseInspector struct {
+	Ebuf interface{}
+}
 
 func (i *BaseInspector) StrTo(s, typ string) (interface{}, error) {
 	if f, ok := conv[typ]; ok {
