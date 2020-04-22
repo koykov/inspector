@@ -12,56 +12,56 @@ type TestFinanceInspector struct {
 }
 
 func (i0 *TestFinanceInspector) Get(src, buf interface{}, path ...string) interface{} {
-	if len(path) == 0 {
-		return nil
-	}
-	if src == nil {
-		return nil
-	}
-	var x *testobj.TestFinance
-	if p, ok := src.(*testobj.TestFinance); ok {
-		x = p
-	} else if v, ok := src.(testobj.TestFinance); ok {
-		x = &v
-	} else {
-		return nil
-	}
-
-	if len(path) > 0 {
-		if path[0] == "MoneyIn" {
-			return x.MoneyIn
-		}
-		if path[0] == "MoneyOut" {
-			return x.MoneyOut
-		}
-		if path[0] == "Balance" {
-			return x.Balance
-		}
-		if path[0] == "History" {
-			x0 := x.History
-			_ = x0
-			if len(path) > 1 {
-				if k, err := i0.StrTo(path[1], "int"); err == nil {
-					i := k.(int)
-					if len(x0) > i {
-						x1 := x0[i]
-						_ = x1
-						if len(path) > 2 {
-							if path[2] == "DateUnix" {
-								return x1.DateUnix
-							}
-							if path[2] == "Cost" {
-								return x1.Cost
-							}
-							if path[2] == "Comment" {
-								return x1.Comment
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	// if len(path) == 0 {
+	// 	return nil
+	// }
+	// if src == nil {
+	// 	return nil
+	// }
+	// var x *testobj.TestFinance
+	// if p, ok := src.(*testobj.TestFinance); ok {
+	// 	x = p
+	// } else if v, ok := src.(testobj.TestFinance); ok {
+	// 	x = &v
+	// } else {
+	// 	return nil
+	// }
+	//
+	// if len(path) > 0 {
+	// 	if path[0] == "MoneyIn" {
+	// 		return x.MoneyIn
+	// 	}
+	// 	if path[0] == "MoneyOut" {
+	// 		return x.MoneyOut
+	// 	}
+	// 	if path[0] == "Balance" {
+	// 		return x.Balance
+	// 	}
+	// 	if path[0] == "History" {
+	// 		x0 := x.History
+	// 		_ = x0
+	// 		if len(path) > 1 {
+	// 			if k, err := i0.StrTo(path[1], "int"); err == nil {
+	// 				i := k.(int)
+	// 				if len(x0) > i {
+	// 					x1 := x0[i]
+	// 					_ = x1
+	// 					if len(path) > 2 {
+	// 						if path[2] == "DateUnix" {
+	// 							return x1.DateUnix
+	// 						}
+	// 						if path[2] == "Cost" {
+	// 							return x1.Cost
+	// 						}
+	// 						if path[2] == "Comment" {
+	// 							return x1.Comment
+	// 						}
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 	return nil
 }
 
@@ -183,8 +183,9 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 				if x0 == nil {
 					return
 				}
+				var k int32
 				t, _ := strconv.ParseInt(path[1], 0, 0)
-				k := int32(t)
+				k = int32(t)
 				x1 := (*x0)[k]
 				_ = x1
 				*buf = &x1
@@ -251,8 +252,9 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 					x1 := x0.History
 					_ = x1
 					if len(path) > 2 {
+						var k int32
 						t, _ := strconv.ParseInt(path[2], 0, 0)
-						k := int32(t)
+						k = int32(t)
 						if len(x1) > int(k) {
 							x2 := x1[k]
 							_ = x2
@@ -287,28 +289,28 @@ type TestPermissionInspector struct {
 }
 
 func (i4 *TestPermissionInspector) Get(src, buf interface{}, path ...string) interface{} {
-	if len(path) == 0 {
-		return nil
-	}
-	if src == nil {
-		return nil
-	}
-	var x *testobj.TestPermission
-	if p, ok := src.(*testobj.TestPermission); ok {
-		x = p
-	} else if v, ok := src.(testobj.TestPermission); ok {
-		x = &v
-	} else {
-		return nil
-	}
-
-	if len(path) > 0 {
-		if k, err := i4.StrTo(path[0], "int32"); err == nil {
-			x0 := (*x)[k.(int32)]
-			_ = x0
-			return x0
-		}
-	}
+	// if len(path) == 0 {
+	// 	return nil
+	// }
+	// if src == nil {
+	// 	return nil
+	// }
+	// var x *testobj.TestPermission
+	// if p, ok := src.(*testobj.TestPermission); ok {
+	// 	x = p
+	// } else if v, ok := src.(testobj.TestPermission); ok {
+	// 	x = &v
+	// } else {
+	// 	return nil
+	// }
+	//
+	// if len(path) > 0 {
+	// 	if k, err := i4.StrTo(path[0], "int32"); err == nil {
+	// 		x0 := (*x)[k.(int32)]
+	// 		_ = x0
+	// 		return x0
+	// 	}
+	// }
 	return nil
 }
 
