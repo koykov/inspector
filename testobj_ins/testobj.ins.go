@@ -183,8 +183,8 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 				if x0 == nil {
 					return
 				}
-				j, _ := strconv.Atoi(path[1])
-				k := int32(j)
+				t, _ := strconv.ParseInt(path[1], 0, 0)
+				k := int32(t)
 				x1 := (*x0)[k]
 				_ = x1
 				*buf = &x1
@@ -251,11 +251,10 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 					x1 := x0.History
 					_ = x1
 					if len(path) > 2 {
-						j, _ := strconv.Atoi(path[2])
-						k := int32(j)
-						i := k
-						if len(x1) > int(i) {
-							x2 := x1[i]
+						t, _ := strconv.ParseInt(path[2], 0, 0)
+						k := int32(t)
+						if len(x1) > int(k) {
+							x2 := x1[k]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
