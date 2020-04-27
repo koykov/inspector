@@ -318,9 +318,15 @@ func (i3 *TestObjectInspector) GetUnsafe(src interface{}, path ...string) (unsaf
 				var k int32
 				t, _ := strconv.ParseInt(path[1], 0, 0)
 				k = int32(t)
-				x1 := (*x0)[k]
-				_ = x1
-				return unsafe.Pointer(&x1), 0, nil
+
+				typ := (*inspector.Typ)(unsafe.Pointer(&x0))
+				mt := (*inspector.Maptype)(unsafe.Pointer(&typ))
+				m := (*inspector.Hmap)(unsafe.Pointer(&x0))
+				rawP, _ := inspector.Mapaccess2(mt, m, unsafe.Pointer(&k))
+				// x1 := (*x0)[k]
+				// _ = x1
+				// return unsafe.Pointer(&x1), 0, nil
+				return rawP, 0, nil
 			}
 		}
 		if path[0] == "HistoryTree" {

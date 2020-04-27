@@ -172,23 +172,24 @@ func testGetterUnsafe(t testing.TB, i inspector.Inspector) {
 	}
 }
 
-func TestReflectInspector_Get(t *testing.T) {
-	ins := &inspector.ReflectInspector{}
-	testGetter(t, ins)
-}
-
-func BenchmarkReflectInspector_Get(b *testing.B) {
-	ins := &inspector.ReflectInspector{}
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testGetter(b, ins)
-	}
-}
+// func TestReflectInspector_Get(t *testing.T) {
+// 	ins := &inspector.ReflectInspector{}
+// 	testGetter(t, ins)
+// }
+//
+// func BenchmarkReflectInspector_Get(b *testing.B) {
+// 	ins := &inspector.ReflectInspector{}
+// 	b.ReportAllocs()
+// 	for i := 0; i < b.N; i++ {
+// 		testGetter(b, ins)
+// 	}
+// }
 
 func TestCompiledInspector_Get(t *testing.T) {
-	var buf interface{}
+	// var buf interface{}
 	ins := &testobj_ins.TestObjectInspector{}
-	testGetterPtr(t, ins, buf)
+	// testGetterPtr(t, ins, buf)
+	testGetterUnsafe(t, ins)
 }
 
 func BenchmarkCompiledInspector_Get(b *testing.B) {
