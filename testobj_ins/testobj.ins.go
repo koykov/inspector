@@ -2,6 +2,7 @@ package testobj_ins
 
 import (
 	"strconv"
+	"unsafe"
 
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -279,6 +280,126 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 		}
 	}
 	return
+}
+
+func (i3 *TestObjectInspector) GetUnsafe(src interface{}, path ...string) (unsafe.Pointer, uint, error) {
+	if len(path) == 0 {
+		return nil, 0, nil
+	}
+	if src == nil {
+		return nil, 0, nil
+	}
+	var x *testobj.TestObject
+	if p, ok := src.(*testobj.TestObject); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestObject); ok {
+		x = &v
+	} else {
+		return nil, 0, nil
+	}
+
+	if len(path) > 0 {
+		if path[0] == "Id" {
+			return unsafe.Pointer(&x.Id), 0, nil
+		}
+		if path[0] == "Name" {
+			return unsafe.Pointer(&x.Name), 0, nil
+		}
+		if path[0] == "Cost" {
+			return unsafe.Pointer(&x.Cost), 0, nil
+		}
+		if path[0] == "Permission" {
+			x0 := x.Permission
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil, 0, nil
+				}
+				var k int32
+				t, _ := strconv.ParseInt(path[1], 0, 0)
+				k = int32(t)
+				x1 := (*x0)[k]
+				_ = x1
+				return unsafe.Pointer(&x1), 0, nil
+			}
+		}
+		if path[0] == "HistoryTree" {
+			x0 := x.HistoryTree
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					if len(path) > 2 {
+						if x1 == nil {
+							return nil, 0, nil
+						}
+						if path[2] == "DateUnix" {
+							return unsafe.Pointer(&x1.DateUnix), 0, nil
+						}
+						if path[2] == "Cost" {
+							return unsafe.Pointer(&x1.Cost), 0, nil
+						}
+						if path[2] == "Comment" {
+							return unsafe.Pointer(&x1.Comment), 0, nil
+						}
+					}
+				}
+			}
+		}
+		if path[0] == "Flags" {
+			x0 := x.Flags
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					return unsafe.Pointer(&x1), 0, nil
+				}
+			}
+		}
+		if path[0] == "Finance" {
+			x0 := x.Finance
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil, 0, nil
+				}
+				if path[1] == "MoneyIn" {
+					return unsafe.Pointer(&x0.MoneyIn), 0, nil
+				}
+				if path[1] == "MoneyOut" {
+					return unsafe.Pointer(&x0.MoneyOut), 0, nil
+				}
+				if path[1] == "Balance" {
+					return unsafe.Pointer(&x0.Balance), 0, nil
+				}
+				if path[1] == "History" {
+					x1 := x0.History
+					_ = x1
+					if len(path) > 2 {
+						var k int32
+						t, _ := strconv.ParseInt(path[2], 0, 0)
+						k = int32(t)
+						if len(x1) > int(k) {
+							x2 := x1[k]
+							_ = x2
+							if len(path) > 3 {
+								if path[3] == "DateUnix" {
+									return unsafe.Pointer(&x2.DateUnix), 0, nil
+								}
+								if path[3] == "Cost" {
+									return unsafe.Pointer(&x2.Cost), 0, nil
+								}
+								if path[3] == "Comment" {
+									return unsafe.Pointer(&x2.Comment), 0, nil
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil, 0, nil
 }
 
 func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) {

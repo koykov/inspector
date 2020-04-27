@@ -3,6 +3,7 @@ package test
 import (
 	"bytes"
 	"testing"
+	"unsafe"
 
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -131,18 +132,58 @@ func testGetterPtr(t testing.TB, i inspector.Inspector, buf interface{}) {
 	}
 }
 
-// func TestReflectInspector_Get(t *testing.T) {
-// 	ins := &inspector.ReflectInspector{}
-// 	testGetter(t, ins)
-// }
-//
-// func BenchmarkReflectInspector_Get(b *testing.B) {
-// 	ins := &inspector.ReflectInspector{}
-// 	b.ReportAllocs()
-// 	for i := 0; i < b.N; i++ {
-// 		testGetter(b, ins)
-// 	}
-// }
+func testGetterUnsafe(t testing.TB, i inspector.Inspector) {
+	var (
+		val unsafe.Pointer
+	)
+	val, _, _ = i.GetUnsafe(testO, p0...)
+	if *(*string)(val) != "foo" {
+		t.Error("object.Id: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p1...)
+	if !bytes.Equal(*(*[]byte)(val), expectFoo) {
+		t.Error("object.Name: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p2...)
+	if *(*bool)(val) != false {
+		t.Error("object.Permission.23: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p3...)
+	if *(*int32)(val) != 17 {
+		t.Error("object.Flags.export: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p4...)
+	if *(*float64)(val) != 9000 {
+		t.Error("object.Finance.Balance: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p5...)
+	if *(*int64)(val) != 153465345246 {
+		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
+	}
+
+	val, _, _ = i.GetUnsafe(testO, p6...)
+	if !bytes.Equal(*(*[]byte)(val), expectComment) {
+		t.Error("object.Finance.History.0.Comment: mismatch result and expectation")
+	}
+}
+
+func TestReflectInspector_Get(t *testing.T) {
+	ins := &inspector.ReflectInspector{}
+	testGetter(t, ins)
+}
+
+func BenchmarkReflectInspector_Get(b *testing.B) {
+	ins := &inspector.ReflectInspector{}
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		testGetter(b, ins)
+	}
+}
 
 func TestCompiledInspector_Get(t *testing.T) {
 	var buf interface{}
@@ -152,10 +193,9 @@ func TestCompiledInspector_Get(t *testing.T) {
 
 func BenchmarkCompiledInspector_Get(b *testing.B) {
 	ins := &testobj_ins.TestObjectInspector{}
-	var buf interface{}
 
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		testGetterPtr(b, ins, buf)
+		testGetterUnsafe(b, ins)
 	}
 }
