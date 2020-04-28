@@ -13,37 +13,44 @@ type Inspector interface {
 
 type BaseInspector struct{}
 
-func (i *BaseInspector) StrConvSnippet(s, typ, _var string) (string, error) {
-	if snippet, ok := convSnippet[typ]; ok {
-		snippet := strings.Replace(snippet, "!{arg}", s, -1)
+type StrConv struct {
+	Snippet string
+	Import  []string
+}
+
+func StrConvSnippet(s, typ, _var string) (string, []string, error) {
+	if sc, ok := convSnippet[typ]; ok {
+		snippet := strings.Replace(sc.Snippet, "!{arg}", s, -1)
 		snippet = strings.Replace(snippet, "!{var}", _var, -1)
+		return snippet, sc.Import, nil
 	}
-	return "", ErrNoConvFunc
+	return "", nil, ErrNoConvFunc
 }
 
 var (
-	convSnippet = map[string]string{}
+	convSnippet = map[string]StrConv{}
 
 	ErrNoConvFunc = errors.New("convert function doesn't exists")
 )
 
-func RegisterStrToFunc(typ, snippet string) {
-	convSnippet[typ] = snippet
+func RegisterStrToFunc(typ, snippet string, imports []string) {
+	convSnippet[typ] = StrConv{snippet, imports}
 }
 
 func init() {
-	RegisterStrToFunc("int", strToIntSnippet("int"))
-	RegisterStrToFunc("int8", strToIntSnippet("int8"))
-	RegisterStrToFunc("int16", strToIntSnippet("int16"))
-	RegisterStrToFunc("int32", strToIntSnippet("int32"))
-	RegisterStrToFunc("int64", strToIntSnippet("int64"))
+	imp := []string{`"strconv"`}
+	RegisterStrToFunc("int", strToIntSnippet("int"), imp)
+	RegisterStrToFunc("int8", strToIntSnippet("int8"), imp)
+	RegisterStrToFunc("int16", strToIntSnippet("int16"), imp)
+	RegisterStrToFunc("int32", strToIntSnippet("int32"), imp)
+	RegisterStrToFunc("int64", strToIntSnippet("int64"), imp)
 
-	RegisterStrToFunc("uint", strToUintSnippet("uint"))
-	RegisterStrToFunc("uint8", strToUintSnippet("uint8"))
-	RegisterStrToFunc("uint16", strToUintSnippet("uint16"))
-	RegisterStrToFunc("uint32", strToUintSnippet("uint32"))
-	RegisterStrToFunc("uint64", strToUintSnippet("uint64"))
+	RegisterStrToFunc("uint", strToUintSnippet("uint"), imp)
+	RegisterStrToFunc("uint8", strToUintSnippet("uint8"), imp)
+	RegisterStrToFunc("uint16", strToUintSnippet("uint16"), imp)
+	RegisterStrToFunc("uint32", strToUintSnippet("uint32"), imp)
+	RegisterStrToFunc("uint64", strToUintSnippet("uint64"), imp)
 
-	RegisterStrToFunc("float32", strToFloatSnippet("float32"))
-	RegisterStrToFunc("float64", strToFloatSnippet("float64"))
+	RegisterStrToFunc("float32", strToFloatSnippet("float32"), imp)
+	RegisterStrToFunc("float64", strToFloatSnippet("float64"), imp)
 }
