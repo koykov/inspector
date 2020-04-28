@@ -131,18 +131,18 @@ func testGetterPtr(t testing.TB, i inspector.Inspector, buf interface{}) {
 	}
 }
 
-// func TestReflectInspector_Get(t *testing.T) {
-// 	ins := &inspector.ReflectInspector{}
-// 	testGetter(t, ins)
-// }
-//
-// func BenchmarkReflectInspector_Get(b *testing.B) {
-// 	ins := &inspector.ReflectInspector{}
-// 	b.ReportAllocs()
-// 	for i := 0; i < b.N; i++ {
-// 		testGetter(b, ins)
-// 	}
-// }
+func TestReflectInspector_Get(t *testing.T) {
+	ins := &inspector.ReflectInspector{}
+	testGetter(t, ins)
+}
+
+func BenchmarkReflectInspector_Get(b *testing.B) {
+	ins := &inspector.ReflectInspector{}
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		testGetter(b, ins)
+	}
+}
 
 func TestCompiledInspector_Get(t *testing.T) {
 	var buf interface{}
