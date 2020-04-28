@@ -3,13 +3,11 @@ package inspector
 import (
 	"errors"
 	"strings"
-	"unsafe"
 )
 
 type Inspector interface {
 	Get(src interface{}, path ...string) (interface{}, error)
 	GetTo(src interface{}, buf *interface{}, path ...string) error
-	GetUnsafe(src interface{}, path ...string) (unsafe.Pointer, uint, error)
 	Set(dst, value interface{}, path ...string)
 }
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"unsafe"
 )
 
 type ReflectInspector struct {
@@ -31,11 +30,6 @@ func (i *ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...stri
 	var err error
 	*buf, err = i.Get(src, path...)
 	return err
-}
-
-func (i *ReflectInspector) GetUnsafe(src interface{}, path ...string) (unsafe.Pointer, uint, error) {
-	val, err := i.Get(src, path...)
-	return unsafe.Pointer(&val), 0, err
 }
 
 func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {
