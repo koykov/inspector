@@ -245,7 +245,6 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 		for _, ch := range node.chld {
 			c.wl(idnt1, "if path[", depths, "] == ", `"`, ch.name, `" {`)
 			if ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte") {
-				// c.wl(idnt2, "return ", v, ".", ch.name)
 				c.wl(idnt2, "*buf = &", v, ".", ch.name)
 				c.wl(idnt, "return")
 			} else {
@@ -260,6 +259,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 			c.wl(idnt1, "}")
 		}
 	case typeMap:
+		// todo find a way to get element from the map without allocation (see runtime.mapaccess1 and runtime.mapaccess2).
 		origPtr := node.ptr
 		if depth == 0 {
 			node.ptr = true
