@@ -13,12 +13,14 @@ type TestFinance struct {
 	MoneyIn  float64
 	MoneyOut float64
 	Balance  float64
+	AllowBuy bool
 	History  []TestHistory
 }
 
 type TestObject struct {
 	Id          string
 	Name        []byte
+	Status      int32
 	Cost        float64
 	Permission  *TestPermission
 	HistoryTree map[string]*TestHistory

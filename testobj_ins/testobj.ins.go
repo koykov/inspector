@@ -48,6 +48,10 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 			*buf = &x.Balance
 			return
 		}
+		if path[0] == "AllowBuy" {
+			*buf = &x.AllowBuy
+			return
+		}
 		if path[0] == "History" {
 			x0 := x.History
 			_ = x0
@@ -205,6 +209,10 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.Name
 			return
 		}
+		if path[0] == "Status" {
+			*buf = &x.Status
+			return
+		}
 		if path[0] == "Cost" {
 			*buf = &x.Cost
 			return
@@ -282,6 +290,10 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 				}
 				if path[1] == "Balance" {
 					*buf = &x0.Balance
+					return
+				}
+				if path[1] == "AllowBuy" {
+					*buf = &x0.AllowBuy
 					return
 				}
 				if path[1] == "History" {
