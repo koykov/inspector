@@ -209,6 +209,7 @@ func (c *Compiler) regImport(imports []string) {
 }
 
 func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
+	// todo remove indentation due to use go/format package.
 	inst := node.name + "Inspector"
 	recv := "i" + strconv.Itoa(idx)
 	pname := c.pkgName + "." + node.typn
