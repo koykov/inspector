@@ -14,6 +14,7 @@ var (
 		Id:         "foo",
 		Name:       []byte("bar"),
 		Cost:       12.34,
+		Status:     78,
 		Permission: &testobj.TestPermission{15: true, 23: false},
 		Flags: testobj.TestFlag{
 			"export": 17,
@@ -25,6 +26,7 @@ var (
 			MoneyIn:  3200,
 			MoneyOut: 1500.637657,
 			Balance:  9000,
+			AllowBuy: true,
 			History: []testobj.TestHistory{
 				{
 					152354345634,
@@ -52,6 +54,8 @@ var (
 	p4 = []string{"Finance", "Balance"}
 	p5 = []string{"Finance", "History", "1", "DateUnix"}
 	p6 = []string{"Finance", "History", "0", "Comment"}
+	p7 = []string{"Status"}
+	p8 = []string{"Finance", "MoneyIn"}
 
 	expectFoo     = []byte("bar")
 	expectComment = []byte("pay for domain")
@@ -131,6 +135,28 @@ func testGetterPtr(t testing.TB, i inspector.Inspector, buf interface{}) {
 	}
 }
 
+func testCmpPtr(t testing.TB, i inspector.Inspector, buf *bool) {
+	_ = i.Cmp(testO, inspector.OpEq, "foo", buf, p0...)
+	if !*buf {
+		t.Error("object.Id: mismatch result and expectation")
+	}
+
+	_ = i.Cmp(testO, inspector.OpEq, "bar", buf, p1...)
+	if !*buf {
+		t.Error("object.Name: mismatch result and expectation")
+	}
+
+	_ = i.Cmp(testO, inspector.OpGtq, "60", buf, p7...)
+	if !*buf {
+		t.Error("object.Status: mismatch result and expectation")
+	}
+
+	_ = i.Cmp(testO, inspector.OpLtq, "5000", buf, p8...)
+	if !*buf {
+		t.Error("object.Finance.MoneyIn: mismatch result and expectation")
+	}
+}
+
 func TestReflectInspector_Get(t *testing.T) {
 	ins := &inspector.ReflectInspector{}
 	testGetter(t, ins)
@@ -157,5 +183,21 @@ func BenchmarkCompiledInspector_Get(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		testGetterPtr(b, ins, buf)
+	}
+}
+
+func TestCompiledInspector_Cmp(t *testing.T) {
+	ins := &testobj_ins.TestObjectInspector{}
+	var buf bool
+	testCmpPtr(t, ins, &buf)
+}
+
+func BenchmarkCompiledInspector_Cmp(b *testing.B) {
+	ins := &testobj_ins.TestObjectInspector{}
+	var buf bool
+
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		testCmpPtr(b, ins, &buf)
 	}
 }

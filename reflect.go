@@ -32,6 +32,11 @@ func (i *ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...stri
 	return err
 }
 
+func (i *ReflectInspector) Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error {
+	// Empty method, I'm too lazy to implement it now.
+	return nil
+}
+
 func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {
 	// Empty method, there is no way to update data using reflection.
 }

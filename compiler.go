@@ -1,6 +1,7 @@
 package inspector
 
 import (
+	"go/format"
 	"go/types"
 	"strconv"
 	"strings"
@@ -9,12 +10,16 @@ import (
 )
 
 type typ int
+type mode int
 
 const (
 	typeStruct typ = iota
 	typeMap
 	typeSlice
 	typeBasic
+
+	modeGet mode = iota
+	modeCmp
 )
 
 type ByteStringWriter interface {
@@ -84,6 +89,14 @@ func (c *Compiler) Compile() error {
 	if err != nil {
 		return err
 	}
+
+	source := c.wr.Bytes()
+	fmtSource, err := format.Source(source)
+	if err != nil {
+		return err
+	}
+	c.wr.Reset()
+	_, _ = c.wr.Write(fmtSource)
 
 	return nil
 }
@@ -195,7 +208,7 @@ func (c *Compiler) regImport(imports []string) {
 	}
 }
 
-func (c *Compiler) writeRootNode(node *node, idx int) error {
+func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
 	inst := node.name + "Inspector"
 	recv := "i" + strconv.Itoa(idx)
 	pname := c.pkgName + "." + node.typn
@@ -213,7 +226,21 @@ func (c *Compiler) writeRootNode(node *node, idx int) error {
 	c.wl("\tvar x *", pname)
 	c.wdl("\tif p, ok := src.(*", pname, "); ok { x = p } else if v, ok := src.(", pname, "); ok { x = &v } else { return }")
 
-	err := c.writeNode(node, recv, "x", 0, 0)
+	err = c.writeNode(node, recv, "x", 0, 0, modeGet)
+	if err != nil {
+		return err
+	}
+
+	c.wdl("\treturn\n}")
+
+	// Compare method.
+	c.wl("func (", recv, " *", inst, ") Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
+	c.wl("\tif len(path) == 0 { return }")
+	c.wl("\tif src == nil { return }")
+	c.wl("\tvar x *", pname)
+	c.wdl("\tif p, ok := src.(*", pname, "); ok { x = p } else if v, ok := src.(", pname, "); ok { x = &v } else { return }")
+
+	err = c.writeNode(node, recv, "x", 0, 0, modeCmp)
 	if err != nil {
 		return err
 	}
@@ -228,7 +255,7 @@ func (c *Compiler) writeRootNode(node *node, idx int) error {
 	return c.err
 }
 
-func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error {
+func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int, mode mode) error {
 	idnt := strings.Repeat("\t", idntc+1)
 	idnt1 := idnt + "\t"
 	idnt2 := idnt1 + "\t"
@@ -245,13 +272,18 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 		for _, ch := range node.chld {
 			c.wl(idnt1, "if path[", depths, "] == ", `"`, ch.name, `" {`)
 			if ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte") {
-				c.wl(idnt2, "*buf = &", v, ".", ch.name)
+				switch mode {
+				case modeGet:
+					c.wl(idnt2, "*buf = &", v, ".", ch.name)
+				case modeCmp:
+					c.writeCmp(idntc+2, ch, v+"."+ch.name)
+				}
 				c.wl(idnt, "return")
 			} else {
 				nv := "x" + strconv.Itoa(depth)
 				c.wl(idnt2, nv, " := ", v, ".", ch.name)
 				c.wl(idnt2, "_ = ", nv)
-				err := c.writeNode(ch, recv, nv, depth+1, idntc+2)
+				err := c.writeNode(ch, recv, nv, depth+1, idntc+2, mode)
 				if err != nil {
 					return err
 				}
@@ -268,7 +300,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 		if node.mapk.typn == "string" {
 			c.wl(idnt1, "if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
 			c.wl(idnt2, "_ = ", nv)
-			err := c.writeNode(node.mapv, recv, nv, depth+1, idntc+2)
+			err := c.writeNode(node.mapv, recv, nv, depth+1, idntc+2, mode)
 			if err != nil {
 				return err
 			}
@@ -283,7 +315,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 			c.wl(strings.Replace(snippet, "\n", idnt1+"\n", -1))
 			c.wl(idnt2, nv, " := ", c.fmtV(node, v), "[k]")
 			c.wl(idnt2, "_ = ", nv)
-			err = c.writeNode(node.mapv, recv, nv, depth+1, idntc+2)
+			err = c.writeNode(node.mapv, recv, nv, depth+1, idntc+2, mode)
 			if err != nil {
 				return err
 			}
@@ -291,7 +323,12 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 		node.ptr = origPtr
 	case typeSlice:
 		if node.typn == "[]byte" {
-			c.wl(idnt, "*buf = &", v)
+			switch mode {
+			case modeGet:
+				c.wl(idnt, "*buf = &", v)
+			case modeCmp:
+				c.writeCmp(idntc+1, node, v)
+			}
 			c.wl(idnt, "return")
 		}
 		nv := "x" + strconv.Itoa(depth)
@@ -305,13 +342,18 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 		c.wl(idnt1, "if len(", v, ") > i {")
 		c.wl(idnt2, nv, " := ", v, "[i]")
 		c.wl(idnt2, "_ = ", nv)
-		err = c.writeNode(node.slct, recv, nv, depth+1, idntc+2)
+		err = c.writeNode(node.slct, recv, nv, depth+1, idntc+2, mode)
 		if err != nil {
 			return err
 		}
 		c.wl(idnt1, "}")
 	case typeBasic:
-		c.wl(idnt, "*buf = &", v)
+		switch mode {
+		case modeGet:
+			c.wl(idnt, "*buf = &", v)
+		case modeCmp:
+			c.writeCmp(idntc, node, v)
+		}
 		c.wl(idnt, "return")
 	}
 	if node.typ != typeBasic {
@@ -319,6 +361,50 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth, idntc int) error
 	}
 
 	return c.err
+}
+
+func (c *Compiler) writeCmp(idntc int, left *node, leftVar string) {
+	idnt := strings.Repeat("\t", idntc+1)
+	idnt1 := idnt + "\t"
+
+	c.wl(idnt, "var rightExact ", left.typn)
+	snippet, imports, err := StrConvSnippet("right", left.typn, "rightExact")
+	c.regImport(imports)
+	if err != nil {
+		c.err = err
+		return
+	}
+	c.wl(idnt, snippet)
+
+	switch left.typn {
+	case "[]byte":
+		c.wl(idnt, "if cond == inspector.OpEq {")
+		c.wl(idnt1, "*result = bytes.Equal(", leftVar, ", rightExact)")
+		c.wl(idnt, "} else {")
+		c.wl(idnt1, "*result = !bytes.Equal(", leftVar, ", rightExact)")
+		c.wl(idnt, "}")
+	case "bool":
+		c.wl(idnt, "if cond == inspector.OpEq {")
+		c.wl(idnt1, "*result = ", leftVar, " == rightExact")
+		c.wl(idnt, "} else {")
+		c.wl(idnt1, "*result = ", leftVar, " != rightExact")
+		c.wl(idnt, "}")
+	default:
+		c.wl(idnt, "switch cond {")
+		c.wl(idnt, "case inspector.OpEq:")
+		c.wl(idnt1, "*result = ", leftVar, " == rightExact")
+		c.wl(idnt, "case inspector.OpNq:")
+		c.wl(idnt1, "*result = ", leftVar, " != rightExact")
+		c.wl(idnt, "case inspector.OpGt:")
+		c.wl(idnt1, "*result = ", leftVar, " > rightExact")
+		c.wl(idnt, "case inspector.OpGtq:")
+		c.wl(idnt1, "*result = ", leftVar, " >= rightExact")
+		c.wl(idnt, "case inspector.OpLt:")
+		c.wl(idnt1, "*result = ", leftVar, " < rightExact")
+		c.wl(idnt, "case inspector.OpLtq:")
+		c.wl(idnt1, "*result = ", leftVar, " <= rightExact")
+		c.wl(idnt, "}")
+	}
 }
 
 func (c *Compiler) fmtV(node *node, v string) string {
