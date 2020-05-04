@@ -362,7 +362,7 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
-func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, cb inspector.LoopCallbackFn, path ...string) (err error) {
+func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, path ...string) (err error) {
 	return nil
 }
 
@@ -1043,7 +1043,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, cb inspector.LoopCallbackFn, path ...string) (err error) {
+func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -1070,7 +1070,7 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				for k, v := range *x0 {
 					ctx.Set("k", k, &inspector.StaticInspector{})
 					ctx.Set("item", v, &inspector.StaticInspector{})
-					cb()
+					ctx.Loop()
 				}
 				return
 			}
@@ -1082,7 +1082,7 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				for k, v := range x0 {
 					ctx.Set("k", k, &inspector.StaticInspector{})
 					ctx.Set("item", v, &TestHistoryInspector{})
-					cb()
+					ctx.Loop()
 				}
 			}
 		}
@@ -1093,7 +1093,7 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				for k, v := range x0 {
 					ctx.Set("k", k, &inspector.StaticInspector{})
 					ctx.Set("item", v, &inspector.StaticInspector{})
-					cb()
+					ctx.Loop()
 				}
 			}
 		}
@@ -1109,8 +1109,8 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 					_ = x1
 					for k, v := range x1 {
 						ctx.Set("k", k, &inspector.StaticInspector{})
-						ctx.Set("item", v, &TestHistoryInspector{})
-						cb()
+						ctx.Set("item", &v, &TestHistoryInspector{})
+						ctx.Loop()
 					}
 				}
 			}

@@ -10,14 +10,13 @@ type Inspector interface {
 	GetTo(src interface{}, buf *interface{}, path ...string) error
 	Set(dst, value interface{}, path ...string)
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
-	Loop(src interface{}, ctx ContextPooler, cb LoopCallbackFn, path ...string) error
+	Loop(src interface{}, ctx ContextPooler, path ...string) error
 }
 
 type ContextPooler interface {
 	Set(key string, val interface{}, ins Inspector)
+	Loop()
 }
-
-type LoopCallbackFn func()
 
 type BaseInspector struct{}
 

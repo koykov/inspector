@@ -41,7 +41,7 @@ func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {
 	// Empty method, there is no way to update data using reflection.
 }
 
-func (i *ReflectInspector) Loop(src interface{}, ctx ContextPooler, cb LoopCallbackFn, path ...string) (err error) {
+func (i *ReflectInspector) Loop(src interface{}, ctx ContextPooler, path ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }

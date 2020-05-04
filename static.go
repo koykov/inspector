@@ -22,6 +22,6 @@ func (i *StaticInspector) Cmp(_ interface{}, _ Op, _ string, result *bool, _ ...
 	return nil
 }
 
-func (i *StaticInspector) Loop(_ interface{}, _ ContextPooler, _ LoopCallbackFn, _ ...string) error {
+func (i *StaticInspector) Loop(_ interface{}, _ ContextPooler, _ ...string) error {
 	return nil
 }
