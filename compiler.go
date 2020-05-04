@@ -356,6 +356,9 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 	if node.typ != typeBasic {
 		c.wl("}")
 	}
+	if (node.typ == typeMap || node.typ == typeSlice) && mode == modeGet {
+		c.wl("*buf = ", v)
+	}
 
 	return c.err
 }
