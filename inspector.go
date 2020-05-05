@@ -10,7 +10,7 @@ type Inspector interface {
 	GetTo(src interface{}, buf *interface{}, path ...string) error
 	Set(dst, value interface{}, path ...string)
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
-	Loop(src interface{}, ctx ContextPooler, path ...string) error
+	Loop(src interface{}, ctx ContextPooler, buf *int, path ...string) error
 }
 
 type ContextPooler interface {

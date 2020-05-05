@@ -9,7 +9,7 @@ func (i *StaticInspector) Get(src interface{}, _ ...string) (interface{}, error)
 }
 
 func (i *StaticInspector) GetTo(src interface{}, buf *interface{}, _ ...string) error {
-	*buf = &src
+	*buf = src
 	return nil
 }
 
@@ -22,6 +22,6 @@ func (i *StaticInspector) Cmp(_ interface{}, _ Op, _ string, result *bool, _ ...
 	return nil
 }
 
-func (i *StaticInspector) Loop(_ interface{}, _ ContextPooler, _ ...string) error {
+func (i *StaticInspector) Loop(_ interface{}, _ ContextPooler, _ *int, _ ...string) error {
 	return nil
 }

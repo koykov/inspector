@@ -362,7 +362,7 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
-func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, path ...string) (err error) {
+func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *int, path ...string) (err error) {
 	return nil
 }
 
@@ -1043,7 +1043,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, path ...string) (err error) {
+func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *int, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -1067,9 +1067,9 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				if x0 == nil {
 					return
 				}
-				for k, v := range *x0 {
-					ctx.Set("k", k, &inspector.StaticInspector{})
-					ctx.Set("item", v, &inspector.StaticInspector{})
+				for k := range *x0 {
+					ctx.Set("k", &k, &inspector.StaticInspector{})
+					ctx.Set("item", (*x0)[k], &inspector.StaticInspector{})
 					ctx.Loop()
 				}
 				return
@@ -1079,9 +1079,9 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 			x0 := x.HistoryTree
 			_ = x0
 			if len(path) > 1 {
-				for k, v := range x0 {
-					ctx.Set("k", k, &inspector.StaticInspector{})
-					ctx.Set("item", v, &TestHistoryInspector{})
+				for k := range x0 {
+					ctx.Set("k", &k, &inspector.StaticInspector{})
+					ctx.Set("item", x0[k], &TestHistoryInspector{})
 					ctx.Loop()
 				}
 			}
@@ -1090,9 +1090,9 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 			x0 := x.Flags
 			_ = x0
 			if len(path) > 1 {
-				for k, v := range x0 {
-					ctx.Set("k", k, &inspector.StaticInspector{})
-					ctx.Set("item", v, &inspector.StaticInspector{})
+				for k := range x0 {
+					ctx.Set("k", &k, &inspector.StaticInspector{})
+					ctx.Set("item", x0[k], &inspector.StaticInspector{})
 					ctx.Loop()
 				}
 			}
@@ -1107,9 +1107,9 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				if path[1] == "History" {
 					x1 := x0.History
 					_ = x1
-					for k, v := range x1 {
-						ctx.Set("k", k, &inspector.StaticInspector{})
-						ctx.Set("item", &v, &TestHistoryInspector{})
+					for *buf = range x1 {
+						ctx.Set("k", buf, &inspector.StaticInspector{})
+						ctx.Set("item", &x1[*buf], &TestHistoryInspector{})
 						ctx.Loop()
 					}
 				}
