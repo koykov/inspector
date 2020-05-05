@@ -362,7 +362,7 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
-func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *int, path ...string) (err error) {
+func (i2 *TestHistoryInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *[]byte, path ...string) (err error) {
 	return nil
 }
 
@@ -1043,7 +1043,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *int, path ...string) (err error) {
+func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -1089,13 +1089,14 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 		if path[0] == "Flags" {
 			x0 := x.Flags
 			_ = x0
-			if len(path) > 1 {
-				for k := range x0 {
-					ctx.Set("k", &k, &inspector.StaticInspector{})
-					ctx.Set("item", x0[k], &inspector.StaticInspector{})
-					ctx.Loop()
-				}
+			// if len(path) > 1 {
+			for k := range x0 {
+				*buf = append((*buf)[:0], k...)
+				ctx.Set("k", buf, &inspector.StaticInspector{})
+				ctx.Set("v", x0[k], &inspector.StaticInspector{})
+				ctx.Loop()
 			}
+			// }
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
@@ -1107,9 +1108,10 @@ func (i3 *TestObjectInspector) Loop(src interface{}, ctx inspector.ContextPooler
 				if path[1] == "History" {
 					x1 := x0.History
 					_ = x1
-					for *buf = range x1 {
+					for i := range x1 {
+						*buf = strconv.AppendInt((*buf)[:0], int64(i), 10)
 						ctx.Set("k", buf, &inspector.StaticInspector{})
-						ctx.Set("item", &x1[*buf], &TestHistoryInspector{})
+						ctx.Set("item", &x1[i], &TestHistoryInspector{})
 						ctx.Loop()
 					}
 				}
