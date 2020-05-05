@@ -10,10 +10,10 @@ type Inspector interface {
 	GetTo(src interface{}, buf *interface{}, path ...string) error
 	Set(dst, value interface{}, path ...string)
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
-	Loop(src interface{}, ctx ContextPooler, buf *[]byte, path ...string) error
+	Loop(src interface{}, l Looper, buf *[]byte, path ...string) error
 }
 
-type ContextPooler interface {
+type Looper interface {
 	Set(key string, val interface{}, ins Inspector)
 	Loop()
 }
