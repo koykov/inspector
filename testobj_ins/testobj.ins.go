@@ -7,10 +7,14 @@ import (
 	"bytes"
 	"strconv"
 
+	"github.com/koykov/cbytealg"
 	"github.com/koykov/fastconv"
-
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
+)
+
+var (
+	_ = cbytealg.AnyToBytes
 )
 
 type TestFinanceInspector struct {
@@ -1063,40 +1067,36 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 		if path[0] == "Permission" {
 			x0 := x.Permission
 			_ = x0
-			if len(path) > 1 {
-				if x0 == nil {
-					return
-				}
-				for k := range *x0 {
-					l.Set("k", &k, &inspector.StaticInspector{})
-					l.Set("item", (*x0)[k], &inspector.StaticInspector{})
-					l.Loop()
-				}
+			if x0 == nil {
 				return
 			}
+			for k := range *x0 {
+				*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+				l.Set("k", &buf, &inspector.StaticInspector{})
+				l.Set("item", (*x0)[k], &inspector.StaticInspector{})
+				l.Loop()
+			}
+			return
 		}
 		if path[0] == "HistoryTree" {
 			x0 := x.HistoryTree
 			_ = x0
-			if len(path) > 1 {
-				for k := range x0 {
-					l.Set("k", &k, &inspector.StaticInspector{})
-					l.Set("item", x0[k], &TestHistoryInspector{})
-					l.Loop()
-				}
+			for k := range x0 {
+				*buf = append((*buf)[:0], k...)
+				l.Set("k", buf, &inspector.StaticInspector{})
+				l.Set("item", x0[k], &TestHistoryInspector{})
+				l.Loop()
 			}
 		}
 		if path[0] == "Flags" {
 			x0 := x.Flags
 			_ = x0
-			// if len(path) > 1 {
 			for k := range x0 {
 				*buf = append((*buf)[:0], k...)
 				l.Set("k", buf, &inspector.StaticInspector{})
 				l.Set("v", x0[k], &inspector.StaticInspector{})
 				l.Loop()
 			}
-			// }
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
@@ -1108,10 +1108,10 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 				if path[1] == "History" {
 					x1 := x0.History
 					_ = x1
-					for i := range x1 {
-						*buf = strconv.AppendInt((*buf)[:0], int64(i), 10)
+					for k := range x1 {
+						*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
 						l.Set("k", buf, &inspector.StaticInspector{})
-						l.Set("item", &x1[i], &TestHistoryInspector{})
+						l.Set("item", &x1[k], &TestHistoryInspector{})
 						l.Loop()
 					}
 				}
