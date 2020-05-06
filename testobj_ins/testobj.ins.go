@@ -1071,9 +1071,11 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 				return
 			}
 			for k := range *x0 {
-				*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
-				l.Set("k", &buf, &inspector.StaticInspector{})
-				l.Set("item", (*x0)[k], &inspector.StaticInspector{})
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((*x0)[k], &inspector.StaticInspector{})
 				l.Loop()
 			}
 			return
@@ -1082,9 +1084,11 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			x0 := x.HistoryTree
 			_ = x0
 			for k := range x0 {
-				*buf = append((*buf)[:0], k...)
-				l.Set("k", buf, &inspector.StaticInspector{})
-				l.Set("item", x0[k], &TestHistoryInspector{})
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(x0[k], &TestHistoryInspector{})
 				l.Loop()
 			}
 		}
@@ -1092,9 +1096,11 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			x0 := x.Flags
 			_ = x0
 			for k := range x0 {
-				*buf = append((*buf)[:0], k...)
-				l.Set("k", buf, &inspector.StaticInspector{})
-				l.Set("v", x0[k], &inspector.StaticInspector{})
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(x0[k], &inspector.StaticInspector{})
 				l.Loop()
 			}
 		}
@@ -1109,9 +1115,11 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					x1 := x0.History
 					_ = x1
 					for k := range x1 {
-						*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
-						l.Set("k", buf, &inspector.StaticInspector{})
-						l.Set("item", &x1[k], &TestHistoryInspector{})
+						if l.RequireKey() {
+							*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+							l.SetKey(buf, &inspector.StaticInspector{})
+						}
+						l.SetVal(&x1[k], &TestHistoryInspector{})
 						l.Loop()
 					}
 				}

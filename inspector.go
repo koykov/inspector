@@ -14,7 +14,9 @@ type Inspector interface {
 }
 
 type Looper interface {
-	Set(key string, val interface{}, ins Inspector)
+	RequireKey() bool
+	SetKey(val interface{}, ins Inspector)
+	SetVal(val interface{}, ins Inspector)
 	Loop()
 }
 
