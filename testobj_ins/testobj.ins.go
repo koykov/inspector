@@ -7,14 +7,10 @@ import (
 	"bytes"
 	"strconv"
 
-	"github.com/koykov/cbytealg"
 	"github.com/koykov/fastconv"
+
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
-)
-
-var (
-	_ = cbytealg.AnyToBytes
 )
 
 type TestFinanceInspector struct {
@@ -35,6 +31,7 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 		return
 	}
 	var x *testobj.TestFinance
+	_ = x
 	if p, ok := src.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFinance); ok {
@@ -103,6 +100,7 @@ func (i0 *TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right st
 		return
 	}
 	var x *testobj.TestFinance
+	_ = x
 	if p, ok := src.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFinance); ok {
@@ -274,6 +272,41 @@ func (i0 *TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right st
 	return
 }
 
+func (i0 *TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	if src == nil {
+		return
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := src.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return
+	}
+
+	if len(path) > 0 {
+		if path[0] == "History" {
+			x0 := x.History
+			_ = x0
+			for k := range x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(x0)[k], &TestHistoryInspector{})
+				l.Loop()
+			}
+			return
+		}
+	}
+	return
+}
+
 func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) {
 }
 
@@ -295,6 +328,7 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 		return
 	}
 	var x *testobj.TestFlag
+	_ = x
 	if p, ok := src.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFlag); ok {
@@ -322,6 +356,7 @@ func (i1 *TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right strin
 		return
 	}
 	var x *testobj.TestFlag
+	_ = x
 	if p, ok := src.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFlag); ok {
@@ -359,15 +394,40 @@ func (i1 *TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right strin
 	return
 }
 
+func (i1 *TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	if src == nil {
+		return
+	}
+	var x *testobj.TestFlag
+	_ = x
+	if p, ok := src.(*testobj.TestFlag); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFlag); ok {
+		x = &v
+	} else {
+		return
+	}
+
+	for k := range *x {
+		if l.RequireKey() {
+			*buf = append((*buf)[:0], k...)
+			l.SetKey(buf, &inspector.StaticInspector{})
+		}
+		l.SetVal((*x)[k], &inspector.StaticInspector{})
+		l.Loop()
+	}
+	return
+	return
+}
+
 func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) {
 }
 
 type TestHistoryInspector struct {
 	inspector.BaseInspector
-}
-
-func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
-	return nil
 }
 
 func (i2 *TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
@@ -384,6 +444,7 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 		return
 	}
 	var x *testobj.TestHistory
+	_ = x
 	if p, ok := src.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestHistory); ok {
@@ -417,6 +478,7 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 		return
 	}
 	var x *testobj.TestHistory
+	_ = x
 	if p, ok := src.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestHistory); ok {
@@ -487,6 +549,28 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 	return
 }
 
+func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	if src == nil {
+		return
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := src.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return
+	}
+
+	if len(path) > 0 {
+	}
+	return
+}
+
 func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) {
 }
 
@@ -508,6 +592,7 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 		return
 	}
 	var x *testobj.TestObject
+	_ = x
 	if p, ok := src.(*testobj.TestObject); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestObject); ok {
@@ -660,6 +745,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 		return
 	}
 	var x *testobj.TestObject
+	_ = x
 	if p, ok := src.(*testobj.TestObject); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestObject); ok {
@@ -1055,6 +1141,7 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 		return
 	}
 	var x *testobj.TestObject
+	_ = x
 	if p, ok := src.(*testobj.TestObject); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestObject); ok {
@@ -1088,9 +1175,10 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					*buf = append((*buf)[:0], k...)
 					l.SetKey(buf, &inspector.StaticInspector{})
 				}
-				l.SetVal(x0[k], &TestHistoryInspector{})
+				l.SetVal((x0)[k], &TestHistoryInspector{})
 				l.Loop()
 			}
+			return
 		}
 		if path[0] == "Flags" {
 			x0 := x.Flags
@@ -1100,9 +1188,10 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					*buf = append((*buf)[:0], k...)
 					l.SetKey(buf, &inspector.StaticInspector{})
 				}
-				l.SetVal(x0[k], &inspector.StaticInspector{})
+				l.SetVal((x0)[k], &inspector.StaticInspector{})
 				l.Loop()
 			}
+			return
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
@@ -1119,9 +1208,10 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 							*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
 							l.SetKey(buf, &inspector.StaticInspector{})
 						}
-						l.SetVal(&x1[k], &TestHistoryInspector{})
+						l.SetVal(&(x1)[k], &TestHistoryInspector{})
 						l.Loop()
 					}
+					return
 				}
 			}
 		}
@@ -1150,6 +1240,7 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 		return
 	}
 	var x *testobj.TestPermission
+	_ = x
 	if p, ok := src.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestPermission); ok {
@@ -1182,6 +1273,7 @@ func (i4 *TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right
 		return
 	}
 	var x *testobj.TestPermission
+	_ = x
 	if p, ok := src.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestPermission); ok {
@@ -1212,6 +1304,35 @@ func (i4 *TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right
 		}
 		return
 	}
+	return
+}
+
+func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	if src == nil {
+		return
+	}
+	var x *testobj.TestPermission
+	_ = x
+	if p, ok := src.(*testobj.TestPermission); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestPermission); ok {
+		x = &v
+	} else {
+		return
+	}
+
+	for k := range *x {
+		if l.RequireKey() {
+			*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+			l.SetKey(buf, &inspector.StaticInspector{})
+		}
+		l.SetVal((*x)[k], &inspector.StaticInspector{})
+		l.Loop()
+	}
+	return
 	return
 }
 

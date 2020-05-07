@@ -20,6 +20,7 @@ const (
 
 	modeGet mode = iota
 	modeCmp
+	modeLoop
 )
 
 type ByteStringWriter interface {
@@ -47,6 +48,8 @@ type node struct {
 	typ  typ
 	typn string
 	name string
+	pkg  string
+	pkgi string
 	ptr  bool
 	chld []*node
 	mapk *node
@@ -111,6 +114,10 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 				if err != nil {
 					return err
 				}
+				if node.typ == typeStruct {
+					node.typn = o.Name()
+				}
+				node.pkg = o.Pkg().Name()
 				node.name = o.Name()
 				c.nodes = append(c.nodes, node)
 			}
@@ -126,16 +133,28 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		typn: strings.Replace(t.String(), c.pkgDot, "", 1),
 		ptr:  false,
 	}
+	if n, ok := t.(*types.Named); ok {
+		node.typn = n.Obj().Name()
+		node.pkg = n.Obj().Pkg().Name()
+		node.pkgi = n.Obj().Pkg().Path()
+	}
 
 	u := t.Underlying()
 	if p, ok := u.(*types.Pointer); ok {
-		u = p.Elem().Underlying()
-		node, err := c.parseType(u)
+		e := p.Elem()
+		u = e.Underlying()
+		unode, err := c.parseType(u)
 		if err != nil {
 			return node, err
 		}
-		node.ptr = true
-		return node, err
+		// unode.typn = strings.TrimLeft(node.typn, "*")
+		unode.ptr = true
+		if n, ok := e.(*types.Named); ok {
+			unode.typn = n.Obj().Name()
+			unode.pkg = n.Obj().Pkg().Name()
+			unode.pkgi = n.Obj().Pkg().Path()
+		}
+		return unode, err
 	}
 
 	if s, ok := u.(*types.Struct); ok {
@@ -215,36 +234,42 @@ func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
 
 	c.wdl("type ", inst, " struct {\ninspector.BaseInspector\n}")
 
+	// Common checks and type cast.
+	funcHeader := `if len(path) == 0 { return }
+if src == nil { return }
+var x *` + pname + `
+_ = x
+if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+
 	// Getter methods.
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
 	c.wl("var buf interface{}\nerr := " + recv + ".GetTo(src, &buf, path...)\nreturn buf, err")
 	c.wdl("}")
 
 	c.wl("func (", recv, " *", inst, ") GetTo(src interface{}, buf *interface{}, path ...string) (err error) {")
-	c.wl("if len(path) == 0 { return }")
-	c.wl("if src == nil { return }")
-	c.wl("var x *", pname)
-	c.wdl("if p, ok := src.(*", pname, "); ok { x = p } else if v, ok := src.(", pname, "); ok { x = &v } else { return }")
-
+	c.wdl(funcHeader)
 	err = c.writeNode(node, recv, "x", 0, modeGet)
 	if err != nil {
 		return err
 	}
-
 	c.wdl("return }")
 
 	// Compare method.
 	c.wl("func (", recv, " *", inst, ") Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
-	c.wl("if len(path) == 0 { return }")
-	c.wl("if src == nil { return }")
-	c.wl("var x *", pname)
-	c.wdl("if p, ok := src.(*", pname, "); ok { x = p } else if v, ok := src.(", pname, "); ok { x = &v } else { return }")
-
+	c.wdl(funcHeader)
 	err = c.writeNode(node, recv, "x", 0, modeCmp)
 	if err != nil {
 		return err
 	}
+	c.wdl("return }")
 
+	// Loop method.
+	c.wl("func (", recv, " *", inst, ") Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
+	c.wdl(funcHeader)
+	err = c.writeNode(node, recv, "x", 0, modeLoop)
+	if err != nil {
+		return err
+	}
 	c.wdl("return }")
 
 	// Setter method.
@@ -258,7 +283,10 @@ func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
 func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) error {
 	depths := strconv.Itoa(depth)
 
-	if node.typ != typeBasic {
+	// requireLenCheck := node.typ != typeBasic
+	requireLenCheck := node.typ != typeBasic && !(mode == modeLoop && (node.typ == typeMap || (node.typ == typeSlice && node.typn != "[]byte")))
+
+	if requireLenCheck {
 		c.wl("if len(path) > ", depths, " {")
 	}
 	if node.ptr {
@@ -267,15 +295,20 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 	switch node.typ {
 	case typeStruct:
 		for _, ch := range node.chld {
+			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
+			if isBasic && mode == modeLoop {
+				continue
+			}
 			c.wl("if path[", depths, "] == ", `"`, ch.name, `" {`)
-			if ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte") {
+			if isBasic {
 				switch mode {
 				case modeGet:
 					c.wl("*buf = &", v, ".", ch.name)
+					c.wl("return")
 				case modeCmp:
 					c.writeCmp(ch, v+"."+ch.name)
+					c.wl("return")
 				}
-				c.wl("return")
 			} else {
 				nv := "x" + strconv.Itoa(depth)
 				c.wl(nv, " := ", v, ".", ch.name)
@@ -293,28 +326,65 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 		if depth == 0 {
 			node.ptr = true
 		}
-		nv := "x" + strconv.Itoa(depth)
-		if node.mapk.typn == "string" {
-			c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
-			c.wl("_ = ", nv)
-			err := c.writeNode(node.mapv, recv, nv, depth+1, mode)
-			if err != nil {
-				return err
+		switch mode {
+		case modeLoop:
+			c.wl("for k := range ", c.fmtV(node, v), " {")
+			c.wl("if l.RequireKey() {")
+			switch node.mapk.typn {
+			case "string", "[]byte":
+				c.wl("*buf = append((*buf)[:0], k...)")
+			case "bool":
+				c.wl(`if k { *buf = append((*buf)[:0], "true"...) } else { *buf = append(*buf[:0], "false"...) }`)
+			case "int", "int8", "int16", "int32", "int64":
+				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
+			case "uint", "uint8", "uint16", "uint32", "uint64":
+				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(k), 10)")
+			case "float32", "float64":
+				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(k), 'f', -1, 64)")
+			default:
+				c.regImport([]string{`"github.com/koykov/cbytealg"`})
+				c.wl("*buf, err = cbytealg.AnyToBytes(*buf[:0], k)")
+				c.wl("if err != nil { return }")
 			}
+			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
 			c.wl("}")
-		} else {
-			c.wl("var k ", node.mapk.typn)
-			snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, "k")
-			c.regImport(imports)
-			if err != nil {
-				return err
+			insName := "inspector.StaticInspector"
+			if node.mapv.typ == typeStruct {
+				insName = ""
+				if node.mapv.pkg != c.pkgName {
+					insName = node.mapv.pkg + "_ins."
+					c.regImport([]string{`"` + node.mapv.pkgi + `_ins"`})
+				}
+				insName += node.mapv.typn + "Inspector"
 			}
-			c.wl(snippet)
-			c.wl(nv, " := ", c.fmtV(node, v), "[k]")
-			c.wl("_ = ", nv)
-			err = c.writeNode(node.mapv, recv, nv, depth+1, mode)
-			if err != nil {
-				return err
+			c.wl("l.SetVal(", c.fmtV(node, v), "[k], &", insName, "{})")
+			c.wl("l.Loop()")
+			c.wl("}")
+			c.wl("return")
+		default:
+			nv := "x" + strconv.Itoa(depth)
+			if node.mapk.typn == "string" {
+				c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
+				c.wl("_ = ", nv)
+				err := c.writeNode(node.mapv, recv, nv, depth+1, mode)
+				if err != nil {
+					return err
+				}
+				c.wl("}")
+			} else {
+				c.wl("var k ", node.mapk.typn)
+				snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, "k")
+				c.regImport(imports)
+				if err != nil {
+					return err
+				}
+				c.wl(snippet)
+				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
+				c.wl("_ = ", nv)
+				err = c.writeNode(node.mapv, recv, nv, depth+1, mode)
+				if err != nil {
+					return err
+				}
 			}
 		}
 		node.ptr = origPtr
@@ -323,37 +393,52 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			switch mode {
 			case modeGet:
 				c.wl("*buf = &", v)
+				c.wl("return")
 			case modeCmp:
 				c.writeCmp(node, v)
+				c.wl("return")
 			}
+		}
+		switch mode {
+		case modeLoop:
+			c.wl("for k := range ", c.fmtV(node, v), " {")
+			c.wl("if l.RequireKey() {")
+			c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
+			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
+			c.wl("}")
+			c.wl("l.SetVal(&", c.fmtV(node, v), "[k], &TestHistoryInspector{})")
+			c.wl("l.Loop()")
+			c.wl("}")
 			c.wl("return")
+		default:
+			nv := "x" + strconv.Itoa(depth)
+			c.wl("var i int")
+			snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "i")
+			c.regImport(imports)
+			if err != nil {
+				return err
+			}
+			c.wl(snippet)
+			c.wl("if len(", v, ") > i {")
+			c.wl(nv, " := ", v, "[i]")
+			c.wl("_ = ", nv)
+			err = c.writeNode(node.slct, recv, nv, depth+1, mode)
+			if err != nil {
+				return err
+			}
+			c.wl("}")
 		}
-		nv := "x" + strconv.Itoa(depth)
-		c.wl("var i int")
-		snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "i")
-		c.regImport(imports)
-		if err != nil {
-			return err
-		}
-		c.wl(snippet)
-		c.wl("if len(", v, ") > i {")
-		c.wl(nv, " := ", v, "[i]")
-		c.wl("_ = ", nv)
-		err = c.writeNode(node.slct, recv, nv, depth+1, mode)
-		if err != nil {
-			return err
-		}
-		c.wl("}")
 	case typeBasic:
 		switch mode {
 		case modeGet:
 			c.wl("*buf = &", v)
+			c.wl("return")
 		case modeCmp:
 			c.writeCmp(node, v)
+			c.wl("return")
 		}
-		c.wl("return")
 	}
-	if node.typ != typeBasic {
+	if requireLenCheck {
 		c.wl("}")
 	}
 	if (node.typ == typeMap || node.typ == typeSlice) && mode == modeGet {
