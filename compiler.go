@@ -420,7 +420,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			}
 			c.wl(snippet)
 			c.wl("if len(", v, ") > i {")
-			c.wl(nv, " := ", v, "[i]")
+			c.wl(nv, " := &", v, "[i]")
 			c.wl("_ = ", nv)
 			err = c.writeNode(node.slct, recv, nv, depth+1, mode)
 			if err != nil {
