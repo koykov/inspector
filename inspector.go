@@ -1,9 +1,6 @@
 package inspector
 
-import (
-	"errors"
-	"strings"
-)
+import "errors"
 
 type Inspector interface {
 	Get(src interface{}, path ...string) (interface{}, error)
@@ -22,31 +19,27 @@ type Looper interface {
 
 type BaseInspector struct{}
 
-type StrConv struct {
-	Snippet string
-	Import  []string
-}
-
-func StrConvSnippet(s, typ, _var string) (string, []string, error) {
-	if sc, ok := convSnippet[typ]; ok {
-		snippet := strings.Replace(sc.Snippet, "!{arg}", s, -1)
-		snippet = strings.Replace(snippet, "!{var}", _var, -1)
-		return snippet, sc.Import, nil
-	}
-	return "", nil, ErrNoConvFunc
-}
-
 var (
-	convSnippet = map[string]StrConv{}
+	inspectorRegistry = map[string]Inspector{}
 
-	ErrNoConvFunc = errors.New("convert function doesn't exists")
+	ErrUnknownInspector = errors.New("unknown inspector")
 )
 
-func RegisterStrToFunc(typ, snippet string, imports []string) {
-	convSnippet[typ] = StrConv{snippet, imports}
+func RegisterInspector(name string, ins Inspector) {
+	inspectorRegistry[name] = ins
+}
+
+func GetInspector(name string) (Inspector, error) {
+	if ins, ok := inspectorRegistry[name]; ok {
+		return ins, nil
+	}
+	return nil, ErrUnknownInspector
 }
 
 func init() {
+	RegisterInspector("static", &StaticInspector{})
+	RegisterInspector("reflect", &ReflectInspector{})
+
 	imp := []string{`"strconv"`}
 	RegisterStrToFunc("bool", strToBoolSnippet("bool"), imp)
 

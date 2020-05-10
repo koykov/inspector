@@ -13,6 +13,14 @@ import (
 	"github.com/koykov/inspector/testobj"
 )
 
+func init() {
+	inspector.RegisterInspector("TestFinance", &TestFinanceInspector{})
+	inspector.RegisterInspector("TestFlag", &TestFlagInspector{})
+	inspector.RegisterInspector("TestHistory", &TestHistoryInspector{})
+	inspector.RegisterInspector("TestObject", &TestObjectInspector{})
+	inspector.RegisterInspector("TestPermission", &TestPermissionInspector{})
+}
+
 type TestFinanceInspector struct {
 	inspector.BaseInspector
 }

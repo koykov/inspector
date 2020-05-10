@@ -201,6 +201,12 @@ func (c *Compiler) write() error {
 	c.imp = append(c.imp, `"github.com/koykov/inspector"`, `"`+c.pkg+`"`)
 	c.wdl("import (\n!{import}\n)")
 
+	c.wl("func init() {")
+	for _, node := range c.nodes {
+		c.wl(`inspector.RegisterInspector("`, node.name, `", &`, node.name, `Inspector{})`)
+	}
+	c.wdl("}")
+
 	for i, node := range c.nodes {
 		err := c.writeRootNode(node, i)
 		if err != nil {
