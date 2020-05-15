@@ -5,12 +5,10 @@ package testobj_ins
 
 import (
 	"bytes"
-	"strconv"
-
 	"github.com/koykov/fastconv"
-
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
+	"strconv"
 )
 
 func init() {

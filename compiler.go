@@ -32,15 +32,21 @@ type ByteStringWriter interface {
 	Reset()
 }
 
+type Logger interface {
+	Print(v ...interface{})
+	Println(v ...interface{})
+}
+
 type Compiler struct {
 	pkg     string
 	pkgDot  string
 	pkgName string
-	outDir  string
 	uniq    map[string]bool
 	nodes   []*node
-	wr      ByteStringWriter
 	imp     []string
+	cntr    int
+	l       Logger
+	wr      ByteStringWriter
 	err     error
 }
 
@@ -57,13 +63,13 @@ type node struct {
 	slct *node
 }
 
-func NewCompiler(pkg, outDir string, w ByteStringWriter) *Compiler {
+func NewCompiler(pkg string, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		pkg:    pkg,
 		pkgDot: pkg + ".",
-		outDir: outDir,
 		uniq:   make(map[string]bool),
 		wr:     w,
+		l:      l,
 		imp:    make([]string, 0),
 	}
 	return &c
@@ -104,6 +110,10 @@ func (c *Compiler) Compile() error {
 	return nil
 }
 
+func (c *Compiler) GetTotal() int {
+	return c.cntr
+}
+
 func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 	for _, scope := range pkg.Info.Scopes {
 		if parent := scope.Parent(); parent != nil {
@@ -113,6 +123,9 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 				node, err := c.parseType(t)
 				if err != nil {
 					return err
+				}
+				if node == nil {
+					continue
 				}
 				if node.typ == typeStruct {
 					node.typn = o.Name()
@@ -135,6 +148,9 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 	}
 	if n, ok := t.(*types.Named); ok {
 		node.typn = n.Obj().Name()
+		if n.Obj().Pkg() == nil {
+			return nil, nil
+		}
 		node.pkg = n.Obj().Pkg().Name()
 		node.pkgi = n.Obj().Pkg().Path()
 	}
@@ -208,10 +224,14 @@ func (c *Compiler) write() error {
 	c.wdl("}")
 
 	for i, node := range c.nodes {
+		if c.l != nil {
+			c.l.Print("Compiling ", node.name, "Inspector")
+		}
 		err := c.writeRootNode(node, i)
 		if err != nil {
 			return err
 		}
+		c.cntr++
 	}
 	c.r("!{import}", strings.Join(c.imp, "\n"))
 
