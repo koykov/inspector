@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal("compile failed with error: ", err)
 	}
-	log.Println("Total inspectors compiled: ", c.GetTotal())
+	log.Println("Total inspectors compiled:", c.GetTotal())
 
 	outFile := absOut + string(os.PathSeparator) + "ins001.go"
 	_, err = os.Stat(absOut)

@@ -53,6 +53,7 @@ type Compiler struct {
 type node struct {
 	typ  typ
 	typn string
+	typu string
 	name string
 	pkg  string
 	pkgi string
@@ -119,12 +120,15 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 		if parent := scope.Parent(); parent != nil {
 			for _, name := range parent.Names() {
 				o := parent.Lookup(name)
+				if !o.Exported() {
+					continue
+				}
 				t := o.Type()
 				node, err := c.parseType(t)
 				if err != nil {
 					return err
 				}
-				if node == nil {
+				if node == nil || node.typ == typeBasic {
 					continue
 				}
 				if node.typ == typeStruct {
@@ -163,7 +167,9 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		if err != nil {
 			return node, err
 		}
-		// unode.typn = strings.TrimLeft(node.typn, "*")
+		if unode == nil {
+			return nil, nil
+		}
 		unode.ptr = true
 		if n, ok := e.(*types.Named); ok {
 			unode.typn = n.Obj().Name()
@@ -175,11 +181,17 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 
 	if s, ok := u.(*types.Struct); ok {
 		node.typ = typeStruct
+		if node.typn == "AdSkip" {
+			node.typ = typeStruct
+		}
 		for i := 0; i < s.NumFields(); i++ {
 			f := s.Field(i)
 			ch, err := c.parseType(f.Type())
 			if err != nil {
 				return node, err
+			}
+			if ch == nil {
+				continue
 			}
 			ch.name = f.Name()
 			if ch.ptr {
@@ -203,6 +215,10 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		node.typ = typeSlice
 		node.slct, err = c.parseType(s.Elem())
 		return node, err
+	}
+
+	if b, ok := u.(*types.Basic); ok {
+		node.typu = b.Name()
 	}
 
 	return node, nil
@@ -399,7 +415,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				c.wl("}")
 			} else {
 				c.wl("var k ", node.mapk.typn)
-				snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, "k")
+				snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, node.mapk.typu, "k")
 				c.regImport(imports)
 				if err != nil {
 					return err
@@ -439,7 +455,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 		default:
 			nv := "x" + strconv.Itoa(depth)
 			c.wl("var i int")
-			snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "i")
+			snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", "i")
 			c.regImport(imports)
 			if err != nil {
 				return err
@@ -476,7 +492,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 
 func (c *Compiler) writeCmp(left *node, leftVar string) {
 	c.wl("var rightExact ", left.typn)
-	snippet, imports, err := StrConvSnippet("right", left.typn, "rightExact")
+	snippet, imports, err := StrConvSnippet("right", left.typn, left.typu, "rightExact")
 	c.regImport(imports)
 	if err != nil {
 		c.err = err
