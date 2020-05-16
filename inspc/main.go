@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -53,23 +52,11 @@ func init() {
 func main() {
 	buf := &bytes.Buffer{}
 	lg := log.New(os.Stdout, "", log.LstdFlags)
-	c := inspector.NewCompiler(pkg, buf, lg)
+	c := inspector.NewCompiler(pkg, absOut, buf, lg)
 	err := c.Compile()
 	if err != nil {
 		log.Fatal("compile failed with error: ", err)
 	}
 	log.Println("Total inspectors compiled:", c.GetTotal())
-
-	outFile := absOut + string(os.PathSeparator) + "ins001.go"
-	_, err = os.Stat(absOut)
-	if err != nil && !os.IsNotExist(err) {
-		if err := os.Remove(outFile); err != nil {
-			log.Fatal("Couldn't prepare out file: ", err)
-		}
-	}
-	err = ioutil.WriteFile(outFile, buf.Bytes(), 0644)
-	if err != nil {
-		log.Fatal("Couldn't write to file: ", err)
-	}
 	log.Println("Complete")
 }
