@@ -6,7 +6,7 @@ import (
 
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
-	"github.com/koykov/inspector/testobj_ins0"
+	"github.com/koykov/inspector/testobj_ins"
 )
 
 var (
