@@ -1,12 +1,15 @@
 package inspector
 
 import (
-	"math/rand"
 	"strconv"
 )
 
+var (
+	tmpCntr int
+)
+
 func strToBoolSnippet(typ string) string {
-	i := strconv.Itoa(rand.Intn(99))
+	i := tmpIdx()
 	snippet := "t" + i + ", err" + i + " := strconv.ParseBool(!{arg})\n"
 	snippet += "if err" + i + " != nil { return err" + i + " }\n"
 	snippet += "!{var} = " + typ + "(t" + i + ")"
@@ -14,7 +17,7 @@ func strToBoolSnippet(typ string) string {
 }
 
 func strToIntSnippet(typ string) string {
-	i := strconv.Itoa(rand.Intn(99))
+	i := tmpIdx()
 	snippet := "t" + i + ", err" + i + " := strconv.ParseInt(!{arg}, 0, 0)\n"
 	snippet += "if err" + i + " != nil { return err" + i + " }\n"
 	snippet += "!{var} = " + typ + "(t" + i + ")"
@@ -22,7 +25,7 @@ func strToIntSnippet(typ string) string {
 }
 
 func strToUintSnippet(typ string) string {
-	i := strconv.Itoa(rand.Intn(99))
+	i := tmpIdx()
 	snippet := "t" + i + ", err" + i + " := strconv.ParseUint(!{arg}, 0, 0)\n"
 	snippet += "if err" + i + " != nil { return err" + i + " }\n"
 	snippet += "!{var} = " + typ + "(t" + i + ")"
@@ -30,7 +33,7 @@ func strToUintSnippet(typ string) string {
 }
 
 func strToFloatSnippet(typ string) string {
-	i := strconv.Itoa(rand.Intn(99))
+	i := tmpIdx()
 	snippet := "t" + i + ", err" + i + " := strconv.ParseFloat(!{arg}, 0)\n"
 	snippet += "if err" + i + " != nil { return err" + i + " }\n"
 	snippet += "!{var} = " + typ + "(t" + i + ")"
@@ -45,4 +48,10 @@ func strToBytesSnippet(typ string) string {
 func strToStrSnippet(_ string) string {
 	snippet := "!{var} = !{arg}\n"
 	return snippet
+}
+
+func tmpIdx() string {
+	i := strconv.Itoa(tmpCntr)
+	tmpCntr++
+	return i
 }

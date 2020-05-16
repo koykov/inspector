@@ -3,6 +3,7 @@ package inspector
 import (
 	"go/format"
 	"go/types"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -63,6 +64,11 @@ type node struct {
 	mapv *node
 	slct *node
 }
+
+var (
+	reMap = regexp.MustCompile(`map\[[^]]+].*`)
+	reSlc = regexp.MustCompile(`\[].*`)
+)
 
 func NewCompiler(pkg string, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
@@ -128,7 +134,7 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 				if err != nil {
 					return err
 				}
-				if node == nil || node.typ == typeBasic {
+				if node == nil || node.typ == typeBasic || reMap.MatchString(node.typn) || reSlc.MatchString(node.typn) {
 					continue
 				}
 				if node.typ == typeStruct {
@@ -136,6 +142,10 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 				}
 				node.pkg = o.Pkg().Name()
 				node.name = o.Name()
+				if _, ok := c.uniq[node.name]; ok {
+					continue
+				}
+				c.uniq[node.name] = true
 				c.nodes = append(c.nodes, node)
 			}
 		}
@@ -325,7 +335,6 @@ if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname +
 func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) error {
 	depths := strconv.Itoa(depth)
 
-	// requireLenCheck := node.typ != typeBasic
 	requireLenCheck := node.typ != typeBasic && !(mode == modeLoop && (node.typ == typeMap || (node.typ == typeSlice && node.typn != "[]byte")))
 
 	if requireLenCheck {
