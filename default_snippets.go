@@ -28,7 +28,7 @@ func strToFloatSnippet(typ string) string {
 	return snippet
 }
 
-func strToBytesSnippet(typ string) string {
+func strToBytesSnippet(_ string) string {
 	snippet := "!{var} = fastconv.S2B(!{arg})\n"
 	return snippet
 }
