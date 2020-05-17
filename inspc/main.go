@@ -10,10 +10,10 @@ import (
 )
 
 var (
-	fPkg           = flag.String("pkg", "", "Package path. May be relative to GOPATH.")
-	fOut           = flag.String("out", "", `Output dir. pkg + "_ins" by default.`)
-	pkg, out       string
-	absPkg, absOut string
+	fPkg     = flag.String("pkg", "", "Package path. May be relative to GOPATH.")
+	fOut     = flag.String("out", "", `Output dir. pkg + "_ins" by default.`)
+	pkg, out string
+	absPkg   string
 )
 
 func init() {
@@ -40,19 +40,12 @@ func init() {
 	if len(out) == 0 {
 		out = pkg + "_ins"
 	}
-	absOut = absPkg + "_ins"
-	_, err = os.Stat(absOut)
-	if os.IsNotExist(err) {
-		if err := os.MkdirAll(absOut, 0755); err != nil {
-			log.Fatal("Couldn't prepare output dir: ", err)
-		}
-	}
 }
 
 func main() {
 	buf := &bytes.Buffer{}
 	lg := log.New(os.Stdout, "", log.LstdFlags)
-	c := inspector.NewCompiler(pkg, absOut, buf, lg)
+	c := inspector.NewCompiler(pkg, out, buf, lg)
 	err := c.Compile()
 	if err != nil {
 		log.Fatal("compile failed with error: ", err)
