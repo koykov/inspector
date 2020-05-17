@@ -1,6 +1,7 @@
 package inspector
 
 type Op int
+type LoopCtl int
 
 const (
 	OpUnk Op = 0
@@ -12,4 +13,8 @@ const (
 	OpLtq Op = 6
 	OpInc Op = 7
 	OpDec Op = 8
+
+	LoopCtlNone = 0
+	LoopCtlBrk  = 1
+	LoopCtlCnt  = 2
 )

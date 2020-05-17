@@ -600,7 +600,13 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					l.SetKey(buf, &inspector.StaticInspector{})
 				}
 				l.SetVal((*x0)[k], &inspector.StaticInspector{})
-				l.Loop()
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
 			}
 			return
 		}
@@ -613,7 +619,13 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					l.SetKey(buf, &inspector.StaticInspector{})
 				}
 				l.SetVal((x0)[k], &TestHistoryInspector{})
-				l.Loop()
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
 			}
 			return
 		}
@@ -626,7 +638,13 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 					l.SetKey(buf, &inspector.StaticInspector{})
 				}
 				l.SetVal((x0)[k], &inspector.StaticInspector{})
-				l.Loop()
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
 			}
 			return
 		}
@@ -646,7 +664,13 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 							l.SetKey(buf, &inspector.StaticInspector{})
 						}
 						l.SetVal(&(x1)[k], &TestHistoryInspector{})
-						l.Loop()
+						ctl := l.Iterate()
+						if ctl == inspector.LoopCtlBrk {
+							break
+						}
+						if ctl == inspector.LoopCtlCnt {
+							continue
+						}
 					}
 					return
 				}

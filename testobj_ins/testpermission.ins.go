@@ -117,7 +117,13 @@ func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf
 			l.SetKey(buf, &inspector.StaticInspector{})
 		}
 		l.SetVal((*x)[k], &inspector.StaticInspector{})
-		l.Loop()
+		ctl := l.Iterate()
+		if ctl == inspector.LoopCtlBrk {
+			break
+		}
+		if ctl == inspector.LoopCtlCnt {
+			continue
+		}
 	}
 	return
 	return

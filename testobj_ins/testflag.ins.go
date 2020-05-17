@@ -116,7 +116,13 @@ func (i1 *TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]by
 			l.SetKey(buf, &inspector.StaticInspector{})
 		}
 		l.SetVal((*x)[k], &inspector.StaticInspector{})
-		l.Loop()
+		ctl := l.Iterate()
+		if ctl == inspector.LoopCtlBrk {
+			break
+		}
+		if ctl == inspector.LoopCtlCnt {
+			continue
+		}
 	}
 	return
 	return

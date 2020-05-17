@@ -14,7 +14,7 @@ type Looper interface {
 	RequireKey() bool
 	SetKey(val interface{}, ins Inspector)
 	SetVal(val interface{}, ins Inspector)
-	Loop()
+	Iterate() LoopCtl
 }
 
 type BaseInspector struct{}

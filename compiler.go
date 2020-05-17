@@ -473,7 +473,9 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				insName += node.mapv.typn + "Inspector"
 			}
 			c.wl("l.SetVal(", c.fmtV(node, v), "[k], &", insName, "{})")
-			c.wl("l.Loop()")
+			c.wl("ctl := l.Iterate()")
+			c.wl("if ctl == inspector.LoopCtlBrk { break }")
+			c.wl("if ctl == inspector.LoopCtlCnt { continue }")
 			c.wl("}")
 			c.wl("return")
 		default:
@@ -522,7 +524,9 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
 			c.wl("}")
 			c.wl("l.SetVal(&", c.fmtV(node, v), "[k], &TestHistoryInspector{})")
-			c.wl("l.Loop()")
+			c.wl("ctl := l.Iterate()")
+			c.wl("if ctl == inspector.LoopCtlBrk { break }")
+			c.wl("if ctl == inspector.LoopCtlCnt { continue }")
 			c.wl("}")
 			c.wl("return")
 		default:
