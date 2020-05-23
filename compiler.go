@@ -428,6 +428,9 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				nv := "x" + strconv.Itoa(depth)
 				c.wl(nv, " := ", v, ".", ch.name)
 				c.wl("_ = ", nv)
+				if mode == modeCmp && ch.ptr {
+					c.writeCmp(ch, nv)
+				}
 				err := c.writeNode(ch, recv, nv, depth+1, mode)
 				if err != nil {
 					return err
@@ -568,6 +571,17 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 }
 
 func (c *Compiler) writeCmp(left *node, leftVar string) {
+	if left.ptr {
+		c.wl("if right==inspector.Nil {")
+		c.wl("if cond == inspector.OpEq {")
+		c.wl("*result = ", leftVar, " == nil")
+		c.wl("} else {")
+		c.wl("*result = ", leftVar, " != nil")
+		c.wl("}")
+		c.wl("return\n}")
+		return
+	}
+
 	c.wl("var rightExact ", left.typn)
 	snippet, imports, err := StrConvSnippet("right", left.typn, left.typu, "rightExact")
 	c.regImport(imports)

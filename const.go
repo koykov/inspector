@@ -17,4 +17,6 @@ const (
 	LoopCtlNone = 0
 	LoopCtlBrk  = 1
 	LoopCtlCnt  = 2
+
+	Nil = "nil"
 )

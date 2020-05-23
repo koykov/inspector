@@ -272,6 +272,14 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 		if path[0] == "Permission" {
 			x0 := x.Permission
 			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
 			if len(path) > 1 {
 				if x0 == nil {
 					return
@@ -402,6 +410,14 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 		if path[0] == "Finance" {
 			x0 := x.Finance
 			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
 			if len(path) > 1 {
 				if x0 == nil {
 					return
