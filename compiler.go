@@ -74,6 +74,8 @@ type node struct {
 var (
 	reMap = regexp.MustCompile(`map\[[^]]+].*`)
 	reSlc = regexp.MustCompile(`\[].*`)
+	reUp  = regexp.MustCompile(`^[A-Z]+.*`)
+	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 
 	ErrNoGOPATH     = errors.New("no GOPATH variable found")
 	ErrDstNotExists = errors.New("destination directory doesn't exists")
@@ -124,11 +126,17 @@ func (c *Compiler) Compile() error {
 	ps := string(os.PathSeparator)
 	c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
 
-	if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
-		return err
+	dstExists := true
+	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
+		dstExists = false
 	}
-	if err := os.RemoveAll(c.dstAbs); err != nil {
-		return err
+	if dstExists {
+		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
+			return err
+		}
+		if err := os.RemoveAll(c.dstAbs); err != nil {
+			return err
+		}
 	}
 	if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
 		return ErrDstNotExists
@@ -175,7 +183,7 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 		if parent := scope.Parent(); parent != nil {
 			for _, name := range parent.Names() {
 				o := parent.Lookup(name)
-				if !o.Exported() {
+				if !c.isExported(o) {
 					continue
 				}
 				t := o.Type()
@@ -215,10 +223,17 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 			return nil, nil
 		}
 		node.pkg = n.Obj().Pkg().Name()
-		node.pkgi = n.Obj().Pkg().Path()
+		node.pkgi = c.clearPkg(n.Obj().Pkg().Path())
 	}
 
 	u := t.Underlying()
+	if _, ok := u.(*types.Interface); ok {
+		return nil, nil
+	}
+	if _, ok := u.(*types.Signature); ok {
+		return nil, nil
+	}
+
 	if p, ok := u.(*types.Pointer); ok {
 		e := p.Elem()
 		u = e.Underlying()
@@ -233,18 +248,18 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		if n, ok := e.(*types.Named); ok {
 			unode.typn = n.Obj().Name()
 			unode.pkg = n.Obj().Pkg().Name()
-			unode.pkgi = n.Obj().Pkg().Path()
+			unode.pkgi = c.clearPkg(n.Obj().Pkg().Path())
 		}
 		return unode, err
 	}
 
 	if s, ok := u.(*types.Struct); ok {
 		node.typ = typeStruct
-		if node.typn == "AdSkip" {
-			node.typ = typeStruct
-		}
 		for i := 0; i < s.NumFields(); i++ {
 			f := s.Field(i)
+			if !f.Exported() {
+				continue
+			}
 			ch, err := c.parseType(f.Type())
 			if err != nil {
 				return node, err
@@ -526,7 +541,16 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
 			c.wl("}")
-			c.wl("l.SetVal(&", c.fmtV(node, v), "[k], &TestHistoryInspector{})")
+			insName := "inspector.StaticInspector"
+			if node.slct.typ == typeStruct {
+				insName = ""
+				if node.slct.pkg != c.pkgName {
+					insName = node.slct.pkg + "_ins."
+					c.regImport([]string{`"` + node.slct.pkgi + `_ins"`})
+				}
+				insName += node.slct.typn + "Inspector"
+			}
+			c.wl("l.SetVal(&", c.fmtV(node, v), "[k], &", insName, "{})")
 			c.wl("ctl := l.Iterate()")
 			c.wl("if ctl == inspector.LoopCtlBrk { break }")
 			c.wl("if ctl == inspector.LoopCtlCnt { continue }")
@@ -542,7 +566,11 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			}
 			c.wl(snippet)
 			c.wl("if len(", v, ") > i {")
-			c.wl(nv, " := &", v, "[i]")
+			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+				c.wl(nv, " := ", v, "[i]")
+			} else {
+				c.wl(nv, " := &", v, "[i]")
+			}
 			c.wl("_ = ", nv)
 			err = c.writeNode(node.slct, recv, nv, depth+1, mode)
 			if err != nil {
@@ -620,6 +648,46 @@ func (c *Compiler) writeCmp(left *node, leftVar string) {
 		c.wl("*result = ", leftVar, " <= rightExact")
 		c.wl("}")
 	}
+}
+
+func (c *Compiler) isBuiltin(typ string) bool {
+	switch typ {
+	case "int", "int8", "int16", "int32", "int64",
+		"uint", "uint8", "uint16", "uint32", "uint64",
+		"float32", "float64",
+		"string", "[]byte", "bool":
+		return true
+	default:
+		return false
+	}
+}
+
+func (c *Compiler) isExported(o types.Object) bool {
+	if !o.Exported() {
+		return false
+	}
+	if _, ok := o.(*types.Var); ok {
+		return false
+	}
+	t := o.Type()
+	if n, ok := t.(*types.Named); ok {
+		if !reUp.MatchString(n.Obj().Name()) {
+			return false
+		}
+	}
+	u := t.Underlying()
+	if p, ok := u.(*types.Pointer); ok {
+		_ = p
+		return true
+	}
+	return true
+}
+
+func (c *Compiler) clearPkg(pkgi string) string {
+	if m := reVnd.FindStringSubmatch(pkgi); m != nil {
+		return m[1]
+	}
+	return pkgi
 }
 
 func (c *Compiler) fmtV(node *node, v string) string {
