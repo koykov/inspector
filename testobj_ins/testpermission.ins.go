@@ -20,9 +20,6 @@ func (i4 *TestPermissionInspector) Get(src interface{}, path ...string) (interfa
 }
 
 func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
-	if len(path) == 0 {
-		return
-	}
 	if src == nil {
 		return
 	}
@@ -33,6 +30,10 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 	} else if v, ok := src.(testobj.TestPermission); ok {
 		x = &v
 	} else {
+		return
+	}
+	if len(path) == 0 {
+		*buf = x
 		return
 	}
 
@@ -48,6 +49,7 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 		*buf = &x0
 		return
 	}
+	*buf = x
 	*buf = x
 	return
 }

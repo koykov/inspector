@@ -20,9 +20,6 @@ func (i1 *TestFlagInspector) Get(src interface{}, path ...string) (interface{}, 
 }
 
 func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
-	if len(path) == 0 {
-		return
-	}
 	if src == nil {
 		return
 	}
@@ -35,6 +32,10 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 	} else {
 		return
 	}
+	if len(path) == 0 {
+		*buf = x
+		return
+	}
 
 	if len(path) > 0 {
 		if x0, ok := (*x)[path[0]]; ok {
@@ -43,6 +44,7 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 			return
 		}
 	}
+	*buf = x
 	*buf = x
 	return
 }

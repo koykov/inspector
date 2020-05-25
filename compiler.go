@@ -371,6 +371,12 @@ if src == nil { return }
 var x *` + pname + `
 _ = x
 if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+	funcHeaderGetTo := `if src == nil { return }
+var x *` + pname + `
+_ = x
+if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
+if len(path) == 0 { *buf = x
+return}`
 
 	// Getter methods.
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
@@ -378,11 +384,12 @@ if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname +
 	c.wdl("}")
 
 	c.wl("func (", recv, " *", inst, ") GetTo(src interface{}, buf *interface{}, path ...string) (err error) {")
-	c.wdl(funcHeader)
+	c.wdl(funcHeaderGetTo)
 	err = c.writeNode(node, recv, "x", 0, modeGet)
 	if err != nil {
 		return err
 	}
+	c.wl("*buf = x")
 	c.wdl("return }")
 
 	// Compare method.
@@ -610,12 +617,20 @@ func (c *Compiler) writeCmp(left *node, leftVar string) {
 		return
 	}
 
-	c.wl("var rightExact ", left.typn)
+	bi := c.isBuiltin(left.typn)
+	pname := left.typn
+	if !bi {
+		pname = c.pkgName + "." + pname
+	}
+	c.wl("var rightExact ", pname)
 	snippet, imports, err := StrConvSnippet("right", left.typn, left.typu, "rightExact")
 	c.regImport(imports)
 	if err != nil {
 		c.err = err
 		return
+	}
+	if !bi {
+		snippet = strings.Replace(snippet, left.typu, pname, -1)
 	}
 	c.wl(snippet)
 

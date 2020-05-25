@@ -22,9 +22,6 @@ func (i0 *TestFinanceInspector) Get(src interface{}, path ...string) (interface{
 }
 
 func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
-	if len(path) == 0 {
-		return
-	}
 	if src == nil {
 		return
 	}
@@ -35,6 +32,10 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 	} else if v, ok := src.(testobj.TestFinance); ok {
 		x = &v
 	} else {
+		return
+	}
+	if len(path) == 0 {
+		*buf = x
 		return
 	}
 
@@ -87,6 +88,7 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 			*buf = x0
 		}
 	}
+	*buf = x
 	return
 }
 

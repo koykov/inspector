@@ -22,9 +22,6 @@ func (i2 *TestHistoryInspector) Get(src interface{}, path ...string) (interface{
 }
 
 func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
-	if len(path) == 0 {
-		return
-	}
 	if src == nil {
 		return
 	}
@@ -35,6 +32,10 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 	} else if v, ok := src.(testobj.TestHistory); ok {
 		x = &v
 	} else {
+		return
+	}
+	if len(path) == 0 {
+		*buf = x
 		return
 	}
 
@@ -52,6 +53,7 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 			return
 		}
 	}
+	*buf = x
 	return
 }
 
