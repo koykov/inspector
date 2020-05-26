@@ -35,7 +35,7 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 		return
 	}
 	if len(path) == 0 {
-		*buf = x
+		*buf = &(*x)
 		return
 	}
 
@@ -83,12 +83,12 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 							return
 						}
 					}
+					*buf = x1
 				}
 			}
-			*buf = x0
 		}
 	}
-	*buf = x
+	*buf = &(*x)
 	return
 }
 

@@ -35,7 +35,7 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 		return
 	}
 	if len(path) == 0 {
-		*buf = x
+		*buf = &(*x)
 		return
 	}
 
@@ -53,7 +53,7 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 			return
 		}
 	}
-	*buf = x
+	*buf = &(*x)
 	return
 }
 

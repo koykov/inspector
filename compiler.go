@@ -375,7 +375,7 @@ if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname +
 var x *` + pname + `
 _ = x
 if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
-if len(path) == 0 { *buf = x
+if len(path) == 0 { *buf = &(*x)
 return}`
 
 	// Getter methods.
@@ -385,17 +385,17 @@ return}`
 
 	c.wl("func (", recv, " *", inst, ") GetTo(src interface{}, buf *interface{}, path ...string) (err error) {")
 	c.wdl(funcHeaderGetTo)
-	err = c.writeNode(node, recv, "x", 0, modeGet)
+	err = c.writeNode(node, nil, recv, "x", "", 0, modeGet)
 	if err != nil {
 		return err
 	}
-	c.wl("*buf = x")
+	c.wl("*buf = &(*x)")
 	c.wdl("return }")
 
 	// Compare method.
 	c.wl("func (", recv, " *", inst, ") Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
 	c.wdl(funcHeader)
-	err = c.writeNode(node, recv, "x", 0, modeCmp)
+	err = c.writeNode(node, nil, recv, "x", "", 0, modeCmp)
 	if err != nil {
 		return err
 	}
@@ -404,7 +404,7 @@ return}`
 	// Loop method.
 	c.wl("func (", recv, " *", inst, ") Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
 	c.wdl(funcHeader)
-	err = c.writeNode(node, recv, "x", 0, modeLoop)
+	err = c.writeNode(node, nil, recv, "x", "", 0, modeLoop)
 	if err != nil {
 		return err
 	}
@@ -418,7 +418,7 @@ return}`
 	return c.err
 }
 
-func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) error {
+func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int, mode mode) error {
 	depths := strconv.Itoa(depth)
 
 	requireLenCheck := node.typ != typeBasic && !(mode == modeLoop && (node.typ == typeMap || (node.typ == typeSlice && node.typn != "[]byte")))
@@ -448,12 +448,17 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				}
 			} else {
 				nv := "x" + strconv.Itoa(depth)
-				c.wl(nv, " := ", v, ".", ch.name)
+				vsrc := v + "." + ch.name
+				pfx := ""
+				if !ch.ptr && ch.typ != typeMap && ch.typ != typeSlice {
+					pfx = "&"
+				}
+				c.wl(nv, " := ", pfx, vsrc)
 				c.wl("_ = ", nv)
 				if mode == modeCmp && ch.ptr {
 					c.writeCmp(ch, nv)
 				}
-				err := c.writeNode(ch, recv, nv, depth+1, mode)
+				err := c.writeNode(ch, node, recv, nv, vsrc, depth+1, mode)
 				if err != nil {
 					return err
 				}
@@ -508,7 +513,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 			if node.mapk.typn == "string" {
 				c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
 				c.wl("_ = ", nv)
-				err := c.writeNode(node.mapv, recv, nv, depth+1, mode)
+				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if err != nil {
 					return err
 				}
@@ -523,7 +528,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				c.wl(snippet)
 				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
 				c.wl("_ = ", nv)
-				err = c.writeNode(node.mapv, recv, nv, depth+1, mode)
+				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if err != nil {
 					return err
 				}
@@ -579,7 +584,7 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 				c.wl(nv, " := &", v, "[i]")
 			}
 			c.wl("_ = ", nv)
-			err = c.writeNode(node.slct, recv, nv, depth+1, mode)
+			err = c.writeNode(node.slct, node, recv, nv, "", depth+1, mode)
 			if err != nil {
 				return err
 			}
@@ -598,8 +603,16 @@ func (c *Compiler) writeNode(node *node, recv, v string, depth int, mode mode) e
 	if requireLenCheck {
 		c.wl("}")
 	}
-	if (node.typ == typeMap || node.typ == typeSlice) && mode == modeGet {
-		c.wl("*buf = ", v)
+	if (node.typ == typeStruct || node.typ == typeMap || node.typ == typeSlice) && mode == modeGet && depth > 1 {
+		pfx := ""
+		if parent != nil && parent.typ != typeSlice {
+			pfx = "&"
+		}
+		if len(vsrc) > 0 {
+			c.wl("*buf = ", pfx, vsrc)
+		} else {
+			c.wl("*buf = ", pfx, v)
+		}
 	}
 
 	return c.err

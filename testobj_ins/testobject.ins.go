@@ -35,7 +35,7 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 		return
 	}
 	if len(path) == 0 {
-		*buf = x
+		*buf = &(*x)
 		return
 	}
 
@@ -74,7 +74,6 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = x0
 		}
 		if path[0] == "HistoryTree" {
 			x0 := x.HistoryTree
@@ -99,9 +98,9 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 							return
 						}
 					}
+					*buf = &x1
 				}
 			}
-			*buf = x0
 		}
 		if path[0] == "Flags" {
 			x0 := x.Flags
@@ -113,7 +112,6 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 					return
 				}
 			}
-			*buf = x0
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
@@ -165,14 +163,15 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 									return
 								}
 							}
+							*buf = x2
 						}
 					}
-					*buf = x1
+					*buf = &x0.History
 				}
 			}
 		}
 	}
-	*buf = x
+	*buf = &(*x)
 	return
 }
 

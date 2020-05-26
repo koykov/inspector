@@ -33,7 +33,7 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 		return
 	}
 	if len(path) == 0 {
-		*buf = x
+		*buf = &(*x)
 		return
 	}
 
@@ -44,8 +44,7 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 			return
 		}
 	}
-	*buf = x
-	*buf = x
+	*buf = &(*x)
 	return
 }
 

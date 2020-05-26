@@ -33,7 +33,7 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 		return
 	}
 	if len(path) == 0 {
-		*buf = x
+		*buf = &(*x)
 		return
 	}
 
@@ -49,8 +49,7 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 		*buf = &x0
 		return
 	}
-	*buf = x
-	*buf = x
+	*buf = &(*x)
 	return
 }
 
