@@ -48,6 +48,7 @@ type Compiler struct {
 	pkgName string
 	dst     string
 	dstAbs  string
+	bl      map[string]bool
 	uniq    map[string]bool
 	nodes   []*node
 	imp     []string
@@ -81,11 +82,12 @@ var (
 	ErrDstNotExists = errors.New("destination directory doesn't exists")
 )
 
-func NewCompiler(pkg, dst string, w ByteStringWriter, l Logger) *Compiler {
+func NewCompiler(pkg, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		pkg:    pkg,
 		pkgDot: pkg + ".",
 		dst:    dst,
+		bl:     bl,
 		uniq:   make(map[string]bool),
 		wr:     w,
 		l:      l,
@@ -201,6 +203,11 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 				node.name = o.Name()
 				if _, ok := c.uniq[node.name]; ok {
 					continue
+				}
+				if len(c.bl) > 0 {
+					if _, ok := c.bl[node.name]; ok {
+						continue
+					}
 				}
 				c.uniq[node.name] = true
 				c.nodes = append(c.nodes, node)

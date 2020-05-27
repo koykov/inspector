@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -12,7 +13,9 @@ import (
 var (
 	fPkg     = flag.String("pkg", "", "Package path. May be relative to GOPATH.")
 	fOut     = flag.String("out", "", `Output dir. pkg + "_ins" by default.`)
+	fBl      = flag.String("bl", "", "Path to blacklist file.")
 	pkg, out string
+	bl       = map[string]bool{}
 	absPkg   string
 )
 
@@ -40,12 +43,23 @@ func init() {
 	if len(out) == 0 {
 		out = pkg + "_ins"
 	}
+
+	if len(*fBl) > 0 {
+		contents, err := ioutil.ReadFile(*fBl)
+		if err != nil {
+			log.Fatal(err)
+		}
+		lines := bytes.Split(contents, []byte("\n"))
+		for _, line := range lines {
+			bl[string(line)] = true
+		}
+	}
 }
 
 func main() {
 	buf := &bytes.Buffer{}
 	lg := log.New(os.Stdout, "", log.LstdFlags)
-	c := inspector.NewCompiler(pkg, out, buf, lg)
+	c := inspector.NewCompiler(pkg, out, bl, buf, lg)
 	err := c.Compile()
 	if err != nil {
 		log.Fatal("compile failed with error: ", err)
