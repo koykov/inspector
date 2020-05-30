@@ -9,7 +9,7 @@ import (
 
 func TestCompiler(t *testing.T) {
 	buf := &bytes.Buffer{}
-	c := inspector.NewCompiler("github.com/koykov/inspector/testobj", "github.com/koykov/inspector/testobj_ins", buf, nil)
+	c := inspector.NewCompiler("github.com/koykov/inspector/testobj", "github.com/koykov/inspector/testobj_ins", nil, buf, nil)
 	err := c.Compile()
 	if err != nil {
 		t.Error(err)
