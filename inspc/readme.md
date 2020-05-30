@@ -17,7 +17,16 @@ by input arg `-dst`, example:
 inspc -pkg github.com/koykov/inspector/testobj -dst github.com/koykov/my_inspectors/testobj
 ```
 
-Also supports blacklist files by passing the erg `-bl`. It's just a path to the blacklist file (see sections below).
+Also supports blacklist files by passing the erg `-bl`. It's just a path to the blacklist file (see the section "Blacklist").
+
+## Installation
+
+Build the tool with the following commands:
+```bash
+go get github.com/koykov/inspector/inspc
+go build -o $GOPATH/bin/inspc github.com/koykov/inspector/inspc
+```
+Make sure `$GOPATH/bin` is in the `$PATH` variable.
 
 ## Blacklist
 
