@@ -14,20 +14,26 @@ import (
 	"golang.org/x/tools/go/loader"
 )
 
+// Internal node type.
 type typ int
+
+// Node compile mode.
 type mode int
 
 const (
+	// Possible node's types.
 	typeStruct typ = iota
 	typeMap
 	typeSlice
 	typeBasic
 
+	// Possible compile modes.
 	modeGet mode = iota
 	modeCmp
 	modeLoop
 )
 
+// Extended writer interface.
 type ByteStringWriter interface {
 	Write(p []byte) (n int, err error)
 	WriteByte(c byte) error
@@ -37,51 +43,85 @@ type ByteStringWriter interface {
 	Reset()
 }
 
+// Logger interface.
 type Logger interface {
 	Print(v ...interface{})
 	Println(v ...interface{})
 }
 
+// The compiler.
 type Compiler struct {
-	pkg     string
-	pkgDot  string
+	// Path to the package relative to $GOPATH/src.
+	pkg string
+	// THe same as pkg plus dot at the end, needs for internal logic.
+	pkgDot string
+	// Only package name.
 	pkgName string
-	dst     string
-	dstAbs  string
-	bl      map[string]bool
-	uniq    map[string]bool
-	nodes   []*node
-	imp     []string
-	cntr    int
-	l       Logger
-	wr      ByteStringWriter
-	err     error
+	// Destination dir relative to $GOPATH/src.
+	dst string
+	// Absolute path to the destination dir.
+	dstAbs string
+	// List of blacklisted types (key is a type name, value is ignored).
+	bl map[string]bool
+	// Cache of processed types, needs to avoid duplications.
+	uniq map[string]bool
+	// Tree of parsed types.
+	nodes []*node
+	// List of imports that should be in final output.
+	imp []string
+	// Internal types counter.
+	cntr int
+	// Logger object
+	l Logger
+	// Writer object
+	wr ByteStringWriter
+
+	err error
 }
 
+// Node type.
+// It's an internal representation of Go type.
 type node struct {
-	typ  typ
+	// Type flag, see constants above.
+	typ typ
+	// Type name as string.
 	typn string
+	// Underlying type name.
 	typu string
+	// If node has a parent, eg struct or map, this field contains the name or key.
 	name string
-	pkg  string
+	// Package name, requires for import suffixes.
+	pkg string
+	// Package path, requires for imports.
 	pkgi string
-	ptr  bool
+	// Is node passed as pointer in parent or not.
+	ptr bool
+	// List of child nodes.
 	chld []*node
+	// If is a map, that node contains information about key's type.
 	mapk *node
+	// If is a map, that node contains information about value's type.
 	mapv *node
+	// If is a slice, that node contains information about value's type.
 	slct *node
 }
 
 var (
+	// Check map.
 	reMap = regexp.MustCompile(`map\[[^]]+].*`)
+	// Check slice.
 	reSlc = regexp.MustCompile(`\[].*`)
-	reUp  = regexp.MustCompile(`^[A-Z]+.*`)
+	// Check if first symbol is in upper case.
+	reUp = regexp.MustCompile(`^[A-Z]+.*`)
+	// Check vendor directory.
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 
+	// Std errors.
 	ErrNoGOPATH     = errors.New("no GOPATH variable found")
 	ErrDstNotExists = errors.New("destination directory doesn't exists")
 )
 
+// Make new instance of the compiler.
 func NewCompiler(pkg, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		pkg:    pkg,
@@ -100,10 +140,12 @@ func (c *Compiler) String() string {
 	return ""
 }
 
+// Main compile method.
 func (c *Compiler) Compile() error {
 	if c.l != nil {
 		c.l.Print("Parse package " + c.pkg)
 	}
+	// Try import the package.
 	var conf loader.Config
 	conf.Import(c.pkg)
 	prog, err := conf.Load()
@@ -111,6 +153,7 @@ func (c *Compiler) Compile() error {
 		return err
 	}
 
+	// Parse the package to nodes list.
 	pkg := prog.Package(c.pkg)
 	c.pkgName = pkg.Pkg.Name()
 	err = c.parsePkg(pkg)
@@ -118,6 +161,7 @@ func (c *Compiler) Compile() error {
 		return err
 	}
 
+	// Prepare destination.
 	if c.l != nil {
 		c.l.Print("Prepare destination dir " + c.dst)
 	}
@@ -144,6 +188,7 @@ func (c *Compiler) Compile() error {
 		return ErrDstNotExists
 	}
 
+	// Write init file of destination package.
 	file := "init.go"
 	if c.l != nil {
 		c.l.Print("Compiling init to " + file)
@@ -157,6 +202,7 @@ func (c *Compiler) Compile() error {
 		return err
 	}
 
+	// Walk over nodes and compile each of them to separate file.
 	for _, node := range c.nodes {
 		file = strings.ToLower(node.name) + ".ins.go"
 		if c.l != nil {
@@ -176,6 +222,7 @@ func (c *Compiler) Compile() error {
 	return nil
 }
 
+// Get the total number of compiled types.
 func (c *Compiler) GetTotal() int {
 	return c.cntr
 }
