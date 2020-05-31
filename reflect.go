@@ -1,5 +1,7 @@
 package inspector
 
+// Reflect inspector. Strongly recommend to not use it. Need only for performance/allocation comparison.
+
 import (
 	"fmt"
 	"reflect"
@@ -32,16 +34,16 @@ func (i *ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...stri
 	return err
 }
 
-func (i *ReflectInspector) Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error {
+func (i *ReflectInspector) Cmp(_ interface{}, _ Op, _ string, _ *bool, _ ...string) error {
 	// Empty method, I'm too lazy to implement it now.
 	return nil
 }
 
-func (i *ReflectInspector) Set(dst, value interface{}, path ...string) {
+func (i *ReflectInspector) Set(_, _ interface{}, _ ...string) {
 	// Empty method, there is no way to update data using reflection.
 }
 
-func (i *ReflectInspector) Loop(src interface{}, l Looper, buf *[]byte, path ...string) (err error) {
+func (i *ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }

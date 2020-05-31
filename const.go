@@ -1,6 +1,9 @@
 package inspector
 
+// Operation types.
 type Op int
+
+// Loop control type.
 type LoopCtl int
 
 const (
@@ -18,5 +21,6 @@ const (
 	LoopCtlBrk  = 1
 	LoopCtlCnt  = 2
 
+	// nil value.
 	Nil = "nil"
 )

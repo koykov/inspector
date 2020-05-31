@@ -1,5 +1,7 @@
 package inspector
 
+// Built-in inspector for simple types, like int, unit, ...
+
 import (
 	"bytes"
 	"strconv"
