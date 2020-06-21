@@ -29,6 +29,7 @@ const (
 
 	// Possible compile modes.
 	modeGet mode = iota
+	modeSet
 	modeCmp
 	modeLoop
 )
@@ -488,7 +489,11 @@ return}`
 
 	// Setter method.
 	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) {")
-	// ...
+	c.wdl(funcHeader)
+	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
+	if err != nil {
+		return err
+	}
 	c.wdl("}")
 
 	return c.err
