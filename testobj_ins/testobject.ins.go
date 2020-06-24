@@ -748,9 +748,12 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 					return err34
 				}
 				k = int32(t34)
+				x1 := (*x0)[k]
+				_ = x1
 				if exact, ok := value.(bool); ok {
-					(*x0)[k] = exact
+					x1 = exact
 				}
+				(*x0)[k] = x1
 			}
 		}
 		if path[0] == "HistoryTree" {

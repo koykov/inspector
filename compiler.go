@@ -630,13 +630,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				c.wl(snippet)
-				if mode != modeSet {
-					c.wl(nv, " := ", c.fmtV(node, v), "[k]")
-					c.wl("_ = ", nv)
-					err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
-				} else {
-					nv = c.fmtV(node, v) + "[k]"
-					err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
+				c.wl("_ = ", nv)
+				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				if mode == modeSet {
+					c.wl(c.fmtV(node, v), "[k] = ", nv)
 				}
 				if err != nil {
 					return err
