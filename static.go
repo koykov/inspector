@@ -22,8 +22,8 @@ func (i *StaticInspector) GetTo(src interface{}, buf *interface{}, _ ...string) 
 	return nil
 }
 
-func (i *StaticInspector) Set(_, _ interface{}, _ ...string) {
-	//
+func (i *StaticInspector) Set(_, _ interface{}, _ ...string) error {
+	return nil
 }
 
 func (i *StaticInspector) Cmp(src interface{}, cond Op, right string, result *bool, _ ...string) error {

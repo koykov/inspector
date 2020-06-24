@@ -77,11 +77,11 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t10, err10 := strconv.ParseInt(right, 0, 0)
-			if err10 != nil {
-				return err10
+			t11, err11 := strconv.ParseInt(right, 0, 0)
+			if err11 != nil {
+				return err11
 			}
-			rightExact = int64(t10)
+			rightExact = int64(t11)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -100,11 +100,11 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t11, err11 := strconv.ParseFloat(right, 0)
-			if err11 != nil {
-				return err11
+			t12, err12 := strconv.ParseFloat(right, 0)
+			if err12 != nil {
+				return err12
 			}
-			rightExact = float64(t11)
+			rightExact = float64(t12)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -158,5 +158,39 @@ func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	return
 }
 
-func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) {
+func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+	if len(path) == 0 {
+		return nil
+	}
+	if dst == nil {
+		return nil
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := dst.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := dst.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return nil
+	}
+
+	if len(path) > 0 {
+		if path[0] == "DateUnix" {
+			if exact, ok := value.(int64); ok {
+				x.DateUnix = exact
+			}
+		}
+		if path[0] == "Cost" {
+			if exact, ok := value.(float64); ok {
+				x.Cost = exact
+			}
+		}
+		if path[0] == "Comment" {
+			if exact, ok := value.([]byte); ok {
+				x.Comment = exact
+			}
+		}
+	}
+	return nil
 }

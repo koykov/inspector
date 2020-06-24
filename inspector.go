@@ -9,7 +9,7 @@ type Inspector interface {
 	// Get value from src to buf according path.
 	GetTo(src interface{}, buf *interface{}, path ...string) error
 	// Set value ti dst according path.
-	Set(dst, value interface{}, path ...string)
+	Set(dst, value interface{}, path ...string) error
 	// Compare value according path with right using cond.
 	// Result will be present in result.
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error

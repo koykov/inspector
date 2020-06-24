@@ -69,11 +69,11 @@ func (i1 *TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right strin
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact int32
-			t9, err9 := strconv.ParseInt(right, 0, 0)
-			if err9 != nil {
-				return err9
+			t10, err10 := strconv.ParseInt(right, 0, 0)
+			if err10 != nil {
+				return err10
 			}
-			rightExact = int32(t9)
+			rightExact = int32(t10)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -129,5 +129,31 @@ func (i1 *TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]by
 	return
 }
 
-func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) {
+func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
+	if len(path) == 0 {
+		return nil
+	}
+	if dst == nil {
+		return nil
+	}
+	var x *testobj.TestFlag
+	_ = x
+	if p, ok := dst.(*testobj.TestFlag); ok {
+		x = p
+	} else if v, ok := dst.(testobj.TestFlag); ok {
+		x = &v
+	} else {
+		return nil
+	}
+
+	if len(path) > 0 {
+		if x0, ok := (*x)[path[0]]; ok {
+			_ = x0
+			if exact, ok := value.(int32); ok {
+				x0 = exact
+			}
+			(*x)[path[0]] = x0
+		}
+	}
+	return nil
 }

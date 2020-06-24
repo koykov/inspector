@@ -313,5 +313,78 @@ func (i0 *TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	return
 }
 
-func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) {
+func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) error {
+	if len(path) == 0 {
+		return nil
+	}
+	if dst == nil {
+		return nil
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := dst.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := dst.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return nil
+	}
+
+	if len(path) > 0 {
+		if path[0] == "MoneyIn" {
+			if exact, ok := value.(float64); ok {
+				x.MoneyIn = exact
+			}
+		}
+		if path[0] == "MoneyOut" {
+			if exact, ok := value.(float64); ok {
+				x.MoneyOut = exact
+			}
+		}
+		if path[0] == "Balance" {
+			if exact, ok := value.(float64); ok {
+				x.Balance = exact
+			}
+		}
+		if path[0] == "AllowBuy" {
+			if exact, ok := value.(bool); ok {
+				x.AllowBuy = exact
+			}
+		}
+		if path[0] == "History" {
+			x0 := x.History
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t9, err9 := strconv.ParseInt(path[1], 0, 0)
+				if err9 != nil {
+					return err9
+				}
+				i = int(t9)
+				if len(x0) > i {
+					x1 := &x0[i]
+					_ = x1
+					if len(path) > 2 {
+						if path[2] == "DateUnix" {
+							if exact, ok := value.(int64); ok {
+								x1.DateUnix = exact
+							}
+						}
+						if path[2] == "Cost" {
+							if exact, ok := value.(float64); ok {
+								x1.Cost = exact
+							}
+						}
+						if path[2] == "Comment" {
+							if exact, ok := value.([]byte); ok {
+								x1.Comment = exact
+							}
+						}
+					}
+					x0[i] = *x1
+				}
+			}
+		}
+	}
+	return nil
 }

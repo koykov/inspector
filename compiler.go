@@ -447,6 +447,12 @@ if src == nil { return }
 var x *` + pname + `
 _ = x
 if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+	// Custom header for Set() method.
+	funcHeaderSet := `if len(path) == 0 { return nil }
+if dst == nil { return nil }
+var x *` + pname + `
+_ = x
+if p, ok := dst.(*` + pname + `); ok { x = p } else if v, ok := dst.(` + pname + `); ok { x = &v } else { return nil }`
 	// Custom header for GetTo() method.
 	funcHeaderGetTo := `if src == nil { return }
 var x *` + pname + `
@@ -488,13 +494,13 @@ return}`
 	c.wdl("return }")
 
 	// Setter method.
-	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) {")
-	c.wdl(funcHeader)
+	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) error {")
+	c.wdl(funcHeaderSet)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
 	if err != nil {
 		return err
 	}
-	c.wdl("}")
+	c.wdl("return nil }")
 
 	return c.err
 }
@@ -511,7 +517,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 	}
 	if node.ptr {
 		// Value may be nil on pointer types.
-		c.wl("if ", v, " == nil { return }")
+		c.wl("if ", v, " == nil { ", c.fmtR(mode, "nil"), " }")
 	}
 
 	switch node.typ {
@@ -531,6 +537,8 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				case modeCmp:
 					c.writeCmp(ch, v+"."+ch.name)
 					c.wl("return")
+				case modeSet:
+					c.wl("if exact, ok := value.(", ch.typn, "); ok {", v, ".", ch.name, " = exact}")
 				}
 			} else {
 				nv := "x" + strconv.Itoa(depth)
@@ -605,6 +613,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if err != nil {
 					return err
 				}
+				if mode == modeSet {
+					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
+				}
 				c.wl("}")
 			} else {
 				// Convert path value to the key type and try to find it in the map.
@@ -615,9 +626,14 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				c.wl(snippet)
-				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
-				c.wl("_ = ", nv)
-				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				if mode != modeSet {
+					c.wl(nv, " := ", c.fmtV(node, v), "[k]")
+					c.wl("_ = ", nv)
+					err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				} else {
+					nv = c.fmtV(node, v) + "[k]"
+					err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				}
 				if err != nil {
 					return err
 				}
@@ -634,6 +650,8 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case modeCmp:
 				c.writeCmp(node, v)
 				c.wl("return")
+			case modeSet:
+				c.wl("if exact, ok := value.(", node.typn, "); ok {", v, " = exact}")
 			}
 		}
 		switch mode {
@@ -680,6 +698,13 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if err != nil {
 				return err
 			}
+			if mode == modeSet {
+				pfx := ""
+				if !node.slct.ptr && !c.isBuiltin(node.slct.typn) {
+					pfx = "*"
+				}
+				c.wl(v, "[i] = ", pfx, nv)
+			}
 			c.wl("}")
 		}
 	case typeBasic:
@@ -690,6 +715,8 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 		case modeCmp:
 			c.writeCmp(node, v)
 			c.wl("return")
+		case modeSet:
+			c.wl("if exact, ok := value.(", node.typn, "); ok {", v, " = exact}")
 		}
 	}
 	if requireLenCheck {
@@ -826,6 +853,14 @@ func (c *Compiler) fmtV(node *node, v string) string {
 		return "(*" + v + ")"
 	}
 	return "(" + v + ")"
+}
+
+func (c *Compiler) fmtR(mode mode, err string) string {
+	if mode == modeSet {
+		return "return " + err
+	} else {
+		return "return"
+	}
 }
 
 // Shorthand write method.

@@ -64,11 +64,11 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 					return
 				}
 				var k int32
-				t13, err13 := strconv.ParseInt(path[1], 0, 0)
-				if err13 != nil {
-					return err13
+				t14, err14 := strconv.ParseInt(path[1], 0, 0)
+				if err14 != nil {
+					return err14
 				}
-				k = int32(t13)
+				k = int32(t14)
 				x1 := (*x0)[k]
 				_ = x1
 				*buf = &x1
@@ -141,11 +141,11 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t14, err14 := strconv.ParseInt(path[2], 0, 0)
-						if err14 != nil {
-							return err14
+						t15, err15 := strconv.ParseInt(path[2], 0, 0)
+						if err15 != nil {
+							return err15
 						}
-						i = int(t14)
+						i = int(t15)
 						if len(x1) > i {
 							x2 := &x1[i]
 							_ = x2
@@ -226,11 +226,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 		}
 		if path[0] == "Status" {
 			var rightExact int32
-			t17, err17 := strconv.ParseInt(right, 0, 0)
-			if err17 != nil {
-				return err17
+			t18, err18 := strconv.ParseInt(right, 0, 0)
+			if err18 != nil {
+				return err18
 			}
-			rightExact = int32(t17)
+			rightExact = int32(t18)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Status == rightExact
@@ -249,11 +249,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t18, err18 := strconv.ParseFloat(right, 0)
-			if err18 != nil {
-				return err18
+			t19, err19 := strconv.ParseFloat(right, 0)
+			if err19 != nil {
+				return err19
 			}
-			rightExact = float64(t18)
+			rightExact = float64(t19)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -286,19 +286,19 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 					return
 				}
 				var k int32
-				t19, err19 := strconv.ParseInt(path[1], 0, 0)
-				if err19 != nil {
-					return err19
-				}
-				k = int32(t19)
-				x1 := (*x0)[k]
-				_ = x1
-				var rightExact bool
-				t20, err20 := strconv.ParseBool(right)
+				t20, err20 := strconv.ParseInt(path[1], 0, 0)
 				if err20 != nil {
 					return err20
 				}
-				rightExact = bool(t20)
+				k = int32(t20)
+				x1 := (*x0)[k]
+				_ = x1
+				var rightExact bool
+				t21, err21 := strconv.ParseBool(right)
+				if err21 != nil {
+					return err21
+				}
+				rightExact = bool(t21)
 				if cond == inspector.OpEq {
 					*result = x1 == rightExact
 				} else {
@@ -319,11 +319,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 						}
 						if path[2] == "DateUnix" {
 							var rightExact int64
-							t21, err21 := strconv.ParseInt(right, 0, 0)
-							if err21 != nil {
-								return err21
+							t22, err22 := strconv.ParseInt(right, 0, 0)
+							if err22 != nil {
+								return err22
 							}
-							rightExact = int64(t21)
+							rightExact = int64(t22)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.DateUnix == rightExact
@@ -342,11 +342,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 						}
 						if path[2] == "Cost" {
 							var rightExact float64
-							t22, err22 := strconv.ParseFloat(right, 0)
-							if err22 != nil {
-								return err22
+							t23, err23 := strconv.ParseFloat(right, 0)
+							if err23 != nil {
+								return err23
 							}
-							rightExact = float64(t22)
+							rightExact = float64(t23)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.Cost == rightExact
@@ -385,11 +385,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
 					var rightExact int32
-					t24, err24 := strconv.ParseInt(right, 0, 0)
-					if err24 != nil {
-						return err24
+					t25, err25 := strconv.ParseInt(right, 0, 0)
+					if err25 != nil {
+						return err25
 					}
-					rightExact = int32(t24)
+					rightExact = int32(t25)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -425,11 +425,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 				}
 				if path[1] == "MoneyIn" {
 					var rightExact float64
-					t25, err25 := strconv.ParseFloat(right, 0)
-					if err25 != nil {
-						return err25
+					t26, err26 := strconv.ParseFloat(right, 0)
+					if err26 != nil {
+						return err26
 					}
-					rightExact = float64(t25)
+					rightExact = float64(t26)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyIn == rightExact
@@ -448,11 +448,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 				}
 				if path[1] == "MoneyOut" {
 					var rightExact float64
-					t26, err26 := strconv.ParseFloat(right, 0)
-					if err26 != nil {
-						return err26
+					t27, err27 := strconv.ParseFloat(right, 0)
+					if err27 != nil {
+						return err27
 					}
-					rightExact = float64(t26)
+					rightExact = float64(t27)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyOut == rightExact
@@ -471,11 +471,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 				}
 				if path[1] == "Balance" {
 					var rightExact float64
-					t27, err27 := strconv.ParseFloat(right, 0)
-					if err27 != nil {
-						return err27
+					t28, err28 := strconv.ParseFloat(right, 0)
+					if err28 != nil {
+						return err28
 					}
-					rightExact = float64(t27)
+					rightExact = float64(t28)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.Balance == rightExact
@@ -494,11 +494,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 				}
 				if path[1] == "AllowBuy" {
 					var rightExact bool
-					t28, err28 := strconv.ParseBool(right)
-					if err28 != nil {
-						return err28
+					t29, err29 := strconv.ParseBool(right)
+					if err29 != nil {
+						return err29
 					}
-					rightExact = bool(t28)
+					rightExact = bool(t29)
 					if cond == inspector.OpEq {
 						*result = x0.AllowBuy == rightExact
 					} else {
@@ -511,22 +511,22 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t29, err29 := strconv.ParseInt(path[2], 0, 0)
-						if err29 != nil {
-							return err29
+						t30, err30 := strconv.ParseInt(path[2], 0, 0)
+						if err30 != nil {
+							return err30
 						}
-						i = int(t29)
+						i = int(t30)
 						if len(x1) > i {
 							x2 := &x1[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
 									var rightExact int64
-									t30, err30 := strconv.ParseInt(right, 0, 0)
-									if err30 != nil {
-										return err30
+									t31, err31 := strconv.ParseInt(right, 0, 0)
+									if err31 != nil {
+										return err31
 									}
-									rightExact = int64(t30)
+									rightExact = int64(t31)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.DateUnix == rightExact
@@ -545,11 +545,11 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 								}
 								if path[3] == "Cost" {
 									var rightExact float64
-									t31, err31 := strconv.ParseFloat(right, 0)
-									if err31 != nil {
-										return err31
+									t32, err32 := strconv.ParseFloat(right, 0)
+									if err32 != nil {
+										return err32
 									}
-									rightExact = float64(t31)
+									rightExact = float64(t32)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.Cost == rightExact
@@ -697,5 +697,168 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) {
+func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error {
+	if len(path) == 0 {
+		return nil
+	}
+	if dst == nil {
+		return nil
+	}
+	var x *testobj.TestObject
+	_ = x
+	if p, ok := dst.(*testobj.TestObject); ok {
+		x = p
+	} else if v, ok := dst.(testobj.TestObject); ok {
+		x = &v
+	} else {
+		return nil
+	}
+
+	if len(path) > 0 {
+		if path[0] == "Id" {
+			if exact, ok := value.(string); ok {
+				x.Id = exact
+			}
+		}
+		if path[0] == "Name" {
+			if exact, ok := value.([]byte); ok {
+				x.Name = exact
+			}
+		}
+		if path[0] == "Status" {
+			if exact, ok := value.(int32); ok {
+				x.Status = exact
+			}
+		}
+		if path[0] == "Cost" {
+			if exact, ok := value.(float64); ok {
+				x.Cost = exact
+			}
+		}
+		if path[0] == "Permission" {
+			x0 := x.Permission
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				var k int32
+				t34, err34 := strconv.ParseInt(path[1], 0, 0)
+				if err34 != nil {
+					return err34
+				}
+				k = int32(t34)
+				if exact, ok := value.(bool); ok {
+					(*x0)[k] = exact
+				}
+			}
+		}
+		if path[0] == "HistoryTree" {
+			x0 := x.HistoryTree
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					if len(path) > 2 {
+						if x1 == nil {
+							return nil
+						}
+						if path[2] == "DateUnix" {
+							if exact, ok := value.(int64); ok {
+								x1.DateUnix = exact
+							}
+						}
+						if path[2] == "Cost" {
+							if exact, ok := value.(float64); ok {
+								x1.Cost = exact
+							}
+						}
+						if path[2] == "Comment" {
+							if exact, ok := value.([]byte); ok {
+								x1.Comment = exact
+							}
+						}
+					}
+					(x0)[path[1]] = x1
+				}
+			}
+		}
+		if path[0] == "Flags" {
+			x0 := x.Flags
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					if exact, ok := value.(int32); ok {
+						x1 = exact
+					}
+					(x0)[path[1]] = x1
+				}
+			}
+		}
+		if path[0] == "Finance" {
+			x0 := x.Finance
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				if path[1] == "MoneyIn" {
+					if exact, ok := value.(float64); ok {
+						x0.MoneyIn = exact
+					}
+				}
+				if path[1] == "MoneyOut" {
+					if exact, ok := value.(float64); ok {
+						x0.MoneyOut = exact
+					}
+				}
+				if path[1] == "Balance" {
+					if exact, ok := value.(float64); ok {
+						x0.Balance = exact
+					}
+				}
+				if path[1] == "AllowBuy" {
+					if exact, ok := value.(bool); ok {
+						x0.AllowBuy = exact
+					}
+				}
+				if path[1] == "History" {
+					x1 := x0.History
+					_ = x1
+					if len(path) > 2 {
+						var i int
+						t35, err35 := strconv.ParseInt(path[2], 0, 0)
+						if err35 != nil {
+							return err35
+						}
+						i = int(t35)
+						if len(x1) > i {
+							x2 := &x1[i]
+							_ = x2
+							if len(path) > 3 {
+								if path[3] == "DateUnix" {
+									if exact, ok := value.(int64); ok {
+										x2.DateUnix = exact
+									}
+								}
+								if path[3] == "Cost" {
+									if exact, ok := value.(float64); ok {
+										x2.Cost = exact
+									}
+								}
+								if path[3] == "Comment" {
+									if exact, ok := value.([]byte); ok {
+										x2.Comment = exact
+									}
+								}
+							}
+							x1[i] = *x2
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil
 }

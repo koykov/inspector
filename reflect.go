@@ -39,8 +39,9 @@ func (i *ReflectInspector) Cmp(_ interface{}, _ Op, _ string, _ *bool, _ ...stri
 	return nil
 }
 
-func (i *ReflectInspector) Set(_, _ interface{}, _ ...string) {
+func (i *ReflectInspector) Set(_, _ interface{}, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
+	return nil
 }
 
 func (i *ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
