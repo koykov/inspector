@@ -538,7 +538,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					c.writeCmp(ch, v+"."+ch.name)
 					c.wl("return")
 				case modeSet:
-					c.wl("if exact, ok := value.(", ch.typn, "); ok {", v, ".", ch.name, " = exact}")
+					pfx := ""
+					if !c.isBuiltin(ch.typn) {
+						pfx = ch.pkg + "."
+					}
+					c.wl("if exact, ok := value.(", pfx, ch.typn, "); ok {", v, ".", ch.name, " = exact}")
 				}
 			} else {
 				nv := "x" + strconv.Itoa(depth)
@@ -716,7 +720,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			c.writeCmp(node, v)
 			c.wl("return")
 		case modeSet:
-			c.wl("if exact, ok := value.(", node.typn, "); ok {", v, " = exact}")
+			pfx := ""
+			if !c.isBuiltin(node.typn) {
+				pfx = node.pkg + "."
+			}
+			c.wl("if exact, ok := value.(", pfx, node.typn, "); ok {", v, " = exact}")
 		}
 	}
 	if requireLenCheck {
