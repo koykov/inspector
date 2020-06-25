@@ -165,7 +165,7 @@ func testSetterPtr(t testing.TB, i inspector.Inspector) {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, expectName, p1...)
+	_ = i.Set(testO, &expectName, p1...)
 	if !bytes.Equal(testO.Name, expectName) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
@@ -190,7 +190,7 @@ func testSetterPtr(t testing.TB, i inspector.Inspector) {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, expectComment1, p6...)
+	_ = i.Set(testO, &expectComment1, p6...)
 	if !bytes.Equal(testO.Finance.History[0].Comment, expectComment1) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}

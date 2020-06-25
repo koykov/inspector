@@ -156,10 +156,14 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 		k = int32(t39)
 		x0 := (*x)[k]
 		_ = x0
+		if exact, ok := value.(*bool); ok {
+			x0 = *exact
+		}
 		if exact, ok := value.(bool); ok {
 			x0 = exact
 		}
 		(*x)[k] = x0
+		return nil
 	}
 	return nil
 }

@@ -542,7 +542,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if !c.isBuiltin(ch.typn) {
 						pfx = ch.pkg + "."
 					}
+					c.wl("if exact, ok := value.(*", pfx, ch.typn, "); ok {", v, ".", ch.name, " = *exact}")
 					c.wl("if exact, ok := value.(", pfx, ch.typn, "); ok {", v, ".", ch.name, " = exact}")
+					c.wl("return nil")
 				}
 			} else {
 				nv := "x" + strconv.Itoa(depth)
@@ -619,6 +621,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 				if mode == modeSet {
 					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
+					c.wl("return nil")
 				}
 				c.wl("}")
 			} else {
@@ -635,6 +638,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if mode == modeSet {
 					c.wl(c.fmtV(node, v), "[k] = ", nv)
+					c.wl("return nil")
 				}
 				if err != nil {
 					return err
@@ -653,7 +657,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.writeCmp(node, v)
 				c.wl("return")
 			case modeSet:
+				c.wl("if exact, ok := value.(*", node.typn, "); ok {", v, " = *exact}")
 				c.wl("if exact, ok := value.(", node.typn, "); ok {", v, " = exact}")
+				c.wl("return nil")
 			}
 		}
 		switch mode {
@@ -706,6 +712,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					pfx = "*"
 				}
 				c.wl(v, "[i] = ", pfx, nv)
+				c.wl("return nil")
 			}
 			c.wl("}")
 		}
@@ -722,7 +729,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if !c.isBuiltin(node.typn) {
 				pfx = node.pkg + "."
 			}
+			c.wl("if exact, ok := value.(*", pfx, node.typn, "); ok {", v, " = *exact}")
 			c.wl("if exact, ok := value.(", pfx, node.typn, "); ok {", v, " = exact}")
+			if parent.typ != typeMap {
+				c.wl("return nil")
+			}
 		}
 	}
 	if requireLenCheck {

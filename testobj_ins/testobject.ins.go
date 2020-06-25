@@ -716,24 +716,40 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 
 	if len(path) > 0 {
 		if path[0] == "Id" {
+			if exact, ok := value.(*string); ok {
+				x.Id = *exact
+			}
 			if exact, ok := value.(string); ok {
 				x.Id = exact
 			}
+			return nil
 		}
 		if path[0] == "Name" {
+			if exact, ok := value.(*[]byte); ok {
+				x.Name = *exact
+			}
 			if exact, ok := value.([]byte); ok {
 				x.Name = exact
 			}
+			return nil
 		}
 		if path[0] == "Status" {
+			if exact, ok := value.(*int32); ok {
+				x.Status = *exact
+			}
 			if exact, ok := value.(int32); ok {
 				x.Status = exact
 			}
+			return nil
 		}
 		if path[0] == "Cost" {
+			if exact, ok := value.(*float64); ok {
+				x.Cost = *exact
+			}
 			if exact, ok := value.(float64); ok {
 				x.Cost = exact
 			}
+			return nil
 		}
 		if path[0] == "Permission" {
 			x0 := x.Permission
@@ -750,10 +766,14 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 				k = int32(t34)
 				x1 := (*x0)[k]
 				_ = x1
+				if exact, ok := value.(*bool); ok {
+					x1 = *exact
+				}
 				if exact, ok := value.(bool); ok {
 					x1 = exact
 				}
 				(*x0)[k] = x1
+				return nil
 			}
 		}
 		if path[0] == "HistoryTree" {
@@ -767,22 +787,35 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 							return nil
 						}
 						if path[2] == "DateUnix" {
+							if exact, ok := value.(*int64); ok {
+								x1.DateUnix = *exact
+							}
 							if exact, ok := value.(int64); ok {
 								x1.DateUnix = exact
 							}
+							return nil
 						}
 						if path[2] == "Cost" {
+							if exact, ok := value.(*float64); ok {
+								x1.Cost = *exact
+							}
 							if exact, ok := value.(float64); ok {
 								x1.Cost = exact
 							}
+							return nil
 						}
 						if path[2] == "Comment" {
+							if exact, ok := value.(*[]byte); ok {
+								x1.Comment = *exact
+							}
 							if exact, ok := value.([]byte); ok {
 								x1.Comment = exact
 							}
+							return nil
 						}
 					}
 					(x0)[path[1]] = x1
+					return nil
 				}
 			}
 		}
@@ -792,10 +825,14 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 			if len(path) > 1 {
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
+					if exact, ok := value.(*int32); ok {
+						x1 = *exact
+					}
 					if exact, ok := value.(int32); ok {
 						x1 = exact
 					}
 					(x0)[path[1]] = x1
+					return nil
 				}
 			}
 		}
@@ -807,24 +844,40 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 					return nil
 				}
 				if path[1] == "MoneyIn" {
+					if exact, ok := value.(*float64); ok {
+						x0.MoneyIn = *exact
+					}
 					if exact, ok := value.(float64); ok {
 						x0.MoneyIn = exact
 					}
+					return nil
 				}
 				if path[1] == "MoneyOut" {
+					if exact, ok := value.(*float64); ok {
+						x0.MoneyOut = *exact
+					}
 					if exact, ok := value.(float64); ok {
 						x0.MoneyOut = exact
 					}
+					return nil
 				}
 				if path[1] == "Balance" {
+					if exact, ok := value.(*float64); ok {
+						x0.Balance = *exact
+					}
 					if exact, ok := value.(float64); ok {
 						x0.Balance = exact
 					}
+					return nil
 				}
 				if path[1] == "AllowBuy" {
+					if exact, ok := value.(*bool); ok {
+						x0.AllowBuy = *exact
+					}
 					if exact, ok := value.(bool); ok {
 						x0.AllowBuy = exact
 					}
+					return nil
 				}
 				if path[1] == "History" {
 					x1 := x0.History
@@ -841,22 +894,35 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
+									if exact, ok := value.(*int64); ok {
+										x2.DateUnix = *exact
+									}
 									if exact, ok := value.(int64); ok {
 										x2.DateUnix = exact
 									}
+									return nil
 								}
 								if path[3] == "Cost" {
+									if exact, ok := value.(*float64); ok {
+										x2.Cost = *exact
+									}
 									if exact, ok := value.(float64); ok {
 										x2.Cost = exact
 									}
+									return nil
 								}
 								if path[3] == "Comment" {
+									if exact, ok := value.(*[]byte); ok {
+										x2.Comment = *exact
+									}
 									if exact, ok := value.([]byte); ok {
 										x2.Comment = exact
 									}
+									return nil
 								}
 							}
 							x1[i] = *x2
+							return nil
 						}
 					}
 				}

@@ -149,10 +149,14 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	if len(path) > 0 {
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
+			if exact, ok := value.(*int32); ok {
+				x0 = *exact
+			}
 			if exact, ok := value.(int32); ok {
 				x0 = exact
 			}
 			(*x)[path[0]] = x0
+			return nil
 		}
 	}
 	return nil

@@ -177,19 +177,31 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
+			if exact, ok := value.(*int64); ok {
+				x.DateUnix = *exact
+			}
 			if exact, ok := value.(int64); ok {
 				x.DateUnix = exact
 			}
+			return nil
 		}
 		if path[0] == "Cost" {
+			if exact, ok := value.(*float64); ok {
+				x.Cost = *exact
+			}
 			if exact, ok := value.(float64); ok {
 				x.Cost = exact
 			}
+			return nil
 		}
 		if path[0] == "Comment" {
+			if exact, ok := value.(*[]byte); ok {
+				x.Comment = *exact
+			}
 			if exact, ok := value.([]byte); ok {
 				x.Comment = exact
 			}
+			return nil
 		}
 	}
 	return nil
