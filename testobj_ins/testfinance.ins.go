@@ -67,7 +67,7 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 				}
 				i = int(t0)
 				if len(x0) > i {
-					x1 := &x0[i]
+					x1 := &(x0)[i]
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
@@ -204,7 +204,7 @@ func (i0 *TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right st
 				}
 				i = int(t5)
 				if len(x0) > i {
-					x1 := &x0[i]
+					x1 := &(x0)[i]
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
@@ -378,7 +378,7 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 				}
 				i = int(t9)
 				if len(x0) > i {
-					x1 := &x0[i]
+					x1 := &(x0)[i]
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
@@ -409,7 +409,7 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 							return nil
 						}
 					}
-					x0[i] = *x1
+					(x0)[i] = *x1
 					return nil
 				}
 			}

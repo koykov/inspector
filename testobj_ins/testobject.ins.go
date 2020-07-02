@@ -147,7 +147,7 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 						}
 						i = int(t15)
 						if len(x1) > i {
-							x2 := &x1[i]
+							x2 := &(x1)[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
@@ -517,7 +517,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 						}
 						i = int(t30)
 						if len(x1) > i {
-							x2 := &x1[i]
+							x2 := &(x1)[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
@@ -890,7 +890,7 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 						}
 						i = int(t35)
 						if len(x1) > i {
-							x2 := &x1[i]
+							x2 := &(x1)[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
@@ -921,7 +921,7 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 									return nil
 								}
 							}
-							x1[i] = *x2
+							(x1)[i] = *x2
 							return nil
 						}
 					}

@@ -665,7 +665,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 		switch mode {
 		case modeLoop:
 			// Loop magic.
-			c.wl("for k := range ", c.fmtV(node, v), " {")
+			c.wl("for k := range ", c.fmtVd(node, v, depth), " {")
 			c.wl("if l.RequireKey() {")
 			c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
@@ -679,7 +679,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 				insName += node.slct.typn + "Inspector"
 			}
-			c.wl("l.SetVal(&", c.fmtV(node, v), "[k], &", insName, "{})")
+			c.wl("l.SetVal(&", c.fmtVd(node, v, depth), "[k], &", insName, "{})")
 			c.wl("ctl := l.Iterate()")
 			c.wl("if ctl == inspector.LoopCtlBrk { break }")
 			c.wl("if ctl == inspector.LoopCtlCnt { continue }")
@@ -695,11 +695,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				return err
 			}
 			c.wl(snippet)
-			c.wl("if len(", v, ") > i {")
+			c.wl("if len(", c.fmtVnb(node, v, depth), ") > i {")
 			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
-				c.wl(nv, " := ", v, "[i]")
+				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[i]")
 			} else {
-				c.wl(nv, " := &", v, "[i]")
+				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[i]")
 			}
 			c.wl("_ = ", nv)
 			err = c.writeNode(node.slct, node, recv, nv, "", depth+1, mode)
@@ -711,7 +711,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if !node.slct.ptr && !c.isBuiltin(node.slct.typn) {
 					pfx = "*"
 				}
-				c.wl(v, "[i] = ", pfx, nv)
+				c.wl(c.fmtVd(node, v, depth), "[i] = ", pfx, nv)
 				c.wl("return nil")
 			}
 			c.wl("}")
@@ -870,6 +870,22 @@ func (c *Compiler) fmtV(node *node, v string) string {
 		return "(*" + v + ")"
 	}
 	return "(" + v + ")"
+}
+
+// Bounds variable according node options and depth.
+func (c *Compiler) fmtVd(node *node, v string, depth int) string {
+	if node.ptr || depth == 0 {
+		return "(*" + v + ")"
+	}
+	return "(" + v + ")"
+}
+
+// No brackets version of fmtV().
+func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
+	if node.ptr || (node.typ == typeSlice && depth == 0) {
+		return "*" + v
+	}
+	return v
 }
 
 func (c *Compiler) fmtR(mode mode, err string) string {
