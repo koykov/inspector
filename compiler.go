@@ -460,6 +460,15 @@ _ = x
 if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
 if len(path) == 0 { *buf = &(*x)
 return}`
+	// Header for Loop() method.
+	funcHeaderLoop := ""
+	if node.typ != typeSlice {
+		funcHeaderLoop += "if len(path) == 0 { return }\n"
+	}
+	funcHeaderLoop += `if src == nil { return }
+var x *` + pname + `
+_ = x
+if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
 
 	// Getter methods.
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
@@ -486,7 +495,7 @@ return}`
 
 	// Loop method.
 	c.wl("func (", recv, " *", inst, ") Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
-	c.wdl(funcHeader)
+	c.wdl(funcHeaderLoop)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeLoop)
 	if err != nil {
 		return err
