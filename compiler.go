@@ -571,6 +571,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if err != nil {
 					return err
 				}
+				if ch.typ == typeSlice && mode == modeGet {
+					c.wl("return")
+				}
 			}
 			c.wl("}")
 		}
@@ -749,7 +752,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 		c.wl("}")
 	}
 	// Special case to take value by pointer to avoid allocation.
-	if (node.typ == typeStruct || node.typ == typeMap || node.typ == typeSlice) && mode == modeGet && depth > 1 {
+	if (node.typ == typeStruct || node.typ == typeMap || node.typ == typeSlice) && mode == modeGet && v != "x" {
 		pfx := ""
 		if parent != nil && parent.typ != typeSlice {
 			pfx = "&"
