@@ -571,7 +571,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if err != nil {
 					return err
 				}
-				if ch.typ == typeSlice && mode == modeGet {
+				if mode == modeGet {
 					c.wl("return")
 				}
 			}
