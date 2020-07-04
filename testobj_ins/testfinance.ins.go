@@ -86,6 +86,8 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 					*buf = x1
 				}
 			}
+			*buf = &x.History
+			return
 		}
 	}
 	*buf = &(*x)
