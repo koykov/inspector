@@ -446,18 +446,18 @@ func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
 if src == nil { return }
 var x *` + pname + `
 _ = x
-if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
 	// Custom header for Set() method.
 	funcHeaderSet := `if len(path) == 0 { return nil }
 if dst == nil { return nil }
 var x *` + pname + `
 _ = x
-if p, ok := dst.(*` + pname + `); ok { x = p } else if v, ok := dst.(` + pname + `); ok { x = &v } else { return nil }`
+if p, ok := dst.(**` + pname + `); ok { x = *p } else if p, ok := dst.(*` + pname + `); ok { x = p } else if v, ok := dst.(` + pname + `); ok { x = &v } else { return nil }`
 	// Custom header for GetTo() method.
 	funcHeaderGetTo := `if src == nil { return }
 var x *` + pname + `
 _ = x
-if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
+if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
 if len(path) == 0 { *buf = &(*x)
 return}`
 	// Header for Loop() method.
@@ -468,7 +468,7 @@ return}`
 	funcHeaderLoop += `if src == nil { return }
 var x *` + pname + `
 _ = x
-if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
 
 	// Getter methods.
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
