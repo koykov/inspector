@@ -551,8 +551,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if !c.isBuiltin(ch.typn) {
 						pfx = ch.pkg + "."
 					}
-					c.wl("if exact, ok := value.(*", pfx, ch.typn, "); ok {", v, ".", ch.name, " = *exact}")
-					c.wl("if exact, ok := value.(", pfx, ch.typn, "); ok {", v, ".", ch.name, " = exact}")
+					typ := pfx + ch.typn
+					if ch.ptr {
+						typ = "*" + typ
+					}
+					c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, ".", ch.name, " = exact.(", typ, ")}")
 					c.wl("return nil")
 				}
 			} else {
@@ -669,8 +672,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.writeCmp(node, v)
 				c.wl("return")
 			case modeSet:
-				c.wl("if exact, ok := value.(*", node.typn, "); ok {", v, " = *exact}")
-				c.wl("if exact, ok := value.(", node.typn, "); ok {", v, " = exact}")
+				typ := node.typn
+				if node.ptr {
+					typ = "*" + typ
+				}
+				c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, " = exact.(", typ, ")}")
 				c.wl("return nil")
 			}
 		}
@@ -741,8 +747,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if !c.isBuiltin(node.typn) {
 				pfx = node.pkg + "."
 			}
-			c.wl("if exact, ok := value.(*", pfx, node.typn, "); ok {", v, " = *exact}")
-			c.wl("if exact, ok := value.(", pfx, node.typn, "); ok {", v, " = exact}")
+			typ := pfx + node.typn
+			if node.ptr {
+				typ = "*" + typ
+			}
+			c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, " = exact.(", typ, ")}")
 			if parent.typ != typeMap {
 				c.wl("return nil")
 			}

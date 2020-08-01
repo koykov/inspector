@@ -27,7 +27,9 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 	}
 	var x *testobj.TestHistory
 	_ = x
-	if p, ok := src.(*testobj.TestHistory); ok {
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestHistory); ok {
 		x = &v
@@ -66,7 +68,9 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 	}
 	var x *testobj.TestHistory
 	_ = x
-	if p, ok := src.(*testobj.TestHistory); ok {
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestHistory); ok {
 		x = &v
@@ -145,7 +149,9 @@ func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	}
 	var x *testobj.TestHistory
 	_ = x
-	if p, ok := src.(*testobj.TestHistory); ok {
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestHistory); ok {
 		x = &v
@@ -167,7 +173,9 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 	}
 	var x *testobj.TestHistory
 	_ = x
-	if p, ok := dst.(*testobj.TestHistory); ok {
+	if p, ok := dst.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := dst.(*testobj.TestHistory); ok {
 		x = p
 	} else if v, ok := dst.(testobj.TestHistory); ok {
 		x = &v
@@ -177,29 +185,20 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
-			if exact, ok := value.(*int64); ok {
-				x.DateUnix = *exact
-			}
-			if exact, ok := value.(int64); ok {
-				x.DateUnix = exact
+			if exact, ok := inspector.TypeCast("int64", value); ok {
+				x.DateUnix = exact.(int64)
 			}
 			return nil
 		}
 		if path[0] == "Cost" {
-			if exact, ok := value.(*float64); ok {
-				x.Cost = *exact
-			}
-			if exact, ok := value.(float64); ok {
-				x.Cost = exact
+			if exact, ok := inspector.TypeCast("float64", value); ok {
+				x.Cost = exact.(float64)
 			}
 			return nil
 		}
 		if path[0] == "Comment" {
-			if exact, ok := value.(*[]byte); ok {
-				x.Comment = *exact
-			}
-			if exact, ok := value.([]byte); ok {
-				x.Comment = exact
+			if exact, ok := inspector.TypeCast("[]byte", value); ok {
+				x.Comment = exact.([]byte)
 			}
 			return nil
 		}

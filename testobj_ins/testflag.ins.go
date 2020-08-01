@@ -25,7 +25,9 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 	}
 	var x *testobj.TestFlag
 	_ = x
-	if p, ok := src.(*testobj.TestFlag); ok {
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFlag); ok {
 		x = &v
@@ -57,7 +59,9 @@ func (i1 *TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right strin
 	}
 	var x *testobj.TestFlag
 	_ = x
-	if p, ok := src.(*testobj.TestFlag); ok {
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFlag); ok {
 		x = &v
@@ -103,7 +107,9 @@ func (i1 *TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]by
 	}
 	var x *testobj.TestFlag
 	_ = x
-	if p, ok := src.(*testobj.TestFlag); ok {
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFlag); ok {
 		x = &v
@@ -138,7 +144,9 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	}
 	var x *testobj.TestFlag
 	_ = x
-	if p, ok := dst.(*testobj.TestFlag); ok {
+	if p, ok := dst.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := dst.(*testobj.TestFlag); ok {
 		x = p
 	} else if v, ok := dst.(testobj.TestFlag); ok {
 		x = &v
@@ -149,11 +157,8 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	if len(path) > 0 {
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
-			if exact, ok := value.(*int32); ok {
-				x0 = *exact
-			}
-			if exact, ok := value.(int32); ok {
-				x0 = exact
+			if exact, ok := inspector.TypeCast("int32", value); ok {
+				x0 = exact.(int32)
 			}
 			(*x)[path[0]] = x0
 			return nil

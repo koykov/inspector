@@ -25,7 +25,9 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 	}
 	var x *testobj.TestPermission
 	_ = x
-	if p, ok := src.(*testobj.TestPermission); ok {
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestPermission); ok {
 		x = &v
@@ -62,7 +64,9 @@ func (i4 *TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right
 	}
 	var x *testobj.TestPermission
 	_ = x
-	if p, ok := src.(*testobj.TestPermission); ok {
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestPermission); ok {
 		x = &v
@@ -104,7 +108,9 @@ func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf
 	}
 	var x *testobj.TestPermission
 	_ = x
-	if p, ok := src.(*testobj.TestPermission); ok {
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestPermission); ok {
 		x = &v
@@ -139,7 +145,9 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 	}
 	var x *testobj.TestPermission
 	_ = x
-	if p, ok := dst.(*testobj.TestPermission); ok {
+	if p, ok := dst.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := dst.(*testobj.TestPermission); ok {
 		x = p
 	} else if v, ok := dst.(testobj.TestPermission); ok {
 		x = &v
@@ -156,11 +164,8 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 		k = int32(t39)
 		x0 := (*x)[k]
 		_ = x0
-		if exact, ok := value.(*bool); ok {
-			x0 = *exact
-		}
-		if exact, ok := value.(bool); ok {
-			x0 = exact
+		if exact, ok := inspector.TypeCast("bool", value); ok {
+			x0 = exact.(bool)
 		}
 		(*x)[k] = x0
 		return nil

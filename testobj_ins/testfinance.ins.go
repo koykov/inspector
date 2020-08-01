@@ -27,7 +27,9 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 	}
 	var x *testobj.TestFinance
 	_ = x
-	if p, ok := src.(*testobj.TestFinance); ok {
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFinance); ok {
 		x = &v
@@ -103,7 +105,9 @@ func (i0 *TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right st
 	}
 	var x *testobj.TestFinance
 	_ = x
-	if p, ok := src.(*testobj.TestFinance); ok {
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFinance); ok {
 		x = &v
@@ -283,7 +287,9 @@ func (i0 *TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	}
 	var x *testobj.TestFinance
 	_ = x
-	if p, ok := src.(*testobj.TestFinance); ok {
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := src.(testobj.TestFinance); ok {
 		x = &v
@@ -324,7 +330,9 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 	}
 	var x *testobj.TestFinance
 	_ = x
-	if p, ok := dst.(*testobj.TestFinance); ok {
+	if p, ok := dst.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := dst.(*testobj.TestFinance); ok {
 		x = p
 	} else if v, ok := dst.(testobj.TestFinance); ok {
 		x = &v
@@ -334,38 +342,26 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "MoneyIn" {
-			if exact, ok := value.(*float64); ok {
-				x.MoneyIn = *exact
-			}
-			if exact, ok := value.(float64); ok {
-				x.MoneyIn = exact
+			if exact, ok := inspector.TypeCast("float64", value); ok {
+				x.MoneyIn = exact.(float64)
 			}
 			return nil
 		}
 		if path[0] == "MoneyOut" {
-			if exact, ok := value.(*float64); ok {
-				x.MoneyOut = *exact
-			}
-			if exact, ok := value.(float64); ok {
-				x.MoneyOut = exact
+			if exact, ok := inspector.TypeCast("float64", value); ok {
+				x.MoneyOut = exact.(float64)
 			}
 			return nil
 		}
 		if path[0] == "Balance" {
-			if exact, ok := value.(*float64); ok {
-				x.Balance = *exact
-			}
-			if exact, ok := value.(float64); ok {
-				x.Balance = exact
+			if exact, ok := inspector.TypeCast("float64", value); ok {
+				x.Balance = exact.(float64)
 			}
 			return nil
 		}
 		if path[0] == "AllowBuy" {
-			if exact, ok := value.(*bool); ok {
-				x.AllowBuy = *exact
-			}
-			if exact, ok := value.(bool); ok {
-				x.AllowBuy = exact
+			if exact, ok := inspector.TypeCast("bool", value); ok {
+				x.AllowBuy = exact.(bool)
 			}
 			return nil
 		}
@@ -384,29 +380,20 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
-							if exact, ok := value.(*int64); ok {
-								x1.DateUnix = *exact
-							}
-							if exact, ok := value.(int64); ok {
-								x1.DateUnix = exact
+							if exact, ok := inspector.TypeCast("int64", value); ok {
+								x1.DateUnix = exact.(int64)
 							}
 							return nil
 						}
 						if path[2] == "Cost" {
-							if exact, ok := value.(*float64); ok {
-								x1.Cost = *exact
-							}
-							if exact, ok := value.(float64); ok {
-								x1.Cost = exact
+							if exact, ok := inspector.TypeCast("float64", value); ok {
+								x1.Cost = exact.(float64)
 							}
 							return nil
 						}
 						if path[2] == "Comment" {
-							if exact, ok := value.(*[]byte); ok {
-								x1.Comment = *exact
-							}
-							if exact, ok := value.([]byte); ok {
-								x1.Comment = exact
+							if exact, ok := inspector.TypeCast("[]byte", value); ok {
+								x1.Comment = exact.([]byte)
 							}
 							return nil
 						}
