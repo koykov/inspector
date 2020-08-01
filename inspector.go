@@ -79,4 +79,12 @@ func init() {
 	imp = []string{`"bytes"`, `"github.com/koykov/fastconv"`}
 	RegisterStrToFunc("[]byte", strToBytesSnippet("[]byte"), imp)
 	RegisterStrToFunc("string", strToStrSnippet("string"), nil)
+
+	// Register functions to typecast to built-in types.
+	RegisterTypeCastFn(TypeCastToBytes)
+	RegisterTypeCastFn(TypeCastToStr)
+	RegisterTypeCastFn(TypeCastToBool)
+	RegisterTypeCastFn(TypeCastToInt)
+	RegisterTypeCastFn(TypeCastToUint)
+	RegisterTypeCastFn(TypeCastToFloat)
 }
