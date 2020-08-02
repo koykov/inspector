@@ -164,9 +164,7 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 		k = int32(t39)
 		x0 := (*x)[k]
 		_ = x0
-		if exact, ok := inspector.TypeCast("bool", value); ok {
-			x0 = exact.(bool)
-		}
+		inspector.Assign(&x0, value)
 		(*x)[k] = x0
 		return nil
 	}

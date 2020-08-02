@@ -551,11 +551,10 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if !c.isBuiltin(ch.typn) {
 						pfx = ch.pkg + "."
 					}
-					typ := pfx + ch.typn
-					if ch.ptr {
-						typ = "*" + typ
+					if !ch.ptr {
+						pfx = "&" + pfx
 					}
-					c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, ".", ch.name, " = exact.(", typ, ")}")
+					c.wl("inspector.Assign(", pfx, v, ".", ch.name, ", value)")
 					c.wl("return nil")
 				}
 			} else {
@@ -672,11 +671,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.writeCmp(node, v)
 				c.wl("return")
 			case modeSet:
-				typ := node.typn
-				if node.ptr {
-					typ = "*" + typ
+				pfx := ""
+				if !node.ptr {
+					pfx = "&"
 				}
-				c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, " = exact.(", typ, ")}")
+				c.wl("inspector.Assign(", pfx, v, ", value)")
 				c.wl("return nil")
 			}
 		}
@@ -747,11 +746,10 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if !c.isBuiltin(node.typn) {
 				pfx = node.pkg + "."
 			}
-			typ := pfx + node.typn
-			if node.ptr {
-				typ = "*" + typ
+			if !node.ptr {
+				pfx = "&" + pfx
 			}
-			c.wl("if exact, ok := inspector.TypeCast(\"", typ, "\", value); ok {", v, " = exact.(", typ, ")}")
+			c.wl("inspector.Assign(", pfx, v, ", value)")
 			if parent.typ != typeMap {
 				c.wl("return nil")
 			}

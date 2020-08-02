@@ -342,27 +342,19 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "MoneyIn" {
-			if exact, ok := inspector.TypeCast("float64", value); ok {
-				x.MoneyIn = exact.(float64)
-			}
+			inspector.Assign(&x.MoneyIn, value)
 			return nil
 		}
 		if path[0] == "MoneyOut" {
-			if exact, ok := inspector.TypeCast("float64", value); ok {
-				x.MoneyOut = exact.(float64)
-			}
+			inspector.Assign(&x.MoneyOut, value)
 			return nil
 		}
 		if path[0] == "Balance" {
-			if exact, ok := inspector.TypeCast("float64", value); ok {
-				x.Balance = exact.(float64)
-			}
+			inspector.Assign(&x.Balance, value)
 			return nil
 		}
 		if path[0] == "AllowBuy" {
-			if exact, ok := inspector.TypeCast("bool", value); ok {
-				x.AllowBuy = exact.(bool)
-			}
+			inspector.Assign(&x.AllowBuy, value)
 			return nil
 		}
 		if path[0] == "History" {
@@ -380,21 +372,15 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
-							if exact, ok := inspector.TypeCast("int64", value); ok {
-								x1.DateUnix = exact.(int64)
-							}
+							inspector.Assign(&x1.DateUnix, value)
 							return nil
 						}
 						if path[2] == "Cost" {
-							if exact, ok := inspector.TypeCast("float64", value); ok {
-								x1.Cost = exact.(float64)
-							}
+							inspector.Assign(&x1.Cost, value)
 							return nil
 						}
 						if path[2] == "Comment" {
-							if exact, ok := inspector.TypeCast("[]byte", value); ok {
-								x1.Comment = exact.([]byte)
-							}
+							inspector.Assign(&x1.Comment, value)
 							return nil
 						}
 					}

@@ -185,21 +185,15 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
-			if exact, ok := inspector.TypeCast("int64", value); ok {
-				x.DateUnix = exact.(int64)
-			}
+			inspector.Assign(&x.DateUnix, value)
 			return nil
 		}
 		if path[0] == "Cost" {
-			if exact, ok := inspector.TypeCast("float64", value); ok {
-				x.Cost = exact.(float64)
-			}
+			inspector.Assign(&x.Cost, value)
 			return nil
 		}
 		if path[0] == "Comment" {
-			if exact, ok := inspector.TypeCast("[]byte", value); ok {
-				x.Comment = exact.([]byte)
-			}
+			inspector.Assign(&x.Comment, value)
 			return nil
 		}
 	}

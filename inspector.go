@@ -81,10 +81,10 @@ func init() {
 	RegisterStrToFunc("string", strToStrSnippet("string"), nil)
 
 	// Register functions to typecast to built-in types.
-	RegisterTypeCastFn(TypeCastToBytes)
-	RegisterTypeCastFn(TypeCastToStr)
-	RegisterTypeCastFn(TypeCastToBool)
-	RegisterTypeCastFn(TypeCastToInt)
-	RegisterTypeCastFn(TypeCastToUint)
-	RegisterTypeCastFn(TypeCastToFloat)
+	RegisterAssignFn(AssignToBytes)
+	RegisterAssignFn(AssignToStr)
+	RegisterAssignFn(AssignToBool)
+	RegisterAssignFn(AssignToInt)
+	RegisterAssignFn(AssignToUint)
+	RegisterAssignFn(AssignToFloat)
 }

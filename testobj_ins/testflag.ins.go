@@ -157,9 +157,7 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	if len(path) > 0 {
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
-			if exact, ok := inspector.TypeCast("int32", value); ok {
-				x0 = exact.(int32)
-			}
+			inspector.Assign(&x0, value)
 			(*x)[path[0]] = x0
 			return nil
 		}

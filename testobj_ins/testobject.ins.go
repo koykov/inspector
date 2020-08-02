@@ -733,27 +733,19 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 
 	if len(path) > 0 {
 		if path[0] == "Id" {
-			if exact, ok := inspector.TypeCast("string", value); ok {
-				x.Id = exact.(string)
-			}
+			inspector.Assign(&x.Id, value)
 			return nil
 		}
 		if path[0] == "Name" {
-			if exact, ok := inspector.TypeCast("[]byte", value); ok {
-				x.Name = exact.([]byte)
-			}
+			inspector.Assign(&x.Name, value)
 			return nil
 		}
 		if path[0] == "Status" {
-			if exact, ok := inspector.TypeCast("int32", value); ok {
-				x.Status = exact.(int32)
-			}
+			inspector.Assign(&x.Status, value)
 			return nil
 		}
 		if path[0] == "Cost" {
-			if exact, ok := inspector.TypeCast("float64", value); ok {
-				x.Cost = exact.(float64)
-			}
+			inspector.Assign(&x.Cost, value)
 			return nil
 		}
 		if path[0] == "Permission" {
@@ -771,9 +763,7 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 				k = int32(t34)
 				x1 := (*x0)[k]
 				_ = x1
-				if exact, ok := inspector.TypeCast("bool", value); ok {
-					x1 = exact.(bool)
-				}
+				inspector.Assign(&x1, value)
 				(*x0)[k] = x1
 				return nil
 			}
@@ -789,21 +779,15 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 							return nil
 						}
 						if path[2] == "DateUnix" {
-							if exact, ok := inspector.TypeCast("int64", value); ok {
-								x1.DateUnix = exact.(int64)
-							}
+							inspector.Assign(&x1.DateUnix, value)
 							return nil
 						}
 						if path[2] == "Cost" {
-							if exact, ok := inspector.TypeCast("float64", value); ok {
-								x1.Cost = exact.(float64)
-							}
+							inspector.Assign(&x1.Cost, value)
 							return nil
 						}
 						if path[2] == "Comment" {
-							if exact, ok := inspector.TypeCast("[]byte", value); ok {
-								x1.Comment = exact.([]byte)
-							}
+							inspector.Assign(&x1.Comment, value)
 							return nil
 						}
 					}
@@ -818,9 +802,7 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 			if len(path) > 1 {
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
-					if exact, ok := inspector.TypeCast("int32", value); ok {
-						x1 = exact.(int32)
-					}
+					inspector.Assign(&x1, value)
 					(x0)[path[1]] = x1
 					return nil
 				}
@@ -834,27 +816,19 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 					return nil
 				}
 				if path[1] == "MoneyIn" {
-					if exact, ok := inspector.TypeCast("float64", value); ok {
-						x0.MoneyIn = exact.(float64)
-					}
+					inspector.Assign(&x0.MoneyIn, value)
 					return nil
 				}
 				if path[1] == "MoneyOut" {
-					if exact, ok := inspector.TypeCast("float64", value); ok {
-						x0.MoneyOut = exact.(float64)
-					}
+					inspector.Assign(&x0.MoneyOut, value)
 					return nil
 				}
 				if path[1] == "Balance" {
-					if exact, ok := inspector.TypeCast("float64", value); ok {
-						x0.Balance = exact.(float64)
-					}
+					inspector.Assign(&x0.Balance, value)
 					return nil
 				}
 				if path[1] == "AllowBuy" {
-					if exact, ok := inspector.TypeCast("bool", value); ok {
-						x0.AllowBuy = exact.(bool)
-					}
+					inspector.Assign(&x0.AllowBuy, value)
 					return nil
 				}
 				if path[1] == "History" {
@@ -872,21 +846,15 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
-									if exact, ok := inspector.TypeCast("int64", value); ok {
-										x2.DateUnix = exact.(int64)
-									}
+									inspector.Assign(&x2.DateUnix, value)
 									return nil
 								}
 								if path[3] == "Cost" {
-									if exact, ok := inspector.TypeCast("float64", value); ok {
-										x2.Cost = exact.(float64)
-									}
+									inspector.Assign(&x2.Cost, value)
 									return nil
 								}
 								if path[3] == "Comment" {
-									if exact, ok := inspector.TypeCast("[]byte", value); ok {
-										x2.Comment = exact.([]byte)
-									}
+									inspector.Assign(&x2.Comment, value)
 									return nil
 								}
 							}
