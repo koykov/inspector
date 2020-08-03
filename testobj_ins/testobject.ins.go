@@ -750,6 +750,11 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 		}
 		if path[0] == "Permission" {
 			x0 := x.Permission
+			if x0 == nil {
+				z := make(testobj.TestPermission)
+				x0 = &z
+				x.Permission = x0
+			}
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
@@ -767,49 +772,64 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 				(*x0)[k] = x1
 				return nil
 			}
+			x.Permission = x0
 		}
 		if path[0] == "HistoryTree" {
 			x0 := x.HistoryTree
+			if x0 == nil {
+				z := make(map[string]*testobj.TestHistory)
+				x0 = z
+				x.HistoryTree = x0
+			}
 			_ = x0
 			if len(path) > 1 {
-				if x1, ok := (x0)[path[1]]; ok {
-					_ = x1
-					if len(path) > 2 {
-						if x1 == nil {
-							return nil
-						}
-						if path[2] == "DateUnix" {
-							inspector.Assign(&x1.DateUnix, value)
-							return nil
-						}
-						if path[2] == "Cost" {
-							inspector.Assign(&x1.Cost, value)
-							return nil
-						}
-						if path[2] == "Comment" {
-							inspector.Assign(&x1.Comment, value)
-							return nil
-						}
+				x1 := (x0)[path[1]]
+				_ = x1
+				if len(path) > 2 {
+					if x1 == nil {
+						return nil
 					}
-					(x0)[path[1]] = x1
-					return nil
+					if path[2] == "DateUnix" {
+						inspector.Assign(&x1.DateUnix, value)
+						return nil
+					}
+					if path[2] == "Cost" {
+						inspector.Assign(&x1.Cost, value)
+						return nil
+					}
+					if path[2] == "Comment" {
+						inspector.Assign(&x1.Comment, value)
+						return nil
+					}
 				}
+				(x0)[path[1]] = x1
+				return nil
 			}
+			x.HistoryTree = x0
 		}
 		if path[0] == "Flags" {
 			x0 := x.Flags
+			if x0 == nil {
+				z := make(testobj.TestFlag)
+				x0 = z
+				x.Flags = x0
+			}
 			_ = x0
 			if len(path) > 1 {
-				if x1, ok := (x0)[path[1]]; ok {
-					_ = x1
-					inspector.Assign(&x1, value)
-					(x0)[path[1]] = x1
-					return nil
-				}
+				x1 := (x0)[path[1]]
+				_ = x1
+				inspector.Assign(&x1, value)
+				(x0)[path[1]] = x1
+				return nil
 			}
+			x.Flags = x0
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
+			if x0 == nil {
+				x0 = &testobj.TestFinance{}
+				x.Finance = x0
+			}
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
@@ -833,6 +853,11 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 				}
 				if path[1] == "History" {
 					x1 := x0.History
+					if x1 == nil {
+						z := make([]testobj.TestHistory, 0)
+						x1 = z
+						x0.History = x1
+					}
 					_ = x1
 					if len(path) > 2 {
 						var i int
@@ -862,8 +887,10 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 							return nil
 						}
 					}
+					x0.History = x1
 				}
 			}
+			x.Finance = x0
 		}
 	}
 	return nil

@@ -565,6 +565,28 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					pfx = "&"
 				}
 				c.wl(nv, " := ", pfx, vsrc)
+				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
+					pfx := ""
+					if ch.ptr {
+						pfx = "&"
+					}
+					c.wl("if ", nv, " == nil {")
+					switch ch.typ {
+					case typeStruct:
+						typ := c.fmtTyp(ch)
+						c.wl(nv, " = ", pfx, typ, "{}")
+					case typeMap:
+						typ := c.fmtTyp(ch)
+						c.wl("z := make(", typ, ")")
+						c.wl(nv, " = ", pfx, "z")
+					case typeSlice:
+						typ := c.fmtTyp(ch)
+						c.wl("z := make(", typ, ", 0)")
+						c.wl(nv, " = ", pfx, "z")
+					}
+					c.wl(v+"."+ch.name, " = ", nv)
+					c.wl("}")
+				}
 				c.wl("_ = ", nv)
 				if mode == modeCmp && ch.ptr {
 					c.writeCmp(ch, nv)
@@ -575,6 +597,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 				if mode == modeGet {
 					c.wl("return")
+				}
+				if mode == modeSet {
+					c.wl(vsrc, " = ", nv)
 				}
 			}
 			c.wl("}")
@@ -627,7 +652,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			nv := "x" + strconv.Itoa(depth)
 			if node.mapk.typn == "string" {
 				// Key is string, simple case.
-				c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
+				if mode == modeSet {
+					c.wl(nv, " := ", c.fmtV(node, v), "[path[", depths, "]]")
+				} else {
+					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
+				}
 				c.wl("_ = ", nv)
 				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if err != nil {
@@ -637,7 +666,9 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
 					c.wl("return nil")
 				}
-				c.wl("}")
+				if mode != modeSet {
+					c.wl("}")
+				}
 			} else {
 				// Convert path value to the key type and try to find it in the map.
 				c.wl("var k ", node.mapk.typn)
@@ -905,6 +936,40 @@ func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
 		return "*" + v
 	}
 	return v
+}
+
+// Format type to use in new()/make() functions.
+func (c *Compiler) fmtTyp(node *node) string {
+	switch node.typ {
+	case typeStruct:
+		return node.pkg + "." + strings.Trim(node.typn, "*")
+	case typeMap:
+		if strings.Contains(node.typn, "map[") {
+			s := "map["
+			if len(node.mapk.pkg) > 0 {
+				s += node.mapk.pkg + "."
+			}
+			s += node.mapk.typn
+			s += "]"
+			if node.mapv.ptr {
+				s += "*"
+			}
+			if len(node.mapv.pkg) > 0 {
+				s += node.mapv.pkg + "."
+			}
+			s += node.mapv.typn
+			return s
+		} else {
+			return node.pkg + "." + strings.Trim(node.typn, "*")
+		}
+	case typeSlice:
+		s := node.slct.pkg + "." + strings.Trim(node.slct.typn, "*")
+		if strings.Index(node.typn, "[]") != -1 {
+			s = "[]" + s
+		}
+		return s
+	}
+	return ""
 }
 
 func (c *Compiler) fmtR(mode mode, err string) string {

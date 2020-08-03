@@ -359,6 +359,11 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 		}
 		if path[0] == "History" {
 			x0 := x.History
+			if x0 == nil {
+				z := make([]testobj.TestHistory, 0)
+				x0 = z
+				x.History = x0
+			}
 			_ = x0
 			if len(path) > 1 {
 				var i int
@@ -388,6 +393,7 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 					return nil
 				}
 			}
+			x.History = x0
 		}
 	}
 	return nil

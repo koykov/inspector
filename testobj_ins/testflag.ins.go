@@ -155,12 +155,11 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	}
 
 	if len(path) > 0 {
-		if x0, ok := (*x)[path[0]]; ok {
-			_ = x0
-			inspector.Assign(&x0, value)
-			(*x)[path[0]] = x0
-			return nil
-		}
+		x0 := (*x)[path[0]]
+		_ = x0
+		inspector.Assign(&x0, value)
+		(*x)[path[0]] = x0
+		return nil
 	}
 	return nil
 }
