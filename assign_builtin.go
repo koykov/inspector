@@ -1,6 +1,15 @@
 package inspector
 
-import "github.com/koykov/fastconv"
+import (
+	"regexp"
+	"strconv"
+
+	"github.com/koykov/fastconv"
+)
+
+var (
+	reIsFloat = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
+)
 
 func AssignToBytes(dst, src interface{}) (ok bool) {
 	switch dst.(type) {
@@ -264,6 +273,14 @@ func AssignToFloat(dst, src interface{}) (ok bool) {
 	case *float64:
 		f = *src.(*float64)
 		ok = true
+	case []byte:
+		f, ok = atof(fastconv.B2S(src.([]byte)))
+	case *[]byte:
+		f, ok = atof(fastconv.B2S(*src.(*[]byte)))
+	case string:
+		f, ok = atof(src.(string))
+	case *string:
+		f, ok = atof(*src.(*string))
 	}
 	if ok {
 		switch dst.(type) {
@@ -276,4 +293,13 @@ func AssignToFloat(dst, src interface{}) (ok bool) {
 		}
 	}
 	return
+}
+
+func atof(s string) (float64, bool) {
+	if reIsFloat.MatchString(s) {
+		if f, err := strconv.ParseFloat(s, 64); err == nil {
+			return f, true
+		}
+	}
+	return 0, false
 }
