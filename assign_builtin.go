@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	// todo optimise string check
 	reIsDecInt   = regexp.MustCompile(`^[-+]?[\d]+$`)
 	reIsDecUint  = regexp.MustCompile(`^[+]?[\d]+$`)
 	reIsDecFloat = regexp.MustCompile(`^[-+]?[\d]*\.?[\d]+([eE][-+]?[\d]+)?$`)
@@ -323,7 +324,7 @@ func atoi(s string) (int64, bool) {
 }
 
 func atou(s string) (uint64, bool) {
-	if reIsDecInt.MatchString(s) {
+	if reIsDecUint.MatchString(s) {
 		if u, err := strconv.ParseUint(s, 10, 64); err == nil {
 			return u, true
 		}
