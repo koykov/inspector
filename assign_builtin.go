@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	reIsFloat = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
+	reIsDecInt   = regexp.MustCompile(`^[-+]?[\d]+$`)
+	reIsDecUint  = regexp.MustCompile(`^[+]?[\d]+$`)
+	reIsDecFloat = regexp.MustCompile(`^[-+]?[\d]*\.?[\d]+([eE][-+]?[\d]+)?$`)
 )
 
 func AssignToBytes(dst, src interface{}) (ok bool) {
@@ -185,6 +187,14 @@ func AssignToInt(dst, src interface{}) (ok bool) {
 	case *int64:
 		i = *src.(*int64)
 		ok = true
+	case []byte:
+		i, ok = atoi(fastconv.B2S(src.([]byte)))
+	case *[]byte:
+		i, ok = atoi(fastconv.B2S(*src.(*[]byte)))
+	case string:
+		i, ok = atoi(src.(string))
+	case *string:
+		i, ok = atoi(*src.(*string))
 	}
 	if ok {
 		switch dst.(type) {
@@ -238,6 +248,14 @@ func AssignToUint(dst, src interface{}) (ok bool) {
 	case *uint64:
 		u = *src.(*uint64)
 		ok = true
+	case []byte:
+		u, ok = atou(fastconv.B2S(src.([]byte)))
+	case *[]byte:
+		u, ok = atou(fastconv.B2S(*src.(*[]byte)))
+	case string:
+		u, ok = atou(src.(string))
+	case *string:
+		u, ok = atou(*src.(*string))
 	}
 	if ok {
 		switch dst.(type) {
@@ -295,8 +313,26 @@ func AssignToFloat(dst, src interface{}) (ok bool) {
 	return
 }
 
+func atoi(s string) (int64, bool) {
+	if reIsDecInt.MatchString(s) {
+		if i, err := strconv.ParseInt(s, 10, 64); err == nil {
+			return i, true
+		}
+	}
+	return 0, false
+}
+
+func atou(s string) (uint64, bool) {
+	if reIsDecInt.MatchString(s) {
+		if u, err := strconv.ParseUint(s, 10, 64); err == nil {
+			return u, true
+		}
+	}
+	return 0, false
+}
+
 func atof(s string) (float64, bool) {
-	if reIsFloat.MatchString(s) {
+	if reIsDecFloat.MatchString(s) {
 		if f, err := strconv.ParseFloat(s, 64); err == nil {
 			return f, true
 		}
