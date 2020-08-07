@@ -750,6 +750,9 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 		}
 		if path[0] == "Permission" {
 			x0 := x.Permission
+			if uvalue, ok := value.(*testobj.TestPermission); ok {
+				x0 = uvalue
+			}
 			if x0 == nil {
 				z := make(testobj.TestPermission)
 				x0 = &z
@@ -776,6 +779,9 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 		}
 		if path[0] == "HistoryTree" {
 			x0 := x.HistoryTree
+			if uvalue, ok := value.(*map[string]*testobj.TestHistory); ok {
+				x0 = *uvalue
+			}
 			if x0 == nil {
 				z := make(map[string]*testobj.TestHistory)
 				x0 = z
@@ -809,6 +815,9 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 		}
 		if path[0] == "Flags" {
 			x0 := x.Flags
+			if uvalue, ok := value.(*testobj.TestFlag); ok {
+				x0 = *uvalue
+			}
 			if x0 == nil {
 				z := make(testobj.TestFlag)
 				x0 = z
@@ -826,6 +835,9 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 		}
 		if path[0] == "Finance" {
 			x0 := x.Finance
+			if uvalue, ok := value.(*testobj.TestFinance); ok {
+				x0 = uvalue
+			}
 			if x0 == nil {
 				x0 = &testobj.TestFinance{}
 				x.Finance = x0
@@ -853,6 +865,9 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 				}
 				if path[1] == "History" {
 					x1 := x0.History
+					if uvalue, ok := value.(*[]testobj.TestHistory); ok {
+						x1 = *uvalue
+					}
 					if x1 == nil {
 						z := make([]testobj.TestHistory, 0)
 						x1 = z

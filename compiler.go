@@ -566,21 +566,27 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 				c.wl(nv, " := ", pfx, vsrc)
 				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
-					pfx := ""
+					typ := c.fmtTyp(ch)
+					pfx := "*"
+					if ch.ptr {
+						pfx = ""
+					}
+					c.wl("if uvalue, ok := value.(*", typ, "); ok {")
+					c.wl(nv, " = ", pfx, "uvalue")
+					c.wl("}")
+
+					pfx = ""
 					if ch.ptr {
 						pfx = "&"
 					}
 					c.wl("if ", nv, " == nil {")
 					switch ch.typ {
 					case typeStruct:
-						typ := c.fmtTyp(ch)
 						c.wl(nv, " = ", pfx, typ, "{}")
 					case typeMap:
-						typ := c.fmtTyp(ch)
 						c.wl("z := make(", typ, ")")
 						c.wl(nv, " = ", pfx, "z")
 					case typeSlice:
-						typ := c.fmtTyp(ch)
 						c.wl("z := make(", typ, ", 0)")
 						c.wl(nv, " = ", pfx, "z")
 					}
