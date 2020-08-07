@@ -38,6 +38,7 @@ func (f *TestFinance) Clear() {
 	for i := range f.History {
 		f.History[i].Clear()
 	}
+	f.History = f.History[:0]
 }
 
 func (o *TestObject) Clear() {
