@@ -29,11 +29,17 @@ type TestObject struct {
 }
 
 func (h *TestHistory) Clear() {
+	if h == nil {
+		return
+	}
 	h.DateUnix, h.Cost = 0, 0
 	h.Comment = h.Comment[:0]
 }
 
 func (f *TestFinance) Clear() {
+	if f == nil {
+		return
+	}
 	f.MoneyIn, f.MoneyOut, f.Balance, f.AllowBuy = 0, 0, 0, false
 	for i := range f.History {
 		f.History[i].Clear()
@@ -42,6 +48,9 @@ func (f *TestFinance) Clear() {
 }
 
 func (o *TestObject) Clear() {
+	if o == nil {
+		return
+	}
 	o.Id = ""
 	o.Name = o.Name[:0]
 	o.Status, o.Cost = 0, 0
