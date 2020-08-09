@@ -548,7 +548,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					c.wl("return")
 				case modeSet:
 					pfx := ""
-					if !c.isBuiltin(ch.typn) {
+					if !c.isBuiltin(ch.typn) && !c.isBuiltin(ch.typu) {
 						pfx = ch.pkg + "."
 					}
 					if !ch.ptr {
@@ -561,14 +561,17 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				nv := "x" + strconv.Itoa(depth)
 				vsrc := v + "." + ch.name
 				pfx := ""
+				nvPtr := false
 				if !ch.ptr && ch.typ != typeMap && ch.typ != typeSlice {
 					pfx = "&"
+					nvPtr = true
 				}
 				c.wl(nv, " := ", pfx, vsrc)
 				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
+					nilChk := ch.ptr || ch.typ == typeMap || ch.typ == typeSlice
 					typ := c.fmtTyp(ch)
 					pfx := "*"
-					if ch.ptr {
+					if ch.ptr || nvPtr {
 						pfx = ""
 					}
 					c.wl("if uvalue, ok := value.(*", typ, "); ok {")
@@ -579,19 +582,21 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if ch.ptr {
 						pfx = "&"
 					}
-					c.wl("if ", nv, " == nil {")
-					switch ch.typ {
-					case typeStruct:
-						c.wl(nv, " = ", pfx, typ, "{}")
-					case typeMap:
-						c.wl("z := make(", typ, ")")
-						c.wl(nv, " = ", pfx, "z")
-					case typeSlice:
-						c.wl("z := make(", typ, ", 0)")
-						c.wl(nv, " = ", pfx, "z")
+					if nilChk {
+						c.wl("if ", nv, " == nil {")
+						switch ch.typ {
+						case typeStruct:
+							c.wl(nv, " = ", pfx, typ, "{}")
+						case typeMap:
+							c.wl("z := make(", typ, ")")
+							c.wl(nv, " = ", pfx, "z")
+						case typeSlice:
+							c.wl("z := make(", typ, ", 0)")
+							c.wl(nv, " = ", pfx, "z")
+						}
+						c.wl(v+"."+ch.name, " = ", nv)
+						c.wl("}")
 					}
-					c.wl(v+"."+ch.name, " = ", nv)
-					c.wl("}")
 				}
 				c.wl("_ = ", nv)
 				if mode == modeCmp && ch.ptr {
@@ -605,7 +610,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					c.wl("return")
 				}
 				if mode == modeSet {
-					c.wl(vsrc, " = ", nv)
+					pfx := ""
+					if nvPtr && !ch.ptr {
+						pfx = "*"
+					}
+					c.wl(vsrc, " = ", pfx, nv)
 				}
 			}
 			c.wl("}")
@@ -969,7 +978,13 @@ func (c *Compiler) fmtTyp(node *node) string {
 			return node.pkg + "." + strings.Trim(node.typn, "*")
 		}
 	case typeSlice:
-		s := node.slct.pkg + "." + strings.Trim(node.slct.typn, "*")
+		s := node.slct.typn
+		if !c.isBuiltin(s) {
+			s = node.slct.pkg + "." + strings.Trim(node.slct.typn, "*")
+			if node.slct.ptr {
+				s = "*" + s
+			}
+		}
 		if strings.Index(node.typn, "[]") != -1 {
 			s = "[]" + s
 		}
