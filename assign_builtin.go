@@ -15,6 +15,7 @@ var (
 	reIsDecFloat = regexp.MustCompile(`^[-+]?[\d]*\.?[\d]+([eE][-+]?[\d]+)?$`)
 )
 
+// Assign source to bytes destination.
 func AssignToBytes(dst, src interface{}) (ok bool) {
 	switch dst.(type) {
 	case *[]byte:
@@ -36,6 +37,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 				p   = *dst.(*[]byte)
 				err error
 			)
+			// Worst case, try to convert source to bytes.
 			p, err = any2bytes.AnyToBytes(p[:0], src)
 			if ok = err == nil; ok {
 				*dst.(*[]byte) = p
@@ -45,6 +47,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Assign source to string destination.
 func AssignToStr(dst, src interface{}) (ok bool) {
 	switch dst.(type) {
 	case *string:
@@ -66,6 +69,7 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 				p   []byte
 				err error
 			)
+			// Worst case, try to convert source to bytes.
 			p = fastconv.S2B(*dst.(*string))
 			p, err = any2bytes.AnyToBytes(p, src)
 			if ok = err == nil; ok {
@@ -76,6 +80,7 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Assign source to bool destination.
 func AssignToBool(dst, src interface{}) (ok bool) {
 	switch dst.(type) {
 	case *bool:
@@ -175,6 +180,7 @@ func AssignToBool(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Assign source to int destination.
 func AssignToInt(dst, src interface{}) (ok bool) {
 	var i int64
 	switch src.(type) {
@@ -236,6 +242,7 @@ func AssignToInt(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Assign source to unsigned int destination.
 func AssignToUint(dst, src interface{}) (ok bool) {
 	var u uint64
 	switch src.(type) {
@@ -297,6 +304,7 @@ func AssignToUint(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Assign source to float destination.
 func AssignToFloat(dst, src interface{}) (ok bool) {
 	var f float64
 	switch src.(type) {
@@ -334,6 +342,7 @@ func AssignToFloat(dst, src interface{}) (ok bool) {
 	return
 }
 
+// Check if string contains integer and parse it.
 func atoi(s string) (int64, bool) {
 	if reIsDecInt.MatchString(s) {
 		if i, err := strconv.ParseInt(s, 10, 64); err == nil {
@@ -343,6 +352,7 @@ func atoi(s string) (int64, bool) {
 	return 0, false
 }
 
+// Check if string contains unsigned integer and parse it.
 func atou(s string) (uint64, bool) {
 	if reIsDecUint.MatchString(s) {
 		if u, err := strconv.ParseUint(s, 10, 64); err == nil {
@@ -352,6 +362,7 @@ func atou(s string) (uint64, bool) {
 	return 0, false
 }
 
+// Check if string contains float and parse it.
 func atof(s string) (float64, bool) {
 	if reIsDecFloat.MatchString(s) {
 		if f, err := strconv.ParseFloat(s, 64); err == nil {
