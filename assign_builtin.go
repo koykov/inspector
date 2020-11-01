@@ -31,7 +31,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 			*dst.(*[]byte) = bytealg.Copy(fastconv.S2B(*src.(*string)))
 			ok = true
 		case string:
-			*dst.(*[]byte) = fastconv.S2B(src.(string))
+			*dst.(*[]byte) = bytealg.Copy(fastconv.S2B(src.(string)))
 			ok = true
 		default:
 			var (
