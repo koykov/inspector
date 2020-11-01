@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/koykov/any2bytes"
+	"github.com/koykov/bytealg"
 	"github.com/koykov/fastconv"
 )
 
@@ -21,13 +22,13 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 	case *[]byte:
 		switch src.(type) {
 		case *[]byte:
-			*dst.(*[]byte) = *src.(*[]byte)
+			*dst.(*[]byte) = bytealg.Copy(*src.(*[]byte))
 			ok = true
 		case []byte:
-			*dst.(*[]byte) = src.([]byte)
+			*dst.(*[]byte) = bytealg.Copy(src.([]byte))
 			ok = true
 		case *string:
-			*dst.(*[]byte) = fastconv.S2B(*src.(*string))
+			*dst.(*[]byte) = bytealg.Copy(fastconv.S2B(*src.(*string)))
 			ok = true
 		case string:
 			*dst.(*[]byte) = fastconv.S2B(src.(string))
@@ -40,7 +41,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 			// Worst case, try to convert source to bytes.
 			p, err = any2bytes.AnyToBytes(p[:0], src)
 			if ok = err == nil; ok {
-				*dst.(*[]byte) = p
+				*dst.(*[]byte) = bytealg.Copy(p)
 			}
 		}
 	}
@@ -53,16 +54,16 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 	case *string:
 		switch src.(type) {
 		case *[]byte:
-			*dst.(*string) = fastconv.B2S(*src.(*[]byte))
+			*dst.(*string) = bytealg.CopyStr(fastconv.B2S(*src.(*[]byte)))
 			ok = true
 		case []byte:
-			*dst.(*string) = fastconv.B2S(src.([]byte))
+			*dst.(*string) = bytealg.CopyStr(fastconv.B2S(src.([]byte)))
 			ok = true
 		case *string:
-			*dst.(*string) = *src.(*string)
+			*dst.(*string) = bytealg.CopyStr(*src.(*string))
 			ok = true
 		case string:
-			*dst.(*string) = src.(string)
+			*dst.(*string) = bytealg.CopyStr(src.(string))
 			ok = true
 		default:
 			var (
@@ -73,7 +74,7 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 			p = fastconv.S2B(*dst.(*string))
 			p, err = any2bytes.AnyToBytes(p, src)
 			if ok = err == nil; ok {
-				*dst.(*string) = fastconv.B2S(p)
+				*dst.(*string) = bytealg.CopyStr(fastconv.B2S(p))
 			}
 		}
 	}
