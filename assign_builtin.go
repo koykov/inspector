@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/koykov/any2bytes"
 	"github.com/koykov/fastconv"
+	"github.com/koykov/x2bytes"
 )
 
 var (
@@ -38,7 +38,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 				err error
 			)
 			// Worst case, try to convert source to bytes.
-			p, err = any2bytes.AnyToBytes(p[:0], src)
+			p, err = x2bytes.ToBytes(p[:0], src)
 			if ok = err == nil; ok {
 				*dst.(*[]byte) = p
 			}
@@ -71,7 +71,7 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 			)
 			// Worst case, try to convert source to bytes.
 			p = fastconv.S2B(*dst.(*string))
-			p, err = any2bytes.AnyToBytes(p, src)
+			p, err = x2bytes.ToBytes(p, src)
 			if ok = err == nil; ok {
 				*dst.(*string) = fastconv.B2S(p)
 			}

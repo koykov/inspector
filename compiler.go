@@ -642,8 +642,8 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case "float32", "float64":
 				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(k), 'f', -1, 64)")
 			default:
-				c.regImport([]string{`"github.com/koykov/any2bytes"`})
-				c.wl("*buf, err = any2bytes.AnyToBytes(*buf[:0], k)")
+				c.regImport([]string{`"github.com/koykov/x2bytes"`})
+				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
 				c.wl("if err != nil { return }")
 			}
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
