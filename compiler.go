@@ -30,7 +30,6 @@ const (
 	// Possible compile modes.
 	modeGet mode = iota
 	modeSet
-	modeSetBuf
 	modeCmp
 	modeLoop
 )
@@ -503,23 +502,17 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	}
 	c.wdl("return }")
 
-	// Setter method.
-	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) error {")
+	// Setter methods.
+	c.wl("func (", recv, " *", inst, ") SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {")
 	c.wdl(funcHeaderSet)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
 	if err != nil {
 		return err
 	}
 	c.wdl("return nil }")
-
-	// Buffered setter method.
-	c.wl("func (", recv, " *", inst, ") SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {")
-	c.wdl(funcHeaderSet)
-	err = c.writeNode(node, nil, recv, "x", "", 0, modeSetBuf)
-	if err != nil {
-		return err
-	}
-	c.wdl("return nil }")
+	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) error {")
+	c.wl("return ", recv, ".SetWB(dst, value, nil, path...)")
+	c.wdl("}")
 
 	return c.err
 }
@@ -556,7 +549,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				case modeCmp:
 					c.writeCmp(ch, v+"."+ch.name)
 					c.wl("return")
-				case modeSet, modeSetBuf:
+				case modeSet:
 					pfx := ""
 					if !c.isBuiltin(ch.typn) && !c.isBuiltin(ch.typu) {
 						pfx = ch.pkg + "."
@@ -565,8 +558,6 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 						pfx = "&" + pfx
 					}
 					if mode == modeSet {
-						c.wl("inspector.Assign(", pfx, v, ".", ch.name, ", value)")
-					} else if mode == modeSetBuf {
 						c.wl("inspector.AssignBuf(", pfx, v, ".", ch.name, ", value, buf)")
 					}
 					c.wl("return nil")
@@ -581,7 +572,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					nvPtr = true
 				}
 				c.wl(nv, " := ", pfx, vsrc)
-				if (mode == modeSet || mode == modeSetBuf) && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
+				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
 					nilChk := ch.ptr || ch.typ == typeMap || ch.typ == typeSlice
 					typ := c.fmtTyp(ch)
 					pfx := "*"
@@ -623,7 +614,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if mode == modeGet {
 					c.wl("return")
 				}
-				if mode == modeSet || mode == modeSetBuf {
+				if mode == modeSet {
 					pfx := ""
 					if nvPtr && !ch.ptr {
 						pfx = "*"
@@ -681,7 +672,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			nv := "x" + strconv.Itoa(depth)
 			if node.mapk.typn == "string" {
 				// Key is string, simple case.
-				if mode == modeSet || mode == modeSetBuf {
+				if mode == modeSet {
 					c.wl(nv, " := ", c.fmtV(node, v), "[path[", depths, "]]")
 				} else {
 					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
@@ -691,11 +682,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if err != nil {
 					return err
 				}
-				if mode == modeSet || mode == modeSetBuf {
+				if mode == modeSet {
 					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
 					c.wl("return nil")
 				}
-				if mode != modeSet && mode != modeSetBuf {
+				if mode != modeSet {
 					c.wl("}")
 				}
 			} else {
@@ -710,7 +701,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
 				c.wl("_ = ", nv)
 				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
-				if mode == modeSet || mode == modeSetBuf {
+				if mode == modeSet {
 					c.wl(c.fmtV(node, v), "[k] = ", nv)
 					c.wl("return nil")
 				}
@@ -730,14 +721,12 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case modeCmp:
 				c.writeCmp(node, v)
 				c.wl("return")
-			case modeSet, modeSetBuf:
+			case modeSet:
 				pfx := ""
 				if !node.ptr {
 					pfx = "&"
 				}
 				if mode == modeSet {
-					c.wl("inspector.Assign(", pfx, v, ", value)")
-				} else if mode == modeSetBuf {
 					c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
 				}
 				c.wl("return nil")
@@ -787,7 +776,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if err != nil {
 				return err
 			}
-			if mode == modeSet || mode == modeSetBuf {
+			if mode == modeSet {
 				pfx := ""
 				if !node.slct.ptr && !c.isBuiltin(node.slct.typn) {
 					pfx = "*"
@@ -805,7 +794,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 		case modeCmp:
 			c.writeCmp(node, v)
 			c.wl("return")
-		case modeSet, modeSetBuf:
+		case modeSet:
 			pfx := ""
 			if !c.isBuiltin(node.typn) {
 				pfx = node.pkg + "."
@@ -814,8 +803,6 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				pfx = "&" + pfx
 			}
 			if mode == modeSet {
-				c.wl("inspector.Assign(", pfx, v, ", value)")
-			} else if mode == modeSetBuf {
 				c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
 			}
 			if parent.typ != typeMap {
@@ -1016,7 +1003,7 @@ func (c *Compiler) fmtTyp(node *node) string {
 }
 
 func (c *Compiler) fmtR(mode mode, err string) string {
-	if mode == modeSet || mode == modeSetBuf {
+	if mode == modeSet {
 		return "return " + err
 	} else {
 		return "return"
