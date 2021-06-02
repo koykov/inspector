@@ -39,6 +39,8 @@ type AccumulativeBuffer interface {
 	AcquireBytes() []byte
 	// Release changed byte collector.
 	ReleaseBytes([]byte)
+	// Reset all accumulated data.
+	Reset()
 }
 
 // Need for possible further improvements.

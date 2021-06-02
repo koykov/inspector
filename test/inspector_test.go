@@ -9,6 +9,25 @@ import (
 	"github.com/koykov/inspector/testobj_ins"
 )
 
+type accBuf struct {
+	b []byte
+}
+
+func (ab *accBuf) AcquireBytes() []byte {
+	return ab.b
+}
+
+func (ab *accBuf) ReleaseBytes(p []byte) {
+	if len(p) == 0 {
+		return
+	}
+	ab.b = p
+}
+
+func (ab *accBuf) Reset() {
+	ab.b = ab.b[:0]
+}
+
 var (
 	testO = &testobj.TestObject{
 		Id:         "foo",
@@ -58,7 +77,7 @@ var (
 	p8 = []string{"Finance", "MoneyIn"}
 
 	expectFoo      = []byte("bar")
-	expectName     = []byte("foo")
+	expectName     = []byte("2000")
 	expectComment  = []byte("pay for domain")
 	expectComment1 = []byte("lorem ipsum dolor sit amet")
 )
@@ -159,38 +178,39 @@ func testCmpPtr(t testing.TB, i inspector.Inspector, buf *bool) {
 	}
 }
 
-func testSetterPtr(t testing.TB, i inspector.Inspector) {
-	_ = i.Set(testO, "bar", p0...)
-	if testO.Id != "bar" {
+func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.AccumulativeBuffer) {
+	testO.Id = ""
+	_ = i.SetWB(testO, 1984, ab, p0...)
+	if testO.Id != "1984" {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, &expectName, p1...)
+	_ = i.SetWB(testO, 2000, ab, p1...)
 	if !bytes.Equal(testO.Name, expectName) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, false, p2...)
+	_ = i.SetWB(testO, false, ab, p2...)
 	if (*testO.Permission)[23] != false {
 		t.Error("object.Permission.23: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, int32(23), p3...)
+	_ = i.SetWB(testO, int32(23), ab, p3...)
 	if testO.Flags["export"] != 23 {
 		t.Error("object.Flags.export: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, float64(9000), p4...)
+	_ = i.SetWB(testO, float64(9000), ab, p4...)
 	if testO.Finance.Balance != 9000 {
 		t.Error("object.Finance.Balance: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, int64(153465345246), p5...)
+	_ = i.SetWB(testO, int64(153465345246), ab, p5...)
 	if testO.Finance.History[1].DateUnix != 153465345246 {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	_ = i.Set(testO, &expectComment1, p6...)
+	_ = i.SetWB(testO, &expectComment1, ab, p6...)
 	if !bytes.Equal(testO.Finance.History[0].Comment, expectComment1) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}
@@ -243,7 +263,7 @@ func BenchmarkCompiledInspector_Cmp(b *testing.B) {
 
 func TestCompiledInspector_Set(t *testing.T) {
 	ins := &testobj_ins.TestObjectInspector{}
-	testSetterPtr(t, ins)
+	testSetterPtr(t, ins, nil)
 }
 
 func BenchmarkCompiledInspector_Set(b *testing.B) {
@@ -251,6 +271,23 @@ func BenchmarkCompiledInspector_Set(b *testing.B) {
 
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		testSetterPtr(b, ins)
+		testSetterPtr(b, ins, nil)
+	}
+}
+
+func TestCompiledInspector_SetBuf(t *testing.T) {
+	ab := accBuf{}
+	ins := &testobj_ins.TestObjectInspector{}
+	testSetterPtr(t, ins, &ab)
+}
+
+func BenchmarkCompiledInspector_SetBuf(b *testing.B) {
+	ins := &testobj_ins.TestObjectInspector{}
+	ab := accBuf{}
+
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		testSetterPtr(b, ins, &ab)
+		ab.Reset()
 	}
 }

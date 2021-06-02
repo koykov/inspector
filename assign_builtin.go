@@ -38,9 +38,19 @@ func AssignToBytes(dst, src interface{}, buf AccumulativeBuffer) (ok bool) {
 				err error
 			)
 			// Worst case, try to convert source to bytes.
-			p, err = x2bytes.ToBytes(p[:0], src)
-			if ok = err == nil; ok {
-				*dst.(*[]byte) = p
+			if buf == nil {
+				p, err = x2bytes.ToBytes(p[:0], src)
+				if ok = err == nil; ok {
+					*dst.(*[]byte) = p
+				}
+			} else {
+				bb := buf.AcquireBytes()
+				offset := len(bb)
+				bb, err = x2bytes.ToBytes(bb, src)
+				if ok = err == nil; ok {
+					*dst.(*[]byte) = bb[offset:]
+				}
+				buf.ReleaseBytes(bb)
 			}
 		}
 	}
@@ -70,10 +80,20 @@ func AssignToStr(dst, src interface{}, buf AccumulativeBuffer) (ok bool) {
 				err error
 			)
 			// Worst case, try to convert source to bytes.
-			p = fastconv.S2B(*dst.(*string))
-			p, err = x2bytes.ToBytes(p, src)
-			if ok = err == nil; ok {
-				*dst.(*string) = fastconv.B2S(p)
+			if buf == nil {
+				p = fastconv.S2B(*dst.(*string))
+				p, err = x2bytes.ToBytes(p, src)
+				if ok = err == nil; ok {
+					*dst.(*string) = fastconv.B2S(p)
+				}
+			} else {
+				bb := buf.AcquireBytes()
+				offset := len(bb)
+				bb, err = x2bytes.ToBytes(bb, src)
+				if ok = err == nil; ok {
+					*dst.(*string) = fastconv.B2S(bb[offset:])
+				}
+				buf.ReleaseBytes(bb)
 			}
 		}
 	}
