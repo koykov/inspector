@@ -135,7 +135,7 @@ func (i1 *TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]by
 	return
 }
 
-func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
+func (i1 *TestFlagInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -157,9 +157,13 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	if len(path) > 0 {
 		x0 := (*x)[path[0]]
 		_ = x0
-		inspector.Assign(&x0, value)
+		inspector.AssignBuf(&x0, value, buf)
 		(*x)[path[0]] = x0
 		return nil
 	}
 	return nil
+}
+
+func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
+	return i1.SetWB(dst, value, nil, path...)
 }

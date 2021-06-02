@@ -164,7 +164,7 @@ func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	return
 }
 
-func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+func (i2 *TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -185,17 +185,21 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
-			inspector.Assign(&x.DateUnix, value)
+			inspector.AssignBuf(&x.DateUnix, value, buf)
 			return nil
 		}
 		if path[0] == "Cost" {
-			inspector.Assign(&x.Cost, value)
+			inspector.AssignBuf(&x.Cost, value, buf)
 			return nil
 		}
 		if path[0] == "Comment" {
-			inspector.Assign(&x.Comment, value)
+			inspector.AssignBuf(&x.Comment, value, buf)
 			return nil
 		}
 	}
 	return nil
+}
+
+func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+	return i2.SetWB(dst, value, nil, path...)
 }

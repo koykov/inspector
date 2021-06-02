@@ -321,7 +321,7 @@ func (i0 *TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	return
 }
 
-func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) error {
+func (i0 *TestFinanceInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -342,19 +342,19 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 
 	if len(path) > 0 {
 		if path[0] == "MoneyIn" {
-			inspector.Assign(&x.MoneyIn, value)
+			inspector.AssignBuf(&x.MoneyIn, value, buf)
 			return nil
 		}
 		if path[0] == "MoneyOut" {
-			inspector.Assign(&x.MoneyOut, value)
+			inspector.AssignBuf(&x.MoneyOut, value, buf)
 			return nil
 		}
 		if path[0] == "Balance" {
-			inspector.Assign(&x.Balance, value)
+			inspector.AssignBuf(&x.Balance, value, buf)
 			return nil
 		}
 		if path[0] == "AllowBuy" {
-			inspector.Assign(&x.AllowBuy, value)
+			inspector.AssignBuf(&x.AllowBuy, value, buf)
 			return nil
 		}
 		if path[0] == "History" {
@@ -380,15 +380,15 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 					_ = x1
 					if len(path) > 2 {
 						if path[2] == "DateUnix" {
-							inspector.Assign(&x1.DateUnix, value)
+							inspector.AssignBuf(&x1.DateUnix, value, buf)
 							return nil
 						}
 						if path[2] == "Cost" {
-							inspector.Assign(&x1.Cost, value)
+							inspector.AssignBuf(&x1.Cost, value, buf)
 							return nil
 						}
 						if path[2] == "Comment" {
-							inspector.Assign(&x1.Comment, value)
+							inspector.AssignBuf(&x1.Comment, value, buf)
 							return nil
 						}
 					}
@@ -400,4 +400,8 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 		}
 	}
 	return nil
+}
+
+func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) error {
+	return i0.SetWB(dst, value, nil, path...)
 }

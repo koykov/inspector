@@ -136,7 +136,7 @@ func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf
 	return
 }
 
-func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
+func (i4 *TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -164,9 +164,13 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 		k = int32(t39)
 		x0 := (*x)[k]
 		_ = x0
-		inspector.Assign(&x0, value)
+		inspector.AssignBuf(&x0, value, buf)
 		(*x)[k] = x0
 		return nil
 	}
 	return nil
+}
+
+func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
+	return i4.SetWB(dst, value, nil, path...)
 }
