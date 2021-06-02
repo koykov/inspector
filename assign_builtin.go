@@ -16,7 +16,7 @@ var (
 )
 
 // Assign source to bytes destination.
-func AssignToBytes(dst, src interface{}) (ok bool) {
+func AssignToBytes(dst, src interface{}, buf AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *[]byte:
 		switch src.(type) {
@@ -48,7 +48,7 @@ func AssignToBytes(dst, src interface{}) (ok bool) {
 }
 
 // Assign source to string destination.
-func AssignToStr(dst, src interface{}) (ok bool) {
+func AssignToStr(dst, src interface{}, buf AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *string:
 		switch src.(type) {
@@ -81,7 +81,7 @@ func AssignToStr(dst, src interface{}) (ok bool) {
 }
 
 // Assign source to bool destination.
-func AssignToBool(dst, src interface{}) (ok bool) {
+func AssignToBool(dst, src interface{}, _ AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *bool:
 		switch src.(type) {
@@ -181,7 +181,7 @@ func AssignToBool(dst, src interface{}) (ok bool) {
 }
 
 // Assign source to int destination.
-func AssignToInt(dst, src interface{}) (ok bool) {
+func AssignToInt(dst, src interface{}, _ AccumulativeBuffer) (ok bool) {
 	var i int64
 	switch src.(type) {
 	case int:
@@ -243,7 +243,7 @@ func AssignToInt(dst, src interface{}) (ok bool) {
 }
 
 // Assign source to unsigned int destination.
-func AssignToUint(dst, src interface{}) (ok bool) {
+func AssignToUint(dst, src interface{}, _ AccumulativeBuffer) (ok bool) {
 	var u uint64
 	switch src.(type) {
 	case uint:
@@ -305,7 +305,7 @@ func AssignToUint(dst, src interface{}) (ok bool) {
 }
 
 // Assign source to float destination.
-func AssignToFloat(dst, src interface{}) (ok bool) {
+func AssignToFloat(dst, src interface{}, _ AccumulativeBuffer) (ok bool) {
 	var f float64
 	switch src.(type) {
 	case float32:

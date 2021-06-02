@@ -29,6 +29,16 @@ type Looper interface {
 	Iterate() LoopCtl
 }
 
+// Accumulative buffer signature.
+//
+// Collects data during assign assign functions work.
+type AccumulativeBuffer interface {
+	// Acquire byte collector.
+	AcquireBytes() []byte
+	// Release changed byte collector.
+	ReleaseBytes([]byte)
+}
+
 // Need for possible further improvements.
 type BaseInspector struct{}
 
