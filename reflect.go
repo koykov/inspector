@@ -44,6 +44,11 @@ func (i *ReflectInspector) Set(_, _ interface{}, _ ...string) error {
 	return nil
 }
 
+func (i *ReflectInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
+	// Empty method, there is no way to update data using reflection.
+	return nil
+}
+
 func (i *ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil

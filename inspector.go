@@ -10,6 +10,8 @@ type Inspector interface {
 	GetTo(src interface{}, buf *interface{}, path ...string) error
 	// Set value to dst according path.
 	Set(dst, value interface{}, path ...string) error
+	// Buffered version of Set().
+	SetWB(dst, value interface{}, buf AccumulativeBuffer, path ...string) error
 	// Compare value according path with right using cond.
 	// Result will be present in result.
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error

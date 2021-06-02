@@ -26,6 +26,10 @@ func (i *StaticInspector) Set(_, _ interface{}, _ ...string) error {
 	return nil
 }
 
+func (i *StaticInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
+	return nil
+}
+
 func (i *StaticInspector) Cmp(src interface{}, cond Op, right string, result *bool, _ ...string) error {
 	switch src.(type) {
 	case int:
