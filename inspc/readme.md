@@ -23,10 +23,10 @@ Also supports blacklist files by passing the erg `-bl`. It's just a path to the 
 
 Build the tool with the following commands:
 ```bash
-go get github.com/koykov/inspector/inspc
-go build -o $GOPATH/bin/inspc github.com/koykov/inspector/inspc
+go get github.com/koykov/inspector
+cd $GOPATH/src/github.com/koykov/inspector
+go install ./inspc
 ```
-Make sure `$GOPATH/bin` is in the `$PATH` variable.
 
 ## Blacklist
 
