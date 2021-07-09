@@ -92,7 +92,6 @@ func (i0 *TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ..
 			return
 		}
 	}
-	*buf = &(*x)
 	return
 }
 

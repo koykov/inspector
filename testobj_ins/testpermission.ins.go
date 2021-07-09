@@ -51,7 +51,6 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 		*buf = &x0
 		return
 	}
-	*buf = &(*x)
 	return
 }
 

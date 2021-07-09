@@ -46,7 +46,6 @@ func (i1 *TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...st
 			return
 		}
 	}
-	*buf = &(*x)
 	return
 }
 

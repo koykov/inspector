@@ -481,7 +481,6 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	if err != nil {
 		return err
 	}
-	c.wl("*buf = &(*x)")
 	c.wdl("return }")
 
 	// Compare method.

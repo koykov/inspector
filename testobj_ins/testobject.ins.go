@@ -182,7 +182,6 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 			return
 		}
 	}
-	*buf = &(*x)
 	return
 }
 

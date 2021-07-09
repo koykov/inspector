@@ -55,7 +55,6 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 			return
 		}
 	}
-	*buf = &(*x)
 	return
 }
 
