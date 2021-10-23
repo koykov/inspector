@@ -21,6 +21,7 @@ type TestObject struct {
 	Id          string
 	Name        []byte
 	Status      int32
+	Ustate      uint64
 	Cost        float64
 	Permission  *TestPermission
 	HistoryTree map[string]*TestHistory
