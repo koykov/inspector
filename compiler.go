@@ -574,19 +574,25 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth i
 		}
 		c.wl("}")
 	case typeSlice:
-		nlv, nrv := lv+"."+node.name, rv+"."+node.name
 		if node.typn == "[]byte" {
+			nlv, nrv := lv+"."+node.name, rv+"."+node.name
 			c.wl("if !bytes.Equal(", nlv, ",", nrv, "){return false}")
 		} else {
-			c.wl("if len(", lv, ")!=len(", rv, "){return false}")
-			c.wl("for i:=0;i<len(", lv, ");i++{")
+			pfx := ""
+			if node.ptr || depth == 0 {
+				pfx = "*"
+			}
+			nlv := pfx + lv
+			nrv := pfx + rv
+			c.wl("if len(", nlv, ")!=len(", nrv, "){return false}")
+			c.wl("for i:=0;i<len(", nlv, ");i++{")
 			c.cntrDEQ++
-			nlv = "lx" + strconv.Itoa(c.cntrDEQ)
-			nrv = "rx" + strconv.Itoa(c.cntrDEQ)
-			c.wl(nlv, ":=", lv, "[i]")
-			c.wl(nrv, ":=", rv, "[i]")
-			c.wl("_,_=", nlv, ",", nrv)
-			if err := c.writeNodeDEQ(node.slct, node, recv, nlv, nrv, depth+1); err != nil {
+			nlv1 := "lx" + strconv.Itoa(c.cntrDEQ)
+			nrv1 := "rx" + strconv.Itoa(c.cntrDEQ)
+			c.wl(nlv1, ":=(", nlv, ")[i]")
+			c.wl(nrv1, ":=(", nrv, ")[i]")
+			c.wl("_,_=", nlv1, ",", nrv1)
+			if err := c.writeNodeDEQ(node.slct, node, recv, nlv1, nrv1, depth+1); err != nil {
 				return err
 			}
 			c.wl("}")
