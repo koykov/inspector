@@ -216,78 +216,65 @@ func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.Accumulativ
 	}
 }
 
-func TestReflectInspector_Get(t *testing.T) {
-	ins := &inspector.ReflectInspector{}
-	testGetter(t, ins)
+func TestInspector(t *testing.T) {
+	t.Run("reflect/get", func(t *testing.T) {
+		testGetter(t, &inspector.ReflectInspector{})
+	})
+	t.Run("cg/get", func(t *testing.T) {
+		var buf interface{}
+		testGetterPtr(t, &testobj_ins.TestObjectInspector{}, buf)
+	})
+	t.Run("cg/cmp", func(t *testing.T) {
+		var buf bool
+		testCmpPtr(t, &testobj_ins.TestObjectInspector{}, &buf)
+	})
+	t.Run("cg/set", func(t *testing.T) {
+		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, nil)
+	})
+	t.Run("cg/setBuf", func(t *testing.T) {
+		ab := accBuf{}
+		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, &ab)
+	})
 }
 
-func BenchmarkReflectInspector_Get(b *testing.B) {
-	ins := &inspector.ReflectInspector{}
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testGetter(b, ins)
-	}
-}
-
-func TestCompiledInspector_Get(t *testing.T) {
-	var buf interface{}
-	ins := &testobj_ins.TestObjectInspector{}
-	testGetterPtr(t, ins, buf)
-}
-
-func BenchmarkCompiledInspector_Get(b *testing.B) {
-	ins := &testobj_ins.TestObjectInspector{}
-	var buf interface{}
-
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testGetterPtr(b, ins, buf)
-	}
-}
-
-func TestCompiledInspector_Cmp(t *testing.T) {
-	ins := &testobj_ins.TestObjectInspector{}
-	var buf bool
-	testCmpPtr(t, ins, &buf)
-}
-
-func BenchmarkCompiledInspector_Cmp(b *testing.B) {
-	ins := &testobj_ins.TestObjectInspector{}
-	var buf bool
-
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testCmpPtr(b, ins, &buf)
-	}
-}
-
-func TestCompiledInspector_Set(t *testing.T) {
-	ins := &testobj_ins.TestObjectInspector{}
-	testSetterPtr(t, ins, nil)
-}
-
-func BenchmarkCompiledInspector_Set(b *testing.B) {
-	ins := &testobj_ins.TestObjectInspector{}
-
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testSetterPtr(b, ins, nil)
-	}
-}
-
-func TestCompiledInspector_SetBuf(t *testing.T) {
-	ab := accBuf{}
-	ins := &testobj_ins.TestObjectInspector{}
-	testSetterPtr(t, ins, &ab)
-}
-
-func BenchmarkCompiledInspector_SetBuf(b *testing.B) {
-	ins := &testobj_ins.TestObjectInspector{}
-	ab := accBuf{}
-
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		testSetterPtr(b, ins, &ab)
-		ab.Reset()
-	}
+func BenchmarkInspector(b *testing.B) {
+	b.Run("reflect/get", func(b *testing.B) {
+		ins := &inspector.ReflectInspector{}
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			testGetter(b, ins)
+		}
+	})
+	b.Run("cg/get", func(b *testing.B) {
+		ins := &testobj_ins.TestObjectInspector{}
+		var buf interface{}
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			testGetterPtr(b, ins, buf)
+		}
+	})
+	b.Run("cg/cmp", func(b *testing.B) {
+		ins := &testobj_ins.TestObjectInspector{}
+		var buf bool
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			testCmpPtr(b, ins, &buf)
+		}
+	})
+	b.Run("cg/set", func(b *testing.B) {
+		ins := &testobj_ins.TestObjectInspector{}
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			testSetterPtr(b, ins, nil)
+		}
+	})
+	b.Run("cg/setBuf", func(b *testing.B) {
+		ins := &testobj_ins.TestObjectInspector{}
+		ab := accBuf{}
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			testSetterPtr(b, ins, &ab)
+			ab.Reset()
+		}
+	})
 }
