@@ -15,6 +15,8 @@ type Inspector interface {
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
 	// Loop iterates in src value taking by path using l looper.
 	Loop(src interface{}, l Looper, buf *[]byte, path ...string) error
+	// DeepEqual compares l and r.
+	DeepEqual(l, r interface{}) bool
 }
 
 // Looper signature.

@@ -54,6 +54,10 @@ func (i *ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string)
 	return nil
 }
 
+func (i *ReflectInspector) DeepEqual(l, r interface{}) bool {
+	return reflect.DeepEqual(l, r)
+}
+
 func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 	v := reflect.ValueOf(node)
 	switch v.Kind() {

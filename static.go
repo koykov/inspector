@@ -112,6 +112,22 @@ func (i *StaticInspector) Cmp(src interface{}, cond Op, right string, result *bo
 		if r, err := strconv.ParseUint(right, 0, 0); err == nil {
 			*result = i.cmpUint(*src.(*uint64), cond, r)
 		}
+	case float32:
+		if r, err := strconv.ParseFloat(right, 0); err == nil {
+			*result = i.cmpFloat(float64(src.(float32)), cond, r)
+		}
+	case *float32:
+		if r, err := strconv.ParseFloat(right, 0); err == nil {
+			*result = i.cmpFloat(float64(*src.(*float32)), cond, r)
+		}
+	case float64:
+		if r, err := strconv.ParseFloat(right, 0); err == nil {
+			*result = i.cmpFloat(src.(float64), cond, r)
+		}
+	case *float64:
+		if r, err := strconv.ParseFloat(right, 0); err == nil {
+			*result = i.cmpFloat(*src.(*float64), cond, r)
+		}
 	case []byte:
 		*result = i.cmpBytes(src.([]byte), cond, fastconv.S2B(right))
 	case *[]byte:
@@ -210,4 +226,122 @@ func (i *StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
 
 func (i *StaticInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) error {
 	return nil
+}
+
+func (i *StaticInspector) DeepEqual(l, r interface{}) bool {
+	switch l.(type) {
+	case int:
+		if rx, ok := r.(int); ok {
+			return rx == l.(int)
+		}
+	case *int:
+		if rx, ok := r.(*int); ok {
+			return *rx == *l.(*int)
+		}
+	case int8:
+		if rx, ok := r.(int8); ok {
+			return rx == l.(int8)
+		}
+	case *int8:
+		if rx, ok := r.(*int8); ok {
+			return *rx == *l.(*int8)
+		}
+	case int16:
+		if rx, ok := r.(int16); ok {
+			return rx == l.(int16)
+		}
+	case *int16:
+		if rx, ok := r.(*int16); ok {
+			return *rx == *l.(*int16)
+		}
+	case int32:
+		if rx, ok := r.(int32); ok {
+			return rx == l.(int32)
+		}
+	case *int32:
+		if rx, ok := r.(*int32); ok {
+			return *rx == *l.(*int32)
+		}
+	case int64:
+		if rx, ok := r.(int64); ok {
+			return rx == l.(int64)
+		}
+	case *int64:
+		if rx, ok := r.(*int64); ok {
+			return *rx == *l.(*int64)
+		}
+	case uint:
+		if rx, ok := r.(uint); ok {
+			return rx == l.(uint)
+		}
+	case *uint:
+		if rx, ok := r.(*uint); ok {
+			return *rx == *l.(*uint)
+		}
+	case uint8:
+		if rx, ok := r.(uint8); ok {
+			return rx == l.(uint8)
+		}
+	case *uint8:
+		if rx, ok := r.(*uint8); ok {
+			return *rx == *l.(*uint8)
+		}
+	case uint16:
+		if rx, ok := r.(uint16); ok {
+			return rx == l.(uint16)
+		}
+	case *uint16:
+		if rx, ok := r.(*uint16); ok {
+			return *rx == *l.(*uint16)
+		}
+	case uint32:
+		if rx, ok := r.(uint32); ok {
+			return rx == l.(uint32)
+		}
+	case *uint32:
+		if rx, ok := r.(*uint32); ok {
+			return *rx == *l.(*uint32)
+		}
+	case uint64:
+		if rx, ok := r.(uint64); ok {
+			return rx == l.(uint64)
+		}
+	case *uint64:
+		if rx, ok := r.(*uint64); ok {
+			return *rx == *l.(*uint64)
+		}
+	case float32:
+		if rx, ok := r.(float32); ok {
+			return rx == l.(float32)
+		}
+	case *float32:
+		if rx, ok := r.(*float32); ok {
+			return *rx == *l.(*float32)
+		}
+	case float64:
+		if rx, ok := r.(float64); ok {
+			return rx == l.(float64)
+		}
+	case *float64:
+		if rx, ok := r.(*float64); ok {
+			return *rx == *l.(*float64)
+		}
+	case []byte:
+		if rx, ok := r.([]byte); ok {
+			return bytes.Equal(rx, l.([]byte))
+		}
+	case *[]byte:
+		if rx, ok := r.(*[]byte); ok {
+			return bytes.Equal(*rx, *l.(*[]byte))
+		}
+	case string:
+		if rx, ok := r.(string); ok {
+			return rx == l.(string)
+		}
+	case *string:
+		if rx, ok := r.(*string); ok {
+			return *rx == *l.(*string)
+		}
+	}
+	return false
 }
