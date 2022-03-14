@@ -202,3 +202,45 @@ func (i2 *TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.Accu
 func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
 	return i2.SetWB(dst, value, nil, path...)
 }
+
+func (i2 *TestHistoryInspector) DeepEqual(l, r interface{}) bool {
+	var (
+		lx, rx   *testobj.TestHistory
+		leq, req bool
+	)
+	_, _, _, _ = lx, rx, leq, req
+	if lp, ok := l.(**testobj.TestHistory); ok {
+		lx, leq = *lp, true
+	} else if lp, ok := l.(*testobj.TestHistory); ok {
+		lx, leq = lp, true
+	} else if lp, ok := l.(testobj.TestHistory); ok {
+		lx, leq = &lp, true
+	}
+	if rp, ok := r.(**testobj.TestHistory); ok {
+		rx, req = *rp, true
+	} else if rp, ok := r.(*testobj.TestHistory); ok {
+		rx, req = rp, true
+	} else if rp, ok := r.(testobj.TestHistory); ok {
+		rx, req = &rp, true
+	}
+	if !leq || !req {
+		return false
+	}
+	if lx == nil && rx == nil {
+		return true
+	}
+	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
+		return false
+	}
+
+	if lx.DateUnix != rx.DateUnix {
+		return false
+	}
+	if lx.Cost != rx.Cost {
+		return false
+	}
+	if !bytes.Equal(lx.Comment, rx.Comment) {
+		return false
+	}
+	return true
+}

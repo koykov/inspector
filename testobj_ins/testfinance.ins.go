@@ -404,3 +404,68 @@ func (i0 *TestFinanceInspector) SetWB(dst, value interface{}, buf inspector.Accu
 func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) error {
 	return i0.SetWB(dst, value, nil, path...)
 }
+
+func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
+	var (
+		lx, rx   *testobj.TestFinance
+		leq, req bool
+	)
+	_, _, _, _ = lx, rx, leq, req
+	if lp, ok := l.(**testobj.TestFinance); ok {
+		lx, leq = *lp, true
+	} else if lp, ok := l.(*testobj.TestFinance); ok {
+		lx, leq = lp, true
+	} else if lp, ok := l.(testobj.TestFinance); ok {
+		lx, leq = &lp, true
+	}
+	if rp, ok := r.(**testobj.TestFinance); ok {
+		rx, req = *rp, true
+	} else if rp, ok := r.(*testobj.TestFinance); ok {
+		rx, req = rp, true
+	} else if rp, ok := r.(testobj.TestFinance); ok {
+		rx, req = &rp, true
+	}
+	if !leq || !req {
+		return false
+	}
+	if lx == nil && rx == nil {
+		return true
+	}
+	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
+		return false
+	}
+
+	if lx.MoneyIn != rx.MoneyIn {
+		return false
+	}
+	if lx.MoneyOut != rx.MoneyOut {
+		return false
+	}
+	if lx.Balance != rx.Balance {
+		return false
+	}
+	if lx.AllowBuy != rx.AllowBuy {
+		return false
+	}
+	lx1 := lx.History
+	rx1 := rx.History
+	_, _ = lx1, rx1
+	if len(lx1) != len(rx1) {
+		return false
+	}
+	for i := 0; i < len(lx1); i++ {
+		lx2 := lx1[i]
+		rx2 := rx1[i]
+		_, _ = lx2, rx2
+		if lx2.DateUnix != rx2.DateUnix {
+			return false
+		}
+		if lx2.Cost != rx2.Cost {
+			return false
+		}
+		if !bytes.Equal(lx2.Comment, rx2.Comment) {
+			return false
+		}
+	}
+	return true
+}

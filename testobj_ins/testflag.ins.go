@@ -166,3 +166,50 @@ func (i1 *TestFlagInspector) SetWB(dst, value interface{}, buf inspector.Accumul
 func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 	return i1.SetWB(dst, value, nil, path...)
 }
+
+func (i1 *TestFlagInspector) DeepEqual(l, r interface{}) bool {
+	var (
+		lx, rx   *testobj.TestFlag
+		leq, req bool
+	)
+	_, _, _, _ = lx, rx, leq, req
+	if lp, ok := l.(**testobj.TestFlag); ok {
+		lx, leq = *lp, true
+	} else if lp, ok := l.(*testobj.TestFlag); ok {
+		lx, leq = lp, true
+	} else if lp, ok := l.(testobj.TestFlag); ok {
+		lx, leq = &lp, true
+	}
+	if rp, ok := r.(**testobj.TestFlag); ok {
+		rx, req = *rp, true
+	} else if rp, ok := r.(*testobj.TestFlag); ok {
+		rx, req = rp, true
+	} else if rp, ok := r.(testobj.TestFlag); ok {
+		rx, req = &rp, true
+	}
+	if !leq || !req {
+		return false
+	}
+	if lx == nil && rx == nil {
+		return true
+	}
+	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
+		return false
+	}
+
+	if len(*lx) != len(*rx) {
+		return false
+	}
+	for k := range *lx {
+		lx1 := (*lx)[k]
+		rx1, ok1 := (*rx)[k]
+		_, _, _ = lx1, rx1, ok1
+		if !ok1 {
+			return false
+		}
+		if lx1 != rx1 {
+			return false
+		}
+	}
+	return true
+}

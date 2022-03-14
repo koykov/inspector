@@ -1,7 +1,6 @@
 package inspector
 
 import (
-	"errors"
 	"go/format"
 	"go/types"
 	"io/ioutil"
@@ -34,7 +33,7 @@ const (
 	modeLoop
 )
 
-// Extended writer interface.
+// ByteStringWriter is an extended writer interface.
 type ByteStringWriter interface {
 	Write(p []byte) (n int, err error)
 	WriteByte(c byte) error
@@ -50,7 +49,6 @@ type Logger interface {
 	Println(v ...interface{})
 }
 
-// The compiler.
 type Compiler struct {
 	// Path to the package relative to $GOPATH/src.
 	pkg string
@@ -116,13 +114,8 @@ var (
 	reUp = regexp.MustCompile(`^[A-Z]+.*`)
 	// Check vendor directory.
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
-
-	// Std errors.
-	ErrNoGOPATH     = errors.New("no GOPATH variable found")
-	ErrDstNotExists = errors.New("destination directory doesn't exists")
 )
 
-// Make new instance of the compiler.
 func NewCompiler(pkg, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		pkg:    pkg,
@@ -141,7 +134,6 @@ func (c *Compiler) String() string {
 	return ""
 }
 
-// Main compile method.
 func (c *Compiler) Compile() error {
 	if c.l != nil {
 		c.l.Print("Parse package " + c.pkg)
@@ -210,12 +202,10 @@ func (c *Compiler) Compile() error {
 			c.l.Print("Compiling ", node.name, "Inspector to "+file)
 		}
 		c.wr.Reset()
-		err = c.writeType(node)
-		if err != nil {
+		if err = c.writeType(node); err != nil {
 			return err
 		}
-		err = c.writeFile(c.dstAbs + ps + file)
-		if err != nil {
+		if err = c.writeFile(c.dstAbs + ps + file); err != nil {
 			return err
 		}
 	}
@@ -223,7 +213,7 @@ func (c *Compiler) Compile() error {
 	return nil
 }
 
-// Get the total number of compiled types.
+// GetTotal returns the total number of compiled types.
 func (c *Compiler) GetTotal() int {
 	return c.cntr
 }
@@ -469,6 +459,18 @@ return}`
 var x *` + pname + `
 _ = x
 if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
+	// Header for DeepEqual() method.
+	funcHeaderEqual := `var (
+lx, rx *` + pname + `
+leq, req bool
+)
+_, _, _, _ = lx, rx, leq, req
+if lp, ok := l.(**` + pname + `); ok { lx, leq = *lp, true } else if lp, ok := l.(*` + pname + `); ok { lx, leq = lp, true } else if lp, ok := l.(` + pname + `); ok { lx, leq = &lp, true }
+if rp, ok := r.(**` + pname + `); ok { rx, req = *rp, true } else if rp, ok := r.(*` + pname + `); ok { rx, req = rp, true } else if rp, ok := r.(` + pname + `); ok { rx, req = &rp, true }
+if !leq || !req { return false }
+if lx == nil && rx == nil { return true }
+if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
+`
 
 	// Getter methods.
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
@@ -513,7 +515,94 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("return ", recv, ".SetWB(dst, value, nil, path...)")
 	c.wdl("}")
 
+	// DeepEqual method.
+	c.wl("func (", recv, " *", inst, ") DeepEqual(l, r interface{}) bool {")
+	c.wdl(funcHeaderEqual)
+	err = c.writeNodeDEQ(node, nil, recv, "lx", "rx", 0, 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("return true }")
+
 	return c.err
+}
+
+func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, idx int) error {
+	_ = parent
+	if node.ptr {
+		c.wl("if ", lv, "==nil && ", rv, "==nil {return true}")
+		c.wl("if (", lv, "==nil && ", rv, "!=nil) || (", lv, "!=nil && ", rv, "==nil) {return false}")
+	}
+
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			nlv, nrv := lv, rv
+			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
+			if !isBasic {
+				idx++
+				nlv = "lx" + strconv.Itoa(idx)
+				nrv = "rx" + strconv.Itoa(idx)
+				c.wl(nlv, ":=", lv, ".", ch.name)
+				c.wl(nrv, ":=", rv, ".", ch.name)
+				c.wl("_,_=", nlv, ",", nrv)
+			}
+			if err := c.writeNodeDEQ(ch, node, recv, nlv, nrv, depth+1, idx); err != nil {
+				return err
+			}
+		}
+	case typeMap:
+		pfx := ""
+		if node.ptr || depth == 0 {
+			pfx = "*"
+		}
+		nlv := pfx + lv
+		nrv := pfx + rv
+		c.wl("if len(", nlv, ")!=len(", nrv, "){return false}")
+		c.wl("for k:=range ", nlv, "{")
+		idx++
+		nlv1 := "lx" + strconv.Itoa(idx)
+		nrv1 := "rx" + strconv.Itoa(idx)
+		ok1 := "ok" + strconv.Itoa(idx)
+		c.wl(nlv1, ":=(", nlv, ")[k]")
+		c.wl(nrv1, ",", ok1, ":=(", nrv, ")[k]")
+		c.wl("_,_,_=", nlv1, ",", nrv1, ",", ok1)
+		c.wl("if !", ok1, "{return false}")
+		if err := c.writeNodeDEQ(node.mapv, node, recv, nlv1, nrv1, depth+1, idx); err != nil {
+			return err
+		}
+		c.wl("}")
+	case typeSlice:
+		nlv, nrv := lv+"."+node.name, rv+"."+node.name
+		if node.typn == "[]byte" {
+			c.wl("if !bytes.Equal(", nlv, ",", nrv, "){return false}")
+		} else {
+			c.wl("if len(", lv, ")!=len(", rv, "){return false}")
+			c.wl("for i:=0;i<len(", lv, ");i++{")
+			idx++
+			nlv = "lx" + strconv.Itoa(idx)
+			nrv = "rx" + strconv.Itoa(idx)
+			c.wl(nlv, ":=", lv, "[i]")
+			c.wl(nrv, ":=", rv, "[i]")
+			c.wl("_,_=", nlv, ",", nrv)
+			if err := c.writeNodeDEQ(node.slct, node, recv, nlv, nrv, depth+1, idx); err != nil {
+				return err
+			}
+			c.wl("}")
+		}
+	case typeBasic:
+		plv, prv := lv, rv
+		if len(node.name) > 0 {
+			plv, prv = lv+"."+node.name, rv+"."+node.name
+		}
+		if node.ptr {
+			plv = "*" + plv
+			prv = "*" + prv
+		}
+		c.wl("if ", plv, "!=", prv, "{return false}")
+	}
+
+	return nil
 }
 
 // Write body of the methods according given mode.

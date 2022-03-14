@@ -944,3 +944,161 @@ func (i3 *TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accum
 func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error {
 	return i3.SetWB(dst, value, nil, path...)
 }
+
+func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
+	var (
+		lx, rx   *testobj.TestObject
+		leq, req bool
+	)
+	_, _, _, _ = lx, rx, leq, req
+	if lp, ok := l.(**testobj.TestObject); ok {
+		lx, leq = *lp, true
+	} else if lp, ok := l.(*testobj.TestObject); ok {
+		lx, leq = lp, true
+	} else if lp, ok := l.(testobj.TestObject); ok {
+		lx, leq = &lp, true
+	}
+	if rp, ok := r.(**testobj.TestObject); ok {
+		rx, req = *rp, true
+	} else if rp, ok := r.(*testobj.TestObject); ok {
+		rx, req = rp, true
+	} else if rp, ok := r.(testobj.TestObject); ok {
+		rx, req = &rp, true
+	}
+	if !leq || !req {
+		return false
+	}
+	if lx == nil && rx == nil {
+		return true
+	}
+	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
+		return false
+	}
+
+	if lx.Id != rx.Id {
+		return false
+	}
+	if !bytes.Equal(lx.Name, rx.Name) {
+		return false
+	}
+	if lx.Status != rx.Status {
+		return false
+	}
+	if lx.Ustate != rx.Ustate {
+		return false
+	}
+	if lx.Cost != rx.Cost {
+		return false
+	}
+	lx1 := lx.Permission
+	rx1 := rx.Permission
+	_, _ = lx1, rx1
+	if lx1 == nil && rx1 == nil {
+		return true
+	}
+	if (lx1 == nil && rx1 != nil) || (lx1 != nil && rx1 == nil) {
+		return false
+	}
+	if len(*lx1) != len(*rx1) {
+		return false
+	}
+	for k := range *lx1 {
+		lx2 := (*lx1)[k]
+		rx2, ok2 := (*rx1)[k]
+		_, _, _ = lx2, rx2, ok2
+		if !ok2 {
+			return false
+		}
+		if lx2 != rx2 {
+			return false
+		}
+	}
+	lx2 := lx.HistoryTree
+	rx2 := rx.HistoryTree
+	_, _ = lx2, rx2
+	if len(lx2) != len(rx2) {
+		return false
+	}
+	for k := range lx2 {
+		lx3 := (lx2)[k]
+		rx3, ok3 := (rx2)[k]
+		_, _, _ = lx3, rx3, ok3
+		if !ok3 {
+			return false
+		}
+		if lx3 == nil && rx3 == nil {
+			return true
+		}
+		if (lx3 == nil && rx3 != nil) || (lx3 != nil && rx3 == nil) {
+			return false
+		}
+		if lx3.DateUnix != rx3.DateUnix {
+			return false
+		}
+		if lx3.Cost != rx3.Cost {
+			return false
+		}
+		if !bytes.Equal(lx3.Comment, rx3.Comment) {
+			return false
+		}
+	}
+	lx3 := lx.Flags
+	rx3 := rx.Flags
+	_, _ = lx3, rx3
+	if len(lx3) != len(rx3) {
+		return false
+	}
+	for k := range lx3 {
+		lx4 := (lx3)[k]
+		rx4, ok4 := (rx3)[k]
+		_, _, _ = lx4, rx4, ok4
+		if !ok4 {
+			return false
+		}
+		if lx4 != rx4 {
+			return false
+		}
+	}
+	lx4 := lx.Finance
+	rx4 := rx.Finance
+	_, _ = lx4, rx4
+	if lx4 == nil && rx4 == nil {
+		return true
+	}
+	if (lx4 == nil && rx4 != nil) || (lx4 != nil && rx4 == nil) {
+		return false
+	}
+	if lx4.MoneyIn != rx4.MoneyIn {
+		return false
+	}
+	if lx4.MoneyOut != rx4.MoneyOut {
+		return false
+	}
+	if lx4.Balance != rx4.Balance {
+		return false
+	}
+	if lx4.AllowBuy != rx4.AllowBuy {
+		return false
+	}
+	lx5 := lx4.History
+	rx5 := rx4.History
+	_, _ = lx5, rx5
+	if len(lx5) != len(rx5) {
+		return false
+	}
+	for i := 0; i < len(lx5); i++ {
+		lx6 := lx5[i]
+		rx6 := rx5[i]
+		_, _ = lx6, rx6
+		if lx6.DateUnix != rx6.DateUnix {
+			return false
+		}
+		if lx6.Cost != rx6.Cost {
+			return false
+		}
+		if !bytes.Equal(lx6.Comment, rx6.Comment) {
+			return false
+		}
+	}
+	return true
+}
