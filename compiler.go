@@ -530,8 +530,8 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, idx int) error {
 	_ = parent
 	if node.ptr {
-		c.wl("if ", lv, "==nil && ", rv, "==nil {return true}")
 		c.wl("if (", lv, "==nil && ", rv, "!=nil) || (", lv, "!=nil && ", rv, "==nil) {return false}")
+		c.wl("if ", lv, "!=nil && ", rv, "!=nil {")
 	}
 
 	switch node.typ {
@@ -600,6 +600,10 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, 
 			prv = "*" + prv
 		}
 		c.wl("if ", plv, "!=", prv, "{return false}")
+	}
+
+	if node.ptr {
+		c.wl("}")
 	}
 
 	return nil
