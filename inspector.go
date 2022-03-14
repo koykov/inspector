@@ -1,64 +1,61 @@
 package inspector
 
-import "errors"
-
 // Inspector signature.
 type Inspector interface {
-	// Get value from src according path.
+	// Get returns value from src according path.
 	Get(src interface{}, path ...string) (interface{}, error)
-	// Get value from src to buf according path.
+	// GetTo writes value from src to buf according path.
 	GetTo(src interface{}, buf *interface{}, path ...string) error
-	// Set value to dst according path.
+	// Set sets value to dst according path.
 	Set(dst, value interface{}, path ...string) error
-	// Buffered version of Set().
+	// SetWB is a buffered version of Set().
 	SetWB(dst, value interface{}, buf AccumulativeBuffer, path ...string) error
-	// Compare value according path with right using cond.
+	// Cmp compares value according path with right using cond.
 	// Result will be present in result.
 	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
-	// Iterate in src value taking by path using l looper.
+	// Loop iterates in src value taking by path using l looper.
 	Loop(src interface{}, l Looper, buf *[]byte, path ...string) error
 }
 
 // Looper signature.
 type Looper interface {
-	// Need to set key.
+	// RequireKey checks set key requirement.
 	RequireKey() bool
-	// Set the key value and inspector to hidden context.
+	// SetKey sets the key value and inspector to hidden context.
 	SetKey(val interface{}, ins Inspector)
-	// Set the value and inspector to context.
+	// SetVal sets the value and inspector to context.
 	SetVal(val interface{}, ins Inspector)
-	// Main method to perform the iteration.
+	// Iterate performs the iteration.
 	Iterate() LoopCtl
 }
 
-// Accumulative buffer signature.
-//
-// Collects data during assign assign functions work.
+// AccumulativeBuffer describes buffer signature.
+// Collects data during assign functions work.
 type AccumulativeBuffer interface {
-	// Acquire byte collector.
+	// AcquireBytes returns more space to use.
 	AcquireBytes() []byte
-	// Release changed byte collector.
+	// ReleaseBytes returns space to the buffer.
 	ReleaseBytes([]byte)
 	// Reset all accumulated data.
 	Reset()
 }
 
-// Need for possible further improvements.
+// BaseInspector describes base struct.
 type BaseInspector struct{}
 
 var (
 	// Global registry of all inspectors.
 	inspectorRegistry = map[string]Inspector{}
 
-	ErrUnknownInspector = errors.New("unknown inspector")
+	_ = GetInspector
 )
 
-// Save inspector to the registry.
+// RegisterInspector saves inspector to the registry.
 func RegisterInspector(name string, ins Inspector) {
 	inspectorRegistry[name] = ins
 }
 
-// Get inspector from the registry.
+// GetInspector returns inspector from the registry.
 func GetInspector(name string) (Inspector, error) {
 	if ins, ok := inspectorRegistry[name]; ok {
 		return ins, nil
