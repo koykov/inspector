@@ -2,6 +2,7 @@ package test
 
 import (
 	"bytes"
+	"strconv"
 	"testing"
 
 	"github.com/koykov/inspector"
@@ -80,6 +81,57 @@ var (
 	expectName     = []byte("2000")
 	expectComment  = []byte("pay for domain")
 	expectComment1 = []byte("lorem ipsum dolor sit amet")
+
+	deqStages = []struct {
+		l, r *testobj.TestObject
+		eq   bool
+	}{
+		{
+			l:  nil,
+			r:  nil,
+			eq: true,
+		},
+		{
+			l:  &testobj.TestObject{Id: "foo"},
+			r:  &testobj.TestObject{Id: "bar"},
+			eq: false,
+		},
+		{
+			l:  &testobj.TestObject{Cost: 3.1415},
+			r:  &testobj.TestObject{Cost: 3.1415},
+			eq: true,
+		},
+		{
+			l:  &testobj.TestObject{Name: []byte("qwe")},
+			r:  &testobj.TestObject{Name: []byte("rty")},
+			eq: false,
+		},
+		{
+			l:  &testobj.TestObject{Flags: testobj.TestFlag{"xxx": 15}},
+			r:  &testobj.TestObject{Flags: testobj.TestFlag{"xxx": 15}},
+			eq: true,
+		},
+		{
+			l:  &testobj.TestObject{Flags: testobj.TestFlag{"xxx": 15}},
+			r:  &testobj.TestObject{Flags: testobj.TestFlag{"xxx": 54}},
+			eq: false,
+		},
+		{
+			l:  &testobj.TestObject{Flags: testobj.TestFlag{"xxx": 15}},
+			r:  &testobj.TestObject{Flags: testobj.TestFlag{"yyy": 15}},
+			eq: false,
+		},
+		{
+			l:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{Cost: 22}}}},
+			r:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{Cost: 22}}}},
+			eq: true,
+		},
+		{
+			l:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{Comment: []byte("aaa")}}}},
+			r:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{}}}},
+			eq: false,
+		},
+	}
 )
 
 func testGetter(t testing.TB, i inspector.Inspector) {
@@ -235,6 +287,33 @@ func TestInspector(t *testing.T) {
 		ab := accBuf{}
 		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, &ab)
 	})
+}
+
+func TestInspectorDeepEqual(t *testing.T) {
+	ins := &testobj_ins.TestObjectInspector{}
+	for i := range deqStages {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			stage := &deqStages[i]
+			if ins.DeepEqual(stage.l, stage.r) != stage.eq {
+				t.FailNow()
+			}
+		})
+	}
+}
+
+func BenchmarkInspectorDeepEqual(b *testing.B) {
+	ins := &testobj_ins.TestObjectInspector{}
+	for i := range deqStages {
+		b.Run(strconv.Itoa(i), func(b *testing.B) {
+			b.ReportAllocs()
+			stage := &deqStages[i]
+			for j := 0; j < b.N; j++ {
+				if ins.DeepEqual(stage.l, stage.r) != stage.eq {
+					b.FailNow()
+				}
+			}
+		})
+	}
 }
 
 func BenchmarkInspector(b *testing.B) {
