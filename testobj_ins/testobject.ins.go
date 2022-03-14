@@ -1012,36 +1012,8 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			}
 		}
 	}
-	lx2 := lx.HistoryTree
-	rx2 := rx.HistoryTree
-	_, _ = lx2, rx2
-	if len(lx2) != len(rx2) {
-		return false
-	}
-	for k := range lx2 {
-		lx3 := (lx2)[k]
-		rx3, ok3 := (rx2)[k]
-		_, _, _ = lx3, rx3, ok3
-		if !ok3 {
-			return false
-		}
-		if (lx3 == nil && rx3 != nil) || (lx3 != nil && rx3 == nil) {
-			return false
-		}
-		if lx3 != nil && rx3 != nil {
-			if lx3.DateUnix != rx3.DateUnix {
-				return false
-			}
-			if lx3.Cost != rx3.Cost {
-				return false
-			}
-			if !bytes.Equal(lx3.Comment, rx3.Comment) {
-				return false
-			}
-		}
-	}
-	lx3 := lx.Flags
-	rx3 := rx.Flags
+	lx3 := lx.HistoryTree
+	rx3 := rx.HistoryTree
 	_, _ = lx3, rx3
 	if len(lx3) != len(rx3) {
 		return false
@@ -1053,46 +1025,74 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		if !ok4 {
 			return false
 		}
-		if lx4 != rx4 {
+		if (lx4 == nil && rx4 != nil) || (lx4 != nil && rx4 == nil) {
 			return false
 		}
+		if lx4 != nil && rx4 != nil {
+			if lx4.DateUnix != rx4.DateUnix {
+				return false
+			}
+			if lx4.Cost != rx4.Cost {
+				return false
+			}
+			if !bytes.Equal(lx4.Comment, rx4.Comment) {
+				return false
+			}
+		}
 	}
-	lx4 := lx.Finance
-	rx4 := rx.Finance
-	_, _ = lx4, rx4
-	if (lx4 == nil && rx4 != nil) || (lx4 != nil && rx4 == nil) {
+	lx5 := lx.Flags
+	rx5 := rx.Flags
+	_, _ = lx5, rx5
+	if len(lx5) != len(rx5) {
 		return false
 	}
-	if lx4 != nil && rx4 != nil {
-		if lx4.MoneyIn != rx4.MoneyIn {
+	for k := range lx5 {
+		lx6 := (lx5)[k]
+		rx6, ok6 := (rx5)[k]
+		_, _, _ = lx6, rx6, ok6
+		if !ok6 {
 			return false
 		}
-		if lx4.MoneyOut != rx4.MoneyOut {
+		if lx6 != rx6 {
 			return false
 		}
-		if lx4.Balance != rx4.Balance {
+	}
+	lx7 := lx.Finance
+	rx7 := rx.Finance
+	_, _ = lx7, rx7
+	if (lx7 == nil && rx7 != nil) || (lx7 != nil && rx7 == nil) {
+		return false
+	}
+	if lx7 != nil && rx7 != nil {
+		if lx7.MoneyIn != rx7.MoneyIn {
 			return false
 		}
-		if lx4.AllowBuy != rx4.AllowBuy {
+		if lx7.MoneyOut != rx7.MoneyOut {
 			return false
 		}
-		lx5 := lx4.History
-		rx5 := rx4.History
-		_, _ = lx5, rx5
-		if len(lx5) != len(rx5) {
+		if lx7.Balance != rx7.Balance {
 			return false
 		}
-		for i := 0; i < len(lx5); i++ {
-			lx6 := lx5[i]
-			rx6 := rx5[i]
-			_, _ = lx6, rx6
-			if lx6.DateUnix != rx6.DateUnix {
+		if lx7.AllowBuy != rx7.AllowBuy {
+			return false
+		}
+		lx8 := lx7.History
+		rx8 := rx7.History
+		_, _ = lx8, rx8
+		if len(lx8) != len(rx8) {
+			return false
+		}
+		for i := 0; i < len(lx8); i++ {
+			lx9 := lx8[i]
+			rx9 := rx8[i]
+			_, _ = lx9, rx9
+			if lx9.DateUnix != rx9.DateUnix {
 				return false
 			}
-			if lx6.Cost != rx6.Cost {
+			if lx9.Cost != rx9.Cost {
 				return false
 			}
-			if !bytes.Equal(lx6.Comment, rx6.Comment) {
+			if !bytes.Equal(lx9.Comment, rx9.Comment) {
 				return false
 			}
 		}

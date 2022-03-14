@@ -69,7 +69,7 @@ type Compiler struct {
 	// List of imports that should be in final output.
 	imp []string
 	// Internal types counter.
-	cntr int
+	cntr, cntrDEQ int
 	// Logger object
 	l Logger
 	// Writer object
@@ -397,7 +397,7 @@ func (c *Compiler) writeType(node *node) error {
 	c.imp = append(c.imp[:0], `"github.com/koykov/inspector"`, `"`+c.pkg+`"`)
 	c.wdl("import (\n!{import}\n)")
 
-	err := c.writeRootNode(node, c.cntr)
+	err := c.writeRootNode(node)
 	if err != nil {
 		return err
 	}
@@ -424,9 +424,9 @@ func (c *Compiler) regImport(imports []string) {
 }
 
 // Write methods of the inspector required by Inspector interface type.
-func (c *Compiler) writeRootNode(node *node, idx int) (err error) {
+func (c *Compiler) writeRootNode(node *node) (err error) {
 	inst := node.name + "Inspector"
-	recv := "i" + strconv.Itoa(idx)
+	recv := "i" + strconv.Itoa(c.cntr)
 	pname := c.pkgName + "." + node.typn
 
 	c.wdl("type ", inst, " struct {\ninspector.BaseInspector\n}")
@@ -516,9 +516,10 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("}")
 
 	// DeepEqual method.
+	c.cntrDEQ = 0
 	c.wl("func (", recv, " *", inst, ") DeepEqual(l, r interface{}) bool {")
 	c.wdl(funcHeaderEqual)
-	err = c.writeNodeDEQ(node, nil, recv, "lx", "rx", 0, 0)
+	err = c.writeNodeDEQ(node, nil, recv, "lx", "rx", 0)
 	if err != nil {
 		return err
 	}
@@ -527,7 +528,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	return c.err
 }
 
-func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, idx int) error {
+func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth int) error {
 	_ = parent
 	if node.ptr {
 		c.wl("if (", lv, "==nil && ", rv, "!=nil) || (", lv, "!=nil && ", rv, "==nil) {return false}")
@@ -540,14 +541,14 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, 
 			nlv, nrv := lv, rv
 			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
 			if !isBasic {
-				idx++
-				nlv = "lx" + strconv.Itoa(idx)
-				nrv = "rx" + strconv.Itoa(idx)
+				c.cntrDEQ++
+				nlv = "lx" + strconv.Itoa(c.cntrDEQ)
+				nrv = "rx" + strconv.Itoa(c.cntrDEQ)
 				c.wl(nlv, ":=", lv, ".", ch.name)
 				c.wl(nrv, ":=", rv, ".", ch.name)
 				c.wl("_,_=", nlv, ",", nrv)
 			}
-			if err := c.writeNodeDEQ(ch, node, recv, nlv, nrv, depth+1, idx); err != nil {
+			if err := c.writeNodeDEQ(ch, node, recv, nlv, nrv, depth+1); err != nil {
 				return err
 			}
 		}
@@ -560,15 +561,15 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, 
 		nrv := pfx + rv
 		c.wl("if len(", nlv, ")!=len(", nrv, "){return false}")
 		c.wl("for k:=range ", nlv, "{")
-		idx++
-		nlv1 := "lx" + strconv.Itoa(idx)
-		nrv1 := "rx" + strconv.Itoa(idx)
-		ok1 := "ok" + strconv.Itoa(idx)
+		c.cntrDEQ++
+		nlv1 := "lx" + strconv.Itoa(c.cntrDEQ)
+		nrv1 := "rx" + strconv.Itoa(c.cntrDEQ)
+		ok1 := "ok" + strconv.Itoa(c.cntrDEQ)
 		c.wl(nlv1, ":=(", nlv, ")[k]")
 		c.wl(nrv1, ",", ok1, ":=(", nrv, ")[k]")
 		c.wl("_,_,_=", nlv1, ",", nrv1, ",", ok1)
 		c.wl("if !", ok1, "{return false}")
-		if err := c.writeNodeDEQ(node.mapv, node, recv, nlv1, nrv1, depth+1, idx); err != nil {
+		if err := c.writeNodeDEQ(node.mapv, node, recv, nlv1, nrv1, depth+1); err != nil {
 			return err
 		}
 		c.wl("}")
@@ -579,13 +580,13 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth, 
 		} else {
 			c.wl("if len(", lv, ")!=len(", rv, "){return false}")
 			c.wl("for i:=0;i<len(", lv, ");i++{")
-			idx++
-			nlv = "lx" + strconv.Itoa(idx)
-			nrv = "rx" + strconv.Itoa(idx)
+			c.cntrDEQ++
+			nlv = "lx" + strconv.Itoa(c.cntrDEQ)
+			nrv = "rx" + strconv.Itoa(c.cntrDEQ)
 			c.wl(nlv, ":=", lv, "[i]")
 			c.wl(nrv, ":=", rv, "[i]")
 			c.wl("_,_=", nlv, ",", nrv)
-			if err := c.writeNodeDEQ(node.slct, node, recv, nlv, nrv, depth+1, idx); err != nil {
+			if err := c.writeNodeDEQ(node.slct, node, recv, nlv, nrv, depth+1); err != nil {
 				return err
 			}
 			c.wl("}")
