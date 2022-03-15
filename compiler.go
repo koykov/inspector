@@ -534,7 +534,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, depth int) error {
 	_ = parent
 	path = strings.Trim(path, ".")
-	if len(path) > 0 {
+	if len(path) > 0 && len(node.name) > 0 {
 		path += "."
 	}
 	if depth > 0 {
