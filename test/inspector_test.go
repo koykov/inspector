@@ -84,6 +84,7 @@ var (
 
 	deqStages = []struct {
 		l, r *testobj.TestObject
+		opts *inspector.DEQOptions
 		eq   bool
 	}{
 		{
@@ -130,6 +131,18 @@ var (
 			l:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{Comment: []byte("aaa")}}}},
 			r:  &testobj.TestObject{Finance: &testobj.TestFinance{History: []testobj.TestHistory{{}}}},
 			eq: false,
+		},
+		{
+			l:    &testobj.TestObject{Id: "foobar", Name: []byte("qwe")},
+			r:    &testobj.TestObject{Id: "foobar", Name: []byte("rty")},
+			opts: &inspector.DEQOptions{Exclude: map[string]struct{}{"Name": {}}},
+			eq:   true,
+		},
+		{
+			l:    &testobj.TestObject{Id: "foobar", Name: []byte("qwe")},
+			r:    &testobj.TestObject{Id: "foobar", Name: []byte("rty")},
+			opts: &inspector.DEQOptions{Filter: map[string]struct{}{"Id": {}}},
+			eq:   true,
 		},
 	}
 )
@@ -294,7 +307,7 @@ func TestInspectorDeepEqual(t *testing.T) {
 	for i := range deqStages {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			stage := &deqStages[i]
-			if ins.DeepEqual(stage.l, stage.r) != stage.eq {
+			if ins.DeepEqualWithOptions(stage.l, stage.r, stage.opts) != stage.eq {
 				t.FailNow()
 			}
 		})
@@ -308,7 +321,7 @@ func BenchmarkInspectorDeepEqual(b *testing.B) {
 			b.ReportAllocs()
 			stage := &deqStages[i]
 			for j := 0; j < b.N; j++ {
-				if ins.DeepEqual(stage.l, stage.r) != stage.eq {
+				if ins.DeepEqualWithOptions(stage.l, stage.r, stage.opts) != stage.eq {
 					b.FailNow()
 				}
 			}
