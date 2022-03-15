@@ -515,9 +515,12 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wl("return ", recv, ".SetWB(dst, value, nil, path...)")
 	c.wdl("}")
 
-	// DeepEqual method.
+	// DeepEqual methods.
 	c.cntrDEQ = 0
 	c.wl("func (", recv, " *", inst, ") DeepEqual(l, r interface{}) bool {")
+	c.wl("return ", recv, ".DeepEqualWithOptions(l, r, nil)")
+	c.wdl("}")
+	c.wl("func (", recv, " *", inst, ") DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {")
 	c.wdl(funcHeaderEqual)
 	err = c.writeNodeDEQ(node, nil, recv, "", "lx", "rx", 0)
 	if err != nil {
@@ -584,8 +587,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
-			c.wl("// ", path)
-			c.wl("if !bytes.Equal(", nlv, ",", nrv, "){return false}")
+			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && ", recv, ".DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
 			pfx := ""
 			if node.ptr || depth == 0 {
@@ -615,8 +617,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			plv = "*" + plv
 			prv = "*" + prv
 		}
-		c.wl("// ", path)
-		c.wl("if ", plv, "!=", prv, "{return false}")
+		c.wl("if ", plv, "!=", prv, " && ", recv, ".DEQMustCheck(\"", path, "\",opts){return false}")
 	}
 
 	if node.ptr {

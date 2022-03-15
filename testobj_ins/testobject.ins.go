@@ -946,6 +946,10 @@ func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error
 }
 
 func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
+	return i3.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestObject
 		leq, req bool
@@ -975,24 +979,19 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
-	// Id
-	if lx.Id != rx.Id {
+	if lx.Id != rx.Id && i3.DEQMustCheck("Id", opts) {
 		return false
 	}
-	// Name
-	if !bytes.Equal(lx.Name, rx.Name) {
+	if !bytes.Equal(lx.Name, rx.Name) && i3.DEQMustCheck("Name", opts) {
 		return false
 	}
-	// Status
-	if lx.Status != rx.Status {
+	if lx.Status != rx.Status && i3.DEQMustCheck("Status", opts) {
 		return false
 	}
-	// Ustate
-	if lx.Ustate != rx.Ustate {
+	if lx.Ustate != rx.Ustate && i3.DEQMustCheck("Ustate", opts) {
 		return false
 	}
-	// Cost
-	if lx.Cost != rx.Cost {
+	if lx.Cost != rx.Cost && i3.DEQMustCheck("Cost", opts) {
 		return false
 	}
 	lx1 := lx.Permission
@@ -1012,8 +1011,7 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			if !ok2 {
 				return false
 			}
-			// Permission.
-			if lx2 != rx2 {
+			if lx2 != rx2 && i3.DEQMustCheck("Permission.", opts) {
 				return false
 			}
 		}
@@ -1035,16 +1033,13 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			return false
 		}
 		if lx4 != nil && rx4 != nil {
-			// HistoryTree.DateUnix
-			if lx4.DateUnix != rx4.DateUnix {
+			if lx4.DateUnix != rx4.DateUnix && i3.DEQMustCheck("HistoryTree.DateUnix", opts) {
 				return false
 			}
-			// HistoryTree.Cost
-			if lx4.Cost != rx4.Cost {
+			if lx4.Cost != rx4.Cost && i3.DEQMustCheck("HistoryTree.Cost", opts) {
 				return false
 			}
-			// HistoryTree.Comment
-			if !bytes.Equal(lx4.Comment, rx4.Comment) {
+			if !bytes.Equal(lx4.Comment, rx4.Comment) && i3.DEQMustCheck("HistoryTree.Comment", opts) {
 				return false
 			}
 		}
@@ -1062,8 +1057,7 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		if !ok6 {
 			return false
 		}
-		// Flags.
-		if lx6 != rx6 {
+		if lx6 != rx6 && i3.DEQMustCheck("Flags.", opts) {
 			return false
 		}
 	}
@@ -1074,20 +1068,16 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 	if lx7 != nil && rx7 != nil {
-		// Finance.MoneyIn
-		if lx7.MoneyIn != rx7.MoneyIn {
+		if lx7.MoneyIn != rx7.MoneyIn && i3.DEQMustCheck("Finance.MoneyIn", opts) {
 			return false
 		}
-		// Finance.MoneyOut
-		if lx7.MoneyOut != rx7.MoneyOut {
+		if lx7.MoneyOut != rx7.MoneyOut && i3.DEQMustCheck("Finance.MoneyOut", opts) {
 			return false
 		}
-		// Finance.Balance
-		if lx7.Balance != rx7.Balance {
+		if lx7.Balance != rx7.Balance && i3.DEQMustCheck("Finance.Balance", opts) {
 			return false
 		}
-		// Finance.AllowBuy
-		if lx7.AllowBuy != rx7.AllowBuy {
+		if lx7.AllowBuy != rx7.AllowBuy && i3.DEQMustCheck("Finance.AllowBuy", opts) {
 			return false
 		}
 		lx8 := lx7.History
@@ -1100,16 +1090,13 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			lx9 := (lx8)[i]
 			rx9 := (rx8)[i]
 			_, _ = lx9, rx9
-			// Finance.History.DateUnix
-			if lx9.DateUnix != rx9.DateUnix {
+			if lx9.DateUnix != rx9.DateUnix && i3.DEQMustCheck("Finance.History.DateUnix", opts) {
 				return false
 			}
-			// Finance.History.Cost
-			if lx9.Cost != rx9.Cost {
+			if lx9.Cost != rx9.Cost && i3.DEQMustCheck("Finance.History.Cost", opts) {
 				return false
 			}
-			// Finance.History.Comment
-			if !bytes.Equal(lx9.Comment, rx9.Comment) {
+			if !bytes.Equal(lx9.Comment, rx9.Comment) && i3.DEQMustCheck("Finance.History.Comment", opts) {
 				return false
 			}
 		}

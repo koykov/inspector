@@ -168,6 +168,10 @@ func (i1 *TestFlagInspector) Set(dst, value interface{}, path ...string) error {
 }
 
 func (i1 *TestFlagInspector) DeepEqual(l, r interface{}) bool {
+	return i1.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i1 *TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFlag
 		leq, req bool
@@ -207,8 +211,7 @@ func (i1 *TestFlagInspector) DeepEqual(l, r interface{}) bool {
 		if !ok1 {
 			return false
 		}
-		//
-		if lx1 != rx1 {
+		if lx1 != rx1 && i1.DEQMustCheck("", opts) {
 			return false
 		}
 	}

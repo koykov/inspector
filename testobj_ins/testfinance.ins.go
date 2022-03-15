@@ -406,6 +406,10 @@ func (i0 *TestFinanceInspector) Set(dst, value interface{}, path ...string) erro
 }
 
 func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
+	return i0.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFinance
 		leq, req bool
@@ -435,20 +439,16 @@ func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
-	// MoneyIn
-	if lx.MoneyIn != rx.MoneyIn {
+	if lx.MoneyIn != rx.MoneyIn && i0.DEQMustCheck("MoneyIn", opts) {
 		return false
 	}
-	// MoneyOut
-	if lx.MoneyOut != rx.MoneyOut {
+	if lx.MoneyOut != rx.MoneyOut && i0.DEQMustCheck("MoneyOut", opts) {
 		return false
 	}
-	// Balance
-	if lx.Balance != rx.Balance {
+	if lx.Balance != rx.Balance && i0.DEQMustCheck("Balance", opts) {
 		return false
 	}
-	// AllowBuy
-	if lx.AllowBuy != rx.AllowBuy {
+	if lx.AllowBuy != rx.AllowBuy && i0.DEQMustCheck("AllowBuy", opts) {
 		return false
 	}
 	lx1 := lx.History
@@ -461,16 +461,13 @@ func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
 		lx2 := (lx1)[i]
 		rx2 := (rx1)[i]
 		_, _ = lx2, rx2
-		// History.DateUnix
-		if lx2.DateUnix != rx2.DateUnix {
+		if lx2.DateUnix != rx2.DateUnix && i0.DEQMustCheck("History.DateUnix", opts) {
 			return false
 		}
-		// History.Cost
-		if lx2.Cost != rx2.Cost {
+		if lx2.Cost != rx2.Cost && i0.DEQMustCheck("History.Cost", opts) {
 			return false
 		}
-		// History.Comment
-		if !bytes.Equal(lx2.Comment, rx2.Comment) {
+		if !bytes.Equal(lx2.Comment, rx2.Comment) && i0.DEQMustCheck("History.Comment", opts) {
 			return false
 		}
 	}

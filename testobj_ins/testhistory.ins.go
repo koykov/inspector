@@ -204,6 +204,10 @@ func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) erro
 }
 
 func (i2 *TestHistoryInspector) DeepEqual(l, r interface{}) bool {
+	return i2.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i2 *TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestHistory
 		leq, req bool
@@ -233,16 +237,13 @@ func (i2 *TestHistoryInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
-	// DateUnix
-	if lx.DateUnix != rx.DateUnix {
+	if lx.DateUnix != rx.DateUnix && i2.DEQMustCheck("DateUnix", opts) {
 		return false
 	}
-	// Cost
-	if lx.Cost != rx.Cost {
+	if lx.Cost != rx.Cost && i2.DEQMustCheck("Cost", opts) {
 		return false
 	}
-	// Comment
-	if !bytes.Equal(lx.Comment, rx.Comment) {
+	if !bytes.Equal(lx.Comment, rx.Comment) && i2.DEQMustCheck("Comment", opts) {
 		return false
 	}
 	return true

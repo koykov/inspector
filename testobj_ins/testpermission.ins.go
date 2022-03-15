@@ -175,6 +175,10 @@ func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) e
 }
 
 func (i4 *TestPermissionInspector) DeepEqual(l, r interface{}) bool {
+	return i4.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestPermission
 		leq, req bool
@@ -214,8 +218,7 @@ func (i4 *TestPermissionInspector) DeepEqual(l, r interface{}) bool {
 		if !ok1 {
 			return false
 		}
-		//
-		if lx1 != rx1 {
+		if lx1 != rx1 && i4.DEQMustCheck("", opts) {
 			return false
 		}
 	}
