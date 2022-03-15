@@ -58,6 +58,10 @@ func (i *ReflectInspector) DeepEqual(l, r interface{}) bool {
 	return reflect.DeepEqual(l, r)
 }
 
+func (i *ReflectInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
+	return reflect.DeepEqual(l, r)
+}
+
 func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 	v := reflect.ValueOf(node)
 	switch v.Kind() {

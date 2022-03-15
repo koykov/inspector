@@ -229,6 +229,10 @@ func (i *StaticInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) 
 }
 
 func (i *StaticInspector) DeepEqual(l, r interface{}) bool {
+	return i.DeepEqualWithOptions(l, r, nil)
+}
+
+func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
 	switch l.(type) {
 	case int:
 		if rx, ok := r.(int); ok {

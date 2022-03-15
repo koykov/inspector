@@ -17,6 +17,8 @@ type Inspector interface {
 	Loop(src interface{}, l Looper, buf *[]byte, path ...string) error
 	// DeepEqual compares l and r.
 	DeepEqual(l, r interface{}) bool
+	// DeepEqualWithOptions compares l and r corresponding options.
+	DeepEqualWithOptions(l, r interface{}, options *DEQOptions) bool
 }
 
 // Looper signature.
@@ -42,8 +44,13 @@ type AccumulativeBuffer interface {
 	Reset()
 }
 
-// BaseInspector describes base struct.
-type BaseInspector struct{}
+// DEQOptions describes DeepEqual options.
+type DEQOptions struct {
+	// List of fields to exclude from check.
+	Exclude map[string]struct{}
+	// Limit fields to check.
+	Filter map[string]struct{}
+}
 
 var (
 	// Global registry of all inspectors.
