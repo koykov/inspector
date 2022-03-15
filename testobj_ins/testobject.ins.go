@@ -975,18 +975,23 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
+	// Id
 	if lx.Id != rx.Id {
 		return false
 	}
+	// Name
 	if !bytes.Equal(lx.Name, rx.Name) {
 		return false
 	}
+	// Status
 	if lx.Status != rx.Status {
 		return false
 	}
+	// Ustate
 	if lx.Ustate != rx.Ustate {
 		return false
 	}
+	// Cost
 	if lx.Cost != rx.Cost {
 		return false
 	}
@@ -1007,6 +1012,7 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			if !ok2 {
 				return false
 			}
+			// Permission.
 			if lx2 != rx2 {
 				return false
 			}
@@ -1029,12 +1035,15 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			return false
 		}
 		if lx4 != nil && rx4 != nil {
+			// HistoryTree.DateUnix
 			if lx4.DateUnix != rx4.DateUnix {
 				return false
 			}
+			// HistoryTree.Cost
 			if lx4.Cost != rx4.Cost {
 				return false
 			}
+			// HistoryTree.Comment
 			if !bytes.Equal(lx4.Comment, rx4.Comment) {
 				return false
 			}
@@ -1053,6 +1062,7 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		if !ok6 {
 			return false
 		}
+		// Flags.
 		if lx6 != rx6 {
 			return false
 		}
@@ -1064,15 +1074,19 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 	if lx7 != nil && rx7 != nil {
+		// Finance.MoneyIn
 		if lx7.MoneyIn != rx7.MoneyIn {
 			return false
 		}
+		// Finance.MoneyOut
 		if lx7.MoneyOut != rx7.MoneyOut {
 			return false
 		}
+		// Finance.Balance
 		if lx7.Balance != rx7.Balance {
 			return false
 		}
+		// Finance.AllowBuy
 		if lx7.AllowBuy != rx7.AllowBuy {
 			return false
 		}
@@ -1083,15 +1097,18 @@ func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
 			return false
 		}
 		for i := 0; i < len(lx8); i++ {
-			lx9 := lx8[i]
-			rx9 := rx8[i]
+			lx9 := (lx8)[i]
+			rx9 := (rx8)[i]
 			_, _ = lx9, rx9
+			// Finance.History.DateUnix
 			if lx9.DateUnix != rx9.DateUnix {
 				return false
 			}
+			// Finance.History.Cost
 			if lx9.Cost != rx9.Cost {
 				return false
 			}
+			// Finance.History.Comment
 			if !bytes.Equal(lx9.Comment, rx9.Comment) {
 				return false
 			}

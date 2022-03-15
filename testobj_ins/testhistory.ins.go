@@ -233,12 +233,15 @@ func (i2 *TestHistoryInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
+	// DateUnix
 	if lx.DateUnix != rx.DateUnix {
 		return false
 	}
+	// Cost
 	if lx.Cost != rx.Cost {
 		return false
 	}
+	// Comment
 	if !bytes.Equal(lx.Comment, rx.Comment) {
 		return false
 	}

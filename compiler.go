@@ -519,7 +519,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.cntrDEQ = 0
 	c.wl("func (", recv, " *", inst, ") DeepEqual(l, r interface{}) bool {")
 	c.wdl(funcHeaderEqual)
-	err = c.writeNodeDEQ(node, nil, recv, "lx", "rx", 0)
+	err = c.writeNodeDEQ(node, nil, recv, "", "lx", "rx", 0)
 	if err != nil {
 		return err
 	}
@@ -528,8 +528,16 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	return c.err
 }
 
-func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth int) error {
+func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, depth int) error {
 	_ = parent
+	path = strings.Trim(path, ".")
+	if len(path) > 0 {
+		path += "."
+	}
+	if depth > 0 {
+		path += node.name
+	}
+
 	if node.ptr {
 		c.wl("if (", lv, "==nil && ", rv, "!=nil) || (", lv, "!=nil && ", rv, "==nil) {return false}")
 		c.wl("if ", lv, "!=nil && ", rv, "!=nil {")
@@ -548,7 +556,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth i
 				c.wl(nrv, ":=", rv, ".", ch.name)
 				c.wl("_,_=", nlv, ",", nrv)
 			}
-			if err := c.writeNodeDEQ(ch, node, recv, nlv, nrv, depth+1); err != nil {
+			if err := c.writeNodeDEQ(ch, node, recv, path, nlv, nrv, depth+1); err != nil {
 				return err
 			}
 		}
@@ -569,13 +577,14 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth i
 		c.wl(nrv1, ",", ok1, ":=(", nrv, ")[k]")
 		c.wl("_,_,_=", nlv1, ",", nrv1, ",", ok1)
 		c.wl("if !", ok1, "{return false}")
-		if err := c.writeNodeDEQ(node.mapv, node, recv, nlv1, nrv1, depth+1); err != nil {
+		if err := c.writeNodeDEQ(node.mapv, node, recv, path, nlv1, nrv1, depth+1); err != nil {
 			return err
 		}
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
+			c.wl("// ", path)
 			c.wl("if !bytes.Equal(", nlv, ",", nrv, "){return false}")
 		} else {
 			pfx := ""
@@ -592,7 +601,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth i
 			c.wl(nlv1, ":=(", nlv, ")[i]")
 			c.wl(nrv1, ":=(", nrv, ")[i]")
 			c.wl("_,_=", nlv1, ",", nrv1)
-			if err := c.writeNodeDEQ(node.slct, node, recv, nlv1, nrv1, depth+1); err != nil {
+			if err := c.writeNodeDEQ(node.slct, node, recv, path, nlv1, nrv1, depth+1); err != nil {
 				return err
 			}
 			c.wl("}")
@@ -606,6 +615,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, lv, rv string, depth i
 			plv = "*" + plv
 			prv = "*" + prv
 		}
+		c.wl("// ", path)
 		c.wl("if ", plv, "!=", prv, "{return false}")
 	}
 

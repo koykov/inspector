@@ -207,6 +207,7 @@ func (i1 *TestFlagInspector) DeepEqual(l, r interface{}) bool {
 		if !ok1 {
 			return false
 		}
+		//
 		if lx1 != rx1 {
 			return false
 		}

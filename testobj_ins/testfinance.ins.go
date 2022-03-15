@@ -435,15 +435,19 @@ func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 
+	// MoneyIn
 	if lx.MoneyIn != rx.MoneyIn {
 		return false
 	}
+	// MoneyOut
 	if lx.MoneyOut != rx.MoneyOut {
 		return false
 	}
+	// Balance
 	if lx.Balance != rx.Balance {
 		return false
 	}
+	// AllowBuy
 	if lx.AllowBuy != rx.AllowBuy {
 		return false
 	}
@@ -454,15 +458,18 @@ func (i0 *TestFinanceInspector) DeepEqual(l, r interface{}) bool {
 		return false
 	}
 	for i := 0; i < len(lx1); i++ {
-		lx2 := lx1[i]
-		rx2 := rx1[i]
+		lx2 := (lx1)[i]
+		rx2 := (rx1)[i]
 		_, _ = lx2, rx2
+		// History.DateUnix
 		if lx2.DateUnix != rx2.DateUnix {
 			return false
 		}
+		// History.Cost
 		if lx2.Cost != rx2.Cost {
 			return false
 		}
+		// History.Comment
 		if !bytes.Equal(lx2.Comment, rx2.Comment) {
 			return false
 		}
