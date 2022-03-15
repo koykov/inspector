@@ -1,10 +1,15 @@
 package inspector
 
-// BaseInspector describes base struct.
-type BaseInspector struct{}
+// DEQOptions describes DeepEqual options.
+type DEQOptions struct {
+	// List of fields to exclude from check.
+	Exclude map[string]struct{}
+	// Limit fields to check.
+	Filter map[string]struct{}
+}
 
 // DEQMustCheck makes a decision must field (by given path) checks or not during DeepEqual().
-func (i BaseInspector) DEQMustCheck(path string, options *DEQOptions) bool {
+func DEQMustCheck(path string, options *DEQOptions) bool {
 	if options == nil {
 		return true
 	}

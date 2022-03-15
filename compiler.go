@@ -587,7 +587,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
-			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && ", recv, ".DEQMustCheck(\"", path, "\",opts){return false}")
+			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
 			pfx := ""
 			if node.ptr || depth == 0 {
@@ -617,7 +617,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			plv = "*" + plv
 			prv = "*" + prv
 		}
-		c.wl("if ", plv, "!=", prv, " && ", recv, ".DEQMustCheck(\"", path, "\",opts){return false}")
+		c.wl("if ", plv, "!=", prv, " && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 	}
 
 	if node.ptr {

@@ -211,7 +211,7 @@ func (i1 *TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspec
 		if !ok1 {
 			return false
 		}
-		if lx1 != rx1 && i1.DEQMustCheck("", opts) {
+		if lx1 != rx1 && inspector.DEQMustCheck("", opts) {
 			return false
 		}
 	}

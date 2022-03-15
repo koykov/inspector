@@ -44,13 +44,8 @@ type AccumulativeBuffer interface {
 	Reset()
 }
 
-// DEQOptions describes DeepEqual options.
-type DEQOptions struct {
-	// List of fields to exclude from check.
-	Exclude map[string]struct{}
-	// Limit fields to check.
-	Filter map[string]struct{}
-}
+// BaseInspector describes base struct.
+type BaseInspector struct{}
 
 var (
 	// Global registry of all inspectors.

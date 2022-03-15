@@ -237,13 +237,13 @@ func (i2 *TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 		return false
 	}
 
-	if lx.DateUnix != rx.DateUnix && i2.DEQMustCheck("DateUnix", opts) {
+	if lx.DateUnix != rx.DateUnix && inspector.DEQMustCheck("DateUnix", opts) {
 		return false
 	}
-	if lx.Cost != rx.Cost && i2.DEQMustCheck("Cost", opts) {
+	if lx.Cost != rx.Cost && inspector.DEQMustCheck("Cost", opts) {
 		return false
 	}
-	if !bytes.Equal(lx.Comment, rx.Comment) && i2.DEQMustCheck("Comment", opts) {
+	if !bytes.Equal(lx.Comment, rx.Comment) && inspector.DEQMustCheck("Comment", opts) {
 		return false
 	}
 	return true

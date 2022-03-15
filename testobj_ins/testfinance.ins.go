@@ -439,16 +439,16 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 		return false
 	}
 
-	if lx.MoneyIn != rx.MoneyIn && i0.DEQMustCheck("MoneyIn", opts) {
+	if lx.MoneyIn != rx.MoneyIn && inspector.DEQMustCheck("MoneyIn", opts) {
 		return false
 	}
-	if lx.MoneyOut != rx.MoneyOut && i0.DEQMustCheck("MoneyOut", opts) {
+	if lx.MoneyOut != rx.MoneyOut && inspector.DEQMustCheck("MoneyOut", opts) {
 		return false
 	}
-	if lx.Balance != rx.Balance && i0.DEQMustCheck("Balance", opts) {
+	if lx.Balance != rx.Balance && inspector.DEQMustCheck("Balance", opts) {
 		return false
 	}
-	if lx.AllowBuy != rx.AllowBuy && i0.DEQMustCheck("AllowBuy", opts) {
+	if lx.AllowBuy != rx.AllowBuy && inspector.DEQMustCheck("AllowBuy", opts) {
 		return false
 	}
 	lx1 := lx.History
@@ -461,13 +461,13 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 		lx2 := (lx1)[i]
 		rx2 := (rx1)[i]
 		_, _ = lx2, rx2
-		if lx2.DateUnix != rx2.DateUnix && i0.DEQMustCheck("History.DateUnix", opts) {
+		if lx2.DateUnix != rx2.DateUnix && inspector.DEQMustCheck("History.DateUnix", opts) {
 			return false
 		}
-		if lx2.Cost != rx2.Cost && i0.DEQMustCheck("History.Cost", opts) {
+		if lx2.Cost != rx2.Cost && inspector.DEQMustCheck("History.Cost", opts) {
 			return false
 		}
-		if !bytes.Equal(lx2.Comment, rx2.Comment) && i0.DEQMustCheck("History.Comment", opts) {
+		if !bytes.Equal(lx2.Comment, rx2.Comment) && inspector.DEQMustCheck("History.Comment", opts) {
 			return false
 		}
 	}
