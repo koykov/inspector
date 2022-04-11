@@ -2,6 +2,8 @@ package inspector
 
 // Inspector signature.
 type Inspector interface {
+	// TypeName returns name of underlying type.
+	TypeName() string
 	// Get returns value from src according path.
 	Get(src interface{}, path ...string) (interface{}, error)
 	// GetTo writes value from src to buf according path.

@@ -473,6 +473,10 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 `
 
 	// Getter methods.
+	c.wl("func (", recv, " *", inst, ") TypeName() string {")
+	c.wl("return \"", node.typn, "\"")
+	c.wdl("}")
+
 	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
 	c.wl("var buf interface{}\nerr := " + recv + ".GetTo(src, &buf, path...)\nreturn buf, err")
 	c.wdl("}")

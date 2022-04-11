@@ -15,6 +15,10 @@ type TestFinanceInspector struct {
 	inspector.BaseInspector
 }
 
+func (i0 *TestFinanceInspector) TypeName() string {
+	return "TestFinance"
+}
+
 func (i0 *TestFinanceInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i0.GetTo(src, &buf, path...)

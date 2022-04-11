@@ -13,6 +13,10 @@ type TestPermissionInspector struct {
 	inspector.BaseInspector
 }
 
+func (i4 *TestPermissionInspector) TypeName() string {
+	return "TestPermission"
+}
+
 func (i4 *TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i4.GetTo(src, &buf, path...)

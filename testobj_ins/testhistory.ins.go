@@ -15,6 +15,10 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
+func (i2 *TestHistoryInspector) TypeName() string {
+	return "TestHistory"
+}
+
 func (i2 *TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i2.GetTo(src, &buf, path...)

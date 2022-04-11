@@ -15,6 +15,10 @@ type TestObjectInspector struct {
 	inspector.BaseInspector
 }
 
+func (i3 *TestObjectInspector) TypeName() string {
+	return "TestObject"
+}
+
 func (i3 *TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i3.GetTo(src, &buf, path...)

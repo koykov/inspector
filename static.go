@@ -13,6 +13,10 @@ type StaticInspector struct {
 	BaseInspector
 }
 
+func (i *StaticInspector) TypeName() string {
+	return "static"
+}
+
 func (i *StaticInspector) Get(src interface{}, _ ...string) (interface{}, error) {
 	return src, nil
 }

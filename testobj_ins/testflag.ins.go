@@ -13,6 +13,10 @@ type TestFlagInspector struct {
 	inspector.BaseInspector
 }
 
+func (i1 *TestFlagInspector) TypeName() string {
+	return "TestFlag"
+}
+
 func (i1 *TestFlagInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i1.GetTo(src, &buf, path...)

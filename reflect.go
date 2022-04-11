@@ -12,6 +12,10 @@ type ReflectInspector struct {
 	BaseInspector
 }
 
+func (i *ReflectInspector) TypeName() string {
+	return "reflect"
+}
+
 func (i *ReflectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var (
 		r interface{}
