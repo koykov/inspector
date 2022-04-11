@@ -4,6 +4,7 @@ package inspector
 
 import (
 	"bytes"
+	"encoding/json"
 	"strconv"
 
 	"github.com/koykov/fastconv"
@@ -352,4 +353,15 @@ func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) 
 		}
 	}
 	return false
+}
+
+func (i *StaticInspector) Parse(p []byte, typ Encoding) (interface{}, error) {
+	var x interface{}
+	switch typ {
+	case EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return x, err
+	default:
+		return nil, ErrUnknownEncodingType
+	}
 }

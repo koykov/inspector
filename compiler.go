@@ -532,6 +532,14 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	}
 	c.wdl("return true }")
 
+	// Encoding methods.
+	c.wl("func (", recv, " *", inst, ") Parse(p []byte, typ inspector.Encoding) (interface{}, error) {")
+	err = c.writeNodeParse(node, pname)
+	if err != nil {
+		return err
+	}
+	c.wdl("}")
+
 	return c.err
 }
 
@@ -941,6 +949,19 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 	}
 
 	return c.err
+}
+
+func (c *Compiler) writeNodeParse(_ *node, pname string) error {
+	c.regImport([]string{`"encoding/json"`})
+	c.wl("var x ", pname)
+	c.wl(`switch typ {
+case inspector.EncodingJSON:
+err := json.Unmarshal(p, &x)
+return &x, err
+default:
+return nil, inspector.ErrUnknownEncodingType
+}`)
+	return nil
 }
 
 // Write comparison code of the node.

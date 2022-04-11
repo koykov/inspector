@@ -3,6 +3,7 @@ package inspector
 // Reflect inspector. Strongly recommend to not use it. Need only for performance/allocation comparison.
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -114,4 +115,15 @@ func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 		}
 	}
 	return nil
+}
+
+func (i *ReflectInspector) Parse(p []byte, typ Encoding) (interface{}, error) {
+	var x interface{}
+	switch typ {
+	case EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return x, err
+	default:
+		return nil, ErrUnknownEncodingType
+	}
 }

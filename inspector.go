@@ -21,6 +21,8 @@ type Inspector interface {
 	DeepEqual(l, r interface{}) bool
 	// DeepEqualWithOptions compares l and r corresponding options.
 	DeepEqualWithOptions(l, r interface{}, options *DEQOptions) bool
+	// Parse parses encoded data according encoding type.
+	Parse([]byte, Encoding) (interface{}, error)
 }
 
 // Looper signature.

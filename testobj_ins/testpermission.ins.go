@@ -4,6 +4,7 @@
 package testobj_ins
 
 import (
+	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -227,4 +228,15 @@ func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *
 		}
 	}
 	return true
+}
+
+func (i4 *TestPermissionInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+	var x testobj.TestPermission
+	switch typ {
+	case inspector.EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return &x, err
+	default:
+		return nil, inspector.ErrUnknownEncodingType
+	}
 }

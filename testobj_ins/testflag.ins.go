@@ -4,6 +4,7 @@
 package testobj_ins
 
 import (
+	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -220,4 +221,15 @@ func (i1 *TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspec
 		}
 	}
 	return true
+}
+
+func (i1 *TestFlagInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+	var x testobj.TestFlag
+	switch typ {
+	case inspector.EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return &x, err
+	default:
+		return nil, inspector.ErrUnknownEncodingType
+	}
 }

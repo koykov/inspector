@@ -5,6 +5,7 @@ package testobj_ins
 
 import (
 	"bytes"
+	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -1106,4 +1107,15 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 		}
 	}
 	return true
+}
+
+func (i3 *TestObjectInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+	var x testobj.TestObject
+	switch typ {
+	case inspector.EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return &x, err
+	default:
+		return nil, inspector.ErrUnknownEncodingType
+	}
 }
