@@ -230,7 +230,7 @@ func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *
 	return true
 }
 
-func (i4 *TestPermissionInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i4 *TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestPermission
 	switch typ {
 	case inspector.EncodingJSON:

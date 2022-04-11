@@ -117,7 +117,7 @@ func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 	return nil
 }
 
-func (i *ReflectInspector) Parse(p []byte, typ Encoding) (interface{}, error) {
+func (i *ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
 	var x interface{}
 	switch typ {
 	case EncodingJSON:

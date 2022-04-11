@@ -254,7 +254,7 @@ func (i2 *TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 	return true
 }
 
-func (i2 *TestHistoryInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i2 *TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestHistory
 	switch typ {
 	case inspector.EncodingJSON:

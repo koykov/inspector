@@ -479,7 +479,7 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 	return true
 }
 
-func (i0 *TestFinanceInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i0 *TestFinanceInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestFinance
 	switch typ {
 	case inspector.EncodingJSON:

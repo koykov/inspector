@@ -533,7 +533,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return true }")
 
 	// Encoding methods.
-	c.wl("func (", recv, " *", inst, ") Parse(p []byte, typ inspector.Encoding) (interface{}, error) {")
+	c.wl("func (", recv, " *", inst, ") Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {")
 	err = c.writeNodeParse(node, pname)
 	if err != nil {
 		return err

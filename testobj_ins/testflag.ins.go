@@ -223,7 +223,7 @@ func (i1 *TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspec
 	return true
 }
 
-func (i1 *TestFlagInspector) Parse(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i1 *TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestFlag
 	switch typ {
 	case inspector.EncodingJSON:
