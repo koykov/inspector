@@ -240,124 +240,124 @@ func (i *StaticInspector) DeepEqual(l, r interface{}) bool {
 func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
 	switch l.(type) {
 	case bool:
-		if rx, ok := r.(bool); ok {
+		if rx, ok := i.indBool(r); ok {
 			return rx == l.(bool)
 		}
 	case *bool:
-		if rx, ok := r.(*bool); ok {
-			return *rx == *l.(*bool)
+		if rx, ok := i.indBool(r); ok {
+			return rx == *l.(*bool)
 		}
 	case int:
-		if rx, ok := r.(int); ok {
-			return rx == l.(int)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(l.(int))
 		}
 	case *int:
-		if rx, ok := r.(*int); ok {
-			return *rx == *l.(*int)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(*l.(*int))
 		}
 	case int8:
-		if rx, ok := r.(int8); ok {
-			return rx == l.(int8)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(l.(int8))
 		}
 	case *int8:
-		if rx, ok := r.(*int8); ok {
-			return *rx == *l.(*int8)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(*l.(*int8))
 		}
 	case int16:
-		if rx, ok := r.(int16); ok {
-			return rx == l.(int16)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(l.(int16))
 		}
 	case *int16:
-		if rx, ok := r.(*int16); ok {
-			return *rx == *l.(*int16)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(*l.(*int16))
 		}
 	case int32:
-		if rx, ok := r.(int32); ok {
-			return rx == l.(int32)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(l.(int32))
 		}
 	case *int32:
-		if rx, ok := r.(*int32); ok {
-			return *rx == *l.(*int32)
+		if rx, ok := i.indInt(r); ok {
+			return rx == int64(*l.(*int32))
 		}
 	case int64:
-		if rx, ok := r.(int64); ok {
+		if rx, ok := i.indInt(r); ok {
 			return rx == l.(int64)
 		}
 	case *int64:
-		if rx, ok := r.(*int64); ok {
-			return *rx == *l.(*int64)
+		if rx, ok := i.indInt(r); ok {
+			return rx == *l.(*int64)
 		}
 	case uint:
-		if rx, ok := r.(uint); ok {
-			return rx == l.(uint)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(l.(uint))
 		}
 	case *uint:
-		if rx, ok := r.(*uint); ok {
-			return *rx == *l.(*uint)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(*l.(*uint))
 		}
 	case uint8:
-		if rx, ok := r.(uint8); ok {
-			return rx == l.(uint8)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(l.(uint8))
 		}
 	case *uint8:
-		if rx, ok := r.(*uint8); ok {
-			return *rx == *l.(*uint8)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(*l.(*uint8))
 		}
 	case uint16:
-		if rx, ok := r.(uint16); ok {
-			return rx == l.(uint16)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(l.(uint16))
 		}
 	case *uint16:
-		if rx, ok := r.(*uint16); ok {
-			return *rx == *l.(*uint16)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(*l.(*uint16))
 		}
 	case uint32:
-		if rx, ok := r.(uint32); ok {
-			return rx == l.(uint32)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(l.(uint32))
 		}
 	case *uint32:
-		if rx, ok := r.(*uint32); ok {
-			return *rx == *l.(*uint32)
+		if rx, ok := i.indUint(r); ok {
+			return rx == uint64(*l.(*uint32))
 		}
 	case uint64:
-		if rx, ok := r.(uint64); ok {
+		if rx, ok := i.indUint(r); ok {
 			return rx == l.(uint64)
 		}
 	case *uint64:
-		if rx, ok := r.(*uint64); ok {
-			return *rx == *l.(*uint64)
+		if rx, ok := i.indUint(r); ok {
+			return rx == *l.(*uint64)
 		}
 	case float32:
-		if rx, ok := r.(float32); ok {
-			return rx == l.(float32)
+		if rx, ok := i.indFloat(r); ok {
+			return rx == float64(l.(float32))
 		}
 	case *float32:
-		if rx, ok := r.(*float32); ok {
-			return *rx == *l.(*float32)
+		if rx, ok := i.indFloat(r); ok {
+			return rx == float64(*l.(*float32))
 		}
 	case float64:
-		if rx, ok := r.(float64); ok {
+		if rx, ok := i.indFloat(r); ok {
 			return rx == l.(float64)
 		}
 	case *float64:
-		if rx, ok := r.(*float64); ok {
-			return *rx == *l.(*float64)
+		if rx, ok := i.indFloat(r); ok {
+			return rx == *l.(*float64)
 		}
 	case []byte:
-		if rx, ok := r.([]byte); ok {
+		if rx, ok := i.indBytes(r); ok {
 			return bytes.Equal(rx, l.([]byte))
 		}
 	case *[]byte:
-		if rx, ok := r.(*[]byte); ok {
-			return bytes.Equal(*rx, *l.(*[]byte))
+		if rx, ok := i.indBytes(r); ok {
+			return bytes.Equal(rx, *l.(*[]byte))
 		}
 	case string:
-		if rx, ok := r.(string); ok {
+		if rx, ok := i.indString(r); ok {
 			return rx == l.(string)
 		}
 	case *string:
-		if rx, ok := r.(*string); ok {
-			return *rx == *l.(*string)
+		if rx, ok := i.indString(r); ok {
+			return rx == *l.(*string)
 		}
 	}
 	return false
@@ -372,4 +372,100 @@ func (i *StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error)
 	default:
 		return nil, ErrUnknownEncodingType
 	}
+}
+
+func (i *StaticInspector) indBool(x interface{}) (bool, bool) {
+	switch x.(type) {
+	case bool:
+		return x.(bool), true
+	case *bool:
+		return *x.(*bool), true
+	}
+	return false, false
+}
+
+func (i *StaticInspector) indInt(x interface{}) (int64, bool) {
+	switch x.(type) {
+	case int:
+		return int64(x.(int)), true
+	case *int:
+		return int64(*x.(*int)), true
+	case int8:
+		return int64(x.(int8)), true
+	case *int8:
+		return int64(*x.(*int8)), true
+	case int16:
+		return int64(x.(int16)), true
+	case *int16:
+		return int64(*x.(*int16)), true
+	case int32:
+		return int64(x.(int32)), true
+	case *int32:
+		return int64(*x.(*int32)), true
+	case int64:
+		return x.(int64), true
+	case *int64:
+		return *x.(*int64), true
+	}
+	return 0, false
+}
+
+func (i *StaticInspector) indUint(x interface{}) (uint64, bool) {
+	switch x.(type) {
+	case uint:
+		return uint64(x.(uint)), true
+	case *uint:
+		return uint64(*x.(*uint)), true
+	case uint8:
+		return uint64(x.(uint8)), true
+	case *uint8:
+		return uint64(*x.(*uint8)), true
+	case uint16:
+		return uint64(x.(uint16)), true
+	case *uint16:
+		return uint64(*x.(*uint16)), true
+	case uint32:
+		return uint64(x.(uint32)), true
+	case *uint32:
+		return uint64(*x.(*uint32)), true
+	case uint64:
+		return x.(uint64), true
+	case *uint64:
+		return *x.(*uint64), true
+	}
+	return 0, false
+}
+
+func (i *StaticInspector) indFloat(x interface{}) (float64, bool) {
+	switch x.(type) {
+	case float32:
+		return float64(x.(float32)), true
+	case *float32:
+		return float64(*x.(*float32)), true
+	case float64:
+		return x.(float64), true
+	case *float64:
+		return *x.(*float64), true
+	}
+	return 0, false
+}
+
+func (i *StaticInspector) indString(x interface{}) (string, bool) {
+	switch x.(type) {
+	case string:
+		return x.(string), true
+	case *string:
+		return *x.(*string), true
+	}
+	return "", false
+}
+
+func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
+	switch x.(type) {
+	case []byte:
+		return x.([]byte), true
+	case *[]byte:
+		return *x.(*[]byte), true
+	}
+	return nil, false
 }
