@@ -406,6 +406,14 @@ func (i *StaticInspector) indInt(x interface{}) (int64, bool) {
 		return x.(int64), true
 	case *int64:
 		return *x.(*int64), true
+	case float32:
+		return int64(x.(float32)), true
+	case *float32:
+		return int64(*x.(*float32)), true
+	case float64:
+		return int64(x.(float64)), true
+	case *float64:
+		return int64(*x.(*float64)), true
 	}
 	return 0, false
 }
@@ -432,6 +440,14 @@ func (i *StaticInspector) indUint(x interface{}) (uint64, bool) {
 		return x.(uint64), true
 	case *uint64:
 		return *x.(*uint64), true
+	case float32:
+		return uint64(x.(float32)), true
+	case *float32:
+		return uint64(*x.(*float32)), true
+	case float64:
+		return uint64(x.(float64)), true
+	case *float64:
+		return uint64(*x.(*float64)), true
 	}
 	return 0, false
 }
@@ -446,6 +462,49 @@ func (i *StaticInspector) indFloat(x interface{}) (float64, bool) {
 		return x.(float64), true
 	case *float64:
 		return *x.(*float64), true
+	default:
+		switch x.(type) {
+		case int:
+			return float64(x.(int)), true
+		case *int:
+			return float64(*x.(*int)), true
+		case int8:
+			return float64(x.(int8)), true
+		case *int8:
+			return float64(*x.(*int8)), true
+		case int16:
+			return float64(x.(int16)), true
+		case *int16:
+			return float64(*x.(*int16)), true
+		case int32:
+			return float64(x.(int32)), true
+		case *int32:
+			return float64(*x.(*int32)), true
+		case int64:
+			return float64(x.(int64)), true
+		case *int64:
+			return float64(*x.(*int64)), true
+		case uint:
+			return float64(x.(uint)), true
+		case *uint:
+			return float64(*x.(*uint)), true
+		case uint8:
+			return float64(x.(uint8)), true
+		case *uint8:
+			return float64(*x.(*uint8)), true
+		case uint16:
+			return float64(x.(uint16)), true
+		case *uint16:
+			return float64(*x.(*uint16)), true
+		case uint32:
+			return float64(x.(uint32)), true
+		case *uint32:
+			return float64(*x.(*uint32)), true
+		case uint64:
+			return float64(x.(uint64)), true
+		case *uint64:
+			return float64(*x.(*uint64)), true
+		}
 	}
 	return 0, false
 }
