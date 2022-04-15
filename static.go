@@ -239,6 +239,14 @@ func (i *StaticInspector) DeepEqual(l, r interface{}) bool {
 
 func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
 	switch l.(type) {
+	case bool:
+		if rx, ok := r.(bool); ok {
+			return rx == l.(bool)
+		}
+	case *bool:
+		if rx, ok := r.(*bool); ok {
+			return *rx == *l.(*bool)
+		}
 	case int:
 		if rx, ok := r.(int); ok {
 			return rx == l.(int)
