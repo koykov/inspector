@@ -23,6 +23,8 @@ type Inspector interface {
 	DeepEqualWithOptions(l, r interface{}, options *DEQOptions) bool
 	// Unmarshal parses encoded data according encoding type.
 	Unmarshal([]byte, Encoding) (interface{}, error)
+	// Copy makes a copy of variable value.
+	Copy(interface{}) (interface{}, error)
 }
 
 // Looper signature.

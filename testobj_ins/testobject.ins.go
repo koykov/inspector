@@ -1119,3 +1119,18 @@ func (i3 *TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 		return nil, inspector.ErrUnknownEncodingType
 	}
 }
+
+func (i3 *TestObjectInspector) Copy(x interface{}) (interface{}, error) {
+	var cpy testobj.TestObject
+	switch x.(type) {
+	case testobj.TestObject:
+		cpy = x.(testobj.TestObject)
+	case *testobj.TestObject:
+		cpy = *x.(*testobj.TestObject)
+	case **testobj.TestObject:
+		cpy = **x.(**testobj.TestObject)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	return cpy, nil
+}

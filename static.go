@@ -374,6 +374,49 @@ func (i *StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error)
 	}
 }
 
+func (i *StaticInspector) Copy(x interface{}) (interface{}, error) {
+	var t interface{}
+	switch x.(type) {
+	case *bool:
+		t = *x.(*bool)
+	case *int:
+		t = *x.(*int)
+	case *int8:
+		t = *x.(*int8)
+	case *int16:
+		t = *x.(*int16)
+	case *int32:
+		t = *x.(*int32)
+	case *int64:
+		t = *x.(*int64)
+	case *uint:
+		t = *x.(*uint)
+	case *uint8:
+		t = *x.(*uint8)
+	case *uint16:
+		t = *x.(*uint16)
+	case *uint32:
+		t = *x.(*uint32)
+	case *uint64:
+		t = *x.(*uint64)
+	case *float32:
+		t = *x.(*float32)
+	case *float64:
+		t = *x.(*float64)
+	case []byte:
+		p := x.([]byte)
+		t = append([]byte(nil), p...)
+	case *[]byte:
+		p := *x.(*[]byte)
+		t = append([]byte(nil), p...)
+	case *string:
+		t = *x.(*string)
+	default:
+		return nil, ErrUnsupportedType
+	}
+	return t, nil
+}
+
 func (i *StaticInspector) indBool(x interface{}) (bool, bool) {
 	switch x.(type) {
 	case bool:

@@ -540,6 +540,14 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	}
 	c.wdl("}")
 
+	// Copy methods.
+	c.wl("func (", recv, " *", inst, ") Copy(x interface{}) (interface{}, error) {")
+	err = c.writeNodeCopy(node, pname)
+	if err != nil {
+		return err
+	}
+	c.wdl("}")
+
 	return c.err
 }
 
@@ -961,6 +969,22 @@ return &x, err
 default:
 return nil, inspector.ErrUnknownEncodingType
 }`)
+	return nil
+}
+
+func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
+	c.wl("var cpy ", pname)
+	c.wl("switch x.(type) {")
+	c.wl("case ", pname, ":")
+	c.wl("cpy = x.(", pname, ")")
+	c.wl("case *", pname, ":")
+	c.wl("cpy = *x.(*", pname, ")")
+	c.wl("case **", pname, ":")
+	c.wl("cpy = **x.(**", pname, ")")
+	c.wl("default:")
+	c.wl("return nil, inspector.ErrUnsupportedType")
+	c.wl("}")
+	c.wl("return cpy, nil")
 	return nil
 }
 

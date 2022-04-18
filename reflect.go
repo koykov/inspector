@@ -127,3 +127,7 @@ func (i *ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error
 		return nil, ErrUnknownEncodingType
 	}
 }
+
+func (i *ReflectInspector) Copy(x interface{}) (interface{}, error) {
+	return x, nil
+}

@@ -240,3 +240,18 @@ func (i4 *TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (
 		return nil, inspector.ErrUnknownEncodingType
 	}
 }
+
+func (i4 *TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
+	var cpy testobj.TestPermission
+	switch x.(type) {
+	case testobj.TestPermission:
+		cpy = x.(testobj.TestPermission)
+	case *testobj.TestPermission:
+		cpy = *x.(*testobj.TestPermission)
+	case **testobj.TestPermission:
+		cpy = **x.(**testobj.TestPermission)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	return cpy, nil
+}
