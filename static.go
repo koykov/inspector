@@ -412,7 +412,7 @@ func (i *StaticInspector) Copy(x interface{}) (interface{}, error) {
 	case *string:
 		t = *x.(*string)
 	default:
-		return nil, ErrUnsupportedType
+		t = x
 	}
 	return t, nil
 }
