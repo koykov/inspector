@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	eqlf64 = 1e-9
+	eqlf64 = 1e-6
 )
 
 type StaticInspector struct {
