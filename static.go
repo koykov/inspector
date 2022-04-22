@@ -5,9 +5,14 @@ package inspector
 import (
 	"bytes"
 	"encoding/json"
+	"math"
 	"strconv"
 
 	"github.com/koykov/fastconv"
+)
+
+const (
+	eqlf64 = 1e-9
 )
 
 type StaticInspector struct {
@@ -329,19 +334,19 @@ func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) 
 		}
 	case float32:
 		if rx, ok := i.indFloat(r); ok {
-			return rx == float64(l.(float32))
+			return i.eqlf64(rx, float64(l.(float32)))
 		}
 	case *float32:
 		if rx, ok := i.indFloat(r); ok {
-			return rx == float64(*l.(*float32))
+			return i.eqlf64(rx, float64(*l.(*float32)))
 		}
 	case float64:
 		if rx, ok := i.indFloat(r); ok {
-			return rx == l.(float64)
+			return i.eqlf64(rx, l.(float64))
 		}
 	case *float64:
 		if rx, ok := i.indFloat(r); ok {
-			return rx == *l.(*float64)
+			return i.eqlf64(rx, *l.(*float64))
 		}
 	case []byte:
 		if rx, ok := i.indBytes(r); ok {
@@ -570,4 +575,8 @@ func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
 		return *x.(*[]byte), true
 	}
 	return nil, false
+}
+
+func (i *StaticInspector) eqlf64(a, b float64) bool {
+	return math.Abs(a-b) <= eqlf64
 }
