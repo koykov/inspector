@@ -564,6 +564,9 @@ func (i *StaticInspector) indString(x interface{}) (string, bool) {
 	case *string:
 		return *x.(*string), true
 	}
+	if b, ok := i.indBytes(x); ok {
+		return fastconv.B2S(b), true
+	}
 	return "", false
 }
 
@@ -573,6 +576,9 @@ func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
 		return x.([]byte), true
 	case *[]byte:
 		return *x.(*[]byte), true
+	}
+	if s, ok := i.indString(x); ok {
+		return fastconv.S2B(s), true
 	}
 	return nil, false
 }
