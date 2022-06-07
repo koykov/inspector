@@ -466,14 +466,16 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 		lx2 := (lx1)[i]
 		rx2 := (rx1)[i]
 		_, _ = lx2, rx2
-		if lx2.DateUnix != rx2.DateUnix && inspector.DEQMustCheck("History.DateUnix", opts) {
-			return false
-		}
-		if lx2.Cost != rx2.Cost && inspector.DEQMustCheck("History.Cost", opts) {
-			return false
-		}
-		if !bytes.Equal(lx2.Comment, rx2.Comment) && inspector.DEQMustCheck("History.Comment", opts) {
-			return false
+		if inspector.DEQMustCheck("History", opts) {
+			if lx2.DateUnix != rx2.DateUnix && inspector.DEQMustCheck("History.DateUnix", opts) {
+				return false
+			}
+			if lx2.Cost != rx2.Cost && inspector.DEQMustCheck("History.Cost", opts) {
+				return false
+			}
+			if !bytes.Equal(lx2.Comment, rx2.Comment) && inspector.DEQMustCheck("History.Comment", opts) {
+				return false
+			}
 		}
 	}
 	return true

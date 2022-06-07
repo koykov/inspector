@@ -568,6 +568,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 
 	switch node.typ {
 	case typeStruct:
+		if len(path) > 0 {
+			c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
+		}
 		for _, ch := range node.chld {
 			nlv, nrv := lv, rv
 			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
@@ -582,6 +585,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			if err := c.writeNodeDEQ(ch, node, recv, path, nlv, nrv, depth+1); err != nil {
 				return err
 			}
+		}
+		if len(path) > 0 {
+			c.wl("}")
 		}
 	case typeMap:
 		pfx := ""

@@ -1038,14 +1038,16 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			return false
 		}
 		if lx4 != nil && rx4 != nil {
-			if lx4.DateUnix != rx4.DateUnix && inspector.DEQMustCheck("HistoryTree.DateUnix", opts) {
-				return false
-			}
-			if lx4.Cost != rx4.Cost && inspector.DEQMustCheck("HistoryTree.Cost", opts) {
-				return false
-			}
-			if !bytes.Equal(lx4.Comment, rx4.Comment) && inspector.DEQMustCheck("HistoryTree.Comment", opts) {
-				return false
+			if inspector.DEQMustCheck("HistoryTree", opts) {
+				if lx4.DateUnix != rx4.DateUnix && inspector.DEQMustCheck("HistoryTree.DateUnix", opts) {
+					return false
+				}
+				if lx4.Cost != rx4.Cost && inspector.DEQMustCheck("HistoryTree.Cost", opts) {
+					return false
+				}
+				if !bytes.Equal(lx4.Comment, rx4.Comment) && inspector.DEQMustCheck("HistoryTree.Comment", opts) {
+					return false
+				}
 			}
 		}
 	}
@@ -1073,36 +1075,40 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 		return false
 	}
 	if lx7 != nil && rx7 != nil {
-		if lx7.MoneyIn != rx7.MoneyIn && inspector.DEQMustCheck("Finance.MoneyIn", opts) {
-			return false
-		}
-		if lx7.MoneyOut != rx7.MoneyOut && inspector.DEQMustCheck("Finance.MoneyOut", opts) {
-			return false
-		}
-		if lx7.Balance != rx7.Balance && inspector.DEQMustCheck("Finance.Balance", opts) {
-			return false
-		}
-		if lx7.AllowBuy != rx7.AllowBuy && inspector.DEQMustCheck("Finance.AllowBuy", opts) {
-			return false
-		}
-		lx8 := lx7.History
-		rx8 := rx7.History
-		_, _ = lx8, rx8
-		if len(lx8) != len(rx8) {
-			return false
-		}
-		for i := 0; i < len(lx8); i++ {
-			lx9 := (lx8)[i]
-			rx9 := (rx8)[i]
-			_, _ = lx9, rx9
-			if lx9.DateUnix != rx9.DateUnix && inspector.DEQMustCheck("Finance.History.DateUnix", opts) {
+		if inspector.DEQMustCheck("Finance", opts) {
+			if lx7.MoneyIn != rx7.MoneyIn && inspector.DEQMustCheck("Finance.MoneyIn", opts) {
 				return false
 			}
-			if lx9.Cost != rx9.Cost && inspector.DEQMustCheck("Finance.History.Cost", opts) {
+			if lx7.MoneyOut != rx7.MoneyOut && inspector.DEQMustCheck("Finance.MoneyOut", opts) {
 				return false
 			}
-			if !bytes.Equal(lx9.Comment, rx9.Comment) && inspector.DEQMustCheck("Finance.History.Comment", opts) {
+			if lx7.Balance != rx7.Balance && inspector.DEQMustCheck("Finance.Balance", opts) {
 				return false
+			}
+			if lx7.AllowBuy != rx7.AllowBuy && inspector.DEQMustCheck("Finance.AllowBuy", opts) {
+				return false
+			}
+			lx8 := lx7.History
+			rx8 := rx7.History
+			_, _ = lx8, rx8
+			if len(lx8) != len(rx8) {
+				return false
+			}
+			for i := 0; i < len(lx8); i++ {
+				lx9 := (lx8)[i]
+				rx9 := (rx8)[i]
+				_, _ = lx9, rx9
+				if inspector.DEQMustCheck("Finance.History", opts) {
+					if lx9.DateUnix != rx9.DateUnix && inspector.DEQMustCheck("Finance.History.DateUnix", opts) {
+						return false
+					}
+					if lx9.Cost != rx9.Cost && inspector.DEQMustCheck("Finance.History.Cost", opts) {
+						return false
+					}
+					if !bytes.Equal(lx9.Comment, rx9.Comment) && inspector.DEQMustCheck("Finance.History.Comment", opts) {
+						return false
+					}
+				}
 			}
 		}
 	}
