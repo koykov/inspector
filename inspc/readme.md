@@ -21,11 +21,16 @@ Also supports blacklist files by passing the erg `-bl`. It's just a path to the 
 
 ## Installation
 
-Build the tool with the following commands:
+go < 1.17
 ```bash
 go get github.com/koykov/inspector
 cd $GOPATH/src/github.com/koykov/inspector
 go install ./inspc
+```
+
+go >= 1.17
+```bash
+go install github.com/koykov/inspector/inspc@latest
 ```
 
 ## Blacklist
