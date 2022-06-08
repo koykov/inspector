@@ -561,6 +561,12 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 		path += node.name
 	}
 
+	var deqMustSkipByType, deqMustSkipByTypeAndPath bool
+	if parent != nil {
+		deqMustSkipByType = parent.typ != typeMap && parent.typ != typeSlice
+		deqMustSkipByTypeAndPath = len(path) > 0 && parent.typ != typeMap && parent.typ != typeSlice
+	}
+
 	if node.ptr {
 		c.wl("if (", lv, "==nil && ", rv, "!=nil) || (", lv, "!=nil && ", rv, "==nil) {return false}")
 		c.wl("if ", lv, "!=nil && ", rv, "!=nil {")
@@ -568,7 +574,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 
 	switch node.typ {
 	case typeStruct:
-		if len(path) > 0 {
+		if deqMustSkipByTypeAndPath {
 			c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
 		}
 		for _, ch := range node.chld {
@@ -586,7 +592,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 				return err
 			}
 		}
-		if len(path) > 0 {
+		if deqMustSkipByTypeAndPath {
 			c.wl("}")
 		}
 	case typeMap:
@@ -596,6 +602,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 		}
 		nlv := pfx + lv
 		nrv := pfx + rv
+		if deqMustSkipByTypeAndPath {
+			c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
+		}
 		c.wl("if len(", nlv, ")!=len(", nrv, "){return false}")
 		c.wl("for k:=range ", nlv, "{")
 		c.cntrDEQ++
@@ -610,6 +619,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			return err
 		}
 		c.wl("}")
+		if deqMustSkipByTypeAndPath {
+			c.wl("}")
+		}
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
@@ -621,6 +633,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			}
 			nlv := pfx + lv
 			nrv := pfx + rv
+			if deqMustSkipByTypeAndPath {
+				c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
+			}
 			c.wl("if len(", nlv, ")!=len(", nrv, "){return false}")
 			c.wl("for i:=0;i<len(", nlv, ");i++{")
 			c.cntrDEQ++
@@ -633,6 +648,9 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 				return err
 			}
 			c.wl("}")
+			if deqMustSkipByTypeAndPath {
+				c.wl("}")
+			}
 		}
 	case typeBasic:
 		plv, prv := lv, rv
@@ -643,7 +661,11 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			plv = "*" + plv
 			prv = "*" + prv
 		}
-		c.wl("if ", plv, "!=", prv, " && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+		if deqMustSkipByType {
+			c.wl("if ", plv, "!=", prv, " && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+		} else {
+			c.wl("if ", plv, "!=", prv, "{return false}")
+		}
 	}
 
 	if node.ptr {

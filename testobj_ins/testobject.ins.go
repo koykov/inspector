@@ -1006,39 +1006,41 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 		return false
 	}
 	if lx1 != nil && rx1 != nil {
-		if len(*lx1) != len(*rx1) {
-			return false
-		}
-		for k := range *lx1 {
-			lx2 := (*lx1)[k]
-			rx2, ok2 := (*rx1)[k]
-			_, _, _ = lx2, rx2, ok2
-			if !ok2 {
+		if inspector.DEQMustCheck("Permission", opts) {
+			if len(*lx1) != len(*rx1) {
 				return false
 			}
-			if lx2 != rx2 && inspector.DEQMustCheck("Permission", opts) {
-				return false
+			for k := range *lx1 {
+				lx2 := (*lx1)[k]
+				rx2, ok2 := (*rx1)[k]
+				_, _, _ = lx2, rx2, ok2
+				if !ok2 {
+					return false
+				}
+				if lx2 != rx2 {
+					return false
+				}
 			}
 		}
 	}
 	lx3 := lx.HistoryTree
 	rx3 := rx.HistoryTree
 	_, _ = lx3, rx3
-	if len(lx3) != len(rx3) {
-		return false
-	}
-	for k := range lx3 {
-		lx4 := (lx3)[k]
-		rx4, ok4 := (rx3)[k]
-		_, _, _ = lx4, rx4, ok4
-		if !ok4 {
+	if inspector.DEQMustCheck("HistoryTree", opts) {
+		if len(lx3) != len(rx3) {
 			return false
 		}
-		if (lx4 == nil && rx4 != nil) || (lx4 != nil && rx4 == nil) {
-			return false
-		}
-		if lx4 != nil && rx4 != nil {
-			if inspector.DEQMustCheck("HistoryTree", opts) {
+		for k := range lx3 {
+			lx4 := (lx3)[k]
+			rx4, ok4 := (rx3)[k]
+			_, _, _ = lx4, rx4, ok4
+			if !ok4 {
+				return false
+			}
+			if (lx4 == nil && rx4 != nil) || (lx4 != nil && rx4 == nil) {
+				return false
+			}
+			if lx4 != nil && rx4 != nil {
 				if lx4.DateUnix != rx4.DateUnix && inspector.DEQMustCheck("HistoryTree.DateUnix", opts) {
 					return false
 				}
@@ -1054,18 +1056,20 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	lx5 := lx.Flags
 	rx5 := rx.Flags
 	_, _ = lx5, rx5
-	if len(lx5) != len(rx5) {
-		return false
-	}
-	for k := range lx5 {
-		lx6 := (lx5)[k]
-		rx6, ok6 := (rx5)[k]
-		_, _, _ = lx6, rx6, ok6
-		if !ok6 {
+	if inspector.DEQMustCheck("Flags", opts) {
+		if len(lx5) != len(rx5) {
 			return false
 		}
-		if lx6 != rx6 && inspector.DEQMustCheck("Flags", opts) {
-			return false
+		for k := range lx5 {
+			lx6 := (lx5)[k]
+			rx6, ok6 := (rx5)[k]
+			_, _, _ = lx6, rx6, ok6
+			if !ok6 {
+				return false
+			}
+			if lx6 != rx6 {
+				return false
+			}
 		}
 	}
 	lx7 := lx.Finance
@@ -1091,14 +1095,14 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			lx8 := lx7.History
 			rx8 := rx7.History
 			_, _ = lx8, rx8
-			if len(lx8) != len(rx8) {
-				return false
-			}
-			for i := 0; i < len(lx8); i++ {
-				lx9 := (lx8)[i]
-				rx9 := (rx8)[i]
-				_, _ = lx9, rx9
-				if inspector.DEQMustCheck("Finance.History", opts) {
+			if inspector.DEQMustCheck("Finance.History", opts) {
+				if len(lx8) != len(rx8) {
+					return false
+				}
+				for i := 0; i < len(lx8); i++ {
+					lx9 := (lx8)[i]
+					rx9 := (rx8)[i]
+					_, _ = lx9, rx9
 					if lx9.DateUnix != rx9.DateUnix && inspector.DEQMustCheck("Finance.History.DateUnix", opts) {
 						return false
 					}

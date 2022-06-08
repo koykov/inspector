@@ -459,14 +459,14 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 	lx1 := lx.History
 	rx1 := rx.History
 	_, _ = lx1, rx1
-	if len(lx1) != len(rx1) {
-		return false
-	}
-	for i := 0; i < len(lx1); i++ {
-		lx2 := (lx1)[i]
-		rx2 := (rx1)[i]
-		_, _ = lx2, rx2
-		if inspector.DEQMustCheck("History", opts) {
+	if inspector.DEQMustCheck("History", opts) {
+		if len(lx1) != len(rx1) {
+			return false
+		}
+		for i := 0; i < len(lx1); i++ {
+			lx2 := (lx1)[i]
+			rx2 := (rx1)[i]
+			_, _ = lx2, rx2
 			if lx2.DateUnix != rx2.DateUnix && inspector.DEQMustCheck("History.DateUnix", opts) {
 				return false
 			}

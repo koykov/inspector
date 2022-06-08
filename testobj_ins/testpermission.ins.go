@@ -223,7 +223,7 @@ func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *
 		if !ok1 {
 			return false
 		}
-		if lx1 != rx1 && inspector.DEQMustCheck("", opts) {
+		if lx1 != rx1 {
 			return false
 		}
 	}
