@@ -21,6 +21,7 @@ const (
 	LoopCtlBrk  = 1
 	LoopCtlCnt  = 2
 
-	// nil value.
 	Nil = "nil"
+
+	FloatPrecision = 1e-3
 )

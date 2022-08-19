@@ -662,7 +662,13 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			prv = "*" + prv
 		}
 		if deqMustSkipByType {
-			c.wl("if ", plv, "!=", prv, " && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			if node.typu == "float32" {
+				c.wl("if !inspector.EqualFloat32(", plv, ",", prv, ", opts) && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			} else if node.typu == "float64" {
+				c.wl("if !inspector.EqualFloat64(", plv, ",", prv, ", opts) && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			} else {
+				c.wl("if ", plv, "!=", prv, " && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			}
 		} else {
 			c.wl("if ", plv, "!=", prv, "{return false}")
 		}

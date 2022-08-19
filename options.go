@@ -2,6 +2,8 @@ package inspector
 
 // DEQOptions describes DeepEqual options.
 type DEQOptions struct {
+	// Float fields comparison precision.
+	Precision float64
 	// List of fields to exclude from check.
 	Exclude map[string]struct{}
 	// Limit fields to check.

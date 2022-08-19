@@ -11,10 +11,6 @@ import (
 	"github.com/koykov/fastconv"
 )
 
-const (
-	eqlf64 = 1e-3
-)
-
 type StaticInspector struct {
 	BaseInspector
 }
@@ -584,5 +580,5 @@ func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
 }
 
 func (i *StaticInspector) eqlf64(a, b float64) bool {
-	return math.Abs(a-b) <= eqlf64
+	return math.Abs(a-b) <= FloatPrecision
 }

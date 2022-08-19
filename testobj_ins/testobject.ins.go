@@ -996,7 +996,7 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	if lx.Ustate != rx.Ustate && inspector.DEQMustCheck("Ustate", opts) {
 		return false
 	}
-	if lx.Cost != rx.Cost && inspector.DEQMustCheck("Cost", opts) {
+	if !inspector.EqualFloat64(lx.Cost, rx.Cost, opts) && inspector.DEQMustCheck("Cost", opts) {
 		return false
 	}
 	lx1 := lx.Permission
@@ -1044,7 +1044,7 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 				if lx4.DateUnix != rx4.DateUnix && inspector.DEQMustCheck("HistoryTree.DateUnix", opts) {
 					return false
 				}
-				if lx4.Cost != rx4.Cost && inspector.DEQMustCheck("HistoryTree.Cost", opts) {
+				if !inspector.EqualFloat64(lx4.Cost, rx4.Cost, opts) && inspector.DEQMustCheck("HistoryTree.Cost", opts) {
 					return false
 				}
 				if !bytes.Equal(lx4.Comment, rx4.Comment) && inspector.DEQMustCheck("HistoryTree.Comment", opts) {
@@ -1080,13 +1080,13 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	}
 	if lx7 != nil && rx7 != nil {
 		if inspector.DEQMustCheck("Finance", opts) {
-			if lx7.MoneyIn != rx7.MoneyIn && inspector.DEQMustCheck("Finance.MoneyIn", opts) {
+			if !inspector.EqualFloat64(lx7.MoneyIn, rx7.MoneyIn, opts) && inspector.DEQMustCheck("Finance.MoneyIn", opts) {
 				return false
 			}
-			if lx7.MoneyOut != rx7.MoneyOut && inspector.DEQMustCheck("Finance.MoneyOut", opts) {
+			if !inspector.EqualFloat64(lx7.MoneyOut, rx7.MoneyOut, opts) && inspector.DEQMustCheck("Finance.MoneyOut", opts) {
 				return false
 			}
-			if lx7.Balance != rx7.Balance && inspector.DEQMustCheck("Finance.Balance", opts) {
+			if !inspector.EqualFloat64(lx7.Balance, rx7.Balance, opts) && inspector.DEQMustCheck("Finance.Balance", opts) {
 				return false
 			}
 			if lx7.AllowBuy != rx7.AllowBuy && inspector.DEQMustCheck("Finance.AllowBuy", opts) {
@@ -1106,7 +1106,7 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 					if lx9.DateUnix != rx9.DateUnix && inspector.DEQMustCheck("Finance.History.DateUnix", opts) {
 						return false
 					}
-					if lx9.Cost != rx9.Cost && inspector.DEQMustCheck("Finance.History.Cost", opts) {
+					if !inspector.EqualFloat64(lx9.Cost, rx9.Cost, opts) && inspector.DEQMustCheck("Finance.History.Cost", opts) {
 						return false
 					}
 					if !bytes.Equal(lx9.Comment, rx9.Comment) && inspector.DEQMustCheck("Finance.History.Comment", opts) {

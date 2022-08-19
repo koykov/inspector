@@ -444,13 +444,13 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 		return false
 	}
 
-	if lx.MoneyIn != rx.MoneyIn && inspector.DEQMustCheck("MoneyIn", opts) {
+	if !inspector.EqualFloat64(lx.MoneyIn, rx.MoneyIn, opts) && inspector.DEQMustCheck("MoneyIn", opts) {
 		return false
 	}
-	if lx.MoneyOut != rx.MoneyOut && inspector.DEQMustCheck("MoneyOut", opts) {
+	if !inspector.EqualFloat64(lx.MoneyOut, rx.MoneyOut, opts) && inspector.DEQMustCheck("MoneyOut", opts) {
 		return false
 	}
-	if lx.Balance != rx.Balance && inspector.DEQMustCheck("Balance", opts) {
+	if !inspector.EqualFloat64(lx.Balance, rx.Balance, opts) && inspector.DEQMustCheck("Balance", opts) {
 		return false
 	}
 	if lx.AllowBuy != rx.AllowBuy && inspector.DEQMustCheck("AllowBuy", opts) {
@@ -470,7 +470,7 @@ func (i0 *TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 			if lx2.DateUnix != rx2.DateUnix && inspector.DEQMustCheck("History.DateUnix", opts) {
 				return false
 			}
-			if lx2.Cost != rx2.Cost && inspector.DEQMustCheck("History.Cost", opts) {
+			if !inspector.EqualFloat64(lx2.Cost, rx2.Cost, opts) && inspector.DEQMustCheck("History.Cost", opts) {
 				return false
 			}
 			if !bytes.Equal(lx2.Comment, rx2.Comment) && inspector.DEQMustCheck("History.Comment", opts) {
