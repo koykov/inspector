@@ -4,6 +4,8 @@
 package testobj_ins
 
 import (
+	"bytes"
+	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -242,16 +244,23 @@ func (i4 *TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (
 }
 
 func (i4 *TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
-	var cpy testobj.TestPermission
+	var origin, cpy testobj.TestPermission
 	switch x.(type) {
 	case testobj.TestPermission:
-		cpy = x.(testobj.TestPermission)
+		origin = x.(testobj.TestPermission)
 	case *testobj.TestPermission:
-		cpy = *x.(*testobj.TestPermission)
+		origin = *x.(*testobj.TestPermission)
 	case **testobj.TestPermission:
-		cpy = **x.(**testobj.TestPermission)
+		origin = **x.(**testobj.TestPermission)
 	default:
 		return nil, inspector.ErrUnsupportedType
+	}
+	buf := bytes.Buffer{}
+	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
+		return nil, err
+	}
+	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+		return nil, err
 	}
 	return cpy, nil
 }

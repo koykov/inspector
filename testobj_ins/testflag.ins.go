@@ -4,6 +4,8 @@
 package testobj_ins
 
 import (
+	"bytes"
+	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -235,16 +237,23 @@ func (i1 *TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (interf
 }
 
 func (i1 *TestFlagInspector) Copy(x interface{}) (interface{}, error) {
-	var cpy testobj.TestFlag
+	var origin, cpy testobj.TestFlag
 	switch x.(type) {
 	case testobj.TestFlag:
-		cpy = x.(testobj.TestFlag)
+		origin = x.(testobj.TestFlag)
 	case *testobj.TestFlag:
-		cpy = *x.(*testobj.TestFlag)
+		origin = *x.(*testobj.TestFlag)
 	case **testobj.TestFlag:
-		cpy = **x.(**testobj.TestFlag)
+		origin = **x.(**testobj.TestFlag)
 	default:
 		return nil, inspector.ErrUnsupportedType
+	}
+	buf := bytes.Buffer{}
+	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
+		return nil, err
+	}
+	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+		return nil, err
 	}
 	return cpy, nil
 }

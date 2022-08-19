@@ -314,6 +314,18 @@ func TestInspectorDeepEqual(t *testing.T) {
 	}
 }
 
+func TestInspectorCopy(t *testing.T) {
+	ins := &testobj_ins.TestObjectInspector{}
+	obj := testobj.TestObject{
+		Name: []byte("foobar"),
+	}
+	cpy, _ := ins.Copy(obj)
+	obj.Name[0] = 'F'
+	if bytes.Equal(obj.Name, cpy.(testobj.TestObject).Name) {
+		t.FailNow()
+	}
+}
+
 func BenchmarkInspectorDeepEqual(b *testing.B) {
 	ins := &testobj_ins.TestObjectInspector{}
 	for i := range deqStages {

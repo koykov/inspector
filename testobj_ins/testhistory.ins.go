@@ -5,6 +5,7 @@ package testobj_ins
 
 import (
 	"bytes"
+	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -266,16 +267,23 @@ func (i2 *TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (int
 }
 
 func (i2 *TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
-	var cpy testobj.TestHistory
+	var origin, cpy testobj.TestHistory
 	switch x.(type) {
 	case testobj.TestHistory:
-		cpy = x.(testobj.TestHistory)
+		origin = x.(testobj.TestHistory)
 	case *testobj.TestHistory:
-		cpy = *x.(*testobj.TestHistory)
+		origin = *x.(*testobj.TestHistory)
 	case **testobj.TestHistory:
-		cpy = **x.(**testobj.TestHistory)
+		origin = **x.(**testobj.TestHistory)
 	default:
 		return nil, inspector.ErrUnsupportedType
+	}
+	buf := bytes.Buffer{}
+	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
+		return nil, err
+	}
+	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+		return nil, err
 	}
 	return cpy, nil
 }

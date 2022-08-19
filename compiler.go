@@ -1007,17 +1007,21 @@ return nil, inspector.ErrUnknownEncodingType
 }
 
 func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
-	c.wl("var cpy ", pname)
+	c.wl("var origin, cpy ", pname)
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
-	c.wl("cpy = x.(", pname, ")")
+	c.wl("origin = x.(", pname, ")")
 	c.wl("case *", pname, ":")
-	c.wl("cpy = *x.(*", pname, ")")
+	c.wl("origin = *x.(*", pname, ")")
 	c.wl("case **", pname, ":")
-	c.wl("cpy = **x.(**", pname, ")")
+	c.wl("origin = **x.(**", pname, ")")
 	c.wl("default:")
 	c.wl("return nil, inspector.ErrUnsupportedType")
 	c.wl("}")
+	c.regImport([]string{`"encoding/gob"`, `"bytes"`})
+	c.wl("buf := bytes.Buffer{}")
+	c.wl("if err := gob.NewEncoder(&buf).Encode(origin); err != nil { return nil, err }")
+	c.wl("if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil { return nil, err }")
 	c.wl("return cpy, nil")
 	return nil
 }
