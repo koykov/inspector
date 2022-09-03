@@ -75,8 +75,8 @@ func GetInspector(name string) (Inspector, error) {
 
 func init() {
 	// Register inspectors known by default.
-	RegisterInspector("static", &StaticInspector{})
-	RegisterInspector("reflect", &ReflectInspector{})
+	RegisterInspector("static", StaticInspector{})
+	RegisterInspector("reflect", ReflectInspector{})
 
 	// Register snippets to convert string to built-in types.
 	imp := []string{`"strconv"`}

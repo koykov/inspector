@@ -15,28 +15,28 @@ type StaticInspector struct {
 	BaseInspector
 }
 
-func (i *StaticInspector) TypeName() string {
+func (i StaticInspector) TypeName() string {
 	return "static"
 }
 
-func (i *StaticInspector) Get(src interface{}, _ ...string) (interface{}, error) {
+func (i StaticInspector) Get(src interface{}, _ ...string) (interface{}, error) {
 	return src, nil
 }
 
-func (i *StaticInspector) GetTo(src interface{}, buf *interface{}, _ ...string) error {
+func (i StaticInspector) GetTo(src interface{}, buf *interface{}, _ ...string) error {
 	*buf = src
 	return nil
 }
 
-func (i *StaticInspector) Set(_, _ interface{}, _ ...string) error {
+func (i StaticInspector) Set(_, _ interface{}, _ ...string) error {
 	return nil
 }
 
-func (i *StaticInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
+func (i StaticInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
 	return nil
 }
 
-func (i *StaticInspector) Cmp(src interface{}, cond Op, right string, result *bool, _ ...string) error {
+func (i StaticInspector) Cmp(src interface{}, cond Op, right string, result *bool, _ ...string) error {
 	switch src.(type) {
 	case int:
 		if r, err := strconv.ParseInt(right, 0, 0); err == nil {
@@ -148,7 +148,7 @@ func (i *StaticInspector) Cmp(src interface{}, cond Op, right string, result *bo
 	return nil
 }
 
-func (i *StaticInspector) cmpInt(left int64, cond Op, right int64) bool {
+func (i StaticInspector) cmpInt(left int64, cond Op, right int64) bool {
 	switch cond {
 	case OpEq:
 		return left == right
@@ -166,7 +166,7 @@ func (i *StaticInspector) cmpInt(left int64, cond Op, right int64) bool {
 	return false
 }
 
-func (i *StaticInspector) cmpUint(left uint64, cond Op, right uint64) bool {
+func (i StaticInspector) cmpUint(left uint64, cond Op, right uint64) bool {
 	switch cond {
 	case OpEq:
 		return left == right
@@ -184,7 +184,7 @@ func (i *StaticInspector) cmpUint(left uint64, cond Op, right uint64) bool {
 	return false
 }
 
-func (i *StaticInspector) cmpFloat(left float64, cond Op, right float64) bool {
+func (i StaticInspector) cmpFloat(left float64, cond Op, right float64) bool {
 	switch cond {
 	case OpEq:
 		return left == right
@@ -202,7 +202,7 @@ func (i *StaticInspector) cmpFloat(left float64, cond Op, right float64) bool {
 	return false
 }
 
-func (i *StaticInspector) cmpStr(left string, cond Op, right string) bool {
+func (i StaticInspector) cmpStr(left string, cond Op, right string) bool {
 	switch cond {
 	case OpEq:
 		return left == right
@@ -220,7 +220,7 @@ func (i *StaticInspector) cmpStr(left string, cond Op, right string) bool {
 	return false
 }
 
-func (i *StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
+func (i StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
 	switch cond {
 	case OpEq:
 		return bytes.Equal(left, right)
@@ -230,15 +230,15 @@ func (i *StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
 	return false
 }
 
-func (i *StaticInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) error {
+func (i StaticInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) error {
 	return nil
 }
 
-func (i *StaticInspector) DeepEqual(l, r interface{}) bool {
+func (i StaticInspector) DeepEqual(l, r interface{}) bool {
 	return i.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
+func (i StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
 	switch l.(type) {
 	case bool:
 		if rx, ok := i.indBool(r); ok {
@@ -364,7 +364,7 @@ func (i *StaticInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) 
 	return false
 }
 
-func (i *StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
+func (i StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
 	var x interface{}
 	switch typ {
 	case EncodingJSON:
@@ -375,7 +375,7 @@ func (i *StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error)
 	}
 }
 
-func (i *StaticInspector) Copy(x interface{}) (interface{}, error) {
+func (i StaticInspector) Copy(x interface{}) (interface{}, error) {
 	var t interface{}
 	switch x.(type) {
 	case *bool:
@@ -418,7 +418,7 @@ func (i *StaticInspector) Copy(x interface{}) (interface{}, error) {
 	return t, nil
 }
 
-func (i *StaticInspector) indBool(x interface{}) (bool, bool) {
+func (i StaticInspector) indBool(x interface{}) (bool, bool) {
 	switch x.(type) {
 	case bool:
 		return x.(bool), true
@@ -428,7 +428,7 @@ func (i *StaticInspector) indBool(x interface{}) (bool, bool) {
 	return false, false
 }
 
-func (i *StaticInspector) indInt(x interface{}) (int64, bool) {
+func (i StaticInspector) indInt(x interface{}) (int64, bool) {
 	switch x.(type) {
 	case int:
 		return int64(x.(int)), true
@@ -462,7 +462,7 @@ func (i *StaticInspector) indInt(x interface{}) (int64, bool) {
 	return 0, false
 }
 
-func (i *StaticInspector) indUint(x interface{}) (uint64, bool) {
+func (i StaticInspector) indUint(x interface{}) (uint64, bool) {
 	switch x.(type) {
 	case uint:
 		return uint64(x.(uint)), true
@@ -496,7 +496,7 @@ func (i *StaticInspector) indUint(x interface{}) (uint64, bool) {
 	return 0, false
 }
 
-func (i *StaticInspector) indFloat(x interface{}) (float64, bool) {
+func (i StaticInspector) indFloat(x interface{}) (float64, bool) {
 	switch x.(type) {
 	case float32:
 		return float64(x.(float32)), true
@@ -553,7 +553,7 @@ func (i *StaticInspector) indFloat(x interface{}) (float64, bool) {
 	return 0, false
 }
 
-func (i *StaticInspector) indString(x interface{}) (string, bool) {
+func (i StaticInspector) indString(x interface{}) (string, bool) {
 	switch x.(type) {
 	case string:
 		return x.(string), true
@@ -566,7 +566,7 @@ func (i *StaticInspector) indString(x interface{}) (string, bool) {
 	return "", false
 }
 
-func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
+func (i StaticInspector) indBytes(x interface{}) ([]byte, bool) {
 	switch x.(type) {
 	case []byte:
 		return x.([]byte), true
@@ -579,6 +579,6 @@ func (i *StaticInspector) indBytes(x interface{}) ([]byte, bool) {
 	return nil, false
 }
 
-func (i *StaticInspector) eqlf64(a, b float64) bool {
+func (i StaticInspector) eqlf64(a, b float64) bool {
 	return math.Abs(a-b) <= FloatPrecision
 }

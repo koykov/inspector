@@ -13,11 +13,11 @@ type ReflectInspector struct {
 	BaseInspector
 }
 
-func (i *ReflectInspector) TypeName() string {
+func (i ReflectInspector) TypeName() string {
 	return "reflect"
 }
 
-func (i *ReflectInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i ReflectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var (
 		r interface{}
 		c int
@@ -33,41 +33,41 @@ func (i *ReflectInspector) Get(src interface{}, path ...string) (interface{}, er
 	return r, nil
 }
 
-func (i *ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...string) error {
+func (i ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...string) error {
 	var err error
 	*buf, err = i.Get(src, path...)
 	return err
 }
 
-func (i *ReflectInspector) Cmp(_ interface{}, _ Op, _ string, _ *bool, _ ...string) error {
+func (i ReflectInspector) Cmp(_ interface{}, _ Op, _ string, _ *bool, _ ...string) error {
 	// Empty method, I'm too lazy to implement it now.
 	return nil
 }
 
-func (i *ReflectInspector) Set(_, _ interface{}, _ ...string) error {
+func (i ReflectInspector) Set(_, _ interface{}, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
 	return nil
 }
 
-func (i *ReflectInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
+func (i ReflectInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
 	return nil
 }
 
-func (i *ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
+func (i ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }
 
-func (i *ReflectInspector) DeepEqual(l, r interface{}) bool {
+func (i ReflectInspector) DeepEqual(l, r interface{}) bool {
 	return reflect.DeepEqual(l, r)
 }
 
-func (i *ReflectInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
+func (i ReflectInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
 	return reflect.DeepEqual(l, r)
 }
 
-func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
+func (i ReflectInspector) inspect(node interface{}, key string) interface{} {
 	v := reflect.ValueOf(node)
 	switch v.Kind() {
 	case reflect.Ptr:
@@ -117,7 +117,7 @@ func (i *ReflectInspector) inspect(node interface{}, key string) interface{} {
 	return nil
 }
 
-func (i *ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
+func (i ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
 	var x interface{}
 	switch typ {
 	case EncodingJSON:
@@ -128,6 +128,6 @@ func (i *ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error
 	}
 }
 
-func (i *ReflectInspector) Copy(x interface{}) (interface{}, error) {
+func (i ReflectInspector) Copy(x interface{}) (interface{}, error) {
 	return x, nil
 }
