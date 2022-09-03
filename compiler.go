@@ -380,7 +380,7 @@ func (c *Compiler) writeInit() error {
 
 	c.wl("func init() {")
 	for _, node := range c.nodes {
-		c.wl(`inspector.RegisterInspector("`, node.name, `", &`, node.name, `Inspector{})`)
+		c.wl(`inspector.RegisterInspector("`, node.name, `", `, node.name, `Inspector{})`)
 	}
 	c.wdl("}")
 
@@ -473,15 +473,15 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 `
 
 	// Getter methods.
-	c.wl("func (", recv, " *", inst, ") TypeName() string {")
+	c.wl("func (", recv, " ", inst, ") TypeName() string {")
 	c.wl("return \"", node.typn, "\"")
 	c.wdl("}")
 
-	c.wl("func (", recv, " *", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
+	c.wl("func (", recv, " ", inst, ") Get(src interface{}, path ...string) (interface{}, error) {")
 	c.wl("var buf interface{}\nerr := " + recv + ".GetTo(src, &buf, path...)\nreturn buf, err")
 	c.wdl("}")
 
-	c.wl("func (", recv, " *", inst, ") GetTo(src interface{}, buf *interface{}, path ...string) (err error) {")
+	c.wl("func (", recv, " ", inst, ") GetTo(src interface{}, buf *interface{}, path ...string) (err error) {")
 	c.wdl(funcHeaderGetTo)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeGet)
 	if err != nil {
@@ -490,7 +490,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Compare method.
-	c.wl("func (", recv, " *", inst, ") Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
+	c.wl("func (", recv, " ", inst, ") Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
 	c.wdl(funcHeader)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeCmp)
 	if err != nil {
@@ -499,7 +499,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Loop method.
-	c.wl("func (", recv, " *", inst, ") Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
+	c.wl("func (", recv, " ", inst, ") Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
 	c.wdl(funcHeaderLoop)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeLoop)
 	if err != nil {
@@ -508,23 +508,23 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Setter methods.
-	c.wl("func (", recv, " *", inst, ") SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {")
+	c.wl("func (", recv, " ", inst, ") SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {")
 	c.wdl(funcHeaderSet)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
 	if err != nil {
 		return err
 	}
 	c.wdl("return nil }")
-	c.wl("func (", recv, " *", inst, ") Set(dst, value interface{}, path ...string) error {")
+	c.wl("func (", recv, " ", inst, ") Set(dst, value interface{}, path ...string) error {")
 	c.wl("return ", recv, ".SetWB(dst, value, nil, path...)")
 	c.wdl("}")
 
 	// DeepEqual methods.
 	c.cntrDEQ = 0
-	c.wl("func (", recv, " *", inst, ") DeepEqual(l, r interface{}) bool {")
+	c.wl("func (", recv, " ", inst, ") DeepEqual(l, r interface{}) bool {")
 	c.wl("return ", recv, ".DeepEqualWithOptions(l, r, nil)")
 	c.wdl("}")
-	c.wl("func (", recv, " *", inst, ") DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {")
+	c.wl("func (", recv, " ", inst, ") DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {")
 	c.wdl(funcHeaderEqual)
 	err = c.writeNodeDEQ(node, nil, recv, "", "lx", "rx", 0)
 	if err != nil {
@@ -533,7 +533,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return true }")
 
 	// Encoding methods.
-	c.wl("func (", recv, " *", inst, ") Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {")
+	c.wl("func (", recv, " ", inst, ") Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {")
 	err = c.writeNodeParse(node, pname)
 	if err != nil {
 		return err
@@ -541,7 +541,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("}")
 
 	// Copy methods.
-	c.wl("func (", recv, " *", inst, ") Copy(x interface{}) (interface{}, error) {")
+	c.wl("func (", recv, " ", inst, ") Copy(x interface{}) (interface{}, error) {")
 	err = c.writeNodeCopy(node, pname)
 	if err != nil {
 		return err

@@ -17,17 +17,17 @@ type TestObjectInspector struct {
 	inspector.BaseInspector
 }
 
-func (i3 *TestObjectInspector) TypeName() string {
+func (i3 TestObjectInspector) TypeName() string {
 	return "TestObject"
 }
 
-func (i3 *TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i3 TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i3.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i3 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -195,7 +195,7 @@ func (i3 *TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...
 	return
 }
 
-func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -632,7 +632,7 @@ func (i3 *TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i3 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -744,7 +744,7 @@ func (i3 *TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i3 *TestObjectInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i3 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -947,15 +947,15 @@ func (i3 *TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accum
 	return nil
 }
 
-func (i3 *TestObjectInspector) Set(dst, value interface{}, path ...string) error {
+func (i3 TestObjectInspector) Set(dst, value interface{}, path ...string) error {
 	return i3.SetWB(dst, value, nil, path...)
 }
 
-func (i3 *TestObjectInspector) DeepEqual(l, r interface{}) bool {
+func (i3 TestObjectInspector) DeepEqual(l, r interface{}) bool {
 	return i3.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i3 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestObject
 		leq, req bool
@@ -1120,7 +1120,7 @@ func (i3 *TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	return true
 }
 
-func (i3 *TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i3 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestObject
 	switch typ {
 	case inspector.EncodingJSON:
@@ -1131,7 +1131,7 @@ func (i3 *TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i3 *TestObjectInspector) Copy(x interface{}) (interface{}, error) {
+func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestObject
 	switch x.(type) {
 	case testobj.TestObject:

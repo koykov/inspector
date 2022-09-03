@@ -16,17 +16,17 @@ type TestPermissionInspector struct {
 	inspector.BaseInspector
 }
 
-func (i4 *TestPermissionInspector) TypeName() string {
+func (i4 TestPermissionInspector) TypeName() string {
 	return "TestPermission"
 }
 
-func (i4 *TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i4 TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i4.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i4 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -61,7 +61,7 @@ func (i4 *TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path
 	return
 }
 
-func (i4 *TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i4 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -105,7 +105,7 @@ func (i4 *TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right
 	return
 }
 
-func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i4 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -142,7 +142,7 @@ func (i4 *TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf
 	return
 }
 
-func (i4 *TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i4 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -177,15 +177,15 @@ func (i4 *TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.A
 	return nil
 }
 
-func (i4 *TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
+func (i4 TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
 	return i4.SetWB(dst, value, nil, path...)
 }
 
-func (i4 *TestPermissionInspector) DeepEqual(l, r interface{}) bool {
+func (i4 TestPermissionInspector) DeepEqual(l, r interface{}) bool {
 	return i4.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i4 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestPermission
 		leq, req bool
@@ -232,7 +232,7 @@ func (i4 *TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *
 	return true
 }
 
-func (i4 *TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i4 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestPermission
 	switch typ {
 	case inspector.EncodingJSON:
@@ -243,7 +243,7 @@ func (i4 *TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (
 	}
 }
 
-func (i4 *TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
+func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestPermission
 	switch x.(type) {
 	case testobj.TestPermission:

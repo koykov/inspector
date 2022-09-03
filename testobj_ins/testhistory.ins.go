@@ -17,17 +17,17 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
-func (i2 *TestHistoryInspector) TypeName() string {
+func (i2 TestHistoryInspector) TypeName() string {
 	return "TestHistory"
 }
 
-func (i2 *TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i2 TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
 	err := i2.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i2 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (i2 *TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ..
 	return
 }
 
-func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i2 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -145,7 +145,7 @@ func (i2 *TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right st
 	return
 }
 
-func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i2 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -169,7 +169,7 @@ func (i2 *TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[
 	return
 }
 
-func (i2 *TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i2 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -205,15 +205,15 @@ func (i2 *TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.Accu
 	return nil
 }
 
-func (i2 *TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+func (i2 TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
 	return i2.SetWB(dst, value, nil, path...)
 }
 
-func (i2 *TestHistoryInspector) DeepEqual(l, r interface{}) bool {
+func (i2 TestHistoryInspector) DeepEqual(l, r interface{}) bool {
 	return i2.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i2 *TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i2 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestHistory
 		leq, req bool
@@ -255,7 +255,7 @@ func (i2 *TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *ins
 	return true
 }
 
-func (i2 *TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i2 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestHistory
 	switch typ {
 	case inspector.EncodingJSON:
@@ -266,7 +266,7 @@ func (i2 *TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (int
 	}
 }
 
-func (i2 *TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
+func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestHistory
 	switch x.(type) {
 	case testobj.TestHistory:
