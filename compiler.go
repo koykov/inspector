@@ -103,6 +103,8 @@ type node struct {
 	mapv *node
 	// If is a slice, that node contains information about value's type.
 	slct *node
+	// Flag if node contains bytes or string inside.
+	hasb bool
 }
 
 var (
@@ -330,6 +332,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
 			}
 			node.chld = append(node.chld, ch)
+			node.hasb = node.hasb || ch.hasb
 		}
 		return node, nil
 	}
@@ -340,6 +343,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		node.typ = typeMap
 		node.mapk, err = c.parseType(m.Key())
 		node.mapv, err = c.parseType(m.Elem())
+		node.hasb = node.mapk.hasb || node.mapv.hasb
 		return node, err
 	}
 
@@ -348,12 +352,14 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		var err error
 		node.typ = typeSlice
 		node.slct, err = c.parseType(s.Elem())
+		node.hasb = node.typn == "[]byte" || node.slct.hasb
 		return node, err
 	}
 
 	if b, ok := u.(*types.Basic); ok {
 		// Fill up the underlying type of basic node.
 		node.typu = b.Name()
+		node.hasb = node.typu == "string"
 	}
 
 	return node, nil
