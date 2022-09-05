@@ -514,3 +514,11 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	return cpy, nil
 }
+
+func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
+	for i1 := 0; i1 < len(x.History); i1++ {
+		x1 := &(x.History)[i1]
+		c += len(x1.Comment)
+	}
+	return c
+}

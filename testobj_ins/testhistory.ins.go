@@ -287,3 +287,8 @@ func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	return cpy, nil
 }
+
+func (i2 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
+	c += len(x.Comment)
+	return c
+}

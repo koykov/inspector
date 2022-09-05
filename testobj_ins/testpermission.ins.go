@@ -264,3 +264,7 @@ func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	return cpy, nil
 }
+
+func (i4 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
+	return c
+}

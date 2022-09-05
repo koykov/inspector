@@ -1152,3 +1152,24 @@ func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	return cpy, nil
 }
+
+func (i3 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
+	c += len(x.Id)
+	c += len(x.Name)
+	for k1, v1 := range x.HistoryTree {
+		_, _ = k1, v1
+		c += len(k1)
+		c += len(v1.Comment)
+	}
+	for k1, v1 := range x.Flags {
+		_, _ = k1, v1
+		c += len(k1)
+	}
+	if x.Finance != nil {
+		for i2 := 0; i2 < len(x.Finance.History); i2++ {
+			x2 := &(x.Finance.History)[i2]
+			c += len(x2.Comment)
+		}
+	}
+	return c
+}

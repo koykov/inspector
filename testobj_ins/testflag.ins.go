@@ -257,3 +257,11 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	return cpy, nil
 }
+
+func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
+	for k0, v0 := range *x {
+		_, _ = k0, v0
+		c += len(k0)
+	}
+	return c
+}

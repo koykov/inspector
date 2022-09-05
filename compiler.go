@@ -554,7 +554,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	}
 	c.wdl("}")
 	c.wl("func (", recv, " ", inst, ") calcBytes(x *", pname, ") (c int) {")
-	err = c.writeCalcBytes(node)
+	err = c.writeCalcBytes(node, "x", 0)
 	if err != nil {
 		return err
 	}
@@ -1038,16 +1038,57 @@ func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
 	return nil
 }
 
-func (c *Compiler) writeCalcBytes(node *node) error {
+func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
+	if !node.hasb {
+		return nil
+	}
 	switch node.typ {
 	case typeStruct:
-		//
+		for _, ch := range node.chld {
+			if !ch.hasb {
+				continue
+			}
+			nv := v + "." + ch.name
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nv, "!=nil{")
+			}
+			_ = c.writeCalcBytes(ch, nv, depth+1)
+			if chPtr {
+				c.wl("}")
+			}
+		}
 	case typeMap:
-		//
+		pfx := ""
+		if node.ptr || depth == 0 {
+			pfx = "*"
+		}
+		nk := "k" + strconv.Itoa(depth)
+		nx := "v" + strconv.Itoa(depth)
+		c.wl("for ", nk, ", ", nx, " := range ", pfx, v, "{")
+		c.wl("_,_=", nk, ",", nx)
+		_ = c.writeCalcBytes(node.mapk, nk, depth+1)
+		_ = c.writeCalcBytes(node.mapv, nx, depth+1)
+		c.wl("}")
 	case typeSlice:
-		//
+		if node.typn == "[]byte" {
+			c.wl("c+=len(", v, ")")
+		} else {
+			ni := "i" + strconv.Itoa(depth)
+			c.wl("for ", ni, ":=0; ", ni, "<len(", v, "); ", ni, "++{")
+			nv := "x" + strconv.Itoa(depth)
+			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[", ni, "]")
+			} else {
+				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[", ni, "]")
+			}
+			_ = c.writeCalcBytes(node.slct, nv, depth+1)
+			c.wl("}")
+		}
 	case typeBasic:
-		//
+		if node.typu == "string" {
+			c.wl("c+=len(", v, ")")
+		}
 	}
 	return nil
 }
