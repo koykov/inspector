@@ -547,6 +547,12 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 		return err
 	}
 	c.wdl("}")
+	c.wl("func (", recv, " ", inst, ") calcBytes(x *", pname, ") (c int) {")
+	err = c.writeCalcBytes(node)
+	if err != nil {
+		return err
+	}
+	c.wdl("return c}")
 
 	return c.err
 }
@@ -1023,6 +1029,20 @@ func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
 	c.wl("if err := gob.NewEncoder(&buf).Encode(origin); err != nil { return nil, err }")
 	c.wl("if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil { return nil, err }")
 	c.wl("return cpy, nil")
+	return nil
+}
+
+func (c *Compiler) writeCalcBytes(node *node) error {
+	switch node.typ {
+	case typeStruct:
+		//
+	case typeMap:
+		//
+	case typeSlice:
+		//
+	case typeBasic:
+		//
+	}
 	return nil
 }
 
