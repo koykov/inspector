@@ -50,9 +50,6 @@ type AccumulativeBuffer interface {
 	Reset()
 }
 
-// BaseInspector describes base struct.
-type BaseInspector struct{}
-
 var (
 	// Global registry of all inspectors.
 	inspectorRegistry = map[string]Inspector{}
