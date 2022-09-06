@@ -5,7 +5,6 @@ package testobj_ins
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -278,11 +277,9 @@ func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i2.calcBytes(&origin)
+	buf := make([]byte, 0, bc)
+	if err := i2.cpy(buf, &origin, &cpy); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -291,4 +288,11 @@ func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 func (i2 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
 	c += len(x.Comment)
 	return c
+}
+
+func (i2 TestHistoryInspector) cpy(buf []byte, x, c *testobj.TestHistory) error {
+	x.DateUnix = c.DateUnix
+	x.Cost = c.Cost
+	buf, x.Comment = inspector.Bufferize(buf, c.Comment)
+	return nil
 }

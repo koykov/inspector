@@ -548,7 +548,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 
 	// Copy methods.
 	c.wl("func (", recv, " ", inst, ") Copy(x interface{}) (interface{}, error) {")
-	err = c.writeNodeCopy(node, pname)
+	err = c.writeNodeCopy(node, recv, pname)
 	if err != nil {
 		return err
 	}
@@ -559,6 +559,12 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 		return err
 	}
 	c.wdl("return c}")
+	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,x, c *", pname, ") error {")
+	err = c.writeCopy(node, "x", "c", 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("return nil}")
 
 	return c.err
 }
@@ -1018,7 +1024,7 @@ return nil, inspector.ErrUnknownEncodingType
 	return nil
 }
 
-func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
+func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
 	c.wl("var origin, cpy ", pname)
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
@@ -1030,10 +1036,9 @@ func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
 	c.wl("default:")
 	c.wl("return nil, inspector.ErrUnsupportedType")
 	c.wl("}")
-	c.regImport([]string{`"encoding/gob"`, `"bytes"`})
-	c.wl("buf := bytes.Buffer{}")
-	c.wl("if err := gob.NewEncoder(&buf).Encode(origin); err != nil { return nil, err }")
-	c.wl("if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil { return nil, err }")
+	c.wl("bc:=", recv, ".calcBytes(&origin)")
+	c.wl("buf:=make([]byte,0,bc)")
+	c.wl("if err:=", recv, ".cpy(buf,&origin,&cpy);err!=nil{return nil,err}")
 	c.wl("return cpy, nil")
 	return nil
 }
@@ -1088,6 +1093,60 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 	case typeBasic:
 		if node.typu == "string" {
 			c.wl("c+=len(", v, ")")
+		}
+	}
+	return nil
+}
+
+func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			nl := l + "." + ch.name
+			nr := r + "." + ch.name
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nl, "!=nil{")
+			}
+			_ = c.writeCopy(ch, nl, nr, depth+1)
+			if chPtr {
+				c.wl("}")
+			}
+		}
+	case typeMap:
+		// pfx := ""
+		// if node.ptr || depth == 0 {
+		// 	pfx = "*"
+		// }
+		// c.wl(l, "=make(", node.typn, ",len(", pfx, r, "))")
+		// nk := "k" + strconv.Itoa(depth)
+		// nx := "v" + strconv.Itoa(depth)
+		// c.wl("for ", nk, ", ", nx, " := range ", pfx, l, "{")
+		// c.wl("_,_=", nk, ",", nx)
+		// _ = c.writeCalcBytes(node.mapk, nk, depth+1)
+		// _ = c.writeCalcBytes(node.mapv, nx, depth+1)
+		// c.wl("}")
+	case typeSlice:
+		if node.typn == "[]byte" {
+			c.wl("buf,", l, "=inspector.Bufferize(buf,", r, ")")
+		} else {
+			// ni := "i" + strconv.Itoa(depth)
+			// c.wl("for ", ni, ":=0; ", ni, "<len(", l, "); ", ni, "++{")
+			// nv := "x" + strconv.Itoa(depth)
+			// nb := "b" + strconv.Itoa(depth)
+			// if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+			// 	c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
+			// } else {
+			// 	c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
+			// }
+			// _ = c.writeCopy(node.slct, nv, nb, depth+1)
+			// c.wl("}")
+		}
+	case typeBasic:
+		if node.typu == "string" {
+			c.wl("buf,", l, "=inspector.BufferizeString(buf,", r, ")")
+		} else {
+			c.wl(l, "=", r)
 		}
 	}
 	return nil

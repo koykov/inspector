@@ -5,7 +5,6 @@ package testobj_ins
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -1143,11 +1142,9 @@ func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i3.calcBytes(&origin)
+	buf := make([]byte, 0, bc)
+	if err := i3.cpy(buf, &origin, &cpy); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -1172,4 +1169,21 @@ func (i3 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
 		}
 	}
 	return c
+}
+
+func (i3 TestObjectInspector) cpy(buf []byte, x, c *testobj.TestObject) error {
+	buf, x.Id = inspector.BufferizeString(buf, c.Id)
+	buf, x.Name = inspector.Bufferize(buf, c.Name)
+	x.Status = c.Status
+	x.Ustate = c.Ustate
+	x.Cost = c.Cost
+	if x.Permission != nil {
+	}
+	if x.Finance != nil {
+		x.Finance.MoneyIn = c.Finance.MoneyIn
+		x.Finance.MoneyOut = c.Finance.MoneyOut
+		x.Finance.Balance = c.Finance.Balance
+		x.Finance.AllowBuy = c.Finance.AllowBuy
+	}
+	return nil
 }

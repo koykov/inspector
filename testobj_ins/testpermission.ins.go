@@ -4,8 +4,6 @@
 package testobj_ins
 
 import (
-	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -255,11 +253,9 @@ func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i4.calcBytes(&origin)
+	buf := make([]byte, 0, bc)
+	if err := i4.cpy(buf, &origin, &cpy); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -267,4 +263,8 @@ func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 
 func (i4 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
 	return c
+}
+
+func (i4 TestPermissionInspector) cpy(buf []byte, x, c *testobj.TestPermission) error {
+	return nil
 }

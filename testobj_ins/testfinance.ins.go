@@ -5,7 +5,6 @@ package testobj_ins
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -505,11 +504,9 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i0.calcBytes(&origin)
+	buf := make([]byte, 0, bc)
+	if err := i0.cpy(buf, &origin, &cpy); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -521,4 +518,12 @@ func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
 		c += len(x1.Comment)
 	}
 	return c
+}
+
+func (i0 TestFinanceInspector) cpy(buf []byte, x, c *testobj.TestFinance) error {
+	x.MoneyIn = c.MoneyIn
+	x.MoneyOut = c.MoneyOut
+	x.Balance = c.Balance
+	x.AllowBuy = c.AllowBuy
+	return nil
 }
