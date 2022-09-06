@@ -1130,17 +1130,25 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		if node.typn == "[]byte" {
 			c.wl("buf,", l, "=inspector.Bufferize(buf,", r, ")")
 		} else {
-			// ni := "i" + strconv.Itoa(depth)
-			// c.wl("for ", ni, ":=0; ", ni, "<len(", l, "); ", ni, "++{")
-			// nv := "x" + strconv.Itoa(depth)
-			// nb := "b" + strconv.Itoa(depth)
-			// if node.slct.ptr || c.isBuiltin(node.slct.typn) {
-			// 	c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
-			// } else {
-			// 	c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
-			// }
-			// _ = c.writeCopy(node.slct, nv, nb, depth+1)
-			// c.wl("}")
+			lb := "buf" + strconv.Itoa(depth)
+			c.wl("if len(", r, ")>0{")
+			c.wl(lb, ":=make(", c.fmtTyp(node), ",0,len(", r, "))")
+
+			ni := "i" + strconv.Itoa(depth)
+			c.wl("for ", ni, ":=0; ", ni, "<len(", l, "); ", ni, "++{")
+			nv := "x" + strconv.Itoa(depth)
+			nb := "b" + strconv.Itoa(depth)
+			c.wl("var ", nb, " ", c.fmtTyp(node.slct))
+			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+				c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
+			} else {
+				c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
+			}
+			_ = c.writeCopy(node.slct, nb, nv, depth+1)
+			c.wl(lb, "=append(", lb, ",", nb, ")")
+			c.wl("}")
+			c.wl(l, "=", lb)
+			c.wl("}")
 		}
 	case typeBasic:
 		if node.typu == "string" {

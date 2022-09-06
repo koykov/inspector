@@ -1184,6 +1184,18 @@ func (i3 TestObjectInspector) cpy(buf []byte, x, c *testobj.TestObject) error {
 		x.Finance.MoneyOut = c.Finance.MoneyOut
 		x.Finance.Balance = c.Finance.Balance
 		x.Finance.AllowBuy = c.Finance.AllowBuy
+		if len(c.Finance.History) > 0 {
+			buf2 := make([]testobj.TestHistory, 0, len(c.Finance.History))
+			for i2 := 0; i2 < len(x.Finance.History); i2++ {
+				var b2 testobj.TestHistory
+				x2 := &(x.Finance.History)[i2]
+				b2.DateUnix = x2.DateUnix
+				b2.Cost = x2.Cost
+				buf, b2.Comment = inspector.Bufferize(buf, x2.Comment)
+				buf2 = append(buf2, b2)
+			}
+			x.Finance.History = buf2
+		}
 	}
 	return nil
 }

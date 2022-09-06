@@ -525,5 +525,17 @@ func (i0 TestFinanceInspector) cpy(buf []byte, x, c *testobj.TestFinance) error 
 	x.MoneyOut = c.MoneyOut
 	x.Balance = c.Balance
 	x.AllowBuy = c.AllowBuy
+	if len(c.History) > 0 {
+		buf1 := make([]testobj.TestHistory, 0, len(c.History))
+		for i1 := 0; i1 < len(x.History); i1++ {
+			var b1 testobj.TestHistory
+			x1 := &(x.History)[i1]
+			b1.DateUnix = x1.DateUnix
+			b1.Cost = x1.Cost
+			buf, b1.Comment = inspector.Bufferize(buf, x1.Comment)
+			buf1 = append(buf1, b1)
+		}
+		x.History = buf1
+	}
 	return nil
 }
