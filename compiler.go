@@ -559,8 +559,8 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 		return err
 	}
 	c.wdl("return c}")
-	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,x, c *", pname, ") error {")
-	err = c.writeCopy(node, "x", "c", 0)
+	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,l, r *", pname, ") error {")
+	err = c.writeCopy(node, "l", "r", 0)
 	if err != nil {
 		return err
 	}
@@ -1038,7 +1038,7 @@ func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
 	c.wl("}")
 	c.wl("bc:=", recv, ".calcBytes(&origin)")
 	c.wl("buf:=make([]byte,0,bc)")
-	c.wl("if err:=", recv, ".cpy(buf,&origin,&cpy);err!=nil{return nil,err}")
+	c.wl("if err:=", recv, ".cpy(buf,&cpy,&origin);err!=nil{return nil,err}")
 	c.wl("return cpy, nil")
 	return nil
 }
@@ -1131,11 +1131,11 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			c.wl("buf,", l, "=inspector.Bufferize(buf,", r, ")")
 		} else {
 			lb := "buf" + strconv.Itoa(depth)
-			c.wl("if len(", r, ")>0{")
-			c.wl(lb, ":=make(", c.fmtTyp(node), ",0,len(", r, "))")
+			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
+			c.wl(lb, ":=make(", c.fmtTyp(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
 
 			ni := "i" + strconv.Itoa(depth)
-			c.wl("for ", ni, ":=0; ", ni, "<len(", l, "); ", ni, "++{")
+			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, r, depth), "); ", ni, "++{")
 			nv := "x" + strconv.Itoa(depth)
 			nb := "b" + strconv.Itoa(depth)
 			c.wl("var ", nb, " ", c.fmtTyp(node.slct))
@@ -1147,7 +1147,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			_ = c.writeCopy(node.slct, nb, nv, depth+1)
 			c.wl(lb, "=append(", lb, ",", nb, ")")
 			c.wl("}")
-			c.wl(l, "=", lb)
+			c.wl(l, "=", c.fmtP(node, lb))
 			c.wl("}")
 		}
 	case typeBasic:
@@ -1293,6 +1293,14 @@ func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
 	return v
 }
 
+// Take pointer of v.
+func (c *Compiler) fmtP(node *node, v string) string {
+	if node.ptr {
+		return "&" + v
+	}
+	return v
+}
+
 // Format type to use in new()/make() functions.
 func (c *Compiler) fmtTyp(node *node) string {
 	switch node.typ {
@@ -1326,9 +1334,19 @@ func (c *Compiler) fmtTyp(node *node) string {
 			}
 		}
 		if strings.Index(node.typn, "[]") != -1 {
-			s = "[]" + s
+			pfx := ""
+			if node.slct.ptr {
+				pfx = "*"
+			}
+			s = "[]" + pfx + s
 		}
 		return s
+	case typeBasic:
+		pfx := ""
+		if node.ptr {
+			pfx = "*"
+		}
+		return pfx + node.typn
 	}
 	return ""
 }

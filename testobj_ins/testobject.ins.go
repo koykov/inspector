@@ -1144,7 +1144,7 @@ func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i3.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i3.cpy(buf, &origin, &cpy); err != nil {
+	if err := i3.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -1171,30 +1171,30 @@ func (i3 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
 	return c
 }
 
-func (i3 TestObjectInspector) cpy(buf []byte, x, c *testobj.TestObject) error {
-	buf, x.Id = inspector.BufferizeString(buf, c.Id)
-	buf, x.Name = inspector.Bufferize(buf, c.Name)
-	x.Status = c.Status
-	x.Ustate = c.Ustate
-	x.Cost = c.Cost
-	if x.Permission != nil {
+func (i3 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
+	buf, l.Id = inspector.BufferizeString(buf, r.Id)
+	buf, l.Name = inspector.Bufferize(buf, r.Name)
+	l.Status = r.Status
+	l.Ustate = r.Ustate
+	l.Cost = r.Cost
+	if l.Permission != nil {
 	}
-	if x.Finance != nil {
-		x.Finance.MoneyIn = c.Finance.MoneyIn
-		x.Finance.MoneyOut = c.Finance.MoneyOut
-		x.Finance.Balance = c.Finance.Balance
-		x.Finance.AllowBuy = c.Finance.AllowBuy
-		if len(c.Finance.History) > 0 {
-			buf2 := make([]testobj.TestHistory, 0, len(c.Finance.History))
-			for i2 := 0; i2 < len(x.Finance.History); i2++ {
+	if l.Finance != nil {
+		l.Finance.MoneyIn = r.Finance.MoneyIn
+		l.Finance.MoneyOut = r.Finance.MoneyOut
+		l.Finance.Balance = r.Finance.Balance
+		l.Finance.AllowBuy = r.Finance.AllowBuy
+		if len(r.Finance.History) > 0 {
+			buf2 := make([]testobj.TestHistory, 0, len(r.Finance.History))
+			for i2 := 0; i2 < len(r.Finance.History); i2++ {
 				var b2 testobj.TestHistory
-				x2 := &(x.Finance.History)[i2]
+				x2 := &(l.Finance.History)[i2]
 				b2.DateUnix = x2.DateUnix
 				b2.Cost = x2.Cost
 				buf, b2.Comment = inspector.Bufferize(buf, x2.Comment)
 				buf2 = append(buf2, b2)
 			}
-			x.Finance.History = buf2
+			l.Finance.History = buf2
 		}
 	}
 	return nil

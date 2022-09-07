@@ -12,5 +12,6 @@ func init() {
 	inspector.RegisterInspector("TestFlag", TestFlagInspector{})
 	inspector.RegisterInspector("TestHistory", TestHistoryInspector{})
 	inspector.RegisterInspector("TestObject", TestObjectInspector{})
+	inspector.RegisterInspector("TestObject1", TestObject1Inspector{})
 	inspector.RegisterInspector("TestPermission", TestPermissionInspector{})
 }

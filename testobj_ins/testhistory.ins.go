@@ -279,7 +279,7 @@ func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i2.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i2.cpy(buf, &origin, &cpy); err != nil {
+	if err := i2.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -290,9 +290,9 @@ func (i2 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
 	return c
 }
 
-func (i2 TestHistoryInspector) cpy(buf []byte, x, c *testobj.TestHistory) error {
-	x.DateUnix = c.DateUnix
-	x.Cost = c.Cost
-	buf, x.Comment = inspector.Bufferize(buf, c.Comment)
+func (i2 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error {
+	l.DateUnix = r.DateUnix
+	l.Cost = r.Cost
+	buf, l.Comment = inspector.Bufferize(buf, r.Comment)
 	return nil
 }

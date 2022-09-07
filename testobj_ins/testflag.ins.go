@@ -248,7 +248,7 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i1.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i1.cpy(buf, &origin, &cpy); err != nil {
+	if err := i1.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -262,6 +262,6 @@ func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
 	return c
 }
 
-func (i1 TestFlagInspector) cpy(buf []byte, x, c *testobj.TestFlag) error {
+func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
 	return nil
 }

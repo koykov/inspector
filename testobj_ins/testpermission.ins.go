@@ -14,17 +14,17 @@ type TestPermissionInspector struct {
 	inspector.BaseInspector
 }
 
-func (i4 TestPermissionInspector) TypeName() string {
+func (i5 TestPermissionInspector) TypeName() string {
 	return "TestPermission"
 }
 
-func (i4 TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i5 TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
-	err := i4.GetTo(src, &buf, path...)
+	err := i5.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i4 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i5 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (i4 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path 
 
 	if len(path) > 0 {
 		var k int32
-		t37, err37 := strconv.ParseInt(path[0], 0, 0)
-		if err37 != nil {
-			return err37
+		t48, err48 := strconv.ParseInt(path[0], 0, 0)
+		if err48 != nil {
+			return err48
 		}
-		k = int32(t37)
+		k = int32(t48)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -59,7 +59,7 @@ func (i4 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path 
 	return
 }
 
-func (i4 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i5 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -80,19 +80,19 @@ func (i4 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right 
 
 	if len(path) > 0 {
 		var k int32
-		t38, err38 := strconv.ParseInt(path[0], 0, 0)
-		if err38 != nil {
-			return err38
+		t49, err49 := strconv.ParseInt(path[0], 0, 0)
+		if err49 != nil {
+			return err49
 		}
-		k = int32(t38)
+		k = int32(t49)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t39, err39 := strconv.ParseBool(right)
-		if err39 != nil {
-			return err39
+		t50, err50 := strconv.ParseBool(right)
+		if err50 != nil {
+			return err50
 		}
-		rightExact = bool(t39)
+		rightExact = bool(t50)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -103,7 +103,7 @@ func (i4 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right 
 	return
 }
 
-func (i4 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i5 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -140,7 +140,7 @@ func (i4 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf 
 	return
 }
 
-func (i4 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i5 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -161,11 +161,11 @@ func (i4 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t40, err40 := strconv.ParseInt(path[0], 0, 0)
-		if err40 != nil {
-			return err40
+		t51, err51 := strconv.ParseInt(path[0], 0, 0)
+		if err51 != nil {
+			return err51
 		}
-		k = int32(t40)
+		k = int32(t51)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
@@ -175,15 +175,15 @@ func (i4 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.Ac
 	return nil
 }
 
-func (i4 TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
-	return i4.SetWB(dst, value, nil, path...)
+func (i5 TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
+	return i5.SetWB(dst, value, nil, path...)
 }
 
-func (i4 TestPermissionInspector) DeepEqual(l, r interface{}) bool {
-	return i4.DeepEqualWithOptions(l, r, nil)
+func (i5 TestPermissionInspector) DeepEqual(l, r interface{}) bool {
+	return i5.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i4 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i5 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestPermission
 		leq, req bool
@@ -230,7 +230,7 @@ func (i4 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *i
 	return true
 }
 
-func (i4 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i5 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestPermission
 	switch typ {
 	case inspector.EncodingJSON:
@@ -241,7 +241,7 @@ func (i4 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (i
 	}
 }
 
-func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
+func (i5 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestPermission
 	switch x.(type) {
 	case testobj.TestPermission:
@@ -253,18 +253,18 @@ func (i4 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i4.calcBytes(&origin)
+	bc := i5.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i4.cpy(buf, &origin, &cpy); err != nil {
+	if err := i5.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
 }
 
-func (i4 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
+func (i5 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
 	return c
 }
 
-func (i4 TestPermissionInspector) cpy(buf []byte, x, c *testobj.TestPermission) error {
+func (i5 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) error {
 	return nil
 }

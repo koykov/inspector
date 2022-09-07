@@ -506,7 +506,7 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i0.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i0.cpy(buf, &origin, &cpy); err != nil {
+	if err := i0.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -520,22 +520,22 @@ func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
 	return c
 }
 
-func (i0 TestFinanceInspector) cpy(buf []byte, x, c *testobj.TestFinance) error {
-	x.MoneyIn = c.MoneyIn
-	x.MoneyOut = c.MoneyOut
-	x.Balance = c.Balance
-	x.AllowBuy = c.AllowBuy
-	if len(c.History) > 0 {
-		buf1 := make([]testobj.TestHistory, 0, len(c.History))
-		for i1 := 0; i1 < len(x.History); i1++ {
+func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) error {
+	l.MoneyIn = r.MoneyIn
+	l.MoneyOut = r.MoneyOut
+	l.Balance = r.Balance
+	l.AllowBuy = r.AllowBuy
+	if len(r.History) > 0 {
+		buf1 := make([]testobj.TestHistory, 0, len(r.History))
+		for i1 := 0; i1 < len(r.History); i1++ {
 			var b1 testobj.TestHistory
-			x1 := &(x.History)[i1]
+			x1 := &(l.History)[i1]
 			b1.DateUnix = x1.DateUnix
 			b1.Cost = x1.Cost
 			buf, b1.Comment = inspector.Bufferize(buf, x1.Comment)
 			buf1 = append(buf1, b1)
 		}
-		x.History = buf1
+		l.History = buf1
 	}
 	return nil
 }
