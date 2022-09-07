@@ -1147,7 +1147,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			_ = c.writeCopy(node.slct, nb, nv, depth+1)
 			c.wl(lb, "=append(", lb, ",", nb, ")")
 			c.wl("}")
-			c.wl(l, "=", c.fmtP(node, lb))
+			c.wl(l, "=", c.fmtP(node, lb, depth))
 			c.wl("}")
 		}
 	case typeBasic:
@@ -1294,8 +1294,8 @@ func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
 }
 
 // Take pointer of v.
-func (c *Compiler) fmtP(node *node, v string) string {
-	if node.ptr {
+func (c *Compiler) fmtP(node *node, v string, depth int) string {
+	if node.ptr || depth == 0 {
 		return "&" + v
 	}
 	return v
