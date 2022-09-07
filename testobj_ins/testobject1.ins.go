@@ -111,6 +111,32 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.IntSlicePtr
 			return
 		}
+		if path[0] == "IntPtrSlicePtr" {
+			x0 := x.IntPtrSlicePtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t40, err40 := strconv.ParseInt(path[1], 0, 0)
+				if err40 != nil {
+					return err40
+				}
+				i = int(t40)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.IntPtrSlicePtr
+			return
+		}
 	}
 	return
 }
@@ -140,20 +166,20 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t40, err40 := strconv.ParseInt(path[1], 0, 0)
-				if err40 != nil {
-					return err40
+				t41, err41 := strconv.ParseInt(path[1], 0, 0)
+				if err41 != nil {
+					return err41
 				}
-				i = int(t40)
+				i = int(t41)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
 					var rightExact int32
-					t41, err41 := strconv.ParseInt(right, 0, 0)
-					if err41 != nil {
-						return err41
+					t42, err42 := strconv.ParseInt(right, 0, 0)
+					if err42 != nil {
+						return err42
 					}
-					rightExact = int32(t41)
+					rightExact = int32(t42)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -177,11 +203,11 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t42, err42 := strconv.ParseInt(path[1], 0, 0)
-				if err42 != nil {
-					return err42
+				t43, err43 := strconv.ParseInt(path[1], 0, 0)
+				if err43 != nil {
+					return err43
 				}
-				i = int(t42)
+				i = int(t43)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -216,20 +242,20 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 					return
 				}
 				var i int
-				t43, err43 := strconv.ParseInt(path[1], 0, 0)
-				if err43 != nil {
-					return err43
+				t44, err44 := strconv.ParseInt(path[1], 0, 0)
+				if err44 != nil {
+					return err44
 				}
-				i = int(t43)
+				i = int(t44)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
 					var rightExact int32
-					t44, err44 := strconv.ParseInt(right, 0, 0)
-					if err44 != nil {
-						return err44
+					t45, err45 := strconv.ParseInt(right, 0, 0)
+					if err45 != nil {
+						return err45
 					}
-					rightExact = int32(t44)
+					rightExact = int32(t45)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -243,6 +269,45 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 						*result = x1 < rightExact
 					case inspector.OpLtq:
 						*result = x1 <= rightExact
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "IntPtrSlicePtr" {
+			x0 := x.IntPtrSlicePtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t46, err46 := strconv.ParseInt(path[1], 0, 0)
+				if err46 != nil {
+					return err46
+				}
+				i = int(t46)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
 					}
 					return
 				}
@@ -332,6 +397,28 @@ func (i4 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
+		if path[0] == "IntPtrSlicePtr" {
+			x0 := x.IntPtrSlicePtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
 	}
 	return
 }
@@ -369,11 +456,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t45, err45 := strconv.ParseInt(path[1], 0, 0)
-				if err45 != nil {
-					return err45
+				t47, err47 := strconv.ParseInt(path[1], 0, 0)
+				if err47 != nil {
+					return err47
 				}
-				i = int(t45)
+				i = int(t47)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -398,11 +485,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t46, err46 := strconv.ParseInt(path[1], 0, 0)
-				if err46 != nil {
-					return err46
+				t48, err48 := strconv.ParseInt(path[1], 0, 0)
+				if err48 != nil {
+					return err48
 				}
-				i = int(t46)
+				i = int(t48)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -433,11 +520,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t47, err47 := strconv.ParseInt(path[1], 0, 0)
-				if err47 != nil {
-					return err47
+				t49, err49 := strconv.ParseInt(path[1], 0, 0)
+				if err49 != nil {
+					return err49
 				}
-				i = int(t47)
+				i = int(t49)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -448,6 +535,41 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				}
 			}
 			x.IntSlicePtr = x0
+		}
+		if path[0] == "IntPtrSlicePtr" {
+			x0 := x.IntPtrSlicePtr
+			if uvalue, ok := value.(*[]*int32); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make([]*int32, 0)
+				x0 = &z
+				x.IntPtrSlicePtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				var i int
+				t50, err50 := strconv.ParseInt(path[1], 0, 0)
+				if err50 != nil {
+					return err50
+				}
+				i = int(t50)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return nil
+					}
+					inspector.AssignBuf(x1, value, buf)
+					return nil
+					(*x0)[i] = x1
+					return nil
+				}
+			}
+			x.IntPtrSlicePtr = x0
 		}
 	}
 	return nil
@@ -549,6 +671,32 @@ func (i4 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
+	lx7 := lx.IntPtrSlicePtr
+	rx7 := rx.IntPtrSlicePtr
+	_, _ = lx7, rx7
+	if (lx7 == nil && rx7 != nil) || (lx7 != nil && rx7 == nil) {
+		return false
+	}
+	if lx7 != nil && rx7 != nil {
+		if inspector.DEQMustCheck("IntPtrSlicePtr", opts) {
+			if len(*lx7) != len(*rx7) {
+				return false
+			}
+			for i := 0; i < len(*lx7); i++ {
+				lx8 := (*lx7)[i]
+				rx8 := (*rx7)[i]
+				_, _ = lx8, rx8
+				if (lx8 == nil && rx8 != nil) || (lx8 != nil && rx8 == nil) {
+					return false
+				}
+				if lx8 != nil && rx8 != nil {
+					if *lx8 != *rx8 {
+						return false
+					}
+				}
+			}
+		}
+	}
 	return true
 }
 
@@ -618,6 +766,18 @@ func (i4 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 				buf1 = append(buf1, b1)
 			}
 			l.IntSlicePtr = &buf1
+		}
+	}
+	if l.IntPtrSlicePtr != nil {
+		if len(*r.IntPtrSlicePtr) > 0 {
+			buf1 := make([]*int32, 0, len(*r.IntPtrSlicePtr))
+			for i1 := 0; i1 < len(*r.IntPtrSlicePtr); i1++ {
+				var b1 *int32
+				x1 := (*l.IntPtrSlicePtr)[i1]
+				b1 = x1
+				buf1 = append(buf1, b1)
+			}
+			l.IntPtrSlicePtr = &buf1
 		}
 	}
 	return nil
