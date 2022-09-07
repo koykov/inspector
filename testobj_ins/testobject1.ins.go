@@ -14,17 +14,17 @@ type TestObject1Inspector struct {
 	inspector.BaseInspector
 }
 
-func (i4 TestObject1Inspector) TypeName() string {
+func (i6 TestObject1Inspector) TypeName() string {
 	return "TestObject1"
 }
 
-func (i4 TestObject1Inspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i6 TestObject1Inspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
-	err := i4.GetTo(src, &buf, path...)
+	err := i6.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t37, err37 := strconv.ParseInt(path[1], 0, 0)
-				if err37 != nil {
-					return err37
+				t44, err44 := strconv.ParseInt(path[1], 0, 0)
+				if err44 != nil {
+					return err44
 				}
-				i = int(t37)
+				i = int(t44)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -70,11 +70,11 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t38, err38 := strconv.ParseInt(path[1], 0, 0)
-				if err38 != nil {
-					return err38
+				t45, err45 := strconv.ParseInt(path[1], 0, 0)
+				if err45 != nil {
+					return err45
 				}
-				i = int(t38)
+				i = int(t45)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -96,11 +96,11 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 					return
 				}
 				var i int
-				t39, err39 := strconv.ParseInt(path[1], 0, 0)
-				if err39 != nil {
-					return err39
+				t46, err46 := strconv.ParseInt(path[1], 0, 0)
+				if err46 != nil {
+					return err46
 				}
-				i = int(t39)
+				i = int(t46)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -119,11 +119,11 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 					return
 				}
 				var i int
-				t40, err40 := strconv.ParseInt(path[1], 0, 0)
-				if err40 != nil {
-					return err40
+				t47, err47 := strconv.ParseInt(path[1], 0, 0)
+				if err47 != nil {
+					return err47
 				}
-				i = int(t40)
+				i = int(t47)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -137,11 +137,103 @@ func (i4 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.IntPtrSlicePtr
 			return
 		}
+		if path[0] == "FloatSlice" {
+			x0 := x.FloatSlice
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t48, err48 := strconv.ParseInt(path[1], 0, 0)
+				if err48 != nil {
+					return err48
+				}
+				i = int(t48)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.FloatSlice
+			return
+		}
+		if path[0] == "FloatPtrSlice" {
+			x0 := x.FloatPtrSlice
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t49, err49 := strconv.ParseInt(path[1], 0, 0)
+				if err49 != nil {
+					return err49
+				}
+				i = int(t49)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.FloatPtrSlice
+			return
+		}
+		if path[0] == "FloatSlicePtr" {
+			x0 := x.FloatSlicePtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t50, err50 := strconv.ParseInt(path[1], 0, 0)
+				if err50 != nil {
+					return err50
+				}
+				i = int(t50)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.FloatSlicePtr
+			return
+		}
+		if path[0] == "FloatPtrSlicePtr" {
+			x0 := x.FloatPtrSlicePtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t51, err51 := strconv.ParseInt(path[1], 0, 0)
+				if err51 != nil {
+					return err51
+				}
+				i = int(t51)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.FloatPtrSlicePtr
+			return
+		}
 	}
 	return
 }
 
-func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -166,20 +258,20 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t41, err41 := strconv.ParseInt(path[1], 0, 0)
-				if err41 != nil {
-					return err41
+				t52, err52 := strconv.ParseInt(path[1], 0, 0)
+				if err52 != nil {
+					return err52
 				}
-				i = int(t41)
+				i = int(t52)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
 					var rightExact int32
-					t42, err42 := strconv.ParseInt(right, 0, 0)
-					if err42 != nil {
-						return err42
+					t53, err53 := strconv.ParseInt(right, 0, 0)
+					if err53 != nil {
+						return err53
 					}
-					rightExact = int32(t42)
+					rightExact = int32(t53)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -203,11 +295,11 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t43, err43 := strconv.ParseInt(path[1], 0, 0)
-				if err43 != nil {
-					return err43
+				t54, err54 := strconv.ParseInt(path[1], 0, 0)
+				if err54 != nil {
+					return err54
 				}
-				i = int(t43)
+				i = int(t54)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -242,20 +334,20 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 					return
 				}
 				var i int
-				t44, err44 := strconv.ParseInt(path[1], 0, 0)
-				if err44 != nil {
-					return err44
+				t55, err55 := strconv.ParseInt(path[1], 0, 0)
+				if err55 != nil {
+					return err55
 				}
-				i = int(t44)
+				i = int(t55)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
 					var rightExact int32
-					t45, err45 := strconv.ParseInt(right, 0, 0)
-					if err45 != nil {
-						return err45
+					t56, err56 := strconv.ParseInt(right, 0, 0)
+					if err56 != nil {
+						return err56
 					}
-					rightExact = int32(t45)
+					rightExact = int32(t56)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -290,11 +382,163 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 					return
 				}
 				var i int
-				t46, err46 := strconv.ParseInt(path[1], 0, 0)
-				if err46 != nil {
-					return err46
+				t57, err57 := strconv.ParseInt(path[1], 0, 0)
+				if err57 != nil {
+					return err57
 				}
-				i = int(t46)
+				i = int(t57)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "FloatSlice" {
+			x0 := x.FloatSlice
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t58, err58 := strconv.ParseInt(path[1], 0, 0)
+				if err58 != nil {
+					return err58
+				}
+				i = int(t58)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					var rightExact float32
+					t59, err59 := strconv.ParseFloat(right, 0)
+					if err59 != nil {
+						return err59
+					}
+					rightExact = float32(t59)
+					switch cond {
+					case inspector.OpEq:
+						*result = x1 == rightExact
+					case inspector.OpNq:
+						*result = x1 != rightExact
+					case inspector.OpGt:
+						*result = x1 > rightExact
+					case inspector.OpGtq:
+						*result = x1 >= rightExact
+					case inspector.OpLt:
+						*result = x1 < rightExact
+					case inspector.OpLtq:
+						*result = x1 <= rightExact
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "FloatPtrSlice" {
+			x0 := x.FloatPtrSlice
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t60, err60 := strconv.ParseInt(path[1], 0, 0)
+				if err60 != nil {
+					return err60
+				}
+				i = int(t60)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "FloatSlicePtr" {
+			x0 := x.FloatSlicePtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t61, err61 := strconv.ParseInt(path[1], 0, 0)
+				if err61 != nil {
+					return err61
+				}
+				i = int(t61)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					var rightExact float32
+					t62, err62 := strconv.ParseFloat(right, 0)
+					if err62 != nil {
+						return err62
+					}
+					rightExact = float32(t62)
+					switch cond {
+					case inspector.OpEq:
+						*result = x1 == rightExact
+					case inspector.OpNq:
+						*result = x1 != rightExact
+					case inspector.OpGt:
+						*result = x1 > rightExact
+					case inspector.OpGtq:
+						*result = x1 >= rightExact
+					case inspector.OpLt:
+						*result = x1 < rightExact
+					case inspector.OpLtq:
+						*result = x1 <= rightExact
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "FloatPtrSlicePtr" {
+			x0 := x.FloatPtrSlicePtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				var i int
+				t63, err63 := strconv.ParseInt(path[1], 0, 0)
+				if err63 != nil {
+					return err63
+				}
+				i = int(t63)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -317,7 +561,7 @@ func (i4 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i4 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -419,11 +663,93 @@ func (i4 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
+		if path[0] == "FloatSlice" {
+			x0 := x.FloatSlice
+			_ = x0
+			for k := range x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "FloatPtrSlice" {
+			x0 := x.FloatPtrSlice
+			_ = x0
+			for k := range x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "FloatSlicePtr" {
+			x0 := x.FloatSlicePtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "FloatPtrSlicePtr" {
+			x0 := x.FloatPtrSlicePtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal(&(*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
 	}
 	return
 }
 
-func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -456,11 +782,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t47, err47 := strconv.ParseInt(path[1], 0, 0)
-				if err47 != nil {
-					return err47
+				t64, err64 := strconv.ParseInt(path[1], 0, 0)
+				if err64 != nil {
+					return err64
 				}
-				i = int(t47)
+				i = int(t64)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -485,11 +811,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t48, err48 := strconv.ParseInt(path[1], 0, 0)
-				if err48 != nil {
-					return err48
+				t65, err65 := strconv.ParseInt(path[1], 0, 0)
+				if err65 != nil {
+					return err65
 				}
-				i = int(t48)
+				i = int(t65)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -520,11 +846,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t49, err49 := strconv.ParseInt(path[1], 0, 0)
-				if err49 != nil {
-					return err49
+				t66, err66 := strconv.ParseInt(path[1], 0, 0)
+				if err66 != nil {
+					return err66
 				}
-				i = int(t49)
+				i = int(t66)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -552,11 +878,11 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t50, err50 := strconv.ParseInt(path[1], 0, 0)
-				if err50 != nil {
-					return err50
+				t67, err67 := strconv.ParseInt(path[1], 0, 0)
+				if err67 != nil {
+					return err67
 				}
-				i = int(t50)
+				i = int(t67)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -571,19 +897,147 @@ func (i4 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			}
 			x.IntPtrSlicePtr = x0
 		}
+		if path[0] == "FloatSlice" {
+			x0 := x.FloatSlice
+			if uvalue, ok := value.(*testobj.TestFloatSlice); ok {
+				x0 = *uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestFloatSlice, 0)
+				x0 = z
+				x.FloatSlice = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t68, err68 := strconv.ParseInt(path[1], 0, 0)
+				if err68 != nil {
+					return err68
+				}
+				i = int(t68)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					inspector.AssignBuf(&x1, value, buf)
+					return nil
+					(x0)[i] = x1
+					return nil
+				}
+			}
+			x.FloatSlice = x0
+		}
+		if path[0] == "FloatPtrSlice" {
+			x0 := x.FloatPtrSlice
+			if uvalue, ok := value.(*testobj.TestFloatPtrSlice); ok {
+				x0 = *uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestFloatPtrSlice, 0)
+				x0 = z
+				x.FloatPtrSlice = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				var i int
+				t69, err69 := strconv.ParseInt(path[1], 0, 0)
+				if err69 != nil {
+					return err69
+				}
+				i = int(t69)
+				if len(x0) > i {
+					x1 := (x0)[i]
+					_ = x1
+					if x1 == nil {
+						return nil
+					}
+					inspector.AssignBuf(x1, value, buf)
+					return nil
+					(x0)[i] = x1
+					return nil
+				}
+			}
+			x.FloatPtrSlice = x0
+		}
+		if path[0] == "FloatSlicePtr" {
+			x0 := x.FloatSlicePtr
+			if uvalue, ok := value.(*testobj.TestFloatSlice); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestFloatSlice, 0)
+				x0 = &z
+				x.FloatSlicePtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				var i int
+				t70, err70 := strconv.ParseInt(path[1], 0, 0)
+				if err70 != nil {
+					return err70
+				}
+				i = int(t70)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					inspector.AssignBuf(&x1, value, buf)
+					return nil
+					(*x0)[i] = x1
+					return nil
+				}
+			}
+			x.FloatSlicePtr = x0
+		}
+		if path[0] == "FloatPtrSlicePtr" {
+			x0 := x.FloatPtrSlicePtr
+			if uvalue, ok := value.(*testobj.TestFloatPtrSlice); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestFloatPtrSlice, 0)
+				x0 = &z
+				x.FloatPtrSlicePtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				var i int
+				t71, err71 := strconv.ParseInt(path[1], 0, 0)
+				if err71 != nil {
+					return err71
+				}
+				i = int(t71)
+				if len(*x0) > i {
+					x1 := (*x0)[i]
+					_ = x1
+					if x1 == nil {
+						return nil
+					}
+					inspector.AssignBuf(x1, value, buf)
+					return nil
+					(*x0)[i] = x1
+					return nil
+				}
+			}
+			x.FloatPtrSlicePtr = x0
+		}
 	}
 	return nil
 }
 
-func (i4 TestObject1Inspector) Set(dst, value interface{}, path ...string) error {
-	return i4.SetWB(dst, value, nil, path...)
+func (i6 TestObject1Inspector) Set(dst, value interface{}, path ...string) error {
+	return i6.SetWB(dst, value, nil, path...)
 }
 
-func (i4 TestObject1Inspector) DeepEqual(l, r interface{}) bool {
-	return i4.DeepEqualWithOptions(l, r, nil)
+func (i6 TestObject1Inspector) DeepEqual(l, r interface{}) bool {
+	return i6.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i4 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestObject1
 		leq, req bool
@@ -697,10 +1151,94 @@ func (i4 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
+	lx9 := lx.FloatSlice
+	rx9 := rx.FloatSlice
+	_, _ = lx9, rx9
+	if inspector.DEQMustCheck("FloatSlice", opts) {
+		if len(lx9) != len(rx9) {
+			return false
+		}
+		for i := 0; i < len(lx9); i++ {
+			lx10 := (lx9)[i]
+			rx10 := (rx9)[i]
+			_, _ = lx10, rx10
+			if lx10 != rx10 {
+				return false
+			}
+		}
+	}
+	lx11 := lx.FloatPtrSlice
+	rx11 := rx.FloatPtrSlice
+	_, _ = lx11, rx11
+	if inspector.DEQMustCheck("FloatPtrSlice", opts) {
+		if len(lx11) != len(rx11) {
+			return false
+		}
+		for i := 0; i < len(lx11); i++ {
+			lx12 := (lx11)[i]
+			rx12 := (rx11)[i]
+			_, _ = lx12, rx12
+			if (lx12 == nil && rx12 != nil) || (lx12 != nil && rx12 == nil) {
+				return false
+			}
+			if lx12 != nil && rx12 != nil {
+				if *lx12 != *rx12 {
+					return false
+				}
+			}
+		}
+	}
+	lx13 := lx.FloatSlicePtr
+	rx13 := rx.FloatSlicePtr
+	_, _ = lx13, rx13
+	if (lx13 == nil && rx13 != nil) || (lx13 != nil && rx13 == nil) {
+		return false
+	}
+	if lx13 != nil && rx13 != nil {
+		if inspector.DEQMustCheck("FloatSlicePtr", opts) {
+			if len(*lx13) != len(*rx13) {
+				return false
+			}
+			for i := 0; i < len(*lx13); i++ {
+				lx14 := (*lx13)[i]
+				rx14 := (*rx13)[i]
+				_, _ = lx14, rx14
+				if lx14 != rx14 {
+					return false
+				}
+			}
+		}
+	}
+	lx15 := lx.FloatPtrSlicePtr
+	rx15 := rx.FloatPtrSlicePtr
+	_, _ = lx15, rx15
+	if (lx15 == nil && rx15 != nil) || (lx15 != nil && rx15 == nil) {
+		return false
+	}
+	if lx15 != nil && rx15 != nil {
+		if inspector.DEQMustCheck("FloatPtrSlicePtr", opts) {
+			if len(*lx15) != len(*rx15) {
+				return false
+			}
+			for i := 0; i < len(*lx15); i++ {
+				lx16 := (*lx15)[i]
+				rx16 := (*rx15)[i]
+				_, _ = lx16, rx16
+				if (lx16 == nil && rx16 != nil) || (lx16 != nil && rx16 == nil) {
+					return false
+				}
+				if lx16 != nil && rx16 != nil {
+					if *lx16 != *rx16 {
+						return false
+					}
+				}
+			}
+		}
+	}
 	return true
 }
 
-func (i4 TestObject1Inspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i6 TestObject1Inspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestObject1
 	switch typ {
 	case inspector.EncodingJSON:
@@ -711,7 +1249,7 @@ func (i4 TestObject1Inspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i4 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
+func (i6 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestObject1
 	switch x.(type) {
 	case testobj.TestObject1:
@@ -723,19 +1261,19 @@ func (i4 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i4.calcBytes(&origin)
+	bc := i6.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i4.cpy(buf, &cpy, &origin); err != nil {
+	if err := i6.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
 }
 
-func (i4 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
+func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
 	return c
 }
 
-func (i4 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error {
+func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error {
 	if len(r.IntSlice) > 0 {
 		buf1 := make([]int32, 0, len(r.IntSlice))
 		for i1 := 0; i1 < len(r.IntSlice); i1++ {
@@ -778,6 +1316,50 @@ func (i4 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 				buf1 = append(buf1, b1)
 			}
 			l.IntPtrSlicePtr = &buf1
+		}
+	}
+	if len(r.FloatSlice) > 0 {
+		buf1 := make(testobj.TestFloatSlice, 0, len(r.FloatSlice))
+		for i1 := 0; i1 < len(r.FloatSlice); i1++ {
+			var b1 float32
+			x1 := (l.FloatSlice)[i1]
+			b1 = x1
+			buf1 = append(buf1, b1)
+		}
+		l.FloatSlice = buf1
+	}
+	if len(r.FloatPtrSlice) > 0 {
+		buf1 := make(testobj.TestFloatPtrSlice, 0, len(r.FloatPtrSlice))
+		for i1 := 0; i1 < len(r.FloatPtrSlice); i1++ {
+			var b1 *float32
+			x1 := (l.FloatPtrSlice)[i1]
+			b1 = x1
+			buf1 = append(buf1, b1)
+		}
+		l.FloatPtrSlice = buf1
+	}
+	if l.FloatSlicePtr != nil {
+		if len(*r.FloatSlicePtr) > 0 {
+			buf1 := make(testobj.TestFloatSlice, 0, len(*r.FloatSlicePtr))
+			for i1 := 0; i1 < len(*r.FloatSlicePtr); i1++ {
+				var b1 float32
+				x1 := (*l.FloatSlicePtr)[i1]
+				b1 = x1
+				buf1 = append(buf1, b1)
+			}
+			l.FloatSlicePtr = &buf1
+		}
+	}
+	if l.FloatPtrSlicePtr != nil {
+		if len(*r.FloatPtrSlicePtr) > 0 {
+			buf1 := make(testobj.TestFloatPtrSlice, 0, len(*r.FloatPtrSlicePtr))
+			for i1 := 0; i1 < len(*r.FloatPtrSlicePtr); i1++ {
+				var b1 *float32
+				x1 := (*l.FloatPtrSlicePtr)[i1]
+				b1 = x1
+				buf1 = append(buf1, b1)
+			}
+			l.FloatPtrSlicePtr = &buf1
 		}
 	}
 	return nil

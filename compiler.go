@@ -1339,6 +1339,8 @@ func (c *Compiler) fmtTyp(node *node) string {
 				pfx = "*"
 			}
 			s = "[]" + pfx + s
+		} else {
+			s = node.pkg + "." + strings.Trim(node.typn, "*")
 		}
 		return s
 	case typeBasic:

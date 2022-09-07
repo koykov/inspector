@@ -16,17 +16,17 @@ type TestHistoryInspector struct {
 	inspector.BaseInspector
 }
 
-func (i2 TestHistoryInspector) TypeName() string {
+func (i4 TestHistoryInspector) TypeName() string {
 	return "TestHistory"
 }
 
-func (i2 TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i4 TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
-	err := i2.GetTo(src, &buf, path...)
+	err := i4.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i2 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i4 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (i2 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...
 	return
 }
 
-func (i2 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i4 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -85,11 +85,11 @@ func (i2 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right str
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t11, err11 := strconv.ParseInt(right, 0, 0)
-			if err11 != nil {
-				return err11
+			t18, err18 := strconv.ParseInt(right, 0, 0)
+			if err18 != nil {
+				return err18
 			}
-			rightExact = int64(t11)
+			rightExact = int64(t18)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -108,11 +108,11 @@ func (i2 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right str
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t12, err12 := strconv.ParseFloat(right, 0)
-			if err12 != nil {
-				return err12
+			t19, err19 := strconv.ParseFloat(right, 0)
+			if err19 != nil {
+				return err19
 			}
-			rightExact = float64(t12)
+			rightExact = float64(t19)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -144,7 +144,7 @@ func (i2 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i2 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i4 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -168,7 +168,7 @@ func (i2 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i2 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i4 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -204,15 +204,15 @@ func (i2 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.Accum
 	return nil
 }
 
-func (i2 TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
-	return i2.SetWB(dst, value, nil, path...)
+func (i4 TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+	return i4.SetWB(dst, value, nil, path...)
 }
 
-func (i2 TestHistoryInspector) DeepEqual(l, r interface{}) bool {
-	return i2.DeepEqualWithOptions(l, r, nil)
+func (i4 TestHistoryInspector) DeepEqual(l, r interface{}) bool {
+	return i4.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i2 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i4 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestHistory
 		leq, req bool
@@ -254,7 +254,7 @@ func (i2 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	return true
 }
 
-func (i2 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i4 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestHistory
 	switch typ {
 	case inspector.EncodingJSON:
@@ -265,7 +265,7 @@ func (i2 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
+func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestHistory
 	switch x.(type) {
 	case testobj.TestHistory:
@@ -277,20 +277,20 @@ func (i2 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i2.calcBytes(&origin)
+	bc := i4.calcBytes(&origin)
 	buf := make([]byte, 0, bc)
-	if err := i2.cpy(buf, &cpy, &origin); err != nil {
+	if err := i4.cpy(buf, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
 }
 
-func (i2 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
+func (i4 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
 	c += len(x.Comment)
 	return c
 }
 
-func (i2 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error {
+func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error {
 	l.DateUnix = r.DateUnix
 	l.Cost = r.Cost
 	buf, l.Comment = inspector.Bufferize(buf, r.Comment)
