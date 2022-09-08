@@ -337,6 +337,89 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.IntPtrStringPtrMapPtr
 			return
 		}
+		if path[0] == "StringFloatMap" {
+			x0 := x.StringFloatMap
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.StringFloatMap
+			return
+		}
+		if path[0] == "StringFloatPtrMap" {
+			x0 := x.StringFloatPtrMap
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.StringFloatPtrMap
+			return
+		}
+		if path[0] == "StringFloatMapPtr" {
+			x0 := x.StringFloatMapPtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[path[1]]; ok {
+					_ = x1
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.StringFloatMapPtr
+			return
+		}
+		if path[0] == "StringFloatPtrMapPtr" {
+			x0 := x.StringFloatPtrMapPtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.StringFloatPtrMapPtr
+			return
+		}
+		if path[0] == "StringPtrFloatPtrMapPtr" {
+			x0 := x.StringPtrFloatPtrMapPtr
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[&path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					*buf = &x1
+					return
+				}
+			}
+			*buf = &x.StringPtrFloatPtrMapPtr
+			return
+		}
 	}
 	return
 }
@@ -840,6 +923,162 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				return
 			}
 		}
+		if path[0] == "StringFloatMap" {
+			x0 := x.StringFloatMap
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					var rightExact float64
+					t76, err76 := strconv.ParseFloat(right, 0)
+					if err76 != nil {
+						return err76
+					}
+					rightExact = float64(t76)
+					switch cond {
+					case inspector.OpEq:
+						*result = x1 == rightExact
+					case inspector.OpNq:
+						*result = x1 != rightExact
+					case inspector.OpGt:
+						*result = x1 > rightExact
+					case inspector.OpGtq:
+						*result = x1 >= rightExact
+					case inspector.OpLt:
+						*result = x1 < rightExact
+					case inspector.OpLtq:
+						*result = x1 <= rightExact
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "StringFloatPtrMap" {
+			x0 := x.StringFloatPtrMap
+			_ = x0
+			if len(path) > 1 {
+				if x1, ok := (x0)[path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "StringFloatMapPtr" {
+			x0 := x.StringFloatMapPtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[path[1]]; ok {
+					_ = x1
+					var rightExact float64
+					t77, err77 := strconv.ParseFloat(right, 0)
+					if err77 != nil {
+						return err77
+					}
+					rightExact = float64(t77)
+					switch cond {
+					case inspector.OpEq:
+						*result = x1 == rightExact
+					case inspector.OpNq:
+						*result = x1 != rightExact
+					case inspector.OpGt:
+						*result = x1 > rightExact
+					case inspector.OpGtq:
+						*result = x1 >= rightExact
+					case inspector.OpLt:
+						*result = x1 < rightExact
+					case inspector.OpLtq:
+						*result = x1 <= rightExact
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "StringFloatPtrMapPtr" {
+			x0 := x.StringFloatPtrMapPtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
+					}
+					return
+				}
+			}
+		}
+		if path[0] == "StringPtrFloatPtrMapPtr" {
+			x0 := x.StringPtrFloatPtrMapPtr
+			_ = x0
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x0 == nil
+				} else {
+					*result = x0 != nil
+				}
+				return
+			}
+			if len(path) > 1 {
+				if x0 == nil {
+					return
+				}
+				if x1, ok := (*x0)[&path[1]]; ok {
+					_ = x1
+					if x1 == nil {
+						return
+					}
+					if right == inspector.Nil {
+						if cond == inspector.OpEq {
+							*result = x1 == nil
+						} else {
+							*result = x1 != nil
+						}
+						return
+					}
+					return
+				}
+			}
+		}
 	}
 	return
 }
@@ -1132,6 +1371,110 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
+		if path[0] == "StringFloatMap" {
+			x0 := x.StringFloatMap
+			_ = x0
+			for k := range x0 {
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "StringFloatPtrMap" {
+			x0 := x.StringFloatPtrMap
+			_ = x0
+			for k := range x0 {
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "StringFloatMapPtr" {
+			x0 := x.StringFloatMapPtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "StringFloatPtrMapPtr" {
+			x0 := x.StringFloatPtrMapPtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
+		if path[0] == "StringPtrFloatPtrMapPtr" {
+			x0 := x.StringPtrFloatPtrMapPtr
+			_ = x0
+			if x0 == nil {
+				return
+			}
+			for k := range *x0 {
+				if l.RequireKey() {
+					*buf = append((*buf)[:0], *k...)
+					l.SetKey(buf, &inspector.StaticInspector{})
+				}
+				l.SetVal((*x0)[k], &inspector.StaticInspector{})
+				ctl := l.Iterate()
+				if ctl == inspector.LoopCtlBrk {
+					break
+				}
+				if ctl == inspector.LoopCtlCnt {
+					continue
+				}
+			}
+			return
+		}
 	}
 	return
 }
@@ -1169,11 +1512,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t76, err76 := strconv.ParseInt(path[1], 0, 0)
-				if err76 != nil {
-					return err76
+				t78, err78 := strconv.ParseInt(path[1], 0, 0)
+				if err78 != nil {
+					return err78
 				}
-				i = int(t76)
+				i = int(t78)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -1198,11 +1541,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t77, err77 := strconv.ParseInt(path[1], 0, 0)
-				if err77 != nil {
-					return err77
+				t79, err79 := strconv.ParseInt(path[1], 0, 0)
+				if err79 != nil {
+					return err79
 				}
-				i = int(t77)
+				i = int(t79)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -1233,11 +1576,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t78, err78 := strconv.ParseInt(path[1], 0, 0)
-				if err78 != nil {
-					return err78
+				t80, err80 := strconv.ParseInt(path[1], 0, 0)
+				if err80 != nil {
+					return err80
 				}
-				i = int(t78)
+				i = int(t80)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -1265,11 +1608,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t79, err79 := strconv.ParseInt(path[1], 0, 0)
-				if err79 != nil {
-					return err79
+				t81, err81 := strconv.ParseInt(path[1], 0, 0)
+				if err81 != nil {
+					return err81
 				}
-				i = int(t79)
+				i = int(t81)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -1297,11 +1640,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t80, err80 := strconv.ParseInt(path[1], 0, 0)
-				if err80 != nil {
-					return err80
+				t82, err82 := strconv.ParseInt(path[1], 0, 0)
+				if err82 != nil {
+					return err82
 				}
-				i = int(t80)
+				i = int(t82)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -1326,11 +1669,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var i int
-				t81, err81 := strconv.ParseInt(path[1], 0, 0)
-				if err81 != nil {
-					return err81
+				t83, err83 := strconv.ParseInt(path[1], 0, 0)
+				if err83 != nil {
+					return err83
 				}
-				i = int(t81)
+				i = int(t83)
 				if len(x0) > i {
 					x1 := (x0)[i]
 					_ = x1
@@ -1361,11 +1704,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t82, err82 := strconv.ParseInt(path[1], 0, 0)
-				if err82 != nil {
-					return err82
+				t84, err84 := strconv.ParseInt(path[1], 0, 0)
+				if err84 != nil {
+					return err84
 				}
-				i = int(t82)
+				i = int(t84)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -1393,11 +1736,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var i int
-				t83, err83 := strconv.ParseInt(path[1], 0, 0)
-				if err83 != nil {
-					return err83
+				t85, err85 := strconv.ParseInt(path[1], 0, 0)
+				if err85 != nil {
+					return err85
 				}
-				i = int(t83)
+				i = int(t85)
 				if len(*x0) > i {
 					x1 := (*x0)[i]
 					_ = x1
@@ -1425,11 +1768,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var k int
-				t84, err84 := strconv.ParseInt(path[1], 0, 0)
-				if err84 != nil {
-					return err84
+				t86, err86 := strconv.ParseInt(path[1], 0, 0)
+				if err86 != nil {
+					return err86
 				}
-				k = int(t84)
+				k = int(t86)
 				x1 := (x0)[k]
 				_ = x1
 				inspector.AssignBuf(&x1, value, buf)
@@ -1451,11 +1794,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			_ = x0
 			if len(path) > 1 {
 				var k int
-				t85, err85 := strconv.ParseInt(path[1], 0, 0)
-				if err85 != nil {
-					return err85
+				t87, err87 := strconv.ParseInt(path[1], 0, 0)
+				if err87 != nil {
+					return err87
 				}
-				k = int(t85)
+				k = int(t87)
 				x1 := (x0)[k]
 				_ = x1
 				if x1 == nil {
@@ -1483,11 +1826,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var k int
-				t86, err86 := strconv.ParseInt(path[1], 0, 0)
-				if err86 != nil {
-					return err86
+				t88, err88 := strconv.ParseInt(path[1], 0, 0)
+				if err88 != nil {
+					return err88
 				}
-				k = int(t86)
+				k = int(t88)
 				x1 := (*x0)[k]
 				_ = x1
 				inspector.AssignBuf(&x1, value, buf)
@@ -1512,11 +1855,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var k int
-				t87, err87 := strconv.ParseInt(path[1], 0, 0)
-				if err87 != nil {
-					return err87
+				t89, err89 := strconv.ParseInt(path[1], 0, 0)
+				if err89 != nil {
+					return err89
 				}
-				k = int(t87)
+				k = int(t89)
 				x1 := (*x0)[k]
 				_ = x1
 				if x1 == nil {
@@ -1544,11 +1887,11 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 					return nil
 				}
 				var k int
-				t88, err88 := strconv.ParseInt(path[1], 0, 0)
-				if err88 != nil {
-					return err88
+				t90, err90 := strconv.ParseInt(path[1], 0, 0)
+				if err90 != nil {
+					return err90
 				}
-				k = int(t88)
+				k = int(t90)
 				x1 := (*x0)[&k]
 				_ = x1
 				if x1 == nil {
@@ -1559,6 +1902,124 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				return nil
 			}
 			x.IntPtrStringPtrMapPtr = x0
+		}
+		if path[0] == "StringFloatMap" {
+			x0 := x.StringFloatMap
+			if uvalue, ok := value.(*testobj.TestStringFloatMap); ok {
+				x0 = *uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestStringFloatMap)
+				x0 = z
+				x.StringFloatMap = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				x1 := (x0)[path[1]]
+				_ = x1
+				inspector.AssignBuf(&x1, value, buf)
+				(x0)[path[1]] = x1
+				return nil
+			}
+			x.StringFloatMap = x0
+		}
+		if path[0] == "StringFloatPtrMap" {
+			x0 := x.StringFloatPtrMap
+			if uvalue, ok := value.(*testobj.TestStringFloatPtrMap); ok {
+				x0 = *uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestStringFloatPtrMap)
+				x0 = z
+				x.StringFloatPtrMap = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				x1 := (x0)[path[1]]
+				_ = x1
+				if x1 == nil {
+					return nil
+				}
+				inspector.AssignBuf(x1, value, buf)
+				(x0)[path[1]] = x1
+				return nil
+			}
+			x.StringFloatPtrMap = x0
+		}
+		if path[0] == "StringFloatMapPtr" {
+			x0 := x.StringFloatMapPtr
+			if uvalue, ok := value.(*testobj.TestStringFloatMap); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestStringFloatMap)
+				x0 = &z
+				x.StringFloatMapPtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				x1 := (*x0)[path[1]]
+				_ = x1
+				inspector.AssignBuf(&x1, value, buf)
+				(*x0)[path[1]] = x1
+				return nil
+			}
+			x.StringFloatMapPtr = x0
+		}
+		if path[0] == "StringFloatPtrMapPtr" {
+			x0 := x.StringFloatPtrMapPtr
+			if uvalue, ok := value.(*testobj.TestStringFloatPtrMap); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestStringFloatPtrMap)
+				x0 = &z
+				x.StringFloatPtrMapPtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				x1 := (*x0)[path[1]]
+				_ = x1
+				if x1 == nil {
+					return nil
+				}
+				inspector.AssignBuf(x1, value, buf)
+				(*x0)[path[1]] = x1
+				return nil
+			}
+			x.StringFloatPtrMapPtr = x0
+		}
+		if path[0] == "StringPtrFloatPtrMapPtr" {
+			x0 := x.StringPtrFloatPtrMapPtr
+			if uvalue, ok := value.(*testobj.TestStringPtrFloatPtrMap); ok {
+				x0 = uvalue
+			}
+			if x0 == nil {
+				z := make(testobj.TestStringPtrFloatPtrMap)
+				x0 = &z
+				x.StringPtrFloatPtrMapPtr = x0
+			}
+			_ = x0
+			if len(path) > 1 {
+				if x0 == nil {
+					return nil
+				}
+				x1 := (*x0)[&path[1]]
+				_ = x1
+				if x1 == nil {
+					return nil
+				}
+				inspector.AssignBuf(x1, value, buf)
+				(*x0)[&path[1]] = x1
+				return nil
+			}
+			x.StringPtrFloatPtrMapPtr = x0
 		}
 	}
 	return nil
@@ -1895,6 +2356,131 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
+	lx27 := lx.StringFloatMap
+	rx27 := rx.StringFloatMap
+	_, _ = lx27, rx27
+	if inspector.DEQMustCheck("StringFloatMap", opts) {
+		if len(lx27) != len(rx27) {
+			return false
+		}
+		for k := range lx27 {
+			lx28 := (lx27)[k]
+			rx28, ok28 := (rx27)[k]
+			_, _, _ = lx28, rx28, ok28
+			if !ok28 {
+				return false
+			}
+			if lx28 != rx28 {
+				return false
+			}
+		}
+	}
+	lx29 := lx.StringFloatPtrMap
+	rx29 := rx.StringFloatPtrMap
+	_, _ = lx29, rx29
+	if inspector.DEQMustCheck("StringFloatPtrMap", opts) {
+		if len(lx29) != len(rx29) {
+			return false
+		}
+		for k := range lx29 {
+			lx30 := (lx29)[k]
+			rx30, ok30 := (rx29)[k]
+			_, _, _ = lx30, rx30, ok30
+			if !ok30 {
+				return false
+			}
+			if (lx30 == nil && rx30 != nil) || (lx30 != nil && rx30 == nil) {
+				return false
+			}
+			if lx30 != nil && rx30 != nil {
+				if *lx30 != *rx30 {
+					return false
+				}
+			}
+		}
+	}
+	lx31 := lx.StringFloatMapPtr
+	rx31 := rx.StringFloatMapPtr
+	_, _ = lx31, rx31
+	if (lx31 == nil && rx31 != nil) || (lx31 != nil && rx31 == nil) {
+		return false
+	}
+	if lx31 != nil && rx31 != nil {
+		if inspector.DEQMustCheck("StringFloatMapPtr", opts) {
+			if len(*lx31) != len(*rx31) {
+				return false
+			}
+			for k := range *lx31 {
+				lx32 := (*lx31)[k]
+				rx32, ok32 := (*rx31)[k]
+				_, _, _ = lx32, rx32, ok32
+				if !ok32 {
+					return false
+				}
+				if lx32 != rx32 {
+					return false
+				}
+			}
+		}
+	}
+	lx33 := lx.StringFloatPtrMapPtr
+	rx33 := rx.StringFloatPtrMapPtr
+	_, _ = lx33, rx33
+	if (lx33 == nil && rx33 != nil) || (lx33 != nil && rx33 == nil) {
+		return false
+	}
+	if lx33 != nil && rx33 != nil {
+		if inspector.DEQMustCheck("StringFloatPtrMapPtr", opts) {
+			if len(*lx33) != len(*rx33) {
+				return false
+			}
+			for k := range *lx33 {
+				lx34 := (*lx33)[k]
+				rx34, ok34 := (*rx33)[k]
+				_, _, _ = lx34, rx34, ok34
+				if !ok34 {
+					return false
+				}
+				if (lx34 == nil && rx34 != nil) || (lx34 != nil && rx34 == nil) {
+					return false
+				}
+				if lx34 != nil && rx34 != nil {
+					if *lx34 != *rx34 {
+						return false
+					}
+				}
+			}
+		}
+	}
+	lx35 := lx.StringPtrFloatPtrMapPtr
+	rx35 := rx.StringPtrFloatPtrMapPtr
+	_, _ = lx35, rx35
+	if (lx35 == nil && rx35 != nil) || (lx35 != nil && rx35 == nil) {
+		return false
+	}
+	if lx35 != nil && rx35 != nil {
+		if inspector.DEQMustCheck("StringPtrFloatPtrMapPtr", opts) {
+			if len(*lx35) != len(*rx35) {
+				return false
+			}
+			for k := range *lx35 {
+				lx36 := (*lx35)[k]
+				rx36, ok36 := (*rx35)[k]
+				_, _, _ = lx36, rx36, ok36
+				if !ok36 {
+					return false
+				}
+				if (lx36 == nil && rx36 != nil) || (lx36 != nil && rx36 == nil) {
+					return false
+				}
+				if lx36 != nil && rx36 != nil {
+					if *lx36 != *rx36 {
+						return false
+					}
+				}
+			}
+		}
+	}
 	return true
 }
 
@@ -1954,6 +2540,32 @@ func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
 		for k1, v1 := range *x.IntPtrStringPtrMapPtr {
 			_, _ = k1, v1
 			c += len(*v1)
+		}
+	}
+	for k1, v1 := range x.StringFloatMap {
+		_, _ = k1, v1
+		c += len(k1)
+	}
+	for k1, v1 := range x.StringFloatPtrMap {
+		_, _ = k1, v1
+		c += len(k1)
+	}
+	if x.StringFloatMapPtr != nil {
+		for k1, v1 := range *x.StringFloatMapPtr {
+			_, _ = k1, v1
+			c += len(k1)
+		}
+	}
+	if x.StringFloatPtrMapPtr != nil {
+		for k1, v1 := range *x.StringFloatPtrMapPtr {
+			_, _ = k1, v1
+			c += len(k1)
+		}
+	}
+	if x.StringPtrFloatPtrMapPtr != nil {
+		for k1, v1 := range *x.StringPtrFloatPtrMapPtr {
+			_, _ = k1, v1
+			c += len(*k1)
 		}
 	}
 	return c
@@ -2053,6 +2665,12 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 	if l.IntStringPtrMapPtr != nil {
 	}
 	if l.IntPtrStringPtrMapPtr != nil {
+	}
+	if l.StringFloatMapPtr != nil {
+	}
+	if l.StringFloatPtrMapPtr != nil {
+	}
+	if l.StringPtrFloatPtrMapPtr != nil {
 	}
 	return nil
 }

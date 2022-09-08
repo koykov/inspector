@@ -16,7 +16,17 @@ type TestObject1 struct {
 	IntStringMapPtr       *map[int]string
 	IntStringPtrMapPtr    *map[int]*string
 	IntPtrStringPtrMapPtr *map[*int]*string
+
+	StringFloatMap          TestStringFloatMap
+	StringFloatPtrMap       TestStringFloatPtrMap
+	StringFloatMapPtr       *TestStringFloatMap
+	StringFloatPtrMapPtr    *TestStringFloatPtrMap
+	StringPtrFloatPtrMapPtr *TestStringPtrFloatPtrMap
 }
 
 type TestFloatSlice []float32
 type TestFloatPtrSlice []*float32
+
+type TestStringFloatMap map[string]float64
+type TestStringFloatPtrMap map[string]*float64
+type TestStringPtrFloatPtrMap map[*string]*float64

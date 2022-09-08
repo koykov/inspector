@@ -819,7 +819,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			c.wl("if l.RequireKey() {")
 			switch node.mapk.typn {
 			case "string", "[]byte":
-				c.wl("*buf = append((*buf)[:0], k...)")
+				c.wl("*buf = append((*buf)[:0], ", c.fmtVnb(node.mapk, "k", depth+1), "...)")
 			case "bool":
 				c.wl(`if k { *buf = append((*buf)[:0], "true"...) } else { *buf = append(*buf[:0], "false"...) }`)
 			case "int", "int8", "int16", "int32", "int64":
@@ -854,10 +854,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			nv := "x" + strconv.Itoa(depth)
 			if node.mapk.typn == "string" {
 				// Key is string, simple case.
+				key := c.fmtP(node.mapk, "path["+depths+"]", depth+1)
 				if mode == modeSet {
-					c.wl(nv, " := ", c.fmtV(node, v), "[path[", depths, "]]")
+					c.wl(nv, " := ", c.fmtV(node, v), "[", key, "]")
 				} else {
-					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
+					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[", key, "]; ok {")
 				}
 				c.wl("_ = ", nv)
 				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
@@ -865,7 +866,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				if mode == modeSet {
-					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
+					c.wl(c.fmtV(node, v), "[", key, "] = ", nv)
 					c.wl("return nil")
 				}
 				if mode != modeSet {
