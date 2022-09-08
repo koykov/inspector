@@ -823,11 +823,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case "bool":
 				c.wl(`if k { *buf = append((*buf)[:0], "true"...) } else { *buf = append(*buf[:0], "false"...) }`)
 			case "int", "int8", "int16", "int32", "int64":
-				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
+				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(", c.fmtVnb(node.mapk, "k", depth), "), 10)")
 			case "uint", "uint8", "uint16", "uint32", "uint64":
-				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(k), 10)")
+				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(", c.fmtVnb(node.mapk, "k", depth), "), 10)")
 			case "float32", "float64":
-				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(k), 'f', -1, 64)")
+				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(", c.fmtVnb(node.mapk, "k", depth), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
 				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
@@ -880,11 +880,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				c.wl(snippet)
-				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
+				c.wl(nv, " := ", c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "]")
 				c.wl("_ = ", nv)
 				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if mode == modeSet {
-					c.wl(c.fmtV(node, v), "[k] = ", nv)
+					c.wl(c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "] = ", nv)
 					c.wl("return nil")
 				}
 				if err != nil {
@@ -1092,7 +1092,7 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 		}
 	case typeBasic:
 		if node.typu == "string" {
-			c.wl("c+=len(", v, ")")
+			c.wl("c+=len(", c.fmtVnb(node, v, depth), ")")
 		}
 	}
 	return nil
@@ -1309,6 +1309,9 @@ func (c *Compiler) fmtTyp(node *node) string {
 	case typeMap:
 		if strings.Contains(node.typn, "map[") {
 			s := "map["
+			if node.mapk.ptr {
+				s += "*"
+			}
 			if len(node.mapk.pkg) > 0 {
 				s += node.mapk.pkg + "."
 			}

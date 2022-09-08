@@ -46,11 +46,11 @@ func (i7 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path 
 
 	if len(path) > 0 {
 		var k int32
-		t72, err72 := strconv.ParseInt(path[0], 0, 0)
-		if err72 != nil {
-			return err72
+		t89, err89 := strconv.ParseInt(path[0], 0, 0)
+		if err89 != nil {
+			return err89
 		}
-		k = int32(t72)
+		k = int32(t89)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -80,19 +80,19 @@ func (i7 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right 
 
 	if len(path) > 0 {
 		var k int32
-		t73, err73 := strconv.ParseInt(path[0], 0, 0)
-		if err73 != nil {
-			return err73
+		t90, err90 := strconv.ParseInt(path[0], 0, 0)
+		if err90 != nil {
+			return err90
 		}
-		k = int32(t73)
+		k = int32(t90)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t74, err74 := strconv.ParseBool(right)
-		if err74 != nil {
-			return err74
+		t91, err91 := strconv.ParseBool(right)
+		if err91 != nil {
+			return err91
 		}
-		rightExact = bool(t74)
+		rightExact = bool(t91)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -161,11 +161,11 @@ func (i7 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t75, err75 := strconv.ParseInt(path[0], 0, 0)
-		if err75 != nil {
-			return err75
+		t92, err92 := strconv.ParseInt(path[0], 0, 0)
+		if err92 != nil {
+			return err92
 		}
-		k = int32(t75)
+		k = int32(t92)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
