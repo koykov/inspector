@@ -229,8 +229,8 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.FloatPtrSlicePtr
 			return
 		}
-		if path[0] == "MapIntString" {
-			x0 := x.MapIntString
+		if path[0] == "IntStringMap" {
+			x0 := x.IntStringMap
 			_ = x0
 			if len(path) > 1 {
 				var k int
@@ -244,11 +244,11 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = &x.MapIntString
+			*buf = &x.IntStringMap
 			return
 		}
-		if path[0] == "MapIntStringPtr" {
-			x0 := x.MapIntStringPtr
+		if path[0] == "IntStringPtrMap" {
+			x0 := x.IntStringPtrMap
 			_ = x0
 			if len(path) > 1 {
 				var k int
@@ -265,11 +265,11 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = &x.MapIntStringPtr
+			*buf = &x.IntStringPtrMap
 			return
 		}
-		if path[0] == "MapPtrIntString" {
-			x0 := x.MapPtrIntString
+		if path[0] == "IntStringMapPtr" {
+			x0 := x.IntStringMapPtr
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
@@ -286,11 +286,11 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = &x.MapPtrIntString
+			*buf = &x.IntStringMapPtr
 			return
 		}
-		if path[0] == "MapPtrIntStringPtr" {
-			x0 := x.MapPtrIntStringPtr
+		if path[0] == "IntStringPtrMapPtr" {
+			x0 := x.IntStringPtrMapPtr
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
@@ -310,11 +310,11 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = &x.MapPtrIntStringPtr
+			*buf = &x.IntStringPtrMapPtr
 			return
 		}
-		if path[0] == "MapPtrIntPtrStringPtr" {
-			x0 := x.MapPtrIntPtrStringPtr
+		if path[0] == "IntPtrStringPtrMapPtr" {
+			x0 := x.IntPtrStringPtrMapPtr
 			_ = x0
 			if len(path) > 1 {
 				if x0 == nil {
@@ -334,7 +334,7 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 				*buf = &x1
 				return
 			}
-			*buf = &x.MapPtrIntPtrStringPtr
+			*buf = &x.IntPtrStringPtrMapPtr
 			return
 		}
 	}
@@ -665,8 +665,8 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				}
 			}
 		}
-		if path[0] == "MapIntString" {
-			x0 := x.MapIntString
+		if path[0] == "IntStringMap" {
+			x0 := x.IntStringMap
 			_ = x0
 			if len(path) > 1 {
 				var k int
@@ -697,8 +697,8 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				return
 			}
 		}
-		if path[0] == "MapIntStringPtr" {
-			x0 := x.MapIntStringPtr
+		if path[0] == "IntStringPtrMap" {
+			x0 := x.IntStringPtrMap
 			_ = x0
 			if len(path) > 1 {
 				var k int
@@ -723,8 +723,8 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				return
 			}
 		}
-		if path[0] == "MapPtrIntString" {
-			x0 := x.MapPtrIntString
+		if path[0] == "IntStringMapPtr" {
+			x0 := x.IntStringMapPtr
 			_ = x0
 			if right == inspector.Nil {
 				if cond == inspector.OpEq {
@@ -766,8 +766,8 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				return
 			}
 		}
-		if path[0] == "MapPtrIntStringPtr" {
-			x0 := x.MapPtrIntStringPtr
+		if path[0] == "IntStringPtrMapPtr" {
+			x0 := x.IntStringPtrMapPtr
 			_ = x0
 			if right == inspector.Nil {
 				if cond == inspector.OpEq {
@@ -803,8 +803,8 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 				return
 			}
 		}
-		if path[0] == "MapPtrIntPtrStringPtr" {
-			x0 := x.MapPtrIntPtrStringPtr
+		if path[0] == "IntPtrStringPtrMapPtr" {
+			x0 := x.IntPtrStringPtrMapPtr
 			_ = x0
 			if right == inspector.Nil {
 				if cond == inspector.OpEq {
@@ -1028,8 +1028,8 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
-		if path[0] == "MapIntString" {
-			x0 := x.MapIntString
+		if path[0] == "IntStringMap" {
+			x0 := x.IntStringMap
 			_ = x0
 			for k := range x0 {
 				if l.RequireKey() {
@@ -1047,8 +1047,8 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
-		if path[0] == "MapIntStringPtr" {
-			x0 := x.MapIntStringPtr
+		if path[0] == "IntStringPtrMap" {
+			x0 := x.IntStringPtrMap
 			_ = x0
 			for k := range x0 {
 				if l.RequireKey() {
@@ -1066,8 +1066,8 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
-		if path[0] == "MapPtrIntString" {
-			x0 := x.MapPtrIntString
+		if path[0] == "IntStringMapPtr" {
+			x0 := x.IntStringMapPtr
 			_ = x0
 			if x0 == nil {
 				return
@@ -1088,8 +1088,8 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
-		if path[0] == "MapPtrIntStringPtr" {
-			x0 := x.MapPtrIntStringPtr
+		if path[0] == "IntStringPtrMapPtr" {
+			x0 := x.IntStringPtrMapPtr
 			_ = x0
 			if x0 == nil {
 				return
@@ -1110,8 +1110,8 @@ func (i6 TestObject1Inspector) Loop(src interface{}, l inspector.Looper, buf *[]
 			}
 			return
 		}
-		if path[0] == "MapPtrIntPtrStringPtr" {
-			x0 := x.MapPtrIntPtrStringPtr
+		if path[0] == "IntPtrStringPtrMapPtr" {
+			x0 := x.IntPtrStringPtrMapPtr
 			_ = x0
 			if x0 == nil {
 				return
@@ -1412,15 +1412,15 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			}
 			x.FloatPtrSlicePtr = x0
 		}
-		if path[0] == "MapIntString" {
-			x0 := x.MapIntString
+		if path[0] == "IntStringMap" {
+			x0 := x.IntStringMap
 			if uvalue, ok := value.(*map[int]string); ok {
 				x0 = *uvalue
 			}
 			if x0 == nil {
 				z := make(map[int]string)
 				x0 = z
-				x.MapIntString = x0
+				x.IntStringMap = x0
 			}
 			_ = x0
 			if len(path) > 1 {
@@ -1436,17 +1436,17 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				(x0)[k] = x1
 				return nil
 			}
-			x.MapIntString = x0
+			x.IntStringMap = x0
 		}
-		if path[0] == "MapIntStringPtr" {
-			x0 := x.MapIntStringPtr
+		if path[0] == "IntStringPtrMap" {
+			x0 := x.IntStringPtrMap
 			if uvalue, ok := value.(*map[int]*string); ok {
 				x0 = *uvalue
 			}
 			if x0 == nil {
 				z := make(map[int]*string)
 				x0 = z
-				x.MapIntStringPtr = x0
+				x.IntStringPtrMap = x0
 			}
 			_ = x0
 			if len(path) > 1 {
@@ -1465,17 +1465,17 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				(x0)[k] = x1
 				return nil
 			}
-			x.MapIntStringPtr = x0
+			x.IntStringPtrMap = x0
 		}
-		if path[0] == "MapPtrIntString" {
-			x0 := x.MapPtrIntString
+		if path[0] == "IntStringMapPtr" {
+			x0 := x.IntStringMapPtr
 			if uvalue, ok := value.(*map[int]string); ok {
 				x0 = uvalue
 			}
 			if x0 == nil {
 				z := make(map[int]string)
 				x0 = &z
-				x.MapPtrIntString = x0
+				x.IntStringMapPtr = x0
 			}
 			_ = x0
 			if len(path) > 1 {
@@ -1494,17 +1494,17 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				(*x0)[k] = x1
 				return nil
 			}
-			x.MapPtrIntString = x0
+			x.IntStringMapPtr = x0
 		}
-		if path[0] == "MapPtrIntStringPtr" {
-			x0 := x.MapPtrIntStringPtr
+		if path[0] == "IntStringPtrMapPtr" {
+			x0 := x.IntStringPtrMapPtr
 			if uvalue, ok := value.(*map[int]*string); ok {
 				x0 = uvalue
 			}
 			if x0 == nil {
 				z := make(map[int]*string)
 				x0 = &z
-				x.MapPtrIntStringPtr = x0
+				x.IntStringPtrMapPtr = x0
 			}
 			_ = x0
 			if len(path) > 1 {
@@ -1526,17 +1526,17 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				(*x0)[k] = x1
 				return nil
 			}
-			x.MapPtrIntStringPtr = x0
+			x.IntStringPtrMapPtr = x0
 		}
-		if path[0] == "MapPtrIntPtrStringPtr" {
-			x0 := x.MapPtrIntPtrStringPtr
+		if path[0] == "IntPtrStringPtrMapPtr" {
+			x0 := x.IntPtrStringPtrMapPtr
 			if uvalue, ok := value.(*map[*int]*string); ok {
 				x0 = uvalue
 			}
 			if x0 == nil {
 				z := make(map[*int]*string)
 				x0 = &z
-				x.MapPtrIntPtrStringPtr = x0
+				x.IntPtrStringPtrMapPtr = x0
 			}
 			_ = x0
 			if len(path) > 1 {
@@ -1558,7 +1558,7 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 				(*x0)[&k] = x1
 				return nil
 			}
-			x.MapPtrIntPtrStringPtr = x0
+			x.IntPtrStringPtrMapPtr = x0
 		}
 	}
 	return nil
@@ -1770,10 +1770,10 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
-	lx17 := lx.MapIntString
-	rx17 := rx.MapIntString
+	lx17 := lx.IntStringMap
+	rx17 := rx.IntStringMap
 	_, _ = lx17, rx17
-	if inspector.DEQMustCheck("MapIntString", opts) {
+	if inspector.DEQMustCheck("IntStringMap", opts) {
 		if len(lx17) != len(rx17) {
 			return false
 		}
@@ -1789,10 +1789,10 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
-	lx19 := lx.MapIntStringPtr
-	rx19 := rx.MapIntStringPtr
+	lx19 := lx.IntStringPtrMap
+	rx19 := rx.IntStringPtrMap
 	_, _ = lx19, rx19
-	if inspector.DEQMustCheck("MapIntStringPtr", opts) {
+	if inspector.DEQMustCheck("IntStringPtrMap", opts) {
 		if len(lx19) != len(rx19) {
 			return false
 		}
@@ -1813,14 +1813,14 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
-	lx21 := lx.MapPtrIntString
-	rx21 := rx.MapPtrIntString
+	lx21 := lx.IntStringMapPtr
+	rx21 := rx.IntStringMapPtr
 	_, _ = lx21, rx21
 	if (lx21 == nil && rx21 != nil) || (lx21 != nil && rx21 == nil) {
 		return false
 	}
 	if lx21 != nil && rx21 != nil {
-		if inspector.DEQMustCheck("MapPtrIntString", opts) {
+		if inspector.DEQMustCheck("IntStringMapPtr", opts) {
 			if len(*lx21) != len(*rx21) {
 				return false
 			}
@@ -1837,14 +1837,14 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
-	lx23 := lx.MapPtrIntStringPtr
-	rx23 := rx.MapPtrIntStringPtr
+	lx23 := lx.IntStringPtrMapPtr
+	rx23 := rx.IntStringPtrMapPtr
 	_, _ = lx23, rx23
 	if (lx23 == nil && rx23 != nil) || (lx23 != nil && rx23 == nil) {
 		return false
 	}
 	if lx23 != nil && rx23 != nil {
-		if inspector.DEQMustCheck("MapPtrIntStringPtr", opts) {
+		if inspector.DEQMustCheck("IntStringPtrMapPtr", opts) {
 			if len(*lx23) != len(*rx23) {
 				return false
 			}
@@ -1866,14 +1866,14 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
-	lx25 := lx.MapPtrIntPtrStringPtr
-	rx25 := rx.MapPtrIntPtrStringPtr
+	lx25 := lx.IntPtrStringPtrMapPtr
+	rx25 := rx.IntPtrStringPtrMapPtr
 	_, _ = lx25, rx25
 	if (lx25 == nil && rx25 != nil) || (lx25 != nil && rx25 == nil) {
 		return false
 	}
 	if lx25 != nil && rx25 != nil {
-		if inspector.DEQMustCheck("MapPtrIntPtrStringPtr", opts) {
+		if inspector.DEQMustCheck("IntPtrStringPtrMapPtr", opts) {
 			if len(*lx25) != len(*rx25) {
 				return false
 			}
@@ -1930,28 +1930,28 @@ func (i6 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
 }
 
 func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
-	for k1, v1 := range x.MapIntString {
+	for k1, v1 := range x.IntStringMap {
 		_, _ = k1, v1
 		c += len(v1)
 	}
-	for k1, v1 := range x.MapIntStringPtr {
+	for k1, v1 := range x.IntStringPtrMap {
 		_, _ = k1, v1
 		c += len(*v1)
 	}
-	if x.MapPtrIntString != nil {
-		for k1, v1 := range *x.MapPtrIntString {
+	if x.IntStringMapPtr != nil {
+		for k1, v1 := range *x.IntStringMapPtr {
 			_, _ = k1, v1
 			c += len(v1)
 		}
 	}
-	if x.MapPtrIntStringPtr != nil {
-		for k1, v1 := range *x.MapPtrIntStringPtr {
+	if x.IntStringPtrMapPtr != nil {
+		for k1, v1 := range *x.IntStringPtrMapPtr {
 			_, _ = k1, v1
 			c += len(*v1)
 		}
 	}
-	if x.MapPtrIntPtrStringPtr != nil {
-		for k1, v1 := range *x.MapPtrIntPtrStringPtr {
+	if x.IntPtrStringPtrMapPtr != nil {
+		for k1, v1 := range *x.IntPtrStringPtrMapPtr {
 			_, _ = k1, v1
 			c += len(*v1)
 		}
@@ -2048,11 +2048,11 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			l.FloatPtrSlicePtr = &buf1
 		}
 	}
-	if l.MapPtrIntString != nil {
+	if l.IntStringMapPtr != nil {
 	}
-	if l.MapPtrIntStringPtr != nil {
+	if l.IntStringPtrMapPtr != nil {
 	}
-	if l.MapPtrIntPtrStringPtr != nil {
+	if l.IntPtrStringPtrMapPtr != nil {
 	}
 	return nil
 }

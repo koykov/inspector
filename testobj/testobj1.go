@@ -11,11 +11,11 @@ type TestObject1 struct {
 	FloatSlicePtr    *TestFloatSlice
 	FloatPtrSlicePtr *TestFloatPtrSlice
 
-	MapIntString          map[int]string
-	MapIntStringPtr       map[int]*string
-	MapPtrIntString       *map[int]string
-	MapPtrIntStringPtr    *map[int]*string
-	MapPtrIntPtrStringPtr *map[*int]*string
+	IntStringMap          map[int]string
+	IntStringPtrMap       map[int]*string
+	IntStringMapPtr       *map[int]string
+	IntStringPtrMapPtr    *map[int]*string
+	IntPtrStringPtrMapPtr *map[*int]*string
 }
 
 type TestFloatSlice []float32
