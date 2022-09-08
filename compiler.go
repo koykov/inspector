@@ -614,12 +614,8 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			c.wl("}")
 		}
 	case typeMap:
-		pfx := ""
-		if node.ptr || depth == 0 {
-			pfx = "*"
-		}
-		nlv := pfx + lv
-		nrv := pfx + rv
+		nlv := c.fmtVnb(node, lv, depth)
+		nrv := c.fmtVnb(node, rv, depth)
 		if deqMustSkipByTypeAndPath {
 			c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
 		}
@@ -645,12 +641,8 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
 			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
-			pfx := ""
-			if node.ptr || depth == 0 {
-				pfx = "*"
-			}
-			nlv := pfx + lv
-			nrv := pfx + rv
+			nlv := c.fmtVnb(node, lv, depth)
+			nrv := c.fmtVnb(node, rv, depth)
 			if deqMustSkipByTypeAndPath {
 				c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
 			}
@@ -823,11 +815,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case "bool":
 				c.wl(`if k { *buf = append((*buf)[:0], "true"...) } else { *buf = append(*buf[:0], "false"...) }`)
 			case "int", "int8", "int16", "int32", "int64":
-				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(", c.fmtVnb(node.mapk, "k", depth), "), 10)")
+				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(", c.fmtVnb(node.mapk, "k", depth+1), "), 10)")
 			case "uint", "uint8", "uint16", "uint32", "uint64":
-				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(", c.fmtVnb(node.mapk, "k", depth), "), 10)")
+				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(", c.fmtVnb(node.mapk, "k", depth+1), "), 10)")
 			case "float32", "float64":
-				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(", c.fmtVnb(node.mapk, "k", depth), "), 'f', -1, 64)")
+				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
 				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
@@ -1065,13 +1057,9 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 			}
 		}
 	case typeMap:
-		pfx := ""
-		if node.ptr || depth == 0 {
-			pfx = "*"
-		}
 		nk := "k" + strconv.Itoa(depth)
 		nx := "v" + strconv.Itoa(depth)
-		c.wl("for ", nk, ", ", nx, " := range ", pfx, v, "{")
+		c.wl("for ", nk, ", ", nx, " := range ", c.fmtVnb(node, v, depth), "{")
 		c.wl("_,_=", nk, ",", nx)
 		_ = c.writeCalcBytes(node.mapk, nk, depth+1)
 		_ = c.writeCalcBytes(node.mapv, nx, depth+1)
@@ -1288,7 +1276,7 @@ func (c *Compiler) fmtVd(node *node, v string, depth int) string {
 
 // No brackets version of fmtV().
 func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
-	if node.ptr || (node.typ == typeSlice && depth == 0) {
+	if node.ptr || depth == 0 {
 		return "*" + v
 	}
 	return v
