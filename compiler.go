@@ -748,7 +748,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.wl(nv, " := ", pfx, vsrc)
 				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
 					nilChk := ch.ptr || ch.typ == typeMap || ch.typ == typeSlice
-					typ := c.fmtTyp(ch)
+					typ := c.fmtT(ch)
 					pfx := "*"
 					if ch.ptr || nvPtr {
 						pfx = ""
@@ -1103,31 +1103,37 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			}
 		}
 	case typeMap:
-		// pfx := ""
-		// if node.ptr || depth == 0 {
-		// 	pfx = "*"
-		// }
-		// c.wl(l, "=make(", node.typn, ",len(", pfx, r, "))")
-		// nk := "k" + strconv.Itoa(depth)
-		// nx := "v" + strconv.Itoa(depth)
-		// c.wl("for ", nk, ", ", nx, " := range ", pfx, l, "{")
-		// c.wl("_,_=", nk, ",", nx)
-		// _ = c.writeCalcBytes(node.mapk, nk, depth+1)
-		// _ = c.writeCalcBytes(node.mapv, nx, depth+1)
-		// c.wl("}")
+		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
+		buf := "buf" + strconv.Itoa(depth)
+		c.wl("if ", ln, ">0 {")
+		c.wl(buf, ":=make(", c.fmtT(node), ",", ln, ")")
+		c.wl("_=", buf)
+		c.wl("for rk,rv:=range ", c.fmtVnb(node, r, depth), "{")
+		c.wl("_,_=rk,rv")
+		c.wl("var lk ", c.fmtT(node.mapk))
+		_ = c.writeCopy(node.mapk, "lk", "rk", depth+1)
+		c.wl("var lv ", c.fmtT(node.mapv))
+		_ = c.writeCopy(node.mapv, "lv", "rv", depth+1)
+		pfx := ""
+		if node.mapv.ptr && node.mapv.typ != typeBasic {
+			pfx = "&"
+		}
+		c.wl(c.fmtVd(node, l, depth), "[lk]=", pfx, "lv")
+		c.wl("}")
+		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
 			c.wl("buf,", l, "=inspector.Bufferize(buf,", r, ")")
 		} else {
 			lb := "buf" + strconv.Itoa(depth)
 			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
-			c.wl(lb, ":=make(", c.fmtTyp(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
+			c.wl(lb, ":=make(", c.fmtT(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
 
 			ni := "i" + strconv.Itoa(depth)
 			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, r, depth), "); ", ni, "++{")
 			nv := "x" + strconv.Itoa(depth)
 			nb := "b" + strconv.Itoa(depth)
-			c.wl("var ", nb, " ", c.fmtTyp(node.slct))
+			c.wl("var ", nb, " ", c.fmtT(node.slct))
 			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
 			} else {
@@ -1141,7 +1147,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		}
 	case typeBasic:
 		if node.typu == "string" {
-			c.wl("buf,", l, "=inspector.BufferizeString(buf,", r, ")")
+			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.BufferizeString(buf,", c.fmtVnb(node, r, depth), ")")
 		} else {
 			c.wl(l, "=", r)
 		}
@@ -1291,7 +1297,7 @@ func (c *Compiler) fmtP(node *node, v string, depth int) string {
 }
 
 // Format type to use in new()/make() functions.
-func (c *Compiler) fmtTyp(node *node) string {
+func (c *Compiler) fmtT(node *node) string {
 	switch node.typ {
 	case typeStruct:
 		return node.pkg + "." + strings.Trim(node.typn, "*")

@@ -1178,6 +1178,44 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 	l.Ustate = r.Ustate
 	l.Cost = r.Cost
 	if l.Permission != nil {
+		if len(*r.Permission) > 0 {
+			buf1 := make(testobj.TestPermission, len(*r.Permission))
+			_ = buf1
+			for rk, rv := range *r.Permission {
+				_, _ = rk, rv
+				var lk int32
+				lk = rk
+				var lv bool
+				lv = rv
+				(*l.Permission)[lk] = lv
+			}
+		}
+	}
+	if len(r.HistoryTree) > 0 {
+		buf1 := make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+		_ = buf1
+		for rk, rv := range r.HistoryTree {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv testobj.TestHistory
+			lv.DateUnix = rv.DateUnix
+			lv.Cost = rv.Cost
+			buf, lv.Comment = inspector.Bufferize(buf, rv.Comment)
+			(l.HistoryTree)[lk] = &lv
+		}
+	}
+	if len(r.Flags) > 0 {
+		buf1 := make(testobj.TestFlag, len(r.Flags))
+		_ = buf1
+		for rk, rv := range r.Flags {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv int32
+			lv = rv
+			(l.Flags)[lk] = lv
+		}
 	}
 	if l.Finance != nil {
 		l.Finance.MoneyIn = r.Finance.MoneyIn

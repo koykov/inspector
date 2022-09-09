@@ -2660,17 +2660,137 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			l.FloatPtrSlicePtr = &buf1
 		}
 	}
+	if len(r.IntStringMap) > 0 {
+		buf1 := make(map[int]string, len(r.IntStringMap))
+		_ = buf1
+		for rk, rv := range r.IntStringMap {
+			_, _ = rk, rv
+			var lk int
+			lk = rk
+			var lv string
+			buf, lv = inspector.BufferizeString(buf, rv)
+			(l.IntStringMap)[lk] = lv
+		}
+	}
+	if len(r.IntStringPtrMap) > 0 {
+		buf1 := make(map[int]*string, len(r.IntStringPtrMap))
+		_ = buf1
+		for rk, rv := range r.IntStringPtrMap {
+			_, _ = rk, rv
+			var lk int
+			lk = rk
+			var lv *string
+			buf, *lv = inspector.BufferizeString(buf, *rv)
+			(l.IntStringPtrMap)[lk] = lv
+		}
+	}
 	if l.IntStringMapPtr != nil {
+		if len(*r.IntStringMapPtr) > 0 {
+			buf1 := make(map[int]string, len(*r.IntStringMapPtr))
+			_ = buf1
+			for rk, rv := range *r.IntStringMapPtr {
+				_, _ = rk, rv
+				var lk int
+				lk = rk
+				var lv string
+				buf, lv = inspector.BufferizeString(buf, rv)
+				(*l.IntStringMapPtr)[lk] = lv
+			}
+		}
 	}
 	if l.IntStringPtrMapPtr != nil {
+		if len(*r.IntStringPtrMapPtr) > 0 {
+			buf1 := make(map[int]*string, len(*r.IntStringPtrMapPtr))
+			_ = buf1
+			for rk, rv := range *r.IntStringPtrMapPtr {
+				_, _ = rk, rv
+				var lk int
+				lk = rk
+				var lv *string
+				buf, *lv = inspector.BufferizeString(buf, *rv)
+				(*l.IntStringPtrMapPtr)[lk] = lv
+			}
+		}
 	}
 	if l.IntPtrStringPtrMapPtr != nil {
+		if len(*r.IntPtrStringPtrMapPtr) > 0 {
+			buf1 := make(map[*int]*string, len(*r.IntPtrStringPtrMapPtr))
+			_ = buf1
+			for rk, rv := range *r.IntPtrStringPtrMapPtr {
+				_, _ = rk, rv
+				var lk *int
+				lk = rk
+				var lv *string
+				buf, *lv = inspector.BufferizeString(buf, *rv)
+				(*l.IntPtrStringPtrMapPtr)[lk] = lv
+			}
+		}
+	}
+	if len(r.StringFloatMap) > 0 {
+		buf1 := make(testobj.TestStringFloatMap, len(r.StringFloatMap))
+		_ = buf1
+		for rk, rv := range r.StringFloatMap {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv float64
+			lv = rv
+			(l.StringFloatMap)[lk] = lv
+		}
+	}
+	if len(r.StringFloatPtrMap) > 0 {
+		buf1 := make(testobj.TestStringFloatPtrMap, len(r.StringFloatPtrMap))
+		_ = buf1
+		for rk, rv := range r.StringFloatPtrMap {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv *float64
+			lv = rv
+			(l.StringFloatPtrMap)[lk] = lv
+		}
 	}
 	if l.StringFloatMapPtr != nil {
+		if len(*r.StringFloatMapPtr) > 0 {
+			buf1 := make(testobj.TestStringFloatMap, len(*r.StringFloatMapPtr))
+			_ = buf1
+			for rk, rv := range *r.StringFloatMapPtr {
+				_, _ = rk, rv
+				var lk string
+				buf, lk = inspector.BufferizeString(buf, rk)
+				var lv float64
+				lv = rv
+				(*l.StringFloatMapPtr)[lk] = lv
+			}
+		}
 	}
 	if l.StringFloatPtrMapPtr != nil {
+		if len(*r.StringFloatPtrMapPtr) > 0 {
+			buf1 := make(testobj.TestStringFloatPtrMap, len(*r.StringFloatPtrMapPtr))
+			_ = buf1
+			for rk, rv := range *r.StringFloatPtrMapPtr {
+				_, _ = rk, rv
+				var lk string
+				buf, lk = inspector.BufferizeString(buf, rk)
+				var lv *float64
+				lv = rv
+				(*l.StringFloatPtrMapPtr)[lk] = lv
+			}
+		}
 	}
 	if l.StringPtrFloatPtrMapPtr != nil {
+		if len(*r.StringPtrFloatPtrMapPtr) > 0 {
+			buf1 := make(testobj.TestStringPtrFloatPtrMap, len(*r.StringPtrFloatPtrMapPtr))
+			_ = buf1
+			for rk, rv := range *r.StringPtrFloatPtrMapPtr {
+				_, _ = rk, rv
+				var lk *string
+				buf, *lk = inspector.BufferizeString(buf, *rk)
+				var lv *float64
+				lv = rv
+				(*l.StringPtrFloatPtrMapPtr)[lk] = lv
+			}
+		}
 	}
 	return nil
 }

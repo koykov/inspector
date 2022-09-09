@@ -263,5 +263,17 @@ func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
 }
 
 func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
+	if len(*r) > 0 {
+		buf0 := make(testobj.TestFlag, len(*r))
+		_ = buf0
+		for rk, rv := range *r {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv int32
+			lv = rv
+			(*l)[lk] = lv
+		}
+	}
 	return nil
 }

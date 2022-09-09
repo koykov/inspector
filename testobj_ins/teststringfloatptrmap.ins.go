@@ -264,5 +264,17 @@ func (i9 TestStringFloatPtrMapInspector) calcBytes(x *testobj.TestStringFloatPtr
 }
 
 func (i9 TestStringFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatPtrMap) error {
+	if len(*r) > 0 {
+		buf0 := make(testobj.TestStringFloatPtrMap, len(*r))
+		_ = buf0
+		for rk, rv := range *r {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv *float64
+			lv = rv
+			(*l)[lk] = lv
+		}
+	}
 	return nil
 }

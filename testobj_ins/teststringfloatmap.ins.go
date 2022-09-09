@@ -263,5 +263,17 @@ func (i8 TestStringFloatMapInspector) calcBytes(x *testobj.TestStringFloatMap) (
 }
 
 func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatMap) error {
+	if len(*r) > 0 {
+		buf0 := make(testobj.TestStringFloatMap, len(*r))
+		_ = buf0
+		for rk, rv := range *r {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv float64
+			lv = rv
+			(*l)[lk] = lv
+		}
+	}
 	return nil
 }

@@ -266,5 +266,17 @@ func (i7 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
 }
 
 func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) error {
+	if len(*r) > 0 {
+		buf0 := make(testobj.TestPermission, len(*r))
+		_ = buf0
+		for rk, rv := range *r {
+			_, _ = rk, rv
+			var lk int32
+			lk = rk
+			var lv bool
+			lv = rv
+			(*l)[lk] = lv
+		}
+	}
 	return nil
 }
