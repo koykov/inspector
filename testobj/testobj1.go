@@ -1,14 +1,14 @@
 package testobj
 
 type TestObject1 struct {
-	IntSlice       []int32
-	IntPtrSlice    []*int32
-	IntSlicePtr    *[]int32
-	IntPtrSlicePtr *[]*int32
-	ByteSlice      []byte
-	BytePtrSlice   []*byte
-	ByteSlicePtr   *[]byte
-	// BytePtrSlicePtr *[]*byte
+	IntSlice        []int32
+	IntPtrSlice     []*int32
+	IntSlicePtr     *[]int32
+	IntPtrSlicePtr  *[]*int32
+	ByteSlice       []byte
+	BytePtrSlice    []*byte
+	ByteSlicePtr    *[]byte
+	BytePtrSlicePtr *[]*byte
 
 	FloatSlice       TestFloatSlice
 	FloatPtrSlice    TestFloatPtrSlice
