@@ -5,6 +5,10 @@ type TestObject1 struct {
 	IntPtrSlice    []*int32
 	IntSlicePtr    *[]int32
 	IntPtrSlicePtr *[]*int32
+	ByteSlice      []byte
+	BytePtrSlice   []*byte
+	// ByteSlicePtr    *[]byte
+	// BytePtrSlicePtr *[]*byte
 
 	FloatSlice       TestFloatSlice
 	FloatPtrSlice    TestFloatPtrSlice
