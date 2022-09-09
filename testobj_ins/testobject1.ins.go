@@ -166,6 +166,10 @@ func (i6 TestObject1Inspector) GetTo(src interface{}, buf *interface{}, path ...
 			*buf = &x.BytePtrSlice
 			return
 		}
+		if path[0] == "ByteSlicePtr" {
+			*buf = &x.ByteSlicePtr
+			return
+		}
 		if path[0] == "FloatSlice" {
 			x0 := x.FloatSlice
 			_ = x0
@@ -663,6 +667,17 @@ func (i6 TestObject1Inspector) Cmp(src interface{}, cond inspector.Op, right str
 					return
 				}
 			}
+		}
+		if path[0] == "ByteSlicePtr" {
+			if right == inspector.Nil {
+				if cond == inspector.OpEq {
+					*result = x.ByteSlicePtr == nil
+				} else {
+					*result = x.ByteSlicePtr != nil
+				}
+				return
+			}
+			return
 		}
 		if path[0] == "FloatSlice" {
 			x0 := x.FloatSlice
@@ -1750,6 +1765,10 @@ func (i6 TestObject1Inspector) SetWB(dst, value interface{}, buf inspector.Accum
 			}
 			x.BytePtrSlice = x0
 		}
+		if path[0] == "ByteSlicePtr" {
+			inspector.AssignBuf(x.ByteSlicePtr, value, buf)
+			return nil
+		}
 		if path[0] == "FloatSlice" {
 			x0 := x.FloatSlice
 			if uvalue, ok := value.(*testobj.TestFloatSlice); ok {
@@ -2294,6 +2313,14 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 			}
 		}
 	}
+	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
+		return false
+	}
+	if lx != nil && rx != nil {
+		if !bytes.Equal(*lx.ByteSlicePtr, *rx.ByteSlicePtr) && inspector.DEQMustCheck("ByteSlicePtr", opts) {
+			return false
+		}
+	}
 	lx11 := lx.FloatSlice
 	rx11 := rx.FloatSlice
 	_, _ = lx11, rx11
@@ -2664,6 +2691,9 @@ func (i6 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
 
 func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
 	c += len(x.ByteSlice)
+	if x.ByteSlicePtr != nil {
+		c += len(*x.ByteSlicePtr)
+	}
 	for k1, v1 := range x.IntStringMap {
 		_, _ = k1, v1
 		c += len(v1)
@@ -2774,6 +2804,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 = append(buf1, b1)
 		}
 		l.BytePtrSlice = buf1
+	}
+	if l.ByteSlicePtr != nil {
+		buf, *l.ByteSlicePtr = inspector.Bufferize(buf, *r.ByteSlicePtr)
 	}
 	if len(r.FloatSlice) > 0 {
 		buf1 := make(testobj.TestFloatSlice, 0, len(r.FloatSlice))

@@ -330,6 +330,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 			ch.name = f.Name()
 			if ch.ptr {
 				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
+				ch.typn = strings.Replace(ch.typn, "*[]byte", "[]byte", 1)
 			}
 			node.chld = append(node.chld, ch)
 			node.hasb = node.hasb || ch.hasb
@@ -639,7 +640,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
-			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			c.wl("if !bytes.Equal(", c.fmtVnb(node, nlv, depth), ",", c.fmtVnb(node, nrv, depth), ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
 			nlv := c.fmtVnb(node, lv, depth)
 			nrv := c.fmtVnb(node, rv, depth)
@@ -1066,7 +1067,7 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
-			c.wl("c+=len(", v, ")")
+			c.wl("c+=len(", c.fmtVnb(node, v, depth), ")")
 		} else {
 			ni := "i" + strconv.Itoa(depth)
 			c.wl("for ", ni, ":=0; ", ni, "<len(", v, "); ", ni, "++{")
@@ -1123,7 +1124,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
-			c.wl("buf,", l, "=inspector.Bufferize(buf,", r, ")")
+			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.Bufferize(buf,", c.fmtVnb(node, r, depth), ")")
 		} else {
 			lb := "buf" + strconv.Itoa(depth)
 			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
