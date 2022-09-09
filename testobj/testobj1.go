@@ -37,6 +37,14 @@ type TestObject1 struct {
 	FloatPtrStructMap       map[*float64]TestStruct
 	FloatPtrStructPtrMap    map[*float64]*TestStruct
 	FloatPtrStructPtrMapPtr *map[*float64]*TestStruct
+
+	// the following cases is unsupported due to StrToX conversion problem.
+	// StructPtrUintMap       map[*TestStruct]uint32
+	// StructPtrUintPtrMap    map[*TestStruct]*uint32
+	// StructPtrUintPtrMapPtr *map[*TestStruct]*uint32
+
+	// BTW the following case is unsupported as well due to comparison operators restriction.
+	// StructUintMap map[TestStruct]uint32
 }
 
 type TestFloatSlice []float32
