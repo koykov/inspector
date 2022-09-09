@@ -330,7 +330,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 			ch.name = f.Name()
 			if ch.ptr {
 				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
-				ch.typn = strings.Replace(ch.typn, "*[]byte", "[]byte", 1)
+				ch.typn = strings.Replace(ch.typn, "*", "", 1)
 			}
 			node.chld = append(node.chld, ch)
 			node.hasb = node.hasb || ch.hasb
@@ -1070,7 +1070,7 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 			c.wl("c+=len(", c.fmtVnb(node, v, depth), ")")
 		} else {
 			ni := "i" + strconv.Itoa(depth)
-			c.wl("for ", ni, ":=0; ", ni, "<len(", v, "); ", ni, "++{")
+			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, v, depth), "); ", ni, "++{")
 			nv := "x" + strconv.Itoa(depth)
 			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[", ni, "]")
@@ -1141,7 +1141,11 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 				c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
 			}
 			_ = c.writeCopy(node.slct, nb, nv, depth+1)
-			c.wl(lb, "=append(", lb, ",", nb, ")")
+			pfx := ""
+			if node.slct.ptr && !c.isBuiltin(node.slct.typn) {
+				pfx = "&"
+			}
+			c.wl(lb, "=append(", lb, ",", pfx, nb, ")")
 			c.wl("}")
 			c.wl(l, "=", c.fmtP(node, lb, depth))
 			c.wl("}")
@@ -1337,7 +1341,7 @@ func (c *Compiler) fmtT(node *node) string {
 			if node.slct.ptr {
 				pfx = "*"
 			}
-			s = "[]" + pfx + s
+			s = "[]" + pfx + strings.TrimLeft(s, "*")
 		} else {
 			s = node.pkg + "." + strings.Trim(node.typn, "*")
 		}

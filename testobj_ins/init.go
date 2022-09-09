@@ -19,4 +19,5 @@ func init() {
 	inspector.RegisterInspector("TestStringFloatMap", TestStringFloatMapInspector{})
 	inspector.RegisterInspector("TestStringFloatPtrMap", TestStringFloatPtrMapInspector{})
 	inspector.RegisterInspector("TestStringPtrFloatPtrMap", TestStringPtrFloatPtrMapInspector{})
+	inspector.RegisterInspector("TestStruct", TestStructInspector{})
 }

@@ -77,11 +77,11 @@ func (i8 TestStringFloatMapInspector) Cmp(src interface{}, cond inspector.Op, ri
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact float64
-			t102, err102 := strconv.ParseFloat(right, 0)
-			if err102 != nil {
-				return err102
+			t174, err174 := strconv.ParseFloat(right, 0)
+			if err174 != nil {
+				return err174
 			}
-			rightExact = float64(t102)
+			rightExact = float64(t174)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
