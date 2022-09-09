@@ -820,7 +820,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			case "uint", "uint8", "uint16", "uint32", "uint64":
 				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(", c.fmtVnb(node.mapk, "k", depth+1), "), 10)")
 			case "float32", "float64":
-				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
+				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float64(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
 				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
