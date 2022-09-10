@@ -297,3 +297,17 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
 	}
 	return nil
 }
+
+func (i1 TestFlagInspector) Reset(x interface{}) {
+	var origin testobj.TestFlag
+	switch x.(type) {
+	case testobj.TestFlag:
+		origin = x.(testobj.TestFlag)
+	case *testobj.TestFlag:
+		origin = *x.(*testobj.TestFlag)
+	case **testobj.TestFlag:
+		origin = **x.(**testobj.TestFlag)
+	default:
+		return
+	}
+}

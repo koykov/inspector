@@ -316,3 +316,22 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error 
 	buf, l.Comment = inspector.Bufferize(buf, r.Comment)
 	return nil
 }
+
+func (i4 TestHistoryInspector) Reset(x interface{}) {
+	var origin testobj.TestHistory
+	switch x.(type) {
+	case testobj.TestHistory:
+		origin = x.(testobj.TestHistory)
+	case *testobj.TestHistory:
+		origin = *x.(*testobj.TestHistory)
+	case **testobj.TestHistory:
+		origin = **x.(**testobj.TestHistory)
+	default:
+		return
+	}
+	origin.DateUnix = 0
+	origin.Cost = 0
+	if l := len(origin.Comment); l > 0 {
+		(origin.Comment) = (origin.Comment)[:0]
+	}
+}

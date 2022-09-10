@@ -310,3 +310,20 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 	}
 	return nil
 }
+
+func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) {
+	var origin testobj.TestFloatPtrSlice
+	switch x.(type) {
+	case testobj.TestFloatPtrSlice:
+		origin = x.(testobj.TestFloatPtrSlice)
+	case *testobj.TestFloatPtrSlice:
+		origin = *x.(*testobj.TestFloatPtrSlice)
+	case **testobj.TestFloatPtrSlice:
+		origin = **x.(**testobj.TestFloatPtrSlice)
+	default:
+		return
+	}
+	if l := len(*origin); l > 0 {
+		(*origin) = (*origin)[:0]
+	}
+}

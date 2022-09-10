@@ -308,3 +308,20 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 	}
 	return nil
 }
+
+func (i3 TestFloatSliceInspector) Reset(x interface{}) {
+	var origin testobj.TestFloatSlice
+	switch x.(type) {
+	case testobj.TestFloatSlice:
+		origin = x.(testobj.TestFloatSlice)
+	case *testobj.TestFloatSlice:
+		origin = *x.(*testobj.TestFloatSlice)
+	case **testobj.TestFloatSlice:
+		origin = **x.(**testobj.TestFloatSlice)
+	default:
+		return
+	}
+	if l := len(*origin); l > 0 {
+		(*origin) = (*origin)[:0]
+	}
+}

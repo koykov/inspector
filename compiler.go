@@ -573,6 +573,25 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	}
 	c.wdl("return nil}")
 
+	// Reset methods.
+	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) {")
+	c.wl("var origin ", pname)
+	c.wl("switch x.(type) {")
+	c.wl("case ", pname, ":")
+	c.wl("origin = x.(", pname, ")")
+	c.wl("case *", pname, ":")
+	c.wl("origin = *x.(*", pname, ")")
+	c.wl("case **", pname, ":")
+	c.wl("origin = **x.(**", pname, ")")
+	c.wl("default:")
+	c.wl("return")
+	c.wl("}")
+	err = c.writeNodeReset(node, "origin", 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("}")
+
 	return c.err
 }
 
@@ -1235,6 +1254,82 @@ func (c *Compiler) writeCmp(left *node, leftVar string) {
 		c.wl("*result = ", leftVar, " <= rightExact")
 		c.wl("}")
 	}
+}
+
+func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			nv := v + "." + ch.name
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nv, "!=nil{")
+			}
+			_ = c.writeNodeReset(ch, nv, depth+1)
+			if chPtr {
+				c.wl("}")
+			}
+		}
+	case typeMap:
+		// ln := "len(" + c.fmtVnb(node, r, depth) + ")"
+		// buf := "buf" + strconv.Itoa(depth)
+		// c.wl("if ", ln, ">0 {")
+		// c.wl(buf, ":=make(", c.fmtT(node), ",", ln, ")")
+		// c.wl("_=", buf)
+		// c.wl("for rk,rv:=range ", c.fmtVnb(node, r, depth), "{")
+		// c.wl("_,_=rk,rv")
+		// c.wl("var lk ", c.fmtT(node.mapk))
+		// _ = c.writeCopy(node.mapk, "lk", "rk", depth+1)
+		// c.wl("var lv ", c.fmtT(node.mapv))
+		// _ = c.writeCopy(node.mapv, "lv", "rv", depth+1)
+		// pfx := ""
+		// if node.mapv.ptr && node.mapv.typ != typeBasic {
+		// 	pfx = "&"
+		// }
+		// c.wl(c.fmtVd(node, l, depth), "[lk]=", pfx, "lv")
+		// c.wl("}")
+		// c.wl("}")
+	case typeSlice:
+		c.wl("if l:=len(", c.fmtVnb(node, v, depth), ");l>0{")
+		if node.typn == "[]byte" {
+			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+		} else {
+			if node.slct.typ != typeBasic {
+				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
+				nv := "x" + strconv.Itoa(depth)
+				c.wl("for i:=0;i<l;i++{")
+				pfx := "&"
+				if node.slct.ptr {
+					pfx = ""
+				}
+				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
+				_ = c.writeNodeReset(node.slct, nv, depth+1)
+				c.wl("}")
+			}
+			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+		}
+		c.wl("}")
+	case typeBasic:
+		typ := node.typu
+		if len(typ) == 0 {
+			typ = node.typn
+		}
+		var def string
+		switch typ {
+		case "int", "int8", "int16", "int32", "int64",
+			"uint", "uint8", "uint16", "uint32", "uint64",
+			"float32", "float64", "byte", "rune":
+			def = "0"
+		case "bool":
+			def = "false"
+		case "string":
+			def = `""`
+		}
+		if len(def) > 0 {
+			c.wl(c.fmtVnb(node, v, depth), "=", def)
+		}
+	}
+	return nil
 }
 
 // Check if given type is a builtin type.

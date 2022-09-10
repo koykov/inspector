@@ -298,3 +298,17 @@ func (i9 TestStringFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStrin
 	}
 	return nil
 }
+
+func (i9 TestStringFloatPtrMapInspector) Reset(x interface{}) {
+	var origin testobj.TestStringFloatPtrMap
+	switch x.(type) {
+	case testobj.TestStringFloatPtrMap:
+		origin = x.(testobj.TestStringFloatPtrMap)
+	case *testobj.TestStringFloatPtrMap:
+		origin = *x.(*testobj.TestStringFloatPtrMap)
+	case **testobj.TestStringFloatPtrMap:
+		origin = **x.(**testobj.TestStringFloatPtrMap)
+	default:
+		return
+	}
+}
