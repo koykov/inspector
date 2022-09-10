@@ -303,6 +303,7 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 
 func (i7 TestPermissionInspector) Reset(x interface{}) {
 	var origin testobj.TestPermission
+	_ = origin
 	switch x.(type) {
 	case testobj.TestPermission:
 		origin = x.(testobj.TestPermission)

@@ -319,6 +319,7 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error 
 
 func (i4 TestHistoryInspector) Reset(x interface{}) {
 	var origin testobj.TestHistory
+	_ = origin
 	switch x.(type) {
 	case testobj.TestHistory:
 		origin = x.(testobj.TestHistory)
@@ -331,7 +332,7 @@ func (i4 TestHistoryInspector) Reset(x interface{}) {
 	}
 	origin.DateUnix = 0
 	origin.Cost = 0
-	if l := len(origin.Comment); l > 0 {
+	if l := len((origin.Comment)); l > 0 {
 		(origin.Comment) = (origin.Comment)[:0]
 	}
 }

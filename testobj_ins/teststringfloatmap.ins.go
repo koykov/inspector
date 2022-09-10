@@ -300,6 +300,7 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 
 func (i8 TestStringFloatMapInspector) Reset(x interface{}) {
 	var origin testobj.TestStringFloatMap
+	_ = origin
 	switch x.(type) {
 	case testobj.TestStringFloatMap:
 		origin = x.(testobj.TestStringFloatMap)

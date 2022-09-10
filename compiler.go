@@ -576,6 +576,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	// Reset methods.
 	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) {")
 	c.wl("var origin ", pname)
+	c.wl("_=origin")
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
 	c.wl("origin = x.(", pname, ")")
@@ -1290,7 +1291,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 		// c.wl("}")
 		// c.wl("}")
 	case typeSlice:
-		c.wl("if l:=len(", c.fmtVnb(node, v, depth), ");l>0{")
+		c.wl("if l:=len(", c.fmtV(node, v), ");l>0{")
 		if node.typn == "[]byte" {
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 		} else {
@@ -1306,7 +1307,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
 				c.wl("}")
 			}
-			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+			c.wl(c.fmtV(node, v), "=", c.fmtV(node, v), "[:0]")
 		}
 		c.wl("}")
 	case typeBasic:

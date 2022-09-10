@@ -1260,6 +1260,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 
 func (i5 TestObjectInspector) Reset(x interface{}) {
 	var origin testobj.TestObject
+	_ = origin
 	switch x.(type) {
 	case testobj.TestObject:
 		origin = x.(testobj.TestObject)
@@ -1271,7 +1272,7 @@ func (i5 TestObjectInspector) Reset(x interface{}) {
 		return
 	}
 	origin.Id = ""
-	if l := len(origin.Name); l > 0 {
+	if l := len((origin.Name)); l > 0 {
 		(origin.Name) = (origin.Name)[:0]
 	}
 	origin.Status = 0
@@ -1284,13 +1285,13 @@ func (i5 TestObjectInspector) Reset(x interface{}) {
 		origin.Finance.MoneyOut = 0
 		origin.Finance.Balance = 0
 		origin.Finance.AllowBuy = false
-		if l := len(origin.Finance.History); l > 0 {
+		if l := len((origin.Finance.History)); l > 0 {
 			_ = (origin.Finance.History)[l-1]
 			for i := 0; i < l; i++ {
 				x2 := &(origin.Finance.History)[i]
 				x2.DateUnix = 0
 				x2.Cost = 0
-				if l := len(x2.Comment); l > 0 {
+				if l := len((x2.Comment)); l > 0 {
 					(x2.Comment) = (x2.Comment)[:0]
 				}
 			}

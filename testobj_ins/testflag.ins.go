@@ -300,6 +300,7 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
 
 func (i1 TestFlagInspector) Reset(x interface{}) {
 	var origin testobj.TestFlag
+	_ = origin
 	switch x.(type) {
 	case testobj.TestFlag:
 		origin = x.(testobj.TestFlag)

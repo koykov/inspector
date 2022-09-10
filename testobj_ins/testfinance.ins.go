@@ -562,6 +562,7 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) error 
 
 func (i0 TestFinanceInspector) Reset(x interface{}) {
 	var origin testobj.TestFinance
+	_ = origin
 	switch x.(type) {
 	case testobj.TestFinance:
 		origin = x.(testobj.TestFinance)
@@ -576,13 +577,13 @@ func (i0 TestFinanceInspector) Reset(x interface{}) {
 	origin.MoneyOut = 0
 	origin.Balance = 0
 	origin.AllowBuy = false
-	if l := len(origin.History); l > 0 {
+	if l := len((origin.History)); l > 0 {
 		_ = (origin.History)[l-1]
 		for i := 0; i < l; i++ {
 			x1 := &(origin.History)[i]
 			x1.DateUnix = 0
 			x1.Cost = 0
-			if l := len(x1.Comment); l > 0 {
+			if l := len((x1.Comment)); l > 0 {
 				(x1.Comment) = (x1.Comment)[:0]
 			}
 		}

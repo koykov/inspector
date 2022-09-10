@@ -737,6 +737,7 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) error {
 
 func (i11 TestStructInspector) Reset(x interface{}) {
 	var origin testobj.TestStruct
+	_ = origin
 	switch x.(type) {
 	case testobj.TestStruct:
 		origin = x.(testobj.TestStruct)
@@ -749,7 +750,7 @@ func (i11 TestStructInspector) Reset(x interface{}) {
 	}
 	origin.A = 0
 	origin.S = ""
-	if l := len(origin.B); l > 0 {
+	if l := len((origin.B)); l > 0 {
 		(origin.B) = (origin.B)[:0]
 	}
 	origin.I = 0

@@ -301,6 +301,7 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 
 func (i10 TestStringPtrFloatPtrMapInspector) Reset(x interface{}) {
 	var origin testobj.TestStringPtrFloatPtrMap
+	_ = origin
 	switch x.(type) {
 	case testobj.TestStringPtrFloatPtrMap:
 		origin = x.(testobj.TestStringPtrFloatPtrMap)
