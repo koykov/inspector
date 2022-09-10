@@ -27,6 +27,8 @@ type Inspector interface {
 	Copy(interface{}) (interface{}, error)
 	// CopyWB makes a copy of variable value using buffer.
 	CopyWB(interface{}, AccumulativeBuffer) (interface{}, error)
+	// Reset resets variable.
+	Reset(interface{})
 }
 
 // Looper signature.

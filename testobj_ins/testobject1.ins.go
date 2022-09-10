@@ -8934,3 +8934,255 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 	}
 	return nil
 }
+
+func (i6 TestObject1Inspector) Reset(x interface{}) {
+	var origin testobj.TestObject1
+	_ = origin
+	switch x.(type) {
+	case testobj.TestObject1:
+		origin = x.(testobj.TestObject1)
+	case *testobj.TestObject1:
+		origin = *x.(*testobj.TestObject1)
+	case **testobj.TestObject1:
+		origin = **x.(**testobj.TestObject1)
+	default:
+		return
+	}
+	if l := len((origin.IntSlice)); l > 0 {
+		(origin.IntSlice) = (origin.IntSlice)[:0]
+	}
+	if l := len((origin.IntPtrSlice)); l > 0 {
+		(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
+	}
+	if origin.IntSlicePtr != nil {
+		if l := len((*origin.IntSlicePtr)); l > 0 {
+			(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
+		}
+	}
+	if origin.IntPtrSlicePtr != nil {
+		if l := len((*origin.IntPtrSlicePtr)); l > 0 {
+			(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
+		}
+	}
+	if l := len((origin.ByteSlice)); l > 0 {
+		(origin.ByteSlice) = (origin.ByteSlice)[:0]
+	}
+	if l := len((origin.BytePtrSlice)); l > 0 {
+		(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
+	}
+	if origin.ByteSlicePtr != nil {
+		if l := len((*origin.ByteSlicePtr)); l > 0 {
+			(*origin.ByteSlicePtr) = (*origin.ByteSlicePtr)[:0]
+		}
+	}
+	if origin.BytePtrSlicePtr != nil {
+		if l := len((*origin.BytePtrSlicePtr)); l > 0 {
+			(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
+		}
+	}
+	if l := len((origin.FloatSlice)); l > 0 {
+		(origin.FloatSlice) = (origin.FloatSlice)[:0]
+	}
+	if l := len((origin.FloatPtrSlice)); l > 0 {
+		(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
+	}
+	if origin.FloatSlicePtr != nil {
+		if l := len((*origin.FloatSlicePtr)); l > 0 {
+			(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
+		}
+	}
+	if origin.FloatPtrSlicePtr != nil {
+		if l := len((*origin.FloatPtrSlicePtr)); l > 0 {
+			(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
+		}
+	}
+	if l := len((origin.StructSlice)); l > 0 {
+		_ = (origin.StructSlice)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := &(origin.StructSlice)[i]
+			x1.A = 0
+			x1.S = ""
+			if l := len((x1.B)); l > 0 {
+				(x1.B) = (x1.B)[:0]
+			}
+			x1.I = 0
+			x1.I8 = 0
+			x1.I16 = 0
+			x1.I32 = 0
+			x1.I64 = 0
+			x1.U = 0
+			x1.U8 = 0
+			x1.U16 = 0
+			x1.U32 = 0
+			x1.U64 = 0
+			x1.F = 0
+			x1.D = 0
+		}
+		(origin.StructSlice) = (origin.StructSlice)[:0]
+	}
+	if l := len((origin.StructPtrSlice)); l > 0 {
+		_ = (origin.StructPtrSlice)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := (origin.StructPtrSlice)[i]
+			x1.A = 0
+			x1.S = ""
+			if l := len((x1.B)); l > 0 {
+				(x1.B) = (x1.B)[:0]
+			}
+			x1.I = 0
+			x1.I8 = 0
+			x1.I16 = 0
+			x1.I32 = 0
+			x1.I64 = 0
+			x1.U = 0
+			x1.U8 = 0
+			x1.U16 = 0
+			x1.U32 = 0
+			x1.U64 = 0
+			x1.F = 0
+			x1.D = 0
+		}
+		(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
+	}
+	if origin.StructSlicePtr != nil {
+		if l := len((*origin.StructSlicePtr)); l > 0 {
+			_ = (*origin.StructSlicePtr)[l-1]
+			for i := 0; i < l; i++ {
+				x1 := &(*origin.StructSlicePtr)[i]
+				x1.A = 0
+				x1.S = ""
+				if l := len((x1.B)); l > 0 {
+					(x1.B) = (x1.B)[:0]
+				}
+				x1.I = 0
+				x1.I8 = 0
+				x1.I16 = 0
+				x1.I32 = 0
+				x1.I64 = 0
+				x1.U = 0
+				x1.U8 = 0
+				x1.U16 = 0
+				x1.U32 = 0
+				x1.U64 = 0
+				x1.F = 0
+				x1.D = 0
+			}
+			(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
+		}
+	}
+	if origin.StructPtrSlicePtr != nil {
+		if l := len((*origin.StructPtrSlicePtr)); l > 0 {
+			_ = (*origin.StructPtrSlicePtr)[l-1]
+			for i := 0; i < l; i++ {
+				x1 := (*origin.StructPtrSlicePtr)[i]
+				x1.A = 0
+				x1.S = ""
+				if l := len((x1.B)); l > 0 {
+					(x1.B) = (x1.B)[:0]
+				}
+				x1.I = 0
+				x1.I8 = 0
+				x1.I16 = 0
+				x1.I32 = 0
+				x1.I64 = 0
+				x1.U = 0
+				x1.U8 = 0
+				x1.U16 = 0
+				x1.U32 = 0
+				x1.U64 = 0
+				x1.F = 0
+				x1.D = 0
+			}
+			(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
+		}
+	}
+	if l := len((origin.IntStringMap)); l > 0 {
+		for k, _ := range origin.IntStringMap {
+			delete((origin.IntStringMap), k)
+		}
+	}
+	if l := len((origin.IntStringPtrMap)); l > 0 {
+		for k, _ := range origin.IntStringPtrMap {
+			delete((origin.IntStringPtrMap), k)
+		}
+	}
+	if origin.IntStringMapPtr != nil {
+		if l := len((*origin.IntStringMapPtr)); l > 0 {
+			for k, _ := range *origin.IntStringMapPtr {
+				delete((*origin.IntStringMapPtr), k)
+			}
+		}
+	}
+	if origin.IntStringPtrMapPtr != nil {
+		if l := len((*origin.IntStringPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.IntStringPtrMapPtr {
+				delete((*origin.IntStringPtrMapPtr), k)
+			}
+		}
+	}
+	if origin.IntPtrStringPtrMapPtr != nil {
+		if l := len((*origin.IntPtrStringPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.IntPtrStringPtrMapPtr {
+				delete((*origin.IntPtrStringPtrMapPtr), k)
+			}
+		}
+	}
+	if l := len((origin.StringFloatMap)); l > 0 {
+		for k, _ := range origin.StringFloatMap {
+			delete((origin.StringFloatMap), k)
+		}
+	}
+	if l := len((origin.StringFloatPtrMap)); l > 0 {
+		for k, _ := range origin.StringFloatPtrMap {
+			delete((origin.StringFloatPtrMap), k)
+		}
+	}
+	if origin.StringFloatMapPtr != nil {
+		if l := len((*origin.StringFloatMapPtr)); l > 0 {
+			for k, _ := range *origin.StringFloatMapPtr {
+				delete((*origin.StringFloatMapPtr), k)
+			}
+		}
+	}
+	if origin.StringFloatPtrMapPtr != nil {
+		if l := len((*origin.StringFloatPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.StringFloatPtrMapPtr {
+				delete((*origin.StringFloatPtrMapPtr), k)
+			}
+		}
+	}
+	if origin.StringPtrFloatPtrMapPtr != nil {
+		if l := len((*origin.StringPtrFloatPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.StringPtrFloatPtrMapPtr {
+				delete((*origin.StringPtrFloatPtrMapPtr), k)
+			}
+		}
+	}
+	if l := len((origin.FloatStructMap)); l > 0 {
+		for k, _ := range origin.FloatStructMap {
+			delete((origin.FloatStructMap), k)
+		}
+	}
+	if l := len((origin.FloatStructPtrMap)); l > 0 {
+		for k, _ := range origin.FloatStructPtrMap {
+			delete((origin.FloatStructPtrMap), k)
+		}
+	}
+	if l := len((origin.FloatPtrStructMap)); l > 0 {
+		for k, _ := range origin.FloatPtrStructMap {
+			delete((origin.FloatPtrStructMap), k)
+		}
+	}
+	if l := len((origin.FloatPtrStructPtrMap)); l > 0 {
+		for k, _ := range origin.FloatPtrStructPtrMap {
+			delete((origin.FloatPtrStructPtrMap), k)
+		}
+	}
+	if origin.FloatPtrStructPtrMapPtr != nil {
+		if l := len((*origin.FloatPtrStructPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.FloatPtrStructPtrMapPtr {
+				delete((*origin.FloatPtrStructPtrMapPtr), k)
+			}
+		}
+	}
+}

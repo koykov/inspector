@@ -1257,3 +1257,60 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 	}
 	return nil
 }
+
+func (i5 TestObjectInspector) Reset(x interface{}) {
+	var origin testobj.TestObject
+	_ = origin
+	switch x.(type) {
+	case testobj.TestObject:
+		origin = x.(testobj.TestObject)
+	case *testobj.TestObject:
+		origin = *x.(*testobj.TestObject)
+	case **testobj.TestObject:
+		origin = **x.(**testobj.TestObject)
+	default:
+		return
+	}
+	origin.Id = ""
+	if l := len((origin.Name)); l > 0 {
+		(origin.Name) = (origin.Name)[:0]
+	}
+	origin.Status = 0
+	origin.Ustate = 0
+	origin.Cost = 0
+	if origin.Permission != nil {
+		if l := len((*origin.Permission)); l > 0 {
+			for k, _ := range *origin.Permission {
+				delete((*origin.Permission), k)
+			}
+		}
+	}
+	if l := len((origin.HistoryTree)); l > 0 {
+		for k, _ := range origin.HistoryTree {
+			delete((origin.HistoryTree), k)
+		}
+	}
+	if l := len((origin.Flags)); l > 0 {
+		for k, _ := range origin.Flags {
+			delete((origin.Flags), k)
+		}
+	}
+	if origin.Finance != nil {
+		origin.Finance.MoneyIn = 0
+		origin.Finance.MoneyOut = 0
+		origin.Finance.Balance = 0
+		origin.Finance.AllowBuy = false
+		if l := len((origin.Finance.History)); l > 0 {
+			_ = (origin.Finance.History)[l-1]
+			for i := 0; i < l; i++ {
+				x2 := &(origin.Finance.History)[i]
+				x2.DateUnix = 0
+				x2.Cost = 0
+				if l := len((x2.Comment)); l > 0 {
+					(x2.Comment) = (x2.Comment)[:0]
+				}
+			}
+			(origin.Finance.History) = (origin.Finance.History)[:0]
+		}
+	}
+}

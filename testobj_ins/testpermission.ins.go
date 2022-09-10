@@ -300,3 +300,23 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 	}
 	return nil
 }
+
+func (i7 TestPermissionInspector) Reset(x interface{}) {
+	var origin testobj.TestPermission
+	_ = origin
+	switch x.(type) {
+	case testobj.TestPermission:
+		origin = x.(testobj.TestPermission)
+	case *testobj.TestPermission:
+		origin = *x.(*testobj.TestPermission)
+	case **testobj.TestPermission:
+		origin = **x.(**testobj.TestPermission)
+	default:
+		return
+	}
+	if l := len((origin)); l > 0 {
+		for k, _ := range origin {
+			delete((origin), k)
+		}
+	}
+}

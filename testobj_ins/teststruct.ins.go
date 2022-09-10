@@ -734,3 +734,35 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) error {
 	l.D = r.D
 	return nil
 }
+
+func (i11 TestStructInspector) Reset(x interface{}) {
+	var origin testobj.TestStruct
+	_ = origin
+	switch x.(type) {
+	case testobj.TestStruct:
+		origin = x.(testobj.TestStruct)
+	case *testobj.TestStruct:
+		origin = *x.(*testobj.TestStruct)
+	case **testobj.TestStruct:
+		origin = **x.(**testobj.TestStruct)
+	default:
+		return
+	}
+	origin.A = 0
+	origin.S = ""
+	if l := len((origin.B)); l > 0 {
+		(origin.B) = (origin.B)[:0]
+	}
+	origin.I = 0
+	origin.I8 = 0
+	origin.I16 = 0
+	origin.I32 = 0
+	origin.I64 = 0
+	origin.U = 0
+	origin.U8 = 0
+	origin.U16 = 0
+	origin.U32 = 0
+	origin.U64 = 0
+	origin.F = 0
+	origin.D = 0
+}

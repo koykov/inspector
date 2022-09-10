@@ -297,3 +297,23 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 	}
 	return nil
 }
+
+func (i8 TestStringFloatMapInspector) Reset(x interface{}) {
+	var origin testobj.TestStringFloatMap
+	_ = origin
+	switch x.(type) {
+	case testobj.TestStringFloatMap:
+		origin = x.(testobj.TestStringFloatMap)
+	case *testobj.TestStringFloatMap:
+		origin = *x.(*testobj.TestStringFloatMap)
+	case **testobj.TestStringFloatMap:
+		origin = **x.(**testobj.TestStringFloatMap)
+	default:
+		return
+	}
+	if l := len((origin)); l > 0 {
+		for k, _ := range origin {
+			delete((origin), k)
+		}
+	}
+}
