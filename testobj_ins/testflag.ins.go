@@ -247,8 +247,28 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i1.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i1.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i1 TestFlagInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFlag
+	switch x.(type) {
+	case testobj.TestFlag:
+		origin = x.(testobj.TestFlag)
+	case *testobj.TestFlag:
+		origin = *x.(*testobj.TestFlag)
+	case **testobj.TestFlag:
+		origin = **x.(**testobj.TestFlag)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

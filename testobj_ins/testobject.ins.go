@@ -1143,8 +1143,28 @@ func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i5.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i5.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i5 TestObjectInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestObject
+	switch x.(type) {
+	case testobj.TestObject:
+		origin = x.(testobj.TestObject)
+	case *testobj.TestObject:
+		origin = *x.(*testobj.TestObject)
+	case **testobj.TestObject:
+		origin = **x.(**testobj.TestObject)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

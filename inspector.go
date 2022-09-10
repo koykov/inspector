@@ -25,6 +25,8 @@ type Inspector interface {
 	Unmarshal([]byte, Encoding) (interface{}, error)
 	// Copy makes a copy of variable value.
 	Copy(interface{}) (interface{}, error)
+	// CopyWB makes a copy of variable value using buffer.
+	CopyWB(interface{}, AccumulativeBuffer) (interface{}, error)
 }
 
 // Looper signature.
@@ -37,17 +39,6 @@ type Looper interface {
 	SetVal(val interface{}, ins Inspector)
 	// Iterate performs the iteration.
 	Iterate() LoopCtl
-}
-
-// AccumulativeBuffer describes buffer signature.
-// Collects data during assign functions work.
-type AccumulativeBuffer interface {
-	// AcquireBytes returns more space to use.
-	AcquireBytes() []byte
-	// ReleaseBytes returns space to the buffer.
-	ReleaseBytes([]byte)
-	// Reset all accumulated data.
-	Reset()
 }
 
 var (

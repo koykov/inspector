@@ -549,7 +549,13 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 
 	// Copy methods.
 	c.wl("func (", recv, " ", inst, ") Copy(x interface{}) (interface{}, error) {")
-	err = c.writeNodeCopy(node, recv, pname)
+	err = c.writeNodeCopy(node, recv, pname, false)
+	if err != nil {
+		return err
+	}
+	c.wdl("}")
+	c.wl("func (", recv, " ", inst, ") CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {")
+	err = c.writeNodeCopy(node, recv, pname, true)
 	if err != nil {
 		return err
 	}
@@ -1018,7 +1024,7 @@ return nil, inspector.ErrUnknownEncodingType
 	return nil
 }
 
-func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
+func (c *Compiler) writeNodeCopy(_ *node, recv, pname string, buffered bool) error {
 	c.wl("var origin, cpy ", pname)
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
@@ -1030,9 +1036,14 @@ func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
 	c.wl("default:")
 	c.wl("return nil, inspector.ErrUnsupportedType")
 	c.wl("}")
-	c.wl("bc:=", recv, ".calcBytes(&origin)")
-	c.wl("buf:=make([]byte,0,bc)")
-	c.wl("if err:=", recv, ".cpy(buf,&cpy,&origin);err!=nil{return nil,err}")
+	if buffered {
+		c.wl("buf1:=buf.AcquireBytes()")
+		c.wl("defer buf.ReleaseBytes(buf1)")
+	} else {
+		c.wl("bc:=", recv, ".calcBytes(&origin)")
+		c.wl("buf1:=make([]byte,0,bc)")
+	}
+	c.wl("if err:=", recv, ".cpy(buf1,&cpy,&origin);err!=nil{return nil,err}")
 	c.wl("return cpy, nil")
 	return nil
 }

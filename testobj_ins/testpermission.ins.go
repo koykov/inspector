@@ -254,8 +254,28 @@ func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i7.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i7.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i7.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i7 TestPermissionInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestPermission
+	switch x.(type) {
+	case testobj.TestPermission:
+		origin = x.(testobj.TestPermission)
+	case *testobj.TestPermission:
+		origin = *x.(*testobj.TestPermission)
+	case **testobj.TestPermission:
+		origin = **x.(**testobj.TestPermission)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i7.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

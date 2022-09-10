@@ -248,8 +248,28 @@ func (i10 TestStringPtrFloatPtrMapInspector) Copy(x interface{}) (interface{}, e
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i10.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i10.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i10.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i10 TestStringPtrFloatPtrMapInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestStringPtrFloatPtrMap
+	switch x.(type) {
+	case testobj.TestStringPtrFloatPtrMap:
+		origin = x.(testobj.TestStringPtrFloatPtrMap)
+	case *testobj.TestStringPtrFloatPtrMap:
+		origin = *x.(*testobj.TestStringPtrFloatPtrMap)
+	case **testobj.TestStringPtrFloatPtrMap:
+		origin = **x.(**testobj.TestStringPtrFloatPtrMap)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i10.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

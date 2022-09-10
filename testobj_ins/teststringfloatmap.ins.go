@@ -247,8 +247,28 @@ func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i8.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i8.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i8.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i8 TestStringFloatMapInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestStringFloatMap
+	switch x.(type) {
+	case testobj.TestStringFloatMap:
+		origin = x.(testobj.TestStringFloatMap)
+	case *testobj.TestStringFloatMap:
+		origin = *x.(*testobj.TestStringFloatMap)
+	case **testobj.TestStringFloatMap:
+		origin = **x.(**testobj.TestStringFloatMap)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i8.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

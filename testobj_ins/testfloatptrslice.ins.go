@@ -266,8 +266,28 @@ func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i2.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i2.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i2.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i2 TestFloatPtrSliceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFloatPtrSlice
+	switch x.(type) {
+	case testobj.TestFloatPtrSlice:
+		origin = x.(testobj.TestFloatPtrSlice)
+	case *testobj.TestFloatPtrSlice:
+		origin = *x.(*testobj.TestFloatPtrSlice)
+	case **testobj.TestFloatPtrSlice:
+		origin = **x.(**testobj.TestFloatPtrSlice)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i2.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

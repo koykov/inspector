@@ -264,8 +264,28 @@ func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i3.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i3.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i3.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i3 TestFloatSliceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFloatSlice
+	switch x.(type) {
+	case testobj.TestFloatSlice:
+		origin = x.(testobj.TestFloatSlice)
+	case *testobj.TestFloatSlice:
+		origin = *x.(*testobj.TestFloatSlice)
+	case **testobj.TestFloatSlice:
+		origin = **x.(**testobj.TestFloatSlice)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i3.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

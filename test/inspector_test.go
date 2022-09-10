@@ -10,25 +10,6 @@ import (
 	"github.com/koykov/inspector/testobj_ins"
 )
 
-type accBuf struct {
-	b []byte
-}
-
-func (ab *accBuf) AcquireBytes() []byte {
-	return ab.b
-}
-
-func (ab *accBuf) ReleaseBytes(p []byte) {
-	if len(p) == 0 {
-		return
-	}
-	ab.b = p
-}
-
-func (ab *accBuf) Reset() {
-	ab.b = ab.b[:0]
-}
-
 var (
 	testO = &testobj.TestObject{
 		Id:         "foo",
@@ -297,7 +278,7 @@ func TestInspector(t *testing.T) {
 		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, nil)
 	})
 	t.Run("cg/setBuf", func(t *testing.T) {
-		ab := accBuf{}
+		ab := inspector.ByteBuffer{}
 		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, &ab)
 	})
 }
@@ -374,7 +355,7 @@ func BenchmarkInspector(b *testing.B) {
 	})
 	b.Run("cg/setBuf", func(b *testing.B) {
 		ins := &testobj_ins.TestObjectInspector{}
-		ab := accBuf{}
+		ab := inspector.ByteBuffer{}
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
 			testSetterPtr(b, ins, &ab)

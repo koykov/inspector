@@ -505,8 +505,28 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i0.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i0.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i0 TestFinanceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFinance
+	switch x.(type) {
+	case testobj.TestFinance:
+		origin = x.(testobj.TestFinance)
+	case *testobj.TestFinance:
+		origin = *x.(*testobj.TestFinance)
+	case **testobj.TestFinance:
+		origin = **x.(**testobj.TestFinance)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

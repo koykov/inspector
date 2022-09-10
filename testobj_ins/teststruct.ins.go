@@ -683,8 +683,28 @@ func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i11.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i11.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i11.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i11 TestStructInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestStruct
+	switch x.(type) {
+	case testobj.TestStruct:
+		origin = x.(testobj.TestStruct)
+	case *testobj.TestStruct:
+		origin = *x.(*testobj.TestStruct)
+	case **testobj.TestStruct:
+		origin = **x.(**testobj.TestStruct)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i11.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil

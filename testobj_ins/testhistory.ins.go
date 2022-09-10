@@ -278,8 +278,28 @@ func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i4.calcBytes(&origin)
-	buf := make([]byte, 0, bc)
-	if err := i4.cpy(buf, &cpy, &origin); err != nil {
+	buf1 := make([]byte, 0, bc)
+	if err := i4.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i4 TestHistoryInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestHistory
+	switch x.(type) {
+	case testobj.TestHistory:
+		origin = x.(testobj.TestHistory)
+	case *testobj.TestHistory:
+		origin = *x.(*testobj.TestHistory)
+	case **testobj.TestHistory:
+		origin = **x.(**testobj.TestHistory)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i4.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
