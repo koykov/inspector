@@ -1279,6 +1279,21 @@ func (i5 TestObjectInspector) Reset(x interface{}) {
 	origin.Ustate = 0
 	origin.Cost = 0
 	if origin.Permission != nil {
+		if l := len((*origin.Permission)); l > 0 {
+			for k, _ := range *origin.Permission {
+				delete((*origin.Permission), k)
+			}
+		}
+	}
+	if l := len((origin.HistoryTree)); l > 0 {
+		for k, _ := range origin.HistoryTree {
+			delete((origin.HistoryTree), k)
+		}
+	}
+	if l := len((origin.Flags)); l > 0 {
+		for k, _ := range origin.Flags {
+			delete((origin.Flags), k)
+		}
 	}
 	if origin.Finance != nil {
 		origin.Finance.MoneyIn = 0

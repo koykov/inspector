@@ -311,4 +311,9 @@ func (i8 TestStringFloatMapInspector) Reset(x interface{}) {
 	default:
 		return
 	}
+	if l := len((origin)); l > 0 {
+		for k, _ := range origin {
+			delete((origin), k)
+		}
+	}
 }

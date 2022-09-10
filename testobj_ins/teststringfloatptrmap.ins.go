@@ -312,4 +312,9 @@ func (i9 TestStringFloatPtrMapInspector) Reset(x interface{}) {
 	default:
 		return
 	}
+	if l := len((origin)); l > 0 {
+		for k, _ := range origin {
+			delete((origin), k)
+		}
+	}
 }
