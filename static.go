@@ -423,14 +423,81 @@ func (i StaticInspector) CopyWB(x interface{}, buf AccumulativeBuffer) (interfac
 		bb = append(bb, p...)
 		t = bb[offset:]
 		buf.ReleaseBytes(bb)
-	case string:
-		t = x.(string)
 	case *string:
 		t = *x.(*string)
 	default:
 		t = x
 	}
 	return t, nil
+}
+
+func (i StaticInspector) Reset(x interface{}) {
+	switch x.(type) {
+	case bool:
+		x = false
+	case *bool:
+		*x.(*bool) = false
+	case int:
+		x = 0
+	case *int:
+		*x.(*int) = 0
+	case *int8:
+		*x.(*int8) = 0
+	case int8:
+		x = 0
+	case *int16:
+		*x.(*int16) = 0
+	case int16:
+		x = 0
+	case *int32:
+		*x.(*int32) = 0
+	case int32:
+		x = 0
+	case *int64:
+		*x.(*int64) = 0
+	case int64:
+		x = 0
+	case *uint:
+		*x.(*uint) = 0
+	case uint:
+		x = 0
+	case *uint8:
+		*x.(*uint8) = 0
+	case uint8:
+		x = 0
+	case *uint16:
+		*x.(*uint16) = 0
+	case uint16:
+		x = 0
+	case *uint32:
+		*x.(*uint32) = 0
+	case uint32:
+		x = 0
+	case *uint64:
+		*x.(*uint64) = 0
+	case uint64:
+		x = 0
+	case *float32:
+		*x.(*float32) = 0
+	case float32:
+		x = 0
+	case *float64:
+		*x.(*float64) = 0
+	case float64:
+		x = 0
+	case []byte:
+		p := x.([]byte)
+		x = p[:0]
+	case *[]byte:
+		p := *x.(*[]byte)
+		p = p[:0]
+		x = &p
+	case string:
+		x = ""
+	case *string:
+		var s string
+		x = &s
+	}
 }
 
 func (i StaticInspector) indBool(x interface{}) (bool, bool) {

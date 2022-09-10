@@ -135,3 +135,5 @@ func (i ReflectInspector) Copy(x interface{}) (interface{}, error) {
 func (i ReflectInspector) CopyWB(x interface{}, _ AccumulativeBuffer) (interface{}, error) {
 	return x, nil
 }
+
+func (i ReflectInspector) Reset(_ interface{}) {}
