@@ -4,8 +4,6 @@
 package testobj_ins
 
 import (
-	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
@@ -248,12 +246,54 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i1.calcBytes(&origin)
+	buf1 := make([]byte, 0, bc)
+	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
+}
+
+func (i1 TestFlagInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFlag
+	switch x.(type) {
+	case testobj.TestFlag:
+		origin = x.(testobj.TestFlag)
+	case *testobj.TestFlag:
+		origin = *x.(*testobj.TestFlag)
+	case **testobj.TestFlag:
+		origin = **x.(**testobj.TestFlag)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
+	for k0, v0 := range *x {
+		_, _ = k0, v0
+		c += len(k0)
+	}
+	return c
+}
+
+func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
+	if len(*r) > 0 {
+		buf0 := make(testobj.TestFlag, len(*r))
+		_ = buf0
+		for rk, rv := range *r {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv int32
+			lv = rv
+			(*l)[lk] = lv
+		}
+	}
+	return nil
 }

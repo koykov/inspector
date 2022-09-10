@@ -5,7 +5,6 @@ package testobj_ins
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -505,12 +504,58 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i0.calcBytes(&origin)
+	buf1 := make([]byte, 0, bc)
+	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
+}
+
+func (i0 TestFinanceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestFinance
+	switch x.(type) {
+	case testobj.TestFinance:
+		origin = x.(testobj.TestFinance)
+	case *testobj.TestFinance:
+		origin = *x.(*testobj.TestFinance)
+	case **testobj.TestFinance:
+		origin = **x.(**testobj.TestFinance)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
+	for i1 := 0; i1 < len(x.History); i1++ {
+		x1 := &(x.History)[i1]
+		c += len(x1.Comment)
+	}
+	return c
+}
+
+func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) error {
+	l.MoneyIn = r.MoneyIn
+	l.MoneyOut = r.MoneyOut
+	l.Balance = r.Balance
+	l.AllowBuy = r.AllowBuy
+	if len(r.History) > 0 {
+		buf1 := make([]testobj.TestHistory, 0, len(r.History))
+		for i1 := 0; i1 < len(r.History); i1++ {
+			var b1 testobj.TestHistory
+			x1 := &(l.History)[i1]
+			b1.DateUnix = x1.DateUnix
+			b1.Cost = x1.Cost
+			buf, b1.Comment = inspector.Bufferize(buf, x1.Comment)
+			buf1 = append(buf1, b1)
+		}
+		l.History = buf1
+	}
+	return nil
 }

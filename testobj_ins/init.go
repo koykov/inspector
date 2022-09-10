@@ -10,7 +10,14 @@ import (
 func init() {
 	inspector.RegisterInspector("TestFinance", TestFinanceInspector{})
 	inspector.RegisterInspector("TestFlag", TestFlagInspector{})
+	inspector.RegisterInspector("TestFloatPtrSlice", TestFloatPtrSliceInspector{})
+	inspector.RegisterInspector("TestFloatSlice", TestFloatSliceInspector{})
 	inspector.RegisterInspector("TestHistory", TestHistoryInspector{})
 	inspector.RegisterInspector("TestObject", TestObjectInspector{})
+	inspector.RegisterInspector("TestObject1", TestObject1Inspector{})
 	inspector.RegisterInspector("TestPermission", TestPermissionInspector{})
+	inspector.RegisterInspector("TestStringFloatMap", TestStringFloatMapInspector{})
+	inspector.RegisterInspector("TestStringFloatPtrMap", TestStringFloatPtrMapInspector{})
+	inspector.RegisterInspector("TestStringPtrFloatPtrMap", TestStringPtrFloatPtrMapInspector{})
+	inspector.RegisterInspector("TestStruct", TestStructInspector{})
 }

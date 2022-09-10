@@ -103,6 +103,8 @@ type node struct {
 	mapv *node
 	// If is a slice, that node contains information about value's type.
 	slct *node
+	// Flag if node contains bytes or string inside.
+	hasb bool
 }
 
 var (
@@ -328,8 +330,10 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 			ch.name = f.Name()
 			if ch.ptr {
 				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
+				ch.typn = strings.Replace(ch.typn, "*", "", 1)
 			}
 			node.chld = append(node.chld, ch)
+			node.hasb = node.hasb || ch.hasb
 		}
 		return node, nil
 	}
@@ -340,6 +344,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		node.typ = typeMap
 		node.mapk, err = c.parseType(m.Key())
 		node.mapv, err = c.parseType(m.Elem())
+		node.hasb = node.mapk.hasb || node.mapv.hasb
 		return node, err
 	}
 
@@ -348,12 +353,14 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		var err error
 		node.typ = typeSlice
 		node.slct, err = c.parseType(s.Elem())
+		node.hasb = node.typn == "[]byte" || node.slct.hasb
 		return node, err
 	}
 
 	if b, ok := u.(*types.Basic); ok {
 		// Fill up the underlying type of basic node.
 		node.typu = b.Name()
+		node.hasb = node.typu == "string"
 	}
 
 	return node, nil
@@ -542,11 +549,29 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 
 	// Copy methods.
 	c.wl("func (", recv, " ", inst, ") Copy(x interface{}) (interface{}, error) {")
-	err = c.writeNodeCopy(node, pname)
+	err = c.writeNodeCopy(node, recv, pname, false)
 	if err != nil {
 		return err
 	}
 	c.wdl("}")
+	c.wl("func (", recv, " ", inst, ") CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {")
+	err = c.writeNodeCopy(node, recv, pname, true)
+	if err != nil {
+		return err
+	}
+	c.wdl("}")
+	c.wl("func (", recv, " ", inst, ") calcBytes(x *", pname, ") (c int) {")
+	err = c.writeCalcBytes(node, "x", 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("return c}")
+	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,l, r *", pname, ") error {")
+	err = c.writeCopy(node, "l", "r", 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("return nil}")
 
 	return c.err
 }
@@ -596,12 +621,8 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 			c.wl("}")
 		}
 	case typeMap:
-		pfx := ""
-		if node.ptr || depth == 0 {
-			pfx = "*"
-		}
-		nlv := pfx + lv
-		nrv := pfx + rv
+		nlv := c.fmtVnb(node, lv, depth)
+		nrv := c.fmtVnb(node, rv, depth)
 		if deqMustSkipByTypeAndPath {
 			c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
 		}
@@ -625,14 +646,10 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 	case typeSlice:
 		if node.typn == "[]byte" {
 			nlv, nrv := lv+"."+node.name, rv+"."+node.name
-			c.wl("if !bytes.Equal(", nlv, ",", nrv, ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
+			c.wl("if !bytes.Equal(", c.fmtVnb(node, nlv, depth), ",", c.fmtVnb(node, nrv, depth), ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
-			pfx := ""
-			if node.ptr || depth == 0 {
-				pfx = "*"
-			}
-			nlv := pfx + lv
-			nrv := pfx + rv
+			nlv := c.fmtVnb(node, lv, depth)
+			nrv := c.fmtVnb(node, rv, depth)
 			if deqMustSkipByTypeAndPath {
 				c.wl("if inspector.DEQMustCheck(\"", path, "\",opts){")
 			}
@@ -738,7 +755,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.wl(nv, " := ", pfx, vsrc)
 				if mode == modeSet && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice) {
 					nilChk := ch.ptr || ch.typ == typeMap || ch.typ == typeSlice
-					typ := c.fmtTyp(ch)
+					typ := c.fmtT(ch)
 					pfx := "*"
 					if ch.ptr || nvPtr {
 						pfx = ""
@@ -801,15 +818,15 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			c.wl("if l.RequireKey() {")
 			switch node.mapk.typn {
 			case "string", "[]byte":
-				c.wl("*buf = append((*buf)[:0], k...)")
+				c.wl("*buf = append((*buf)[:0], ", c.fmtVnb(node.mapk, "k", depth+1), "...)")
 			case "bool":
 				c.wl(`if k { *buf = append((*buf)[:0], "true"...) } else { *buf = append(*buf[:0], "false"...) }`)
 			case "int", "int8", "int16", "int32", "int64":
-				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(k), 10)")
+				c.wl("*buf = strconv.AppendInt((*buf)[:0], int64(", c.fmtVnb(node.mapk, "k", depth+1), "), 10)")
 			case "uint", "uint8", "uint16", "uint32", "uint64":
-				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(k), 10)")
+				c.wl("*buf = strconv.AppendUint((*buf)[:0], uint64(", c.fmtVnb(node.mapk, "k", depth+1), "), 10)")
 			case "float32", "float64":
-				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float6464(k), 'f', -1, 64)")
+				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float64(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
 				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
@@ -836,10 +853,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			nv := "x" + strconv.Itoa(depth)
 			if node.mapk.typn == "string" {
 				// Key is string, simple case.
+				key := c.fmtP(node.mapk, "path["+depths+"]", depth+1)
 				if mode == modeSet {
-					c.wl(nv, " := ", c.fmtV(node, v), "[path[", depths, "]]")
+					c.wl(nv, " := ", c.fmtV(node, v), "[", key, "]")
 				} else {
-					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[path[", depths, "]]; ok {")
+					c.wl("if ", nv, ", ok := ", c.fmtV(node, v), "[", key, "]; ok {")
 				}
 				c.wl("_ = ", nv)
 				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
@@ -847,7 +865,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				if mode == modeSet {
-					c.wl(c.fmtV(node, v), "[path[", depths, "]] = ", nv)
+					c.wl(c.fmtV(node, v), "[", key, "] = ", nv)
 					c.wl("return nil")
 				}
 				if mode != modeSet {
@@ -862,11 +880,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					return err
 				}
 				c.wl(snippet)
-				c.wl(nv, " := ", c.fmtV(node, v), "[k]")
+				c.wl(nv, " := ", c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "]")
 				c.wl("_ = ", nv)
 				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if mode == modeSet {
-					c.wl(c.fmtV(node, v), "[k] = ", nv)
+					c.wl(c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "] = ", nv)
 					c.wl("return nil")
 				}
 				if err != nil {
@@ -1006,7 +1024,7 @@ return nil, inspector.ErrUnknownEncodingType
 	return nil
 }
 
-func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
+func (c *Compiler) writeNodeCopy(_ *node, recv, pname string, buffered bool) error {
 	c.wl("var origin, cpy ", pname)
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
@@ -1018,11 +1036,138 @@ func (c *Compiler) writeNodeCopy(_ *node, pname string) error {
 	c.wl("default:")
 	c.wl("return nil, inspector.ErrUnsupportedType")
 	c.wl("}")
-	c.regImport([]string{`"encoding/gob"`, `"bytes"`})
-	c.wl("buf := bytes.Buffer{}")
-	c.wl("if err := gob.NewEncoder(&buf).Encode(origin); err != nil { return nil, err }")
-	c.wl("if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil { return nil, err }")
+	if buffered {
+		c.wl("buf1:=buf.AcquireBytes()")
+		c.wl("defer buf.ReleaseBytes(buf1)")
+	} else {
+		c.wl("bc:=", recv, ".calcBytes(&origin)")
+		c.wl("buf1:=make([]byte,0,bc)")
+	}
+	c.wl("if err:=", recv, ".cpy(buf1,&cpy,&origin);err!=nil{return nil,err}")
 	c.wl("return cpy, nil")
+	return nil
+}
+
+func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
+	if !node.hasb {
+		return nil
+	}
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			if !ch.hasb {
+				continue
+			}
+			nv := v + "." + ch.name
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nv, "!=nil{")
+			}
+			_ = c.writeCalcBytes(ch, nv, depth+1)
+			if chPtr {
+				c.wl("}")
+			}
+		}
+	case typeMap:
+		nk := "k" + strconv.Itoa(depth)
+		nx := "v" + strconv.Itoa(depth)
+		c.wl("for ", nk, ", ", nx, " := range ", c.fmtVnb(node, v, depth), "{")
+		c.wl("_,_=", nk, ",", nx)
+		_ = c.writeCalcBytes(node.mapk, nk, depth+1)
+		_ = c.writeCalcBytes(node.mapv, nx, depth+1)
+		c.wl("}")
+	case typeSlice:
+		if node.typn == "[]byte" {
+			c.wl("c+=len(", c.fmtVnb(node, v, depth), ")")
+		} else {
+			ni := "i" + strconv.Itoa(depth)
+			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, v, depth), "); ", ni, "++{")
+			nv := "x" + strconv.Itoa(depth)
+			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[", ni, "]")
+			} else {
+				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[", ni, "]")
+			}
+			_ = c.writeCalcBytes(node.slct, nv, depth+1)
+			c.wl("}")
+		}
+	case typeBasic:
+		if node.typu == "string" {
+			c.wl("c+=len(", c.fmtVnb(node, v, depth), ")")
+		}
+	}
+	return nil
+}
+
+func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			nl := l + "." + ch.name
+			nr := r + "." + ch.name
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nl, "!=nil{")
+			}
+			_ = c.writeCopy(ch, nl, nr, depth+1)
+			if chPtr {
+				c.wl("}")
+			}
+		}
+	case typeMap:
+		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
+		buf := "buf" + strconv.Itoa(depth)
+		c.wl("if ", ln, ">0 {")
+		c.wl(buf, ":=make(", c.fmtT(node), ",", ln, ")")
+		c.wl("_=", buf)
+		c.wl("for rk,rv:=range ", c.fmtVnb(node, r, depth), "{")
+		c.wl("_,_=rk,rv")
+		c.wl("var lk ", c.fmtT(node.mapk))
+		_ = c.writeCopy(node.mapk, "lk", "rk", depth+1)
+		c.wl("var lv ", c.fmtT(node.mapv))
+		_ = c.writeCopy(node.mapv, "lv", "rv", depth+1)
+		pfx := ""
+		if node.mapv.ptr && node.mapv.typ != typeBasic {
+			pfx = "&"
+		}
+		c.wl(c.fmtVd(node, l, depth), "[lk]=", pfx, "lv")
+		c.wl("}")
+		c.wl("}")
+	case typeSlice:
+		if node.typn == "[]byte" {
+			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.Bufferize(buf,", c.fmtVnb(node, r, depth), ")")
+		} else {
+			lb := "buf" + strconv.Itoa(depth)
+			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
+			c.wl(lb, ":=make(", c.fmtT(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
+
+			ni := "i" + strconv.Itoa(depth)
+			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, r, depth), "); ", ni, "++{")
+			nv := "x" + strconv.Itoa(depth)
+			nb := "b" + strconv.Itoa(depth)
+			c.wl("var ", nb, " ", c.fmtT(node.slct))
+			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+				c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
+			} else {
+				c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
+			}
+			_ = c.writeCopy(node.slct, nb, nv, depth+1)
+			pfx := ""
+			if node.slct.ptr && !c.isBuiltin(node.slct.typn) {
+				pfx = "&"
+			}
+			c.wl(lb, "=append(", lb, ",", pfx, nb, ")")
+			c.wl("}")
+			c.wl(l, "=", c.fmtP(node, lb, depth))
+			c.wl("}")
+		}
+	case typeBasic:
+		if node.typu == "string" {
+			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.BufferizeString(buf,", c.fmtVnb(node, r, depth), ")")
+		} else {
+			c.wl(l, "=", r)
+		}
+	}
 	return nil
 }
 
@@ -1098,7 +1243,7 @@ func (c *Compiler) isBuiltin(typ string) bool {
 	case "int", "int8", "int16", "int32", "int64",
 		"uint", "uint8", "uint16", "uint32", "uint64",
 		"float32", "float64",
-		"string", "[]byte", "bool":
+		"string", "[]byte", "byte", "bool":
 		return true
 	default:
 		return false
@@ -1153,20 +1298,31 @@ func (c *Compiler) fmtVd(node *node, v string, depth int) string {
 
 // No brackets version of fmtV().
 func (c *Compiler) fmtVnb(node *node, v string, depth int) string {
-	if node.ptr || (node.typ == typeSlice && depth == 0) {
+	if node.ptr || depth == 0 {
 		return "*" + v
 	}
 	return v
 }
 
+// Take pointer of v.
+func (c *Compiler) fmtP(node *node, v string, depth int) string {
+	if node.ptr || depth == 0 {
+		return "&" + v
+	}
+	return v
+}
+
 // Format type to use in new()/make() functions.
-func (c *Compiler) fmtTyp(node *node) string {
+func (c *Compiler) fmtT(node *node) string {
 	switch node.typ {
 	case typeStruct:
 		return node.pkg + "." + strings.Trim(node.typn, "*")
 	case typeMap:
 		if strings.Contains(node.typn, "map[") {
 			s := "map["
+			if node.mapk.ptr {
+				s += "*"
+			}
 			if len(node.mapk.pkg) > 0 {
 				s += node.mapk.pkg + "."
 			}
@@ -1192,9 +1348,21 @@ func (c *Compiler) fmtTyp(node *node) string {
 			}
 		}
 		if strings.Index(node.typn, "[]") != -1 {
-			s = "[]" + s
+			pfx := ""
+			if node.slct.ptr {
+				pfx = "*"
+			}
+			s = "[]" + pfx + strings.TrimLeft(s, "*")
+		} else {
+			s = node.pkg + "." + strings.Trim(node.typn, "*")
 		}
 		return s
+	case typeBasic:
+		pfx := ""
+		if node.ptr {
+			pfx = "*"
+		}
+		return pfx + node.typn
 	}
 	return ""
 }

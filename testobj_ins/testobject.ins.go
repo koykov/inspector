@@ -5,7 +5,6 @@ package testobj_ins
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"github.com/koykov/fastconv"
 	"github.com/koykov/inspector"
@@ -17,17 +16,17 @@ type TestObjectInspector struct {
 	inspector.BaseInspector
 }
 
-func (i3 TestObjectInspector) TypeName() string {
+func (i5 TestObjectInspector) TypeName() string {
 	return "TestObject"
 }
 
-func (i3 TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i5 TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
 	var buf interface{}
-	err := i3.GetTo(src, &buf, path...)
+	err := i5.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i3 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i5 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -76,11 +75,11 @@ func (i3 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...s
 					return
 				}
 				var k int32
-				t14, err14 := strconv.ParseInt(path[1], 0, 0)
-				if err14 != nil {
-					return err14
+				t21, err21 := strconv.ParseInt(path[1], 0, 0)
+				if err21 != nil {
+					return err21
 				}
-				k = int32(t14)
+				k = int32(t21)
 				x1 := (*x0)[k]
 				_ = x1
 				*buf = &x1
@@ -159,11 +158,11 @@ func (i3 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...s
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t15, err15 := strconv.ParseInt(path[2], 0, 0)
-						if err15 != nil {
-							return err15
+						t22, err22 := strconv.ParseInt(path[2], 0, 0)
+						if err22 != nil {
+							return err22
 						}
-						i = int(t15)
+						i = int(t22)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
@@ -195,7 +194,7 @@ func (i3 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...s
 	return
 }
 
-func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i5 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -248,11 +247,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 		}
 		if path[0] == "Status" {
 			var rightExact int32
-			t18, err18 := strconv.ParseInt(right, 0, 0)
-			if err18 != nil {
-				return err18
+			t25, err25 := strconv.ParseInt(right, 0, 0)
+			if err25 != nil {
+				return err25
 			}
-			rightExact = int32(t18)
+			rightExact = int32(t25)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Status == rightExact
@@ -271,11 +270,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 		}
 		if path[0] == "Ustate" {
 			var rightExact uint64
-			t19, err19 := strconv.ParseUint(right, 0, 0)
-			if err19 != nil {
-				return err19
+			t26, err26 := strconv.ParseUint(right, 0, 0)
+			if err26 != nil {
+				return err26
 			}
-			rightExact = uint64(t19)
+			rightExact = uint64(t26)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Ustate == rightExact
@@ -294,11 +293,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t20, err20 := strconv.ParseFloat(right, 0)
-			if err20 != nil {
-				return err20
+			t27, err27 := strconv.ParseFloat(right, 0)
+			if err27 != nil {
+				return err27
 			}
-			rightExact = float64(t20)
+			rightExact = float64(t27)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -331,19 +330,19 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 					return
 				}
 				var k int32
-				t21, err21 := strconv.ParseInt(path[1], 0, 0)
-				if err21 != nil {
-					return err21
+				t28, err28 := strconv.ParseInt(path[1], 0, 0)
+				if err28 != nil {
+					return err28
 				}
-				k = int32(t21)
+				k = int32(t28)
 				x1 := (*x0)[k]
 				_ = x1
 				var rightExact bool
-				t22, err22 := strconv.ParseBool(right)
-				if err22 != nil {
-					return err22
+				t29, err29 := strconv.ParseBool(right)
+				if err29 != nil {
+					return err29
 				}
-				rightExact = bool(t22)
+				rightExact = bool(t29)
 				if cond == inspector.OpEq {
 					*result = x1 == rightExact
 				} else {
@@ -364,11 +363,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 						}
 						if path[2] == "DateUnix" {
 							var rightExact int64
-							t23, err23 := strconv.ParseInt(right, 0, 0)
-							if err23 != nil {
-								return err23
+							t30, err30 := strconv.ParseInt(right, 0, 0)
+							if err30 != nil {
+								return err30
 							}
-							rightExact = int64(t23)
+							rightExact = int64(t30)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.DateUnix == rightExact
@@ -387,11 +386,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 						}
 						if path[2] == "Cost" {
 							var rightExact float64
-							t24, err24 := strconv.ParseFloat(right, 0)
-							if err24 != nil {
-								return err24
+							t31, err31 := strconv.ParseFloat(right, 0)
+							if err31 != nil {
+								return err31
 							}
-							rightExact = float64(t24)
+							rightExact = float64(t31)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.Cost == rightExact
@@ -430,11 +429,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
 					var rightExact int32
-					t26, err26 := strconv.ParseInt(right, 0, 0)
-					if err26 != nil {
-						return err26
+					t33, err33 := strconv.ParseInt(right, 0, 0)
+					if err33 != nil {
+						return err33
 					}
-					rightExact = int32(t26)
+					rightExact = int32(t33)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -470,11 +469,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 				}
 				if path[1] == "MoneyIn" {
 					var rightExact float64
-					t27, err27 := strconv.ParseFloat(right, 0)
-					if err27 != nil {
-						return err27
+					t34, err34 := strconv.ParseFloat(right, 0)
+					if err34 != nil {
+						return err34
 					}
-					rightExact = float64(t27)
+					rightExact = float64(t34)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyIn == rightExact
@@ -493,11 +492,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 				}
 				if path[1] == "MoneyOut" {
 					var rightExact float64
-					t28, err28 := strconv.ParseFloat(right, 0)
-					if err28 != nil {
-						return err28
+					t35, err35 := strconv.ParseFloat(right, 0)
+					if err35 != nil {
+						return err35
 					}
-					rightExact = float64(t28)
+					rightExact = float64(t35)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyOut == rightExact
@@ -516,11 +515,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 				}
 				if path[1] == "Balance" {
 					var rightExact float64
-					t29, err29 := strconv.ParseFloat(right, 0)
-					if err29 != nil {
-						return err29
+					t36, err36 := strconv.ParseFloat(right, 0)
+					if err36 != nil {
+						return err36
 					}
-					rightExact = float64(t29)
+					rightExact = float64(t36)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.Balance == rightExact
@@ -539,11 +538,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 				}
 				if path[1] == "AllowBuy" {
 					var rightExact bool
-					t30, err30 := strconv.ParseBool(right)
-					if err30 != nil {
-						return err30
+					t37, err37 := strconv.ParseBool(right)
+					if err37 != nil {
+						return err37
 					}
-					rightExact = bool(t30)
+					rightExact = bool(t37)
 					if cond == inspector.OpEq {
 						*result = x0.AllowBuy == rightExact
 					} else {
@@ -556,22 +555,22 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t31, err31 := strconv.ParseInt(path[2], 0, 0)
-						if err31 != nil {
-							return err31
+						t38, err38 := strconv.ParseInt(path[2], 0, 0)
+						if err38 != nil {
+							return err38
 						}
-						i = int(t31)
+						i = int(t38)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
 									var rightExact int64
-									t32, err32 := strconv.ParseInt(right, 0, 0)
-									if err32 != nil {
-										return err32
+									t39, err39 := strconv.ParseInt(right, 0, 0)
+									if err39 != nil {
+										return err39
 									}
-									rightExact = int64(t32)
+									rightExact = int64(t39)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.DateUnix == rightExact
@@ -590,11 +589,11 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 								}
 								if path[3] == "Cost" {
 									var rightExact float64
-									t33, err33 := strconv.ParseFloat(right, 0)
-									if err33 != nil {
-										return err33
+									t40, err40 := strconv.ParseFloat(right, 0)
+									if err40 != nil {
+										return err40
 									}
-									rightExact = float64(t33)
+									rightExact = float64(t40)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.Cost == rightExact
@@ -632,7 +631,7 @@ func (i3 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 	return
 }
 
-func (i3 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i5 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -744,7 +743,7 @@ func (i3 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]b
 	return
 }
 
-func (i3 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i5 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -800,11 +799,11 @@ func (i3 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accumu
 					return nil
 				}
 				var k int32
-				t35, err35 := strconv.ParseInt(path[1], 0, 0)
-				if err35 != nil {
-					return err35
+				t42, err42 := strconv.ParseInt(path[1], 0, 0)
+				if err42 != nil {
+					return err42
 				}
-				k = int32(t35)
+				k = int32(t42)
 				x1 := (*x0)[k]
 				_ = x1
 				inspector.AssignBuf(&x1, value, buf)
@@ -912,11 +911,11 @@ func (i3 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accumu
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t36, err36 := strconv.ParseInt(path[2], 0, 0)
-						if err36 != nil {
-							return err36
+						t43, err43 := strconv.ParseInt(path[2], 0, 0)
+						if err43 != nil {
+							return err43
 						}
-						i = int(t36)
+						i = int(t43)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
@@ -947,15 +946,15 @@ func (i3 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accumu
 	return nil
 }
 
-func (i3 TestObjectInspector) Set(dst, value interface{}, path ...string) error {
-	return i3.SetWB(dst, value, nil, path...)
+func (i5 TestObjectInspector) Set(dst, value interface{}, path ...string) error {
+	return i5.SetWB(dst, value, nil, path...)
 }
 
-func (i3 TestObjectInspector) DeepEqual(l, r interface{}) bool {
-	return i3.DeepEqualWithOptions(l, r, nil)
+func (i5 TestObjectInspector) DeepEqual(l, r interface{}) bool {
+	return i5.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i3 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i5 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestObject
 		leq, req bool
@@ -1120,7 +1119,7 @@ func (i3 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspe
 	return true
 }
 
-func (i3 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i5 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
 	var x testobj.TestObject
 	switch typ {
 	case inspector.EncodingJSON:
@@ -1131,7 +1130,7 @@ func (i3 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (inter
 	}
 }
 
-func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
+func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	var origin, cpy testobj.TestObject
 	switch x.(type) {
 	case testobj.TestObject:
@@ -1143,12 +1142,118 @@ func (i3 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	buf := bytes.Buffer{}
-	if err := gob.NewEncoder(&buf).Encode(origin); err != nil {
-		return nil, err
-	}
-	if err := gob.NewDecoder(&buf).Decode(&cpy); err != nil {
+	bc := i5.calcBytes(&origin)
+	buf1 := make([]byte, 0, bc)
+	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
+}
+
+func (i5 TestObjectInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
+	var origin, cpy testobj.TestObject
+	switch x.(type) {
+	case testobj.TestObject:
+		origin = x.(testobj.TestObject)
+	case *testobj.TestObject:
+		origin = *x.(*testobj.TestObject)
+	case **testobj.TestObject:
+		origin = **x.(**testobj.TestObject)
+	default:
+		return nil, inspector.ErrUnsupportedType
+	}
+	buf1 := buf.AcquireBytes()
+	defer buf.ReleaseBytes(buf1)
+	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
+		return nil, err
+	}
+	return cpy, nil
+}
+
+func (i5 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
+	c += len(x.Id)
+	c += len(x.Name)
+	for k1, v1 := range x.HistoryTree {
+		_, _ = k1, v1
+		c += len(k1)
+		c += len(v1.Comment)
+	}
+	for k1, v1 := range x.Flags {
+		_, _ = k1, v1
+		c += len(k1)
+	}
+	if x.Finance != nil {
+		for i2 := 0; i2 < len(x.Finance.History); i2++ {
+			x2 := &(x.Finance.History)[i2]
+			c += len(x2.Comment)
+		}
+	}
+	return c
+}
+
+func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
+	buf, l.Id = inspector.BufferizeString(buf, r.Id)
+	buf, l.Name = inspector.Bufferize(buf, r.Name)
+	l.Status = r.Status
+	l.Ustate = r.Ustate
+	l.Cost = r.Cost
+	if l.Permission != nil {
+		if len(*r.Permission) > 0 {
+			buf1 := make(testobj.TestPermission, len(*r.Permission))
+			_ = buf1
+			for rk, rv := range *r.Permission {
+				_, _ = rk, rv
+				var lk int32
+				lk = rk
+				var lv bool
+				lv = rv
+				(*l.Permission)[lk] = lv
+			}
+		}
+	}
+	if len(r.HistoryTree) > 0 {
+		buf1 := make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+		_ = buf1
+		for rk, rv := range r.HistoryTree {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv testobj.TestHistory
+			lv.DateUnix = rv.DateUnix
+			lv.Cost = rv.Cost
+			buf, lv.Comment = inspector.Bufferize(buf, rv.Comment)
+			(l.HistoryTree)[lk] = &lv
+		}
+	}
+	if len(r.Flags) > 0 {
+		buf1 := make(testobj.TestFlag, len(r.Flags))
+		_ = buf1
+		for rk, rv := range r.Flags {
+			_, _ = rk, rv
+			var lk string
+			buf, lk = inspector.BufferizeString(buf, rk)
+			var lv int32
+			lv = rv
+			(l.Flags)[lk] = lv
+		}
+	}
+	if l.Finance != nil {
+		l.Finance.MoneyIn = r.Finance.MoneyIn
+		l.Finance.MoneyOut = r.Finance.MoneyOut
+		l.Finance.Balance = r.Finance.Balance
+		l.Finance.AllowBuy = r.Finance.AllowBuy
+		if len(r.Finance.History) > 0 {
+			buf2 := make([]testobj.TestHistory, 0, len(r.Finance.History))
+			for i2 := 0; i2 < len(r.Finance.History); i2++ {
+				var b2 testobj.TestHistory
+				x2 := &(l.Finance.History)[i2]
+				b2.DateUnix = x2.DateUnix
+				b2.Cost = x2.Cost
+				buf, b2.Comment = inspector.Bufferize(buf, x2.Comment)
+				buf2 = append(buf2, b2)
+			}
+			l.Finance.History = buf2
+		}
+	}
+	return nil
 }

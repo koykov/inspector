@@ -7,6 +7,12 @@ func strToBoolSnippet(typ string) string {
 	return snippet
 }
 
+func strToByteSnippet(_ string) string {
+	snippet := "t!{tmp} := fastconv.S2B(!{arg})\n"
+	snippet += "if len(t!{tmp}) > 0{ !{var} = t!{tmp}[0] }\n"
+	return snippet
+}
+
 func strToIntSnippet(typ string) string {
 	snippet := "t!{tmp}, err!{tmp} := strconv.ParseInt(!{arg}, 0, 0)\n"
 	snippet += "if err!{tmp} != nil { return err!{tmp} }\n"

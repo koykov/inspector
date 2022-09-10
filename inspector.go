@@ -25,6 +25,8 @@ type Inspector interface {
 	Unmarshal([]byte, Encoding) (interface{}, error)
 	// Copy makes a copy of variable value.
 	Copy(interface{}) (interface{}, error)
+	// CopyWB makes a copy of variable value using buffer.
+	CopyWB(interface{}, AccumulativeBuffer) (interface{}, error)
 }
 
 // Looper signature.
@@ -38,20 +40,6 @@ type Looper interface {
 	// Iterate performs the iteration.
 	Iterate() LoopCtl
 }
-
-// AccumulativeBuffer describes buffer signature.
-// Collects data during assign functions work.
-type AccumulativeBuffer interface {
-	// AcquireBytes returns more space to use.
-	AcquireBytes() []byte
-	// ReleaseBytes returns space to the buffer.
-	ReleaseBytes([]byte)
-	// Reset all accumulated data.
-	Reset()
-}
-
-// BaseInspector describes base struct.
-type BaseInspector struct{}
 
 var (
 	// Global registry of all inspectors.
@@ -100,6 +88,7 @@ func init() {
 	imp = []string{`"bytes"`, `"github.com/koykov/fastconv"`}
 	RegisterStrToFunc("[]byte", strToBytesSnippet("[]byte"), imp)
 	RegisterStrToFunc("string", strToStrSnippet("string"), nil)
+	RegisterStrToFunc("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/fastconv"`})
 
 	// Register functions to typecast to built-in types.
 	RegisterAssignFn(AssignToBytes)

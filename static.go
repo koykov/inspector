@@ -376,6 +376,11 @@ func (i StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) 
 }
 
 func (i StaticInspector) Copy(x interface{}) (interface{}, error) {
+	buf := ByteBuffer{}
+	return i.CopyWB(x, &buf)
+}
+
+func (i StaticInspector) CopyWB(x interface{}, buf AccumulativeBuffer) (interface{}, error) {
 	var t interface{}
 	switch x.(type) {
 	case *bool:
@@ -406,10 +411,20 @@ func (i StaticInspector) Copy(x interface{}) (interface{}, error) {
 		t = *x.(*float64)
 	case []byte:
 		p := x.([]byte)
-		t = append([]byte(nil), p...)
+		bb := buf.AcquireBytes()
+		offset := len(bb)
+		bb = append(bb, p...)
+		t = bb[offset:]
+		buf.ReleaseBytes(bb)
 	case *[]byte:
 		p := *x.(*[]byte)
-		t = append([]byte(nil), p...)
+		bb := buf.AcquireBytes()
+		offset := len(bb)
+		bb = append(bb, p...)
+		t = bb[offset:]
+		buf.ReleaseBytes(bb)
+	case string:
+		t = x.(string)
 	case *string:
 		t = *x.(*string)
 	default:
