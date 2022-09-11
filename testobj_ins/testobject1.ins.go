@@ -9249,7 +9249,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		}
 		l.IntPtrSlice = buf1
 	}
-	if l.IntSlicePtr != nil {
+	if r.IntSlicePtr != nil {
 		if len(*r.IntSlicePtr) > 0 {
 			buf1 := make([]int32, 0, len(*r.IntSlicePtr))
 			for i1 := 0; i1 < len(*r.IntSlicePtr); i1++ {
@@ -9261,7 +9261,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			l.IntSlicePtr = &buf1
 		}
 	}
-	if l.IntPtrSlicePtr != nil {
+	if r.IntPtrSlicePtr != nil {
 		if len(*r.IntPtrSlicePtr) > 0 {
 			buf1 := make([]*int32, 0, len(*r.IntPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.IntPtrSlicePtr); i1++ {
@@ -9284,10 +9284,10 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		}
 		l.BytePtrSlice = buf1
 	}
-	if l.ByteSlicePtr != nil {
+	if r.ByteSlicePtr != nil {
 		buf, *l.ByteSlicePtr = inspector.Bufferize(buf, *r.ByteSlicePtr)
 	}
-	if l.BytePtrSlicePtr != nil {
+	if r.BytePtrSlicePtr != nil {
 		if len(*r.BytePtrSlicePtr) > 0 {
 			buf1 := make([]*byte, 0, len(*r.BytePtrSlicePtr))
 			for i1 := 0; i1 < len(*r.BytePtrSlicePtr); i1++ {
@@ -9319,7 +9319,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		}
 		l.FloatPtrSlice = buf1
 	}
-	if l.FloatSlicePtr != nil {
+	if r.FloatSlicePtr != nil {
 		if len(*r.FloatSlicePtr) > 0 {
 			buf1 := make(testobj.TestFloatSlice, 0, len(*r.FloatSlicePtr))
 			for i1 := 0; i1 < len(*r.FloatSlicePtr); i1++ {
@@ -9331,7 +9331,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			l.FloatSlicePtr = &buf1
 		}
 	}
-	if l.FloatPtrSlicePtr != nil {
+	if r.FloatPtrSlicePtr != nil {
 		if len(*r.FloatPtrSlicePtr) > 0 {
 			buf1 := make(testobj.TestFloatPtrSlice, 0, len(*r.FloatPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.FloatPtrSlicePtr); i1++ {
@@ -9391,7 +9391,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		}
 		l.StructPtrSlice = buf1
 	}
-	if l.StructSlicePtr != nil {
+	if r.StructSlicePtr != nil {
 		if len(*r.StructSlicePtr) > 0 {
 			buf1 := make([]testobj.TestStruct, 0, len(*r.StructSlicePtr))
 			for i1 := 0; i1 < len(*r.StructSlicePtr); i1++ {
@@ -9417,7 +9417,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			l.StructSlicePtr = &buf1
 		}
 	}
-	if l.StructPtrSlicePtr != nil {
+	if r.StructPtrSlicePtr != nil {
 		if len(*r.StructPtrSlicePtr) > 0 {
 			buf1 := make([]*testobj.TestStruct, 0, len(*r.StructPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.StructPtrSlicePtr); i1++ {
@@ -9491,7 +9491,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			(l.IntStringPtrMap)[lk1] = lv1
 		}
 	}
-	if l.IntStringMapPtr != nil {
+	if r.IntStringMapPtr != nil {
 		if len(*r.IntStringMapPtr) > 0 {
 			buf1 := make(map[int]string, len(*r.IntStringMapPtr))
 			_ = buf1
@@ -9505,7 +9505,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			}
 		}
 	}
-	if l.IntStringPtrMapPtr != nil {
+	if r.IntStringPtrMapPtr != nil {
 		if len(*r.IntStringPtrMapPtr) > 0 {
 			buf1 := make(map[int]*string, len(*r.IntStringPtrMapPtr))
 			_ = buf1
@@ -9519,7 +9519,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			}
 		}
 	}
-	if l.IntPtrStringPtrMapPtr != nil {
+	if r.IntPtrStringPtrMapPtr != nil {
 		if len(*r.IntPtrStringPtrMapPtr) > 0 {
 			buf1 := make(map[*int]*string, len(*r.IntPtrStringPtrMapPtr))
 			_ = buf1
@@ -9580,7 +9580,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			(l.StringFloatPtrMap)[lk1] = lv1
 		}
 	}
-	if l.StringFloatMapPtr != nil {
+	if r.StringFloatMapPtr != nil {
 		if len(*r.StringFloatMapPtr) > 0 {
 			buf1 := make(testobj.TestStringFloatMap, len(*r.StringFloatMapPtr))
 			_ = buf1
@@ -9594,7 +9594,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			}
 		}
 	}
-	if l.StringFloatPtrMapPtr != nil {
+	if r.StringFloatPtrMapPtr != nil {
 		if len(*r.StringFloatPtrMapPtr) > 0 {
 			buf1 := make(testobj.TestStringFloatPtrMap, len(*r.StringFloatPtrMapPtr))
 			_ = buf1
@@ -9608,7 +9608,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			}
 		}
 	}
-	if l.StringPtrFloatPtrMapPtr != nil {
+	if r.StringPtrFloatPtrMapPtr != nil {
 		if len(*r.StringPtrFloatPtrMapPtr) > 0 {
 			buf1 := make(testobj.TestStringPtrFloatPtrMap, len(*r.StringPtrFloatPtrMapPtr))
 			_ = buf1
@@ -9726,7 +9726,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			(l.FloatPtrStructPtrMap)[lk1] = &lv1
 		}
 	}
-	if l.FloatPtrStructPtrMapPtr != nil {
+	if r.FloatPtrStructPtrMapPtr != nil {
 		if len(*r.FloatPtrStructPtrMapPtr) > 0 {
 			buf1 := make(map[*float64]*testobj.TestStruct, len(*r.FloatPtrStructPtrMapPtr))
 			_ = buf1

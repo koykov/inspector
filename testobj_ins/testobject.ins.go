@@ -1197,7 +1197,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 	l.Status = r.Status
 	l.Ustate = r.Ustate
 	l.Cost = r.Cost
-	if l.Permission != nil {
+	if r.Permission != nil {
 		if len(*r.Permission) > 0 {
 			buf1 := make(testobj.TestPermission, len(*r.Permission))
 			_ = buf1
@@ -1237,7 +1237,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 			(l.Flags)[lk1] = lv1
 		}
 	}
-	if l.Finance != nil {
+	if r.Finance != nil {
 		l.Finance.MoneyIn = r.Finance.MoneyIn
 		l.Finance.MoneyOut = r.Finance.MoneyOut
 		l.Finance.Balance = r.Finance.Balance
