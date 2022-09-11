@@ -252,48 +252,59 @@ func (i3 TestFloatSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (i
 }
 
 func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestFloatSlice
+	var r testobj.TestFloatSlice
 	switch x.(type) {
 	case testobj.TestFloatSlice:
-		origin = x.(testobj.TestFloatSlice)
+		r = x.(testobj.TestFloatSlice)
 	case *testobj.TestFloatSlice:
-		origin = *x.(*testobj.TestFloatSlice)
+		r = *x.(*testobj.TestFloatSlice)
 	case **testobj.TestFloatSlice:
-		origin = **x.(**testobj.TestFloatSlice)
+		r = **x.(**testobj.TestFloatSlice)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i3.calcBytes(&origin)
+	bc := i3.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i3.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestFloatSlice
+	err := i3.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i3 TestFloatSliceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestFloatSlice
-	switch x.(type) {
+func (i3 TestFloatSliceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestFloatSlice
+	switch src.(type) {
 	case testobj.TestFloatSlice:
-		origin = x.(testobj.TestFloatSlice)
+		r = src.(testobj.TestFloatSlice)
 	case *testobj.TestFloatSlice:
-		origin = *x.(*testobj.TestFloatSlice)
+		r = *src.(*testobj.TestFloatSlice)
 	case **testobj.TestFloatSlice:
-		origin = **x.(**testobj.TestFloatSlice)
+		r = **src.(**testobj.TestFloatSlice)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestFloatSlice
+	switch src.(type) {
+	case testobj.TestFloatSlice:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFloatSlice:
+		l = src.(*testobj.TestFloatSlice)
+	case **testobj.TestFloatSlice:
+		l = *src.(**testobj.TestFloatSlice)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i3.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i3.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i3 TestFloatSliceInspector) calcBytes(x *testobj.TestFloatSlice) (c int) {
+func (i3 TestFloatSliceInspector) countBytes(x *testobj.TestFloatSlice) (c int) {
 	return c
 }
 

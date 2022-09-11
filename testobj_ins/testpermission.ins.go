@@ -242,48 +242,59 @@ func (i7 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (i
 }
 
 func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestPermission
+	var r testobj.TestPermission
 	switch x.(type) {
 	case testobj.TestPermission:
-		origin = x.(testobj.TestPermission)
+		r = x.(testobj.TestPermission)
 	case *testobj.TestPermission:
-		origin = *x.(*testobj.TestPermission)
+		r = *x.(*testobj.TestPermission)
 	case **testobj.TestPermission:
-		origin = **x.(**testobj.TestPermission)
+		r = **x.(**testobj.TestPermission)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i7.calcBytes(&origin)
+	bc := i7.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i7.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestPermission
+	err := i7.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i7 TestPermissionInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestPermission
-	switch x.(type) {
+func (i7 TestPermissionInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestPermission
+	switch src.(type) {
 	case testobj.TestPermission:
-		origin = x.(testobj.TestPermission)
+		r = src.(testobj.TestPermission)
 	case *testobj.TestPermission:
-		origin = *x.(*testobj.TestPermission)
+		r = *src.(*testobj.TestPermission)
 	case **testobj.TestPermission:
-		origin = **x.(**testobj.TestPermission)
+		r = **src.(**testobj.TestPermission)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestPermission
+	switch src.(type) {
+	case testobj.TestPermission:
+		return inspector.ErrMustPointerType
+	case *testobj.TestPermission:
+		l = src.(*testobj.TestPermission)
+	case **testobj.TestPermission:
+		l = *src.(**testobj.TestPermission)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i7.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i7.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i7 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
+func (i7 TestPermissionInspector) countBytes(x *testobj.TestPermission) (c int) {
 	return c
 }
 

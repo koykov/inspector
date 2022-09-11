@@ -236,48 +236,59 @@ func (i9 TestStringFloatPtrMapInspector) Unmarshal(p []byte, typ inspector.Encod
 }
 
 func (i9 TestStringFloatPtrMapInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestStringFloatPtrMap
+	var r testobj.TestStringFloatPtrMap
 	switch x.(type) {
 	case testobj.TestStringFloatPtrMap:
-		origin = x.(testobj.TestStringFloatPtrMap)
+		r = x.(testobj.TestStringFloatPtrMap)
 	case *testobj.TestStringFloatPtrMap:
-		origin = *x.(*testobj.TestStringFloatPtrMap)
+		r = *x.(*testobj.TestStringFloatPtrMap)
 	case **testobj.TestStringFloatPtrMap:
-		origin = **x.(**testobj.TestStringFloatPtrMap)
+		r = **x.(**testobj.TestStringFloatPtrMap)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i9.calcBytes(&origin)
+	bc := i9.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i9.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestStringFloatPtrMap
+	err := i9.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i9 TestStringFloatPtrMapInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestStringFloatPtrMap
-	switch x.(type) {
+func (i9 TestStringFloatPtrMapInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestStringFloatPtrMap
+	switch src.(type) {
 	case testobj.TestStringFloatPtrMap:
-		origin = x.(testobj.TestStringFloatPtrMap)
+		r = src.(testobj.TestStringFloatPtrMap)
 	case *testobj.TestStringFloatPtrMap:
-		origin = *x.(*testobj.TestStringFloatPtrMap)
+		r = *src.(*testobj.TestStringFloatPtrMap)
 	case **testobj.TestStringFloatPtrMap:
-		origin = **x.(**testobj.TestStringFloatPtrMap)
+		r = **src.(**testobj.TestStringFloatPtrMap)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestStringFloatPtrMap
+	switch src.(type) {
+	case testobj.TestStringFloatPtrMap:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStringFloatPtrMap:
+		l = src.(*testobj.TestStringFloatPtrMap)
+	case **testobj.TestStringFloatPtrMap:
+		l = *src.(**testobj.TestStringFloatPtrMap)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i9.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i9.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i9 TestStringFloatPtrMapInspector) calcBytes(x *testobj.TestStringFloatPtrMap) (c int) {
+func (i9 TestStringFloatPtrMapInspector) countBytes(x *testobj.TestStringFloatPtrMap) (c int) {
 	for k0, v0 := range *x {
 		_, _ = k0, v0
 		c += len(k0)

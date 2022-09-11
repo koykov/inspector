@@ -493,48 +493,59 @@ func (i0 TestFinanceInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 }
 
 func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestFinance
+	var r testobj.TestFinance
 	switch x.(type) {
 	case testobj.TestFinance:
-		origin = x.(testobj.TestFinance)
+		r = x.(testobj.TestFinance)
 	case *testobj.TestFinance:
-		origin = *x.(*testobj.TestFinance)
+		r = *x.(*testobj.TestFinance)
 	case **testobj.TestFinance:
-		origin = **x.(**testobj.TestFinance)
+		r = **x.(**testobj.TestFinance)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i0.calcBytes(&origin)
+	bc := i0.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i0.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestFinance
+	err := i0.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i0 TestFinanceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestFinance
-	switch x.(type) {
+func (i0 TestFinanceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestFinance
+	switch src.(type) {
 	case testobj.TestFinance:
-		origin = x.(testobj.TestFinance)
+		r = src.(testobj.TestFinance)
 	case *testobj.TestFinance:
-		origin = *x.(*testobj.TestFinance)
+		r = *src.(*testobj.TestFinance)
 	case **testobj.TestFinance:
-		origin = **x.(**testobj.TestFinance)
+		r = **src.(**testobj.TestFinance)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestFinance
+	switch src.(type) {
+	case testobj.TestFinance:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFinance:
+		l = src.(*testobj.TestFinance)
+	case **testobj.TestFinance:
+		l = *src.(**testobj.TestFinance)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i0.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i0.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
+func (i0 TestFinanceInspector) countBytes(x *testobj.TestFinance) (c int) {
 	for i1 := 0; i1 < len(x.History); i1++ {
 		x1 := &(x.History)[i1]
 		c += len(x1.Comment)

@@ -375,60 +375,61 @@ func (i StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) 
 	}
 }
 
-func (i StaticInspector) Copy(x interface{}) (interface{}, error) {
+func (i StaticInspector) Copy(x interface{}) (dst interface{}, err error) {
+	// todo cover with tests.
 	buf := ByteBuffer{}
-	return i.CopyWB(x, &buf)
+	err = i.CopyWB(x, dst, &buf)
+	return
 }
 
-func (i StaticInspector) CopyWB(x interface{}, buf AccumulativeBuffer) (interface{}, error) {
-	var t interface{}
-	switch x.(type) {
+func (i StaticInspector) CopyWB(src, dst interface{}, buf AccumulativeBuffer) error {
+	switch src.(type) {
 	case *bool:
-		t = *x.(*bool)
+		dst = *src.(*bool)
 	case *int:
-		t = *x.(*int)
+		dst = *src.(*int)
 	case *int8:
-		t = *x.(*int8)
+		dst = *src.(*int8)
 	case *int16:
-		t = *x.(*int16)
+		dst = *src.(*int16)
 	case *int32:
-		t = *x.(*int32)
+		dst = *src.(*int32)
 	case *int64:
-		t = *x.(*int64)
+		dst = *src.(*int64)
 	case *uint:
-		t = *x.(*uint)
+		dst = *src.(*uint)
 	case *uint8:
-		t = *x.(*uint8)
+		dst = *src.(*uint8)
 	case *uint16:
-		t = *x.(*uint16)
+		dst = *src.(*uint16)
 	case *uint32:
-		t = *x.(*uint32)
+		dst = *src.(*uint32)
 	case *uint64:
-		t = *x.(*uint64)
+		dst = *src.(*uint64)
 	case *float32:
-		t = *x.(*float32)
+		dst = *src.(*float32)
 	case *float64:
-		t = *x.(*float64)
+		dst = *src.(*float64)
 	case []byte:
-		p := x.([]byte)
+		p := src.([]byte)
 		bb := buf.AcquireBytes()
 		offset := len(bb)
 		bb = append(bb, p...)
-		t = bb[offset:]
+		dst = bb[offset:]
 		buf.ReleaseBytes(bb)
 	case *[]byte:
-		p := *x.(*[]byte)
+		p := *src.(*[]byte)
 		bb := buf.AcquireBytes()
 		offset := len(bb)
 		bb = append(bb, p...)
-		t = bb[offset:]
+		dst = bb[offset:]
 		buf.ReleaseBytes(bb)
 	case *string:
-		t = *x.(*string)
+		dst = *src.(*string)
 	default:
-		t = x
+		dst = src
 	}
-	return t, nil
+	return nil
 }
 
 func (i StaticInspector) Reset(x interface{}) {

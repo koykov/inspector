@@ -235,48 +235,59 @@ func (i8 TestStringFloatMapInspector) Unmarshal(p []byte, typ inspector.Encoding
 }
 
 func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestStringFloatMap
+	var r testobj.TestStringFloatMap
 	switch x.(type) {
 	case testobj.TestStringFloatMap:
-		origin = x.(testobj.TestStringFloatMap)
+		r = x.(testobj.TestStringFloatMap)
 	case *testobj.TestStringFloatMap:
-		origin = *x.(*testobj.TestStringFloatMap)
+		r = *x.(*testobj.TestStringFloatMap)
 	case **testobj.TestStringFloatMap:
-		origin = **x.(**testobj.TestStringFloatMap)
+		r = **x.(**testobj.TestStringFloatMap)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i8.calcBytes(&origin)
+	bc := i8.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i8.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestStringFloatMap
+	err := i8.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i8 TestStringFloatMapInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestStringFloatMap
-	switch x.(type) {
+func (i8 TestStringFloatMapInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestStringFloatMap
+	switch src.(type) {
 	case testobj.TestStringFloatMap:
-		origin = x.(testobj.TestStringFloatMap)
+		r = src.(testobj.TestStringFloatMap)
 	case *testobj.TestStringFloatMap:
-		origin = *x.(*testobj.TestStringFloatMap)
+		r = *src.(*testobj.TestStringFloatMap)
 	case **testobj.TestStringFloatMap:
-		origin = **x.(**testobj.TestStringFloatMap)
+		r = **src.(**testobj.TestStringFloatMap)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestStringFloatMap
+	switch src.(type) {
+	case testobj.TestStringFloatMap:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStringFloatMap:
+		l = src.(*testobj.TestStringFloatMap)
+	case **testobj.TestStringFloatMap:
+		l = *src.(**testobj.TestStringFloatMap)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i8.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i8.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i8 TestStringFloatMapInspector) calcBytes(x *testobj.TestStringFloatMap) (c int) {
+func (i8 TestStringFloatMapInspector) countBytes(x *testobj.TestStringFloatMap) (c int) {
 	for k0, v0 := range *x {
 		_, _ = k0, v0
 		c += len(k0)

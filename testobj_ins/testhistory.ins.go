@@ -266,48 +266,59 @@ func (i4 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 }
 
 func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestHistory
+	var r testobj.TestHistory
 	switch x.(type) {
 	case testobj.TestHistory:
-		origin = x.(testobj.TestHistory)
+		r = x.(testobj.TestHistory)
 	case *testobj.TestHistory:
-		origin = *x.(*testobj.TestHistory)
+		r = *x.(*testobj.TestHistory)
 	case **testobj.TestHistory:
-		origin = **x.(**testobj.TestHistory)
+		r = **x.(**testobj.TestHistory)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i4.calcBytes(&origin)
+	bc := i4.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i4.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestHistory
+	err := i4.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i4 TestHistoryInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestHistory
-	switch x.(type) {
+func (i4 TestHistoryInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestHistory
+	switch src.(type) {
 	case testobj.TestHistory:
-		origin = x.(testobj.TestHistory)
+		r = src.(testobj.TestHistory)
 	case *testobj.TestHistory:
-		origin = *x.(*testobj.TestHistory)
+		r = *src.(*testobj.TestHistory)
 	case **testobj.TestHistory:
-		origin = **x.(**testobj.TestHistory)
+		r = **src.(**testobj.TestHistory)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestHistory
+	switch src.(type) {
+	case testobj.TestHistory:
+		return inspector.ErrMustPointerType
+	case *testobj.TestHistory:
+		l = src.(*testobj.TestHistory)
+	case **testobj.TestHistory:
+		l = *src.(**testobj.TestHistory)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i4.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i4.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i4 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
+func (i4 TestHistoryInspector) countBytes(x *testobj.TestHistory) (c int) {
 	c += len(x.Comment)
 	return c
 }

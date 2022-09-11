@@ -742,48 +742,59 @@ func (i12 TestStructSliceLiteralInspector) Unmarshal(p []byte, typ inspector.Enc
 }
 
 func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestStructSliceLiteral
+	var r testobj.TestStructSliceLiteral
 	switch x.(type) {
 	case testobj.TestStructSliceLiteral:
-		origin = x.(testobj.TestStructSliceLiteral)
+		r = x.(testobj.TestStructSliceLiteral)
 	case *testobj.TestStructSliceLiteral:
-		origin = *x.(*testobj.TestStructSliceLiteral)
+		r = *x.(*testobj.TestStructSliceLiteral)
 	case **testobj.TestStructSliceLiteral:
-		origin = **x.(**testobj.TestStructSliceLiteral)
+		r = **x.(**testobj.TestStructSliceLiteral)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i12.calcBytes(&origin)
+	bc := i12.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i12.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestStructSliceLiteral
+	err := i12.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i12 TestStructSliceLiteralInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestStructSliceLiteral
-	switch x.(type) {
+func (i12 TestStructSliceLiteralInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestStructSliceLiteral
+	switch src.(type) {
 	case testobj.TestStructSliceLiteral:
-		origin = x.(testobj.TestStructSliceLiteral)
+		r = src.(testobj.TestStructSliceLiteral)
 	case *testobj.TestStructSliceLiteral:
-		origin = *x.(*testobj.TestStructSliceLiteral)
+		r = *src.(*testobj.TestStructSliceLiteral)
 	case **testobj.TestStructSliceLiteral:
-		origin = **x.(**testobj.TestStructSliceLiteral)
+		r = **src.(**testobj.TestStructSliceLiteral)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestStructSliceLiteral
+	switch src.(type) {
+	case testobj.TestStructSliceLiteral:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStructSliceLiteral:
+		l = src.(*testobj.TestStructSliceLiteral)
+	case **testobj.TestStructSliceLiteral:
+		l = *src.(**testobj.TestStructSliceLiteral)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i12.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i12.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i12 TestStructSliceLiteralInspector) calcBytes(x *testobj.TestStructSliceLiteral) (c int) {
+func (i12 TestStructSliceLiteralInspector) countBytes(x *testobj.TestStructSliceLiteral) (c int) {
 	for i0 := 0; i0 < len(*x); i0++ {
 		x0 := (*x)[i0]
 		c += len(x0.S)

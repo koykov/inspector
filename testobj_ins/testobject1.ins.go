@@ -10162,48 +10162,59 @@ func (i6 TestObject1Inspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 }
 
 func (i6 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestObject1
+	var r testobj.TestObject1
 	switch x.(type) {
 	case testobj.TestObject1:
-		origin = x.(testobj.TestObject1)
+		r = x.(testobj.TestObject1)
 	case *testobj.TestObject1:
-		origin = *x.(*testobj.TestObject1)
+		r = *x.(*testobj.TestObject1)
 	case **testobj.TestObject1:
-		origin = **x.(**testobj.TestObject1)
+		r = **x.(**testobj.TestObject1)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i6.calcBytes(&origin)
+	bc := i6.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i6.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestObject1
+	err := i6.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i6 TestObject1Inspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestObject1
-	switch x.(type) {
+func (i6 TestObject1Inspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestObject1
+	switch src.(type) {
 	case testobj.TestObject1:
-		origin = x.(testobj.TestObject1)
+		r = src.(testobj.TestObject1)
 	case *testobj.TestObject1:
-		origin = *x.(*testobj.TestObject1)
+		r = *src.(*testobj.TestObject1)
 	case **testobj.TestObject1:
-		origin = **x.(**testobj.TestObject1)
+		r = **src.(**testobj.TestObject1)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestObject1
+	switch src.(type) {
+	case testobj.TestObject1:
+		return inspector.ErrMustPointerType
+	case *testobj.TestObject1:
+		l = src.(*testobj.TestObject1)
+	case **testobj.TestObject1:
+		l = *src.(**testobj.TestObject1)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i6.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i6.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
+func (i6 TestObject1Inspector) countBytes(x *testobj.TestObject1) (c int) {
 	c += len(x.ByteSlice)
 	if x.ByteSlicePtr != nil {
 		c += len(*x.ByteSlicePtr)

@@ -254,48 +254,59 @@ func (i2 TestFloatPtrSliceInspector) Unmarshal(p []byte, typ inspector.Encoding)
 }
 
 func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestFloatPtrSlice
+	var r testobj.TestFloatPtrSlice
 	switch x.(type) {
 	case testobj.TestFloatPtrSlice:
-		origin = x.(testobj.TestFloatPtrSlice)
+		r = x.(testobj.TestFloatPtrSlice)
 	case *testobj.TestFloatPtrSlice:
-		origin = *x.(*testobj.TestFloatPtrSlice)
+		r = *x.(*testobj.TestFloatPtrSlice)
 	case **testobj.TestFloatPtrSlice:
-		origin = **x.(**testobj.TestFloatPtrSlice)
+		r = **x.(**testobj.TestFloatPtrSlice)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i2.calcBytes(&origin)
+	bc := i2.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i2.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestFloatPtrSlice
+	err := i2.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i2 TestFloatPtrSliceInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestFloatPtrSlice
-	switch x.(type) {
+func (i2 TestFloatPtrSliceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestFloatPtrSlice
+	switch src.(type) {
 	case testobj.TestFloatPtrSlice:
-		origin = x.(testobj.TestFloatPtrSlice)
+		r = src.(testobj.TestFloatPtrSlice)
 	case *testobj.TestFloatPtrSlice:
-		origin = *x.(*testobj.TestFloatPtrSlice)
+		r = *src.(*testobj.TestFloatPtrSlice)
 	case **testobj.TestFloatPtrSlice:
-		origin = **x.(**testobj.TestFloatPtrSlice)
+		r = **src.(**testobj.TestFloatPtrSlice)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestFloatPtrSlice
+	switch src.(type) {
+	case testobj.TestFloatPtrSlice:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFloatPtrSlice:
+		l = src.(*testobj.TestFloatPtrSlice)
+	case **testobj.TestFloatPtrSlice:
+		l = *src.(**testobj.TestFloatPtrSlice)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i2.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i2.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i2 TestFloatPtrSliceInspector) calcBytes(x *testobj.TestFloatPtrSlice) (c int) {
+func (i2 TestFloatPtrSliceInspector) countBytes(x *testobj.TestFloatPtrSlice) (c int) {
 	return c
 }
 

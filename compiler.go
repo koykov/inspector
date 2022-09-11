@@ -549,18 +549,18 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 
 	// Copy methods.
 	c.wl("func (", recv, " ", inst, ") Copy(x interface{}) (interface{}, error) {")
-	err = c.writeNodeCopy(node, recv, pname, false)
+	err = c.writeNodeCopy(node, recv, pname)
 	if err != nil {
 		return err
 	}
 	c.wdl("}")
-	c.wl("func (", recv, " ", inst, ") CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {")
-	err = c.writeNodeCopy(node, recv, pname, true)
+	c.wl("func (", recv, " ", inst, ") CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {")
+	err = c.writeNodeCopyWB(node, recv, pname)
 	if err != nil {
 		return err
 	}
 	c.wdl("}")
-	c.wl("func (", recv, " ", inst, ") calcBytes(x *", pname, ") (c int) {")
+	c.wl("func (", recv, " ", inst, ") countBytes(x *", pname, ") (c int) {")
 	err = c.writeCalcBytes(node, "x", 0)
 	if err != nil {
 		return err
@@ -1044,28 +1044,59 @@ return nil, inspector.ErrUnknownEncodingType
 	return nil
 }
 
-func (c *Compiler) writeNodeCopy(_ *node, recv, pname string, buffered bool) error {
-	c.wl("var origin, cpy ", pname)
+func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
+	c.wl("var r ", pname)
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
-	c.wl("origin = x.(", pname, ")")
+	c.wl("r = x.(", pname, ")")
 	c.wl("case *", pname, ":")
-	c.wl("origin = *x.(*", pname, ")")
+	c.wl("r = *x.(*", pname, ")")
 	c.wl("case **", pname, ":")
-	c.wl("origin = **x.(**", pname, ")")
+	c.wl("r = **x.(**", pname, ")")
 	c.wl("default:")
 	c.wl("return nil, inspector.ErrUnsupportedType")
 	c.wl("}")
-	if buffered {
-		c.wl("buf1:=buf.AcquireBytes()")
-		c.wl("defer buf.ReleaseBytes(buf1)")
-	} else {
-		c.wl("bc:=", recv, ".calcBytes(&origin)")
-		c.wl("buf1:=make([]byte,0,bc)")
-	}
+
+	c.wl("bc:=", recv, ".countBytes(&r)")
+	c.wl("buf1:=make([]byte,0,bc)")
+	c.wl("var buf inspector.ByteBuffer")
+	c.wl("buf.ReleaseBytes(buf1)")
+	c.wl("var l ", pname)
+	c.wl("err:=", recv, ".CopyWB(&r,&l,&buf)")
+	c.wl("return &l, err")
+	return nil
+}
+
+func (c *Compiler) writeNodeCopyWB(_ *node, recv, pname string) error {
+	c.wl("var r ", pname)
+	c.wl("switch src.(type) {")
+	c.wl("case ", pname, ":")
+	c.wl("r = src.(", pname, ")")
+	c.wl("case *", pname, ":")
+	c.wl("r = *src.(*", pname, ")")
+	c.wl("case **", pname, ":")
+	c.wl("r = **src.(**", pname, ")")
+	c.wl("default:")
+	c.wl("return inspector.ErrUnsupportedType")
+	c.wl("}")
+
+	c.wl("var l *", pname)
+	c.wl("switch src.(type) {")
+	c.wl("case ", pname, ":")
+	c.wl("return inspector.ErrMustPointerType")
+	c.wl("case *", pname, ":")
+	c.wl("l = src.(*", pname, ")")
+	c.wl("case **", pname, ":")
+	c.wl("l = *src.(**", pname, ")")
+	c.wl("default:")
+	c.wl("return inspector.ErrUnsupportedType")
+	c.wl("}")
+
+	c.wl("bb:=buf.AcquireBytes()")
 	c.wl("var err error")
-	c.wl("if buf1,err=", recv, ".cpy(buf1,&cpy,&origin);err!=nil{return nil,err}")
-	c.wl("return cpy, nil")
+	c.wl("if bb,err=", recv, ".cpy(bb,l,&r);err!=nil{return err}")
+	c.wl("buf.ReleaseBytes(bb)")
+	c.wl("return nil")
 	return nil
 }
 

@@ -671,48 +671,59 @@ func (i11 TestStructInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 }
 
 func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestStruct
+	var r testobj.TestStruct
 	switch x.(type) {
 	case testobj.TestStruct:
-		origin = x.(testobj.TestStruct)
+		r = x.(testobj.TestStruct)
 	case *testobj.TestStruct:
-		origin = *x.(*testobj.TestStruct)
+		r = *x.(*testobj.TestStruct)
 	case **testobj.TestStruct:
-		origin = **x.(**testobj.TestStruct)
+		r = **x.(**testobj.TestStruct)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i11.calcBytes(&origin)
+	bc := i11.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i11.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestStruct
+	err := i11.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i11 TestStructInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestStruct
-	switch x.(type) {
+func (i11 TestStructInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestStruct
+	switch src.(type) {
 	case testobj.TestStruct:
-		origin = x.(testobj.TestStruct)
+		r = src.(testobj.TestStruct)
 	case *testobj.TestStruct:
-		origin = *x.(*testobj.TestStruct)
+		r = *src.(*testobj.TestStruct)
 	case **testobj.TestStruct:
-		origin = **x.(**testobj.TestStruct)
+		r = **src.(**testobj.TestStruct)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestStruct
+	switch src.(type) {
+	case testobj.TestStruct:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStruct:
+		l = src.(*testobj.TestStruct)
+	case **testobj.TestStruct:
+		l = *src.(**testobj.TestStruct)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i11.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i11.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i11 TestStructInspector) calcBytes(x *testobj.TestStruct) (c int) {
+func (i11 TestStructInspector) countBytes(x *testobj.TestStruct) (c int) {
 	c += len(x.S)
 	c += len(x.B)
 	return c

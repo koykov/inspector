@@ -1131,48 +1131,59 @@ func (i5 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (inter
 }
 
 func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestObject
+	var r testobj.TestObject
 	switch x.(type) {
 	case testobj.TestObject:
-		origin = x.(testobj.TestObject)
+		r = x.(testobj.TestObject)
 	case *testobj.TestObject:
-		origin = *x.(*testobj.TestObject)
+		r = *x.(*testobj.TestObject)
 	case **testobj.TestObject:
-		origin = **x.(**testobj.TestObject)
+		r = **x.(**testobj.TestObject)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i5.calcBytes(&origin)
+	bc := i5.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i5.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestObject
+	err := i5.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i5 TestObjectInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestObject
-	switch x.(type) {
+func (i5 TestObjectInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestObject
+	switch src.(type) {
 	case testobj.TestObject:
-		origin = x.(testobj.TestObject)
+		r = src.(testobj.TestObject)
 	case *testobj.TestObject:
-		origin = *x.(*testobj.TestObject)
+		r = *src.(*testobj.TestObject)
 	case **testobj.TestObject:
-		origin = **x.(**testobj.TestObject)
+		r = **src.(**testobj.TestObject)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestObject
+	switch src.(type) {
+	case testobj.TestObject:
+		return inspector.ErrMustPointerType
+	case *testobj.TestObject:
+		l = src.(*testobj.TestObject)
+	case **testobj.TestObject:
+		l = *src.(**testobj.TestObject)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i5.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i5.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i5 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
+func (i5 TestObjectInspector) countBytes(x *testobj.TestObject) (c int) {
 	c += len(x.Id)
 	c += len(x.Name)
 	for k1, v1 := range x.HistoryTree {

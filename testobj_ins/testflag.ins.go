@@ -235,48 +235,59 @@ func (i1 TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (interfa
 }
 
 func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
-	var origin, cpy testobj.TestFlag
+	var r testobj.TestFlag
 	switch x.(type) {
 	case testobj.TestFlag:
-		origin = x.(testobj.TestFlag)
+		r = x.(testobj.TestFlag)
 	case *testobj.TestFlag:
-		origin = *x.(*testobj.TestFlag)
+		r = *x.(*testobj.TestFlag)
 	case **testobj.TestFlag:
-		origin = **x.(**testobj.TestFlag)
+		r = **x.(**testobj.TestFlag)
 	default:
 		return nil, inspector.ErrUnsupportedType
 	}
-	bc := i1.calcBytes(&origin)
+	bc := i1.countBytes(&r)
 	buf1 := make([]byte, 0, bc)
-	var err error
-	if buf1, err = i1.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
-	}
-	return cpy, nil
+	var buf inspector.ByteBuffer
+	buf.ReleaseBytes(buf1)
+	var l testobj.TestFlag
+	err := i1.CopyWB(&r, &l, &buf)
+	return &l, err
 }
 
-func (i1 TestFlagInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuffer) (interface{}, error) {
-	var origin, cpy testobj.TestFlag
-	switch x.(type) {
+func (i1 TestFlagInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+	var r testobj.TestFlag
+	switch src.(type) {
 	case testobj.TestFlag:
-		origin = x.(testobj.TestFlag)
+		r = src.(testobj.TestFlag)
 	case *testobj.TestFlag:
-		origin = *x.(*testobj.TestFlag)
+		r = *src.(*testobj.TestFlag)
 	case **testobj.TestFlag:
-		origin = **x.(**testobj.TestFlag)
+		r = **src.(**testobj.TestFlag)
 	default:
-		return nil, inspector.ErrUnsupportedType
+		return inspector.ErrUnsupportedType
 	}
-	buf1 := buf.AcquireBytes()
-	defer buf.ReleaseBytes(buf1)
+	var l *testobj.TestFlag
+	switch src.(type) {
+	case testobj.TestFlag:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFlag:
+		l = src.(*testobj.TestFlag)
+	case **testobj.TestFlag:
+		l = *src.(**testobj.TestFlag)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	bb := buf.AcquireBytes()
 	var err error
-	if buf1, err = i1.cpy(buf1, &cpy, &origin); err != nil {
-		return nil, err
+	if bb, err = i1.cpy(bb, l, &r); err != nil {
+		return err
 	}
-	return cpy, nil
+	buf.ReleaseBytes(bb)
+	return nil
 }
 
-func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
+func (i1 TestFlagInspector) countBytes(x *testobj.TestFlag) (c int) {
 	for k0, v0 := range *x {
 		_, _ = k0, v0
 		c += len(k0)

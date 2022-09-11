@@ -302,7 +302,7 @@ func TestInspectorCopy(t *testing.T) {
 	}
 	cpy, _ := ins.Copy(obj)
 	obj.Name[0] = 'F'
-	if bytes.Equal(obj.Name, cpy.(testobj.TestObject).Name) {
+	if bytes.Equal(obj.Name, cpy.(*testobj.TestObject).Name) {
 		t.FailNow()
 	}
 }
