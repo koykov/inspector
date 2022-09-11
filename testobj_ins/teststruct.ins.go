@@ -684,7 +684,8 @@ func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i11.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i11.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i11.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -704,7 +705,8 @@ func (i11 TestStructInspector) CopyWB(x interface{}, buf inspector.AccumulativeB
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i11.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i11.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -716,7 +718,7 @@ func (i11 TestStructInspector) calcBytes(x *testobj.TestStruct) (c int) {
 	return c
 }
 
-func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) error {
+func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) ([]byte, error) {
 	l.A = r.A
 	buf, l.S = inspector.BufferizeString(buf, r.S)
 	buf, l.B = inspector.Bufferize(buf, r.B)
@@ -732,7 +734,7 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) error {
 	l.U64 = r.U64
 	l.F = r.F
 	l.D = r.D
-	return nil
+	return buf, nil
 }
 
 func (i11 TestStructInspector) Reset(x interface{}) {

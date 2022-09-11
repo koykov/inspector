@@ -279,7 +279,8 @@ func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i4.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i4.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i4.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -299,7 +300,8 @@ func (i4 TestHistoryInspector) CopyWB(x interface{}, buf inspector.AccumulativeB
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i4.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i4.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -310,11 +312,11 @@ func (i4 TestHistoryInspector) calcBytes(x *testobj.TestHistory) (c int) {
 	return c
 }
 
-func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) error {
+func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) ([]byte, error) {
 	l.DateUnix = r.DateUnix
 	l.Cost = r.Cost
 	buf, l.Comment = inspector.Bufferize(buf, r.Comment)
-	return nil
+	return buf, nil
 }
 
 func (i4 TestHistoryInspector) Reset(x interface{}) {

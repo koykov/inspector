@@ -506,7 +506,8 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i0.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i0.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -526,7 +527,8 @@ func (i0 TestFinanceInspector) CopyWB(x interface{}, buf inspector.AccumulativeB
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i0.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i0.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -540,7 +542,7 @@ func (i0 TestFinanceInspector) calcBytes(x *testobj.TestFinance) (c int) {
 	return c
 }
 
-func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) error {
+func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byte, error) {
 	l.MoneyIn = r.MoneyIn
 	l.MoneyOut = r.MoneyOut
 	l.Balance = r.Balance
@@ -557,7 +559,7 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) error 
 		}
 		l.History = buf1
 	}
-	return nil
+	return buf, nil
 }
 
 func (i0 TestFinanceInspector) Reset(x interface{}) {

@@ -265,7 +265,8 @@ func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i3.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i3.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i3.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -285,7 +286,8 @@ func (i3 TestFloatSliceInspector) CopyWB(x interface{}, buf inspector.Accumulati
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i3.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i3.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -295,7 +297,7 @@ func (i3 TestFloatSliceInspector) calcBytes(x *testobj.TestFloatSlice) (c int) {
 	return c
 }
 
-func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) error {
+func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestFloatSlice, 0, len(*r))
 		for i0 := 0; i0 < len(*r); i0++ {
@@ -306,7 +308,7 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 		}
 		l = &buf0
 	}
-	return nil
+	return buf, nil
 }
 
 func (i3 TestFloatSliceInspector) Reset(x interface{}) {

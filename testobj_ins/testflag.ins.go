@@ -248,7 +248,8 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i1.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i1.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -268,7 +269,8 @@ func (i1 TestFlagInspector) CopyWB(x interface{}, buf inspector.AccumulativeBuff
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i1.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i1.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -282,7 +284,7 @@ func (i1 TestFlagInspector) calcBytes(x *testobj.TestFlag) (c int) {
 	return c
 }
 
-func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
+func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestFlag, len(*r))
 		_ = buf0
@@ -295,7 +297,7 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) error {
 			(*l)[lk0] = lv0
 		}
 	}
-	return nil
+	return buf, nil
 }
 
 func (i1 TestFlagInspector) Reset(x interface{}) {

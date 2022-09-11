@@ -1144,7 +1144,8 @@ func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i5.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i5.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -1164,7 +1165,8 @@ func (i5 TestObjectInspector) CopyWB(x interface{}, buf inspector.AccumulativeBu
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i5.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i5.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -1191,7 +1193,7 @@ func (i5 TestObjectInspector) calcBytes(x *testobj.TestObject) (c int) {
 	return c
 }
 
-func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
+func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte, error) {
 	buf, l.Id = inspector.BufferizeString(buf, r.Id)
 	buf, l.Name = inspector.Bufferize(buf, r.Name)
 	l.Status = r.Status
@@ -1256,7 +1258,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 			l.Finance.History = buf2
 		}
 	}
-	return nil
+	return buf, nil
 }
 
 func (i5 TestObjectInspector) Reset(x interface{}) {

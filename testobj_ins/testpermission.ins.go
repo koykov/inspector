@@ -255,7 +255,8 @@ func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i7.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i7.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i7.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -275,7 +276,8 @@ func (i7 TestPermissionInspector) CopyWB(x interface{}, buf inspector.Accumulati
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i7.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i7.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -285,7 +287,7 @@ func (i7 TestPermissionInspector) calcBytes(x *testobj.TestPermission) (c int) {
 	return c
 }
 
-func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) error {
+func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestPermission, len(*r))
 		_ = buf0
@@ -298,7 +300,7 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 			(*l)[lk0] = lv0
 		}
 	}
-	return nil
+	return buf, nil
 }
 
 func (i7 TestPermissionInspector) Reset(x interface{}) {

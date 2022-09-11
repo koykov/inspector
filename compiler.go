@@ -566,12 +566,12 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 		return err
 	}
 	c.wdl("return c}")
-	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,l, r *", pname, ") error {")
+	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,l, r *", pname, ") ([]byte, error) {")
 	err = c.writeCopy(node, "l", "r", 0)
 	if err != nil {
 		return err
 	}
-	c.wdl("return nil}")
+	c.wdl("return buf,nil}")
 
 	// Reset methods.
 	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) {")
@@ -1063,7 +1063,8 @@ func (c *Compiler) writeNodeCopy(_ *node, recv, pname string, buffered bool) err
 		c.wl("bc:=", recv, ".calcBytes(&origin)")
 		c.wl("buf1:=make([]byte,0,bc)")
 	}
-	c.wl("if err:=", recv, ".cpy(buf1,&cpy,&origin);err!=nil{return nil,err}")
+	c.wl("var err error")
+	c.wl("if buf1,err=", recv, ".cpy(buf1,&cpy,&origin);err!=nil{return nil,err}")
 	c.wl("return cpy, nil")
 	return nil
 }

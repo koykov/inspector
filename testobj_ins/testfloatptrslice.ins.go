@@ -267,7 +267,8 @@ func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i2.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i2.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i2.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -287,7 +288,8 @@ func (i2 TestFloatPtrSliceInspector) CopyWB(x interface{}, buf inspector.Accumul
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i2.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i2.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -297,7 +299,7 @@ func (i2 TestFloatPtrSliceInspector) calcBytes(x *testobj.TestFloatPtrSlice) (c 
 	return c
 }
 
-func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrSlice) error {
+func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrSlice) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestFloatPtrSlice, 0, len(*r))
 		for i0 := 0; i0 < len(*r); i0++ {
@@ -308,7 +310,7 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 		}
 		l = &buf0
 	}
-	return nil
+	return buf, nil
 }
 
 func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) {

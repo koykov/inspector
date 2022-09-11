@@ -10175,7 +10175,8 @@ func (i6 TestObject1Inspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i6.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i6.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i6.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -10195,7 +10196,8 @@ func (i6 TestObject1Inspector) CopyWB(x interface{}, buf inspector.AccumulativeB
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i6.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i6.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -10323,7 +10325,7 @@ func (i6 TestObject1Inspector) calcBytes(x *testobj.TestObject1) (c int) {
 	return c
 }
 
-func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error {
+func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byte, error) {
 	if len(r.IntSlice) > 0 {
 		buf1 := make([]int32, 0, len(r.IntSlice))
 		for i1 := 0; i1 < len(r.IntSlice); i1++ {
@@ -10882,7 +10884,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		l.NestedStructPtr.F = r.NestedStructPtr.F
 		l.NestedStructPtr.D = r.NestedStructPtr.D
 	}
-	return nil
+	return buf, nil
 }
 
 func (i6 TestObject1Inspector) Reset(x interface{}) {

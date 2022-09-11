@@ -249,7 +249,8 @@ func (i10 TestStringPtrFloatPtrMapInspector) Copy(x interface{}) (interface{}, e
 	}
 	bc := i10.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i10.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i10.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -269,7 +270,8 @@ func (i10 TestStringPtrFloatPtrMapInspector) CopyWB(x interface{}, buf inspector
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i10.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i10.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -283,7 +285,7 @@ func (i10 TestStringPtrFloatPtrMapInspector) calcBytes(x *testobj.TestStringPtrF
 	return c
 }
 
-func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringPtrFloatPtrMap) error {
+func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringPtrFloatPtrMap) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestStringPtrFloatPtrMap, len(*r))
 		_ = buf0
@@ -296,7 +298,7 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 			(*l)[lk0] = lv0
 		}
 	}
-	return nil
+	return buf, nil
 }
 
 func (i10 TestStringPtrFloatPtrMapInspector) Reset(x interface{}) {

@@ -248,7 +248,8 @@ func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i8.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i8.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i8.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -268,7 +269,8 @@ func (i8 TestStringFloatMapInspector) CopyWB(x interface{}, buf inspector.Accumu
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i8.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i8.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -282,7 +284,7 @@ func (i8 TestStringFloatMapInspector) calcBytes(x *testobj.TestStringFloatMap) (
 	return c
 }
 
-func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatMap) error {
+func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatMap) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestStringFloatMap, len(*r))
 		_ = buf0
@@ -295,7 +297,7 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 			(*l)[lk0] = lv0
 		}
 	}
-	return nil
+	return buf, nil
 }
 
 func (i8 TestStringFloatMapInspector) Reset(x interface{}) {

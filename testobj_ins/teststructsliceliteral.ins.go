@@ -755,7 +755,8 @@ func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, err
 	}
 	bc := i12.calcBytes(&origin)
 	buf1 := make([]byte, 0, bc)
-	if err := i12.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i12.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -775,7 +776,8 @@ func (i12 TestStructSliceLiteralInspector) CopyWB(x interface{}, buf inspector.A
 	}
 	buf1 := buf.AcquireBytes()
 	defer buf.ReleaseBytes(buf1)
-	if err := i12.cpy(buf1, &cpy, &origin); err != nil {
+	var err error
+	if buf1, err = i12.cpy(buf1, &cpy, &origin); err != nil {
 		return nil, err
 	}
 	return cpy, nil
@@ -790,7 +792,7 @@ func (i12 TestStructSliceLiteralInspector) calcBytes(x *testobj.TestStructSliceL
 	return c
 }
 
-func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStructSliceLiteral) error {
+func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStructSliceLiteral) ([]byte, error) {
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestStructSliceLiteral, 0, len(*r))
 		for i0 := 0; i0 < len(*r); i0++ {
@@ -815,7 +817,7 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 		}
 		l = &buf0
 	}
-	return nil
+	return buf, nil
 }
 
 func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) {
