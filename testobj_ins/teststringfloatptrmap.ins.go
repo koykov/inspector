@@ -287,13 +287,13 @@ func (i9 TestStringFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStrin
 	if len(*r) > 0 {
 		buf0 := make(testobj.TestStringFloatPtrMap, len(*r))
 		_ = buf0
-		for rk, rv := range *r {
-			_, _ = rk, rv
-			var lk string
-			buf, lk = inspector.BufferizeString(buf, rk)
-			var lv *float64
-			lv = rv
-			(*l)[lk] = lv
+		for rk0, rv0 := range *r {
+			_, _ = rk0, rv0
+			var lk0 string
+			buf, lk0 = inspector.BufferizeString(buf, rk0)
+			var lv0 *float64
+			lv0 = rv0
+			(*l)[lk0] = lv0
 		}
 	}
 	return nil

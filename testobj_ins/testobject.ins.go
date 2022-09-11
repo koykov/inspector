@@ -1201,40 +1201,40 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 		if len(*r.Permission) > 0 {
 			buf1 := make(testobj.TestPermission, len(*r.Permission))
 			_ = buf1
-			for rk, rv := range *r.Permission {
-				_, _ = rk, rv
-				var lk int32
-				lk = rk
-				var lv bool
-				lv = rv
-				(*l.Permission)[lk] = lv
+			for rk1, rv1 := range *r.Permission {
+				_, _ = rk1, rv1
+				var lk1 int32
+				lk1 = rk1
+				var lv1 bool
+				lv1 = rv1
+				(*l.Permission)[lk1] = lv1
 			}
 		}
 	}
 	if len(r.HistoryTree) > 0 {
 		buf1 := make(map[string]*testobj.TestHistory, len(r.HistoryTree))
 		_ = buf1
-		for rk, rv := range r.HistoryTree {
-			_, _ = rk, rv
-			var lk string
-			buf, lk = inspector.BufferizeString(buf, rk)
-			var lv testobj.TestHistory
-			lv.DateUnix = rv.DateUnix
-			lv.Cost = rv.Cost
-			buf, lv.Comment = inspector.Bufferize(buf, rv.Comment)
-			(l.HistoryTree)[lk] = &lv
+		for rk1, rv1 := range r.HistoryTree {
+			_, _ = rk1, rv1
+			var lk1 string
+			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var lv1 testobj.TestHistory
+			lv1.DateUnix = rv1.DateUnix
+			lv1.Cost = rv1.Cost
+			buf, lv1.Comment = inspector.Bufferize(buf, rv1.Comment)
+			(l.HistoryTree)[lk1] = &lv1
 		}
 	}
 	if len(r.Flags) > 0 {
 		buf1 := make(testobj.TestFlag, len(r.Flags))
 		_ = buf1
-		for rk, rv := range r.Flags {
-			_, _ = rk, rv
-			var lk string
-			buf, lk = inspector.BufferizeString(buf, rk)
-			var lv int32
-			lv = rv
-			(l.Flags)[lk] = lv
+		for rk1, rv1 := range r.Flags {
+			_, _ = rk1, rv1
+			var lk1 string
+			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var lv1 int32
+			lv1 = rv1
+			(l.Flags)[lk1] = lv1
 		}
 	}
 	if l.Finance != nil {
