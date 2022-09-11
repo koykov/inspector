@@ -1140,17 +1140,21 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		c.wl("if ", ln, ">0 {")
 		c.wl(buf, ":=make(", c.fmtT(node), ",", ln, ")")
 		c.wl("_=", buf)
-		c.wl("for rk,rv:=range ", c.fmtVnb(node, r, depth), "{")
-		c.wl("_,_=rk,rv")
-		c.wl("var lk ", c.fmtT(node.mapk))
-		_ = c.writeCopy(node.mapk, "lk", "rk", depth+1)
-		c.wl("var lv ", c.fmtT(node.mapv))
-		_ = c.writeCopy(node.mapv, "lv", "rv", depth+1)
+		rk := "rk" + strconv.Itoa(depth)
+		rv := "rv" + strconv.Itoa(depth)
+		c.wl("for ", rk, ",", rv, ":=range ", c.fmtVnb(node, r, depth), "{")
+		c.wl("_,_=", rk, ",", rv)
+		lk := "lk" + strconv.Itoa(depth)
+		c.wl("var ", lk, " ", c.fmtT(node.mapk))
+		_ = c.writeCopy(node.mapk, lk, rk, depth+1)
+		lv := "lv" + strconv.Itoa(depth)
+		c.wl("var ", lv, " ", c.fmtT(node.mapv))
+		_ = c.writeCopy(node.mapv, lv, rv, depth+1)
 		pfx := ""
 		if node.mapv.ptr && node.mapv.typ != typeBasic {
 			pfx = "&"
 		}
-		c.wl(c.fmtVd(node, l, depth), "[lk]=", pfx, "lv")
+		c.wl(c.fmtVd(node, l, depth), "[", lk, "]=", pfx, lv)
 		c.wl("}")
 		c.wl("}")
 	case typeSlice:

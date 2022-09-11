@@ -26,6 +26,8 @@ type TestObject1 struct {
 	IntStringPtrMapPtr    *map[int]*string
 	IntPtrStringPtrMapPtr *map[*int]*string
 
+	IntIntMapMap map[int32]map[int32]int32
+
 	StringFloatMap          TestStringFloatMap
 	StringFloatPtrMap       TestStringFloatPtrMap
 	StringFloatMapPtr       *TestStringFloatMap
