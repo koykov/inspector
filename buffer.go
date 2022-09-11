@@ -18,7 +18,7 @@ type ByteBuffer struct {
 func NewByteBuffer(size int) *ByteBuffer {
 	b := ByteBuffer{}
 	if size > 0 {
-		b.b = make([]byte, size)
+		b.b = make([]byte, 0, size)
 	}
 	return &b
 }
