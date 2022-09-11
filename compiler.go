@@ -1287,14 +1287,14 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 		} else {
 			if node.slct.typ != typeBasic {
-				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
+				c.wl("_=", c.fmtV(node, v), "[l-1]")
 				nv := "x" + strconv.Itoa(depth)
 				c.wl("for i:=0;i<l;i++{")
 				pfx := "&"
 				if node.slct.ptr {
 					pfx = ""
 				}
-				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
+				c.wl(nv, ":=", pfx, c.fmtV(node, v), "[i]")
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
 				c.wl("}")
 			}

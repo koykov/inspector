@@ -15,10 +15,11 @@ type TestObject1 struct {
 	FloatSlicePtr    *TestFloatSlice
 	FloatPtrSlicePtr *TestFloatPtrSlice
 
-	StructSlice       []TestStruct
-	StructPtrSlice    []*TestStruct
-	StructSlicePtr    *[]TestStruct
-	StructPtrSlicePtr *[]*TestStruct
+	StructSlice        []TestStruct
+	StructPtrSlice     []*TestStruct
+	StructSlicePtr     *[]TestStruct
+	StructPtrSlicePtr  *[]*TestStruct
+	StructSliceLiteral TestStructSliceLiteral
 
 	IntStringMap          map[int]string
 	IntStringPtrMap       map[int]*string
@@ -51,6 +52,7 @@ type TestObject1 struct {
 
 type TestFloatSlice []float32
 type TestFloatPtrSlice []*float32
+type TestStructSliceLiteral []*TestStruct
 
 type TestStringFloatMap map[string]float64
 type TestStringFloatPtrMap map[string]*float64
