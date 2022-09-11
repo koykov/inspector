@@ -22,13 +22,13 @@ type Inspector interface {
 	// DeepEqualWithOptions compares l and r corresponding options.
 	DeepEqualWithOptions(l, r interface{}, options *DEQOptions) bool
 	// Unmarshal parses encoded data according encoding type.
-	Unmarshal([]byte, Encoding) (interface{}, error)
-	// Copy makes a copy of variable value.
-	Copy(interface{}) (interface{}, error)
-	// CopyWB makes a copy of variable value using buffer.
-	CopyWB(interface{}, AccumulativeBuffer) (interface{}, error)
-	// Reset resets variable.
-	Reset(interface{})
+	Unmarshal(p []byte, typ Encoding) (interface{}, error)
+	// Copy makes a copy of src.
+	Copy(src interface{}) (interface{}, error)
+	// CopyWB makes a copy of src using buffer.
+	CopyWB(src interface{}, buf AccumulativeBuffer) (interface{}, error)
+	// Reset resets src.
+	Reset(src interface{})
 }
 
 // Looper signature.
