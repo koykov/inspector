@@ -41,6 +41,9 @@ type TestObject1 struct {
 	FloatPtrStructPtrMap    map[*float64]*TestStruct
 	FloatPtrStructPtrMapPtr *map[*float64]*TestStruct
 
+	NestedStruct    TestStruct
+	NestedStructPtr *TestStruct
+
 	// the following cases is unsupported due to StrToX conversion problem.
 	// StructPtrUintMap       map[*TestStruct]uint32
 	// StructPtrUintPtrMap    map[*TestStruct]*uint32

@@ -1198,7 +1198,6 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 	l.Ustate = r.Ustate
 	l.Cost = r.Cost
 	if r.Permission != nil {
-		l.Permission = &testobj.TestPermission{}
 		if len(*r.Permission) > 0 {
 			buf1 := make(testobj.TestPermission, len(*r.Permission))
 			_ = buf1
