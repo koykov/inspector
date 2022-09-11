@@ -1128,6 +1128,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
 			if chPtr {
 				c.wl("if ", nr, "!=nil{")
+				c.wl(nl, "=&", c.fmtT(ch), "{}")
 			}
 			_ = c.writeCopy(ch, nl, nr, depth+1)
 			if chPtr {
