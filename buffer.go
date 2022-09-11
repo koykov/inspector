@@ -15,6 +15,14 @@ type ByteBuffer struct {
 	b []byte
 }
 
+func NewByteBuffer(size int) *ByteBuffer {
+	b := ByteBuffer{}
+	if size > 0 {
+		b.b = make([]byte, size)
+	}
+	return &b
+}
+
 func (ab ByteBuffer) AcquireBytes() []byte {
 	return ab.b
 }

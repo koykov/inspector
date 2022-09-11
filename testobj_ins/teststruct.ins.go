@@ -683,11 +683,8 @@ func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i11.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestStruct
-	err := i11.CopyWB(&r, &l, &buf)
+	err := i11.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -704,13 +701,13 @@ func (i11 TestStructInspector) CopyWB(src, dst interface{}, buf inspector.Accumu
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestStruct
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestStruct:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStruct:
-		l = src.(*testobj.TestStruct)
+		l = dst.(*testobj.TestStruct)
 	case **testobj.TestStruct:
-		l = *src.(**testobj.TestStruct)
+		l = *dst.(**testobj.TestStruct)
 	default:
 		return inspector.ErrUnsupportedType
 	}

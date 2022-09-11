@@ -254,11 +254,8 @@ func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i7.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestPermission
-	err := i7.CopyWB(&r, &l, &buf)
+	err := i7.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -275,13 +272,13 @@ func (i7 TestPermissionInspector) CopyWB(src, dst interface{}, buf inspector.Acc
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestPermission
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestPermission:
 		return inspector.ErrMustPointerType
 	case *testobj.TestPermission:
-		l = src.(*testobj.TestPermission)
+		l = dst.(*testobj.TestPermission)
 	case **testobj.TestPermission:
-		l = *src.(**testobj.TestPermission)
+		l = *dst.(**testobj.TestPermission)
 	default:
 		return inspector.ErrUnsupportedType
 	}

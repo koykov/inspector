@@ -247,11 +247,8 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i1.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestFlag
-	err := i1.CopyWB(&r, &l, &buf)
+	err := i1.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -268,13 +265,13 @@ func (i1 TestFlagInspector) CopyWB(src, dst interface{}, buf inspector.Accumulat
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestFlag
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestFlag:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFlag:
-		l = src.(*testobj.TestFlag)
+		l = dst.(*testobj.TestFlag)
 	case **testobj.TestFlag:
-		l = *src.(**testobj.TestFlag)
+		l = *dst.(**testobj.TestFlag)
 	default:
 		return inspector.ErrUnsupportedType
 	}

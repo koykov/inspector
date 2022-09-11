@@ -1143,11 +1143,8 @@ func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i5.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestObject
-	err := i5.CopyWB(&r, &l, &buf)
+	err := i5.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -1164,13 +1161,13 @@ func (i5 TestObjectInspector) CopyWB(src, dst interface{}, buf inspector.Accumul
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestObject
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestObject:
 		return inspector.ErrMustPointerType
 	case *testobj.TestObject:
-		l = src.(*testobj.TestObject)
+		l = dst.(*testobj.TestObject)
 	case **testobj.TestObject:
-		l = *src.(**testobj.TestObject)
+		l = *dst.(**testobj.TestObject)
 	default:
 		return inspector.ErrUnsupportedType
 	}

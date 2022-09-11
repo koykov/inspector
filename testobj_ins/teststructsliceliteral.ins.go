@@ -754,11 +754,8 @@ func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, err
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i12.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestStructSliceLiteral
-	err := i12.CopyWB(&r, &l, &buf)
+	err := i12.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -775,13 +772,13 @@ func (i12 TestStructSliceLiteralInspector) CopyWB(src, dst interface{}, buf insp
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestStructSliceLiteral
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestStructSliceLiteral:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStructSliceLiteral:
-		l = src.(*testobj.TestStructSliceLiteral)
+		l = dst.(*testobj.TestStructSliceLiteral)
 	case **testobj.TestStructSliceLiteral:
-		l = *src.(**testobj.TestStructSliceLiteral)
+		l = *dst.(**testobj.TestStructSliceLiteral)
 	default:
 		return inspector.ErrUnsupportedType
 	}

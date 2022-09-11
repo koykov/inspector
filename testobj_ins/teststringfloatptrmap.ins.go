@@ -248,11 +248,8 @@ func (i9 TestStringFloatPtrMapInspector) Copy(x interface{}) (interface{}, error
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i9.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestStringFloatPtrMap
-	err := i9.CopyWB(&r, &l, &buf)
+	err := i9.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -269,13 +266,13 @@ func (i9 TestStringFloatPtrMapInspector) CopyWB(src, dst interface{}, buf inspec
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestStringFloatPtrMap
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestStringFloatPtrMap:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStringFloatPtrMap:
-		l = src.(*testobj.TestStringFloatPtrMap)
+		l = dst.(*testobj.TestStringFloatPtrMap)
 	case **testobj.TestStringFloatPtrMap:
-		l = *src.(**testobj.TestStringFloatPtrMap)
+		l = *dst.(**testobj.TestStringFloatPtrMap)
 	default:
 		return inspector.ErrUnsupportedType
 	}

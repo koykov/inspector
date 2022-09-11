@@ -1058,11 +1058,8 @@ func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
 	c.wl("}")
 
 	c.wl("bc:=", recv, ".countBytes(&r)")
-	c.wl("buf1:=make([]byte,0,bc)")
-	c.wl("var buf inspector.ByteBuffer")
-	c.wl("buf.ReleaseBytes(buf1)")
 	c.wl("var l ", pname)
-	c.wl("err:=", recv, ".CopyWB(&r,&l,&buf)")
+	c.wl("err:=", recv, ".CopyWB(&r,&l,inspector.NewByteBuffer(bc))")
 	c.wl("return &l, err")
 	return nil
 }
@@ -1081,13 +1078,13 @@ func (c *Compiler) writeNodeCopyWB(_ *node, recv, pname string) error {
 	c.wl("}")
 
 	c.wl("var l *", pname)
-	c.wl("switch src.(type) {")
+	c.wl("switch dst.(type) {")
 	c.wl("case ", pname, ":")
 	c.wl("return inspector.ErrMustPointerType")
 	c.wl("case *", pname, ":")
-	c.wl("l = src.(*", pname, ")")
+	c.wl("l = dst.(*", pname, ")")
 	c.wl("case **", pname, ":")
-	c.wl("l = *src.(**", pname, ")")
+	c.wl("l = *dst.(**", pname, ")")
 	c.wl("default:")
 	c.wl("return inspector.ErrUnsupportedType")
 	c.wl("}")

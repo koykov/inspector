@@ -505,11 +505,8 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i0.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestFinance
-	err := i0.CopyWB(&r, &l, &buf)
+	err := i0.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -526,13 +523,13 @@ func (i0 TestFinanceInspector) CopyWB(src, dst interface{}, buf inspector.Accumu
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestFinance
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestFinance:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFinance:
-		l = src.(*testobj.TestFinance)
+		l = dst.(*testobj.TestFinance)
 	case **testobj.TestFinance:
-		l = *src.(**testobj.TestFinance)
+		l = *dst.(**testobj.TestFinance)
 	default:
 		return inspector.ErrUnsupportedType
 	}

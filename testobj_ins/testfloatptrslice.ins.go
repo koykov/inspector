@@ -266,11 +266,8 @@ func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
 		return nil, inspector.ErrUnsupportedType
 	}
 	bc := i2.countBytes(&r)
-	buf1 := make([]byte, 0, bc)
-	var buf inspector.ByteBuffer
-	buf.ReleaseBytes(buf1)
 	var l testobj.TestFloatPtrSlice
-	err := i2.CopyWB(&r, &l, &buf)
+	err := i2.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
@@ -287,13 +284,13 @@ func (i2 TestFloatPtrSliceInspector) CopyWB(src, dst interface{}, buf inspector.
 		return inspector.ErrUnsupportedType
 	}
 	var l *testobj.TestFloatPtrSlice
-	switch src.(type) {
+	switch dst.(type) {
 	case testobj.TestFloatPtrSlice:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFloatPtrSlice:
-		l = src.(*testobj.TestFloatPtrSlice)
+		l = dst.(*testobj.TestFloatPtrSlice)
 	case **testobj.TestFloatPtrSlice:
-		l = *src.(**testobj.TestFloatPtrSlice)
+		l = *dst.(**testobj.TestFloatPtrSlice)
 	default:
 		return inspector.ErrUnsupportedType
 	}
