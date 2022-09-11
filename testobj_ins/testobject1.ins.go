@@ -10328,7 +10328,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make([]int32, 0, len(r.IntSlice))
 		for i1 := 0; i1 < len(r.IntSlice); i1++ {
 			var b1 int32
-			x1 := (l.IntSlice)[i1]
+			x1 := (r.IntSlice)[i1]
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10338,7 +10338,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make([]*int32, 0, len(r.IntPtrSlice))
 		for i1 := 0; i1 < len(r.IntPtrSlice); i1++ {
 			var b1 *int32
-			x1 := (l.IntPtrSlice)[i1]
+			x1 := (r.IntPtrSlice)[i1]
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10349,7 +10349,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make([]int32, 0, len(*r.IntSlicePtr))
 			for i1 := 0; i1 < len(*r.IntSlicePtr); i1++ {
 				var b1 int32
-				x1 := (*l.IntSlicePtr)[i1]
+				x1 := (*r.IntSlicePtr)[i1]
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10361,7 +10361,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make([]*int32, 0, len(*r.IntPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.IntPtrSlicePtr); i1++ {
 				var b1 *int32
-				x1 := (*l.IntPtrSlicePtr)[i1]
+				x1 := (*r.IntPtrSlicePtr)[i1]
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10373,7 +10373,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make([]*byte, 0, len(r.BytePtrSlice))
 		for i1 := 0; i1 < len(r.BytePtrSlice); i1++ {
 			var b1 *byte
-			x1 := (l.BytePtrSlice)[i1]
+			x1 := (r.BytePtrSlice)[i1]
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10387,7 +10387,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make([]*byte, 0, len(*r.BytePtrSlicePtr))
 			for i1 := 0; i1 < len(*r.BytePtrSlicePtr); i1++ {
 				var b1 *byte
-				x1 := (*l.BytePtrSlicePtr)[i1]
+				x1 := (*r.BytePtrSlicePtr)[i1]
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10398,7 +10398,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make(testobj.TestFloatSlice, 0, len(r.FloatSlice))
 		for i1 := 0; i1 < len(r.FloatSlice); i1++ {
 			var b1 float32
-			x1 := (l.FloatSlice)[i1]
+			x1 := (r.FloatSlice)[i1]
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10408,7 +10408,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make(testobj.TestFloatPtrSlice, 0, len(r.FloatPtrSlice))
 		for i1 := 0; i1 < len(r.FloatPtrSlice); i1++ {
 			var b1 *float32
-			x1 := (l.FloatPtrSlice)[i1]
+			x1 := (r.FloatPtrSlice)[i1]
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10419,7 +10419,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make(testobj.TestFloatSlice, 0, len(*r.FloatSlicePtr))
 			for i1 := 0; i1 < len(*r.FloatSlicePtr); i1++ {
 				var b1 float32
-				x1 := (*l.FloatSlicePtr)[i1]
+				x1 := (*r.FloatSlicePtr)[i1]
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10431,7 +10431,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make(testobj.TestFloatPtrSlice, 0, len(*r.FloatPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.FloatPtrSlicePtr); i1++ {
 				var b1 *float32
-				x1 := (*l.FloatPtrSlicePtr)[i1]
+				x1 := (*r.FloatPtrSlicePtr)[i1]
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10442,7 +10442,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make([]testobj.TestStruct, 0, len(r.StructSlice))
 		for i1 := 0; i1 < len(r.StructSlice); i1++ {
 			var b1 testobj.TestStruct
-			x1 := &(l.StructSlice)[i1]
+			x1 := &(r.StructSlice)[i1]
 			b1.A = x1.A
 			buf, b1.S = inspector.BufferizeString(buf, x1.S)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)
@@ -10466,7 +10466,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make([]*testobj.TestStruct, 0, len(r.StructPtrSlice))
 		for i1 := 0; i1 < len(r.StructPtrSlice); i1++ {
 			var b1 testobj.TestStruct
-			x1 := (l.StructPtrSlice)[i1]
+			x1 := (r.StructPtrSlice)[i1]
 			b1.A = x1.A
 			buf, b1.S = inspector.BufferizeString(buf, x1.S)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)
@@ -10491,7 +10491,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make([]testobj.TestStruct, 0, len(*r.StructSlicePtr))
 			for i1 := 0; i1 < len(*r.StructSlicePtr); i1++ {
 				var b1 testobj.TestStruct
-				x1 := &(*l.StructSlicePtr)[i1]
+				x1 := &(*r.StructSlicePtr)[i1]
 				b1.A = x1.A
 				buf, b1.S = inspector.BufferizeString(buf, x1.S)
 				buf, b1.B = inspector.Bufferize(buf, x1.B)
@@ -10517,7 +10517,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 			buf1 := make([]*testobj.TestStruct, 0, len(*r.StructPtrSlicePtr))
 			for i1 := 0; i1 < len(*r.StructPtrSlicePtr); i1++ {
 				var b1 testobj.TestStruct
-				x1 := (*l.StructPtrSlicePtr)[i1]
+				x1 := (*r.StructPtrSlicePtr)[i1]
 				b1.A = x1.A
 				buf, b1.S = inspector.BufferizeString(buf, x1.S)
 				buf, b1.B = inspector.Bufferize(buf, x1.B)
@@ -10542,7 +10542,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) error 
 		buf1 := make(testobj.TestStructSliceLiteral, 0, len(r.StructSliceLiteral))
 		for i1 := 0; i1 < len(r.StructSliceLiteral); i1++ {
 			var b1 testobj.TestStruct
-			x1 := (l.StructSliceLiteral)[i1]
+			x1 := (r.StructSliceLiteral)[i1]
 			b1.A = x1.A
 			buf, b1.S = inspector.BufferizeString(buf, x1.S)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)

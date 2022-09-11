@@ -1247,7 +1247,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) error {
 			buf2 := make([]testobj.TestHistory, 0, len(r.Finance.History))
 			for i2 := 0; i2 < len(r.Finance.History); i2++ {
 				var b2 testobj.TestHistory
-				x2 := &(l.Finance.History)[i2]
+				x2 := &(r.Finance.History)[i2]
 				b2.DateUnix = x2.DateUnix
 				b2.Cost = x2.Cost
 				buf, b2.Comment = inspector.Bufferize(buf, x2.Comment)

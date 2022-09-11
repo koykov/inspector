@@ -300,7 +300,7 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 		buf0 := make(testobj.TestFloatSlice, 0, len(*r))
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 float32
-			x0 := (*l)[i0]
+			x0 := (*r)[i0]
 			b0 = x0
 			buf0 = append(buf0, b0)
 		}

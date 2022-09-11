@@ -1174,9 +1174,9 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			nb := "b" + strconv.Itoa(depth)
 			c.wl("var ", nb, " ", c.fmtT(node.slct))
 			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
-				c.wl(nv, " := ", c.fmtVd(node, l, depth), "[", ni, "]")
+				c.wl(nv, " := ", c.fmtVd(node, r, depth), "[", ni, "]")
 			} else {
-				c.wl(nv, " := &", c.fmtVd(node, l, depth), "[", ni, "]")
+				c.wl(nv, " := &", c.fmtVd(node, r, depth), "[", ni, "]")
 			}
 			_ = c.writeCopy(node.slct, nb, nv, depth+1)
 			pfx := ""
