@@ -132,8 +132,8 @@ func (i ReflectInspector) Copy(x interface{}) (interface{}, error) {
 	return x, nil
 }
 
-func (i ReflectInspector) CopyWB(_, _ interface{}, _ AccumulativeBuffer) error {
+func (i ReflectInspector) CopyTo(_, _ interface{}, _ AccumulativeBuffer) error {
 	return nil
 }
 
-func (i ReflectInspector) Reset(_ interface{}) {}
+func (i ReflectInspector) Reset(_ interface{}) error { return nil }

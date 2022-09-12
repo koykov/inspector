@@ -684,11 +684,11 @@ func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i11.countBytes(&r)
 	var l testobj.TestStruct
-	err := i11.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i11.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i11 TestStructInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i11 TestStructInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStruct
 	switch src.(type) {
 	case testobj.TestStruct:
@@ -745,18 +745,18 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) ([]byte
 	return buf, nil
 }
 
-func (i11 TestStructInspector) Reset(x interface{}) {
+func (i11 TestStructInspector) Reset(x interface{}) error {
 	var origin testobj.TestStruct
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStruct:
-		origin = x.(testobj.TestStruct)
+		return inspector.ErrMustPointerType
 	case *testobj.TestStruct:
 		origin = *x.(*testobj.TestStruct)
 	case **testobj.TestStruct:
 		origin = **x.(**testobj.TestStruct)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	origin.A = 0
 	origin.S = ""
@@ -775,4 +775,5 @@ func (i11 TestStructInspector) Reset(x interface{}) {
 	origin.U64 = 0
 	origin.F = 0
 	origin.D = 0
+	return nil
 }

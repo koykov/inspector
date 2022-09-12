@@ -265,11 +265,11 @@ func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i3.countBytes(&r)
 	var l testobj.TestFloatSlice
-	err := i3.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i3.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i3 TestFloatSliceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i3 TestFloatSliceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFloatSlice
 	switch src.(type) {
 	case testobj.TestFloatSlice:
@@ -307,7 +307,10 @@ func (i3 TestFloatSliceInspector) countBytes(x *testobj.TestFloatSlice) (c int) 
 
 func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestFloatSlice, 0, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestFloatSlice, 0, len(*r))
+		}
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 float32
 			x0 := (*r)[i0]
@@ -319,20 +322,21 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 	return buf, nil
 }
 
-func (i3 TestFloatSliceInspector) Reset(x interface{}) {
+func (i3 TestFloatSliceInspector) Reset(x interface{}) error {
 	var origin testobj.TestFloatSlice
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFloatSlice:
-		origin = x.(testobj.TestFloatSlice)
+		return inspector.ErrMustPointerType
 	case *testobj.TestFloatSlice:
 		origin = *x.(*testobj.TestFloatSlice)
 	case **testobj.TestFloatSlice:
 		origin = **x.(**testobj.TestFloatSlice)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		(origin) = (origin)[:0]
 	}
+	return nil
 }

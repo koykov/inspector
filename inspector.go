@@ -25,10 +25,10 @@ type Inspector interface {
 	Unmarshal(p []byte, typ Encoding) (interface{}, error)
 	// Copy makes a copy of x.
 	Copy(x interface{}) (interface{}, error)
-	// CopyWB makes a copy of src to dst using buffer.
-	CopyWB(src, dst interface{}, buf AccumulativeBuffer) error
+	// CopyTo makes a copy of src to dst using buffer.
+	CopyTo(src, dst interface{}, buf AccumulativeBuffer) error
 	// Reset resets x.
-	Reset(x interface{})
+	Reset(x interface{}) error
 }
 
 func init() {

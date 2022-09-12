@@ -1144,11 +1144,11 @@ func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i5.countBytes(&r)
 	var l testobj.TestObject
-	err := i5.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i5.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i5 TestObjectInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i5 TestObjectInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestObject
 	switch src.(type) {
 	case testobj.TestObject:
@@ -1209,7 +1209,10 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 	l.Cost = r.Cost
 	if r.Permission != nil {
 		if len(*r.Permission) > 0 {
-			buf1 := make(testobj.TestPermission, len(*r.Permission))
+			buf1 := (*l.Permission)
+			if buf1 == nil {
+				buf1 = make(testobj.TestPermission, len(*r.Permission))
+			}
 			_ = buf1
 			for rk1, rv1 := range *r.Permission {
 				_, _ = rk1, rv1
@@ -1217,12 +1220,16 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 				lk1 = rk1
 				var lv1 bool
 				lv1 = rv1
-				(*l.Permission)[lk1] = lv1
+				buf1[lk1] = lv1
 			}
+			(*l.Permission) = buf1
 		}
 	}
 	if len(r.HistoryTree) > 0 {
-		buf1 := make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+		buf1 := (l.HistoryTree)
+		if buf1 == nil {
+			buf1 = make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+		}
 		_ = buf1
 		for rk1, rv1 := range r.HistoryTree {
 			_, _ = rk1, rv1
@@ -1232,11 +1239,15 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 			lv1.DateUnix = rv1.DateUnix
 			lv1.Cost = rv1.Cost
 			buf, lv1.Comment = inspector.Bufferize(buf, rv1.Comment)
-			(l.HistoryTree)[lk1] = &lv1
+			buf1[lk1] = &lv1
 		}
+		(l.HistoryTree) = buf1
 	}
 	if len(r.Flags) > 0 {
-		buf1 := make(testobj.TestFlag, len(r.Flags))
+		buf1 := (l.Flags)
+		if buf1 == nil {
+			buf1 = make(testobj.TestFlag, len(r.Flags))
+		}
 		_ = buf1
 		for rk1, rv1 := range r.Flags {
 			_, _ = rk1, rv1
@@ -1244,17 +1255,23 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 			buf, lk1 = inspector.BufferizeString(buf, rk1)
 			var lv1 int32
 			lv1 = rv1
-			(l.Flags)[lk1] = lv1
+			buf1[lk1] = lv1
 		}
+		(l.Flags) = buf1
 	}
 	if r.Finance != nil {
-		l.Finance = &testobj.TestFinance{}
+		if l.Finance == nil {
+			l.Finance = &testobj.TestFinance{}
+		}
 		l.Finance.MoneyIn = r.Finance.MoneyIn
 		l.Finance.MoneyOut = r.Finance.MoneyOut
 		l.Finance.Balance = r.Finance.Balance
 		l.Finance.AllowBuy = r.Finance.AllowBuy
 		if len(r.Finance.History) > 0 {
-			buf2 := make([]testobj.TestHistory, 0, len(r.Finance.History))
+			buf2 := (l.Finance.History)
+			if buf2 == nil {
+				buf2 = make([]testobj.TestHistory, 0, len(r.Finance.History))
+			}
 			for i2 := 0; i2 < len(r.Finance.History); i2++ {
 				var b2 testobj.TestHistory
 				x2 := &(r.Finance.History)[i2]
@@ -1269,18 +1286,18 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 	return buf, nil
 }
 
-func (i5 TestObjectInspector) Reset(x interface{}) {
+func (i5 TestObjectInspector) Reset(x interface{}) error {
 	var origin testobj.TestObject
 	_ = origin
 	switch x.(type) {
 	case testobj.TestObject:
-		origin = x.(testobj.TestObject)
+		return inspector.ErrMustPointerType
 	case *testobj.TestObject:
 		origin = *x.(*testobj.TestObject)
 	case **testobj.TestObject:
 		origin = **x.(**testobj.TestObject)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	origin.Id = ""
 	if l := len((origin.Name)); l > 0 {
@@ -1324,4 +1341,5 @@ func (i5 TestObjectInspector) Reset(x interface{}) {
 			(origin.Finance.History) = (origin.Finance.History)[:0]
 		}
 	}
+	return nil
 }

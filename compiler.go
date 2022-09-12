@@ -554,14 +554,14 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 		return err
 	}
 	c.wdl("}")
-	c.wl("func (", recv, " ", inst, ") CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {")
-	err = c.writeNodeCopyWB(node, recv, pname)
+	c.wl("func (", recv, " ", inst, ") CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {")
+	err = c.writeNodeCopyTo(node, recv, pname)
 	if err != nil {
 		return err
 	}
 	c.wdl("}")
 	c.wl("func (", recv, " ", inst, ") countBytes(x *", pname, ") (c int) {")
-	err = c.writeCalcBytes(node, "x", 0)
+	err = c.writeCountBytes(node, "x", 0)
 	if err != nil {
 		return err
 	}
@@ -574,24 +574,24 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return buf,nil}")
 
 	// Reset methods.
-	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) {")
+	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) error {")
 	c.wl("var origin ", pname)
 	c.wl("_=origin")
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
-	c.wl("origin = x.(", pname, ")")
+	c.wl("return inspector.ErrMustPointerType")
 	c.wl("case *", pname, ":")
 	c.wl("origin = *x.(*", pname, ")")
 	c.wl("case **", pname, ":")
 	c.wl("origin = **x.(**", pname, ")")
 	c.wl("default:")
-	c.wl("return")
+	c.wl("return inspector.ErrUnsupportedType")
 	c.wl("}")
 	err = c.writeNodeReset(node, "origin", 0)
 	if err != nil {
 		return err
 	}
-	c.wdl("}")
+	c.wdl("return nil}")
 
 	return c.err
 }
@@ -1059,12 +1059,12 @@ func (c *Compiler) writeNodeCopy(_ *node, recv, pname string) error {
 
 	c.wl("bc:=", recv, ".countBytes(&r)")
 	c.wl("var l ", pname)
-	c.wl("err:=", recv, ".CopyWB(&r,&l,inspector.NewByteBuffer(bc))")
+	c.wl("err:=", recv, ".CopyTo(&r,&l,inspector.NewByteBuffer(bc))")
 	c.wl("return &l, err")
 	return nil
 }
 
-func (c *Compiler) writeNodeCopyWB(_ *node, recv, pname string) error {
+func (c *Compiler) writeNodeCopyTo(_ *node, recv, pname string) error {
 	c.wl("var r ", pname)
 	c.wl("switch src.(type) {")
 	c.wl("case ", pname, ":")
@@ -1097,7 +1097,7 @@ func (c *Compiler) writeNodeCopyWB(_ *node, recv, pname string) error {
 	return nil
 }
 
-func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
+func (c *Compiler) writeCountBytes(node *node, v string, depth int) error {
 	if !node.hasb {
 		return nil
 	}
@@ -1112,7 +1112,7 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 			if chPtr {
 				c.wl("if ", nv, "!=nil{")
 			}
-			_ = c.writeCalcBytes(ch, nv, depth+1)
+			_ = c.writeCountBytes(ch, nv, depth+1)
 			if chPtr {
 				c.wl("}")
 			}
@@ -1122,8 +1122,8 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 		nx := "v" + strconv.Itoa(depth)
 		c.wl("for ", nk, ", ", nx, " := range ", c.fmtVnb(node, v, depth), "{")
 		c.wl("_,_=", nk, ",", nx)
-		_ = c.writeCalcBytes(node.mapk, nk, depth+1)
-		_ = c.writeCalcBytes(node.mapv, nx, depth+1)
+		_ = c.writeCountBytes(node.mapk, nk, depth+1)
+		_ = c.writeCountBytes(node.mapv, nx, depth+1)
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
@@ -1137,7 +1137,7 @@ func (c *Compiler) writeCalcBytes(node *node, v string, depth int) error {
 			} else {
 				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[", ni, "]")
 			}
-			_ = c.writeCalcBytes(node.slct, nv, depth+1)
+			_ = c.writeCountBytes(node.slct, nv, depth+1)
 			c.wl("}")
 		}
 	case typeBasic:
@@ -1158,7 +1158,9 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			if chPtr {
 				c.wl("if ", nr, "!=nil{")
 				if ch.ptr && ch.typ == typeStruct {
+					c.wl("if ", nl, "==nil{")
 					c.wl(nl, "=&", c.fmtT(ch), "{}")
+					c.wl("}")
 				}
 			}
 			_ = c.writeCopy(ch, nl, nr, depth+1)
@@ -1168,10 +1170,13 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		}
 	case typeMap:
 		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
-		buf := "buf" + strconv.Itoa(depth)
 		c.wl("if ", ln, ">0 {")
-		c.wl(buf, ":=make(", c.fmtT(node), ",", ln, ")")
-		c.wl("_=", buf)
+		lb := "buf" + strconv.Itoa(depth)
+		c.wl(lb, ":=", c.fmtVd(node, l, depth))
+		c.wl("if ", lb, "==nil {")
+		c.wl(lb, "=make(", c.fmtT(node), ",", ln, ")")
+		c.wl("}")
+		c.wl("_=", lb)
 		rk := "rk" + strconv.Itoa(depth)
 		rv := "rv" + strconv.Itoa(depth)
 		c.wl("for ", rk, ",", rv, ":=range ", c.fmtVnb(node, r, depth), "{")
@@ -1186,16 +1191,20 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		if node.mapv.ptr && node.mapv.typ != typeBasic {
 			pfx = "&"
 		}
-		c.wl(c.fmtVd(node, l, depth), "[", lk, "]=", pfx, lv)
+		c.wl(lb, "[", lk, "]=", pfx, lv)
 		c.wl("}")
+		c.wl(c.fmtVd(node, l, depth), "=", lb)
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {
 			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.Bufferize(buf,", c.fmtVnb(node, r, depth), ")")
 		} else {
-			lb := "buf" + strconv.Itoa(depth)
 			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
-			c.wl(lb, ":=make(", c.fmtT(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
+			lb := "buf" + strconv.Itoa(depth)
+			c.wl(lb, ":=", c.fmtVd(node, l, depth))
+			c.wl("if ", lb, "==nil {")
+			c.wl(lb, "=make(", c.fmtT(node), ",0,len(", c.fmtVnb(node, r, depth), "))")
+			c.wl("}")
 
 			ni := "i" + strconv.Itoa(depth)
 			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, r, depth), "); ", ni, "++{")

@@ -248,11 +248,11 @@ func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i8.countBytes(&r)
 	var l testobj.TestStringFloatMap
-	err := i8.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i8.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i8 TestStringFloatMapInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i8 TestStringFloatMapInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStringFloatMap
 	switch src.(type) {
 	case testobj.TestStringFloatMap:
@@ -294,7 +294,10 @@ func (i8 TestStringFloatMapInspector) countBytes(x *testobj.TestStringFloatMap) 
 
 func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatMap) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestStringFloatMap, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestStringFloatMap, len(*r))
+		}
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
@@ -302,28 +305,30 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 			buf, lk0 = inspector.BufferizeString(buf, rk0)
 			var lv0 float64
 			lv0 = rv0
-			(*l)[lk0] = lv0
+			buf0[lk0] = lv0
 		}
+		(*l) = buf0
 	}
 	return buf, nil
 }
 
-func (i8 TestStringFloatMapInspector) Reset(x interface{}) {
+func (i8 TestStringFloatMapInspector) Reset(x interface{}) error {
 	var origin testobj.TestStringFloatMap
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStringFloatMap:
-		origin = x.(testobj.TestStringFloatMap)
+		return inspector.ErrMustPointerType
 	case *testobj.TestStringFloatMap:
 		origin = *x.(*testobj.TestStringFloatMap)
 	case **testobj.TestStringFloatMap:
 		origin = **x.(**testobj.TestStringFloatMap)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		for k, _ := range origin {
 			delete((origin), k)
 		}
 	}
+	return nil
 }

@@ -755,11 +755,11 @@ func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, err
 	}
 	bc := i12.countBytes(&r)
 	var l testobj.TestStructSliceLiteral
-	err := i12.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i12.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i12 TestStructSliceLiteralInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i12 TestStructSliceLiteralInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStructSliceLiteral
 	switch src.(type) {
 	case testobj.TestStructSliceLiteral:
@@ -802,7 +802,10 @@ func (i12 TestStructSliceLiteralInspector) countBytes(x *testobj.TestStructSlice
 
 func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStructSliceLiteral) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestStructSliceLiteral, 0, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestStructSliceLiteral, 0, len(*r))
+		}
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 testobj.TestStruct
 			x0 := (*r)[i0]
@@ -828,18 +831,18 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 	return buf, nil
 }
 
-func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) {
+func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) error {
 	var origin testobj.TestStructSliceLiteral
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStructSliceLiteral:
-		origin = x.(testobj.TestStructSliceLiteral)
+		return inspector.ErrMustPointerType
 	case *testobj.TestStructSliceLiteral:
 		origin = *x.(*testobj.TestStructSliceLiteral)
 	case **testobj.TestStructSliceLiteral:
 		origin = **x.(**testobj.TestStructSliceLiteral)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		_ = (origin)[l-1]
@@ -865,4 +868,5 @@ func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) {
 		}
 		(origin) = (origin)[:0]
 	}
+	return nil
 }

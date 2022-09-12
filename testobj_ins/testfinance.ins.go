@@ -506,11 +506,11 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i0.countBytes(&r)
 	var l testobj.TestFinance
-	err := i0.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i0.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i0 TestFinanceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i0 TestFinanceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFinance
 	switch src.(type) {
 	case testobj.TestFinance:
@@ -556,7 +556,10 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 	l.Balance = r.Balance
 	l.AllowBuy = r.AllowBuy
 	if len(r.History) > 0 {
-		buf1 := make([]testobj.TestHistory, 0, len(r.History))
+		buf1 := (l.History)
+		if buf1 == nil {
+			buf1 = make([]testobj.TestHistory, 0, len(r.History))
+		}
 		for i1 := 0; i1 < len(r.History); i1++ {
 			var b1 testobj.TestHistory
 			x1 := &(r.History)[i1]
@@ -570,18 +573,18 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 	return buf, nil
 }
 
-func (i0 TestFinanceInspector) Reset(x interface{}) {
+func (i0 TestFinanceInspector) Reset(x interface{}) error {
 	var origin testobj.TestFinance
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFinance:
-		origin = x.(testobj.TestFinance)
+		return inspector.ErrMustPointerType
 	case *testobj.TestFinance:
 		origin = *x.(*testobj.TestFinance)
 	case **testobj.TestFinance:
 		origin = **x.(**testobj.TestFinance)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	origin.MoneyIn = 0
 	origin.MoneyOut = 0
@@ -599,4 +602,5 @@ func (i0 TestFinanceInspector) Reset(x interface{}) {
 		}
 		(origin.History) = (origin.History)[:0]
 	}
+	return nil
 }

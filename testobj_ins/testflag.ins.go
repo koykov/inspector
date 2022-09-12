@@ -248,11 +248,11 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i1.countBytes(&r)
 	var l testobj.TestFlag
-	err := i1.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i1.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i1 TestFlagInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i1 TestFlagInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFlag
 	switch src.(type) {
 	case testobj.TestFlag:
@@ -294,7 +294,10 @@ func (i1 TestFlagInspector) countBytes(x *testobj.TestFlag) (c int) {
 
 func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestFlag, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestFlag, len(*r))
+		}
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
@@ -302,28 +305,30 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, err
 			buf, lk0 = inspector.BufferizeString(buf, rk0)
 			var lv0 int32
 			lv0 = rv0
-			(*l)[lk0] = lv0
+			buf0[lk0] = lv0
 		}
+		(*l) = buf0
 	}
 	return buf, nil
 }
 
-func (i1 TestFlagInspector) Reset(x interface{}) {
+func (i1 TestFlagInspector) Reset(x interface{}) error {
 	var origin testobj.TestFlag
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFlag:
-		origin = x.(testobj.TestFlag)
+		return inspector.ErrMustPointerType
 	case *testobj.TestFlag:
 		origin = *x.(*testobj.TestFlag)
 	case **testobj.TestFlag:
 		origin = **x.(**testobj.TestFlag)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		for k, _ := range origin {
 			delete((origin), k)
 		}
 	}
+	return nil
 }

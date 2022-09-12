@@ -279,11 +279,11 @@ func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i4.countBytes(&r)
 	var l testobj.TestHistory
-	err := i4.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i4.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i4 TestHistoryInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i4 TestHistoryInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestHistory
 	switch src.(type) {
 	case testobj.TestHistory:
@@ -327,22 +327,23 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) ([]byt
 	return buf, nil
 }
 
-func (i4 TestHistoryInspector) Reset(x interface{}) {
+func (i4 TestHistoryInspector) Reset(x interface{}) error {
 	var origin testobj.TestHistory
 	_ = origin
 	switch x.(type) {
 	case testobj.TestHistory:
-		origin = x.(testobj.TestHistory)
+		return inspector.ErrMustPointerType
 	case *testobj.TestHistory:
 		origin = *x.(*testobj.TestHistory)
 	case **testobj.TestHistory:
 		origin = **x.(**testobj.TestHistory)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	origin.DateUnix = 0
 	origin.Cost = 0
 	if l := len((origin.Comment)); l > 0 {
 		(origin.Comment) = (origin.Comment)[:0]
 	}
+	return nil
 }

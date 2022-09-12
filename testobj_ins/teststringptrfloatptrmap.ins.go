@@ -249,11 +249,11 @@ func (i10 TestStringPtrFloatPtrMapInspector) Copy(x interface{}) (interface{}, e
 	}
 	bc := i10.countBytes(&r)
 	var l testobj.TestStringPtrFloatPtrMap
-	err := i10.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i10.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i10 TestStringPtrFloatPtrMapInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i10 TestStringPtrFloatPtrMapInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStringPtrFloatPtrMap
 	switch src.(type) {
 	case testobj.TestStringPtrFloatPtrMap:
@@ -295,7 +295,10 @@ func (i10 TestStringPtrFloatPtrMapInspector) countBytes(x *testobj.TestStringPtr
 
 func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringPtrFloatPtrMap) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestStringPtrFloatPtrMap, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestStringPtrFloatPtrMap, len(*r))
+		}
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
@@ -303,28 +306,30 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 			buf, *lk0 = inspector.BufferizeString(buf, *rk0)
 			var lv0 *float64
 			lv0 = rv0
-			(*l)[lk0] = lv0
+			buf0[lk0] = lv0
 		}
+		(*l) = buf0
 	}
 	return buf, nil
 }
 
-func (i10 TestStringPtrFloatPtrMapInspector) Reset(x interface{}) {
+func (i10 TestStringPtrFloatPtrMapInspector) Reset(x interface{}) error {
 	var origin testobj.TestStringPtrFloatPtrMap
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStringPtrFloatPtrMap:
-		origin = x.(testobj.TestStringPtrFloatPtrMap)
+		return inspector.ErrMustPointerType
 	case *testobj.TestStringPtrFloatPtrMap:
 		origin = *x.(*testobj.TestStringPtrFloatPtrMap)
 	case **testobj.TestStringPtrFloatPtrMap:
 		origin = **x.(**testobj.TestStringPtrFloatPtrMap)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		for k, _ := range origin {
 			delete((origin), k)
 		}
 	}
+	return nil
 }

@@ -267,11 +267,11 @@ func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i2.countBytes(&r)
 	var l testobj.TestFloatPtrSlice
-	err := i2.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i2.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i2 TestFloatPtrSliceInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i2 TestFloatPtrSliceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFloatPtrSlice
 	switch src.(type) {
 	case testobj.TestFloatPtrSlice:
@@ -309,7 +309,10 @@ func (i2 TestFloatPtrSliceInspector) countBytes(x *testobj.TestFloatPtrSlice) (c
 
 func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrSlice) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestFloatPtrSlice, 0, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestFloatPtrSlice, 0, len(*r))
+		}
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 *float32
 			x0 := (*r)[i0]
@@ -321,20 +324,21 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 	return buf, nil
 }
 
-func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) {
+func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) error {
 	var origin testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFloatPtrSlice:
-		origin = x.(testobj.TestFloatPtrSlice)
+		return inspector.ErrMustPointerType
 	case *testobj.TestFloatPtrSlice:
 		origin = *x.(*testobj.TestFloatPtrSlice)
 	case **testobj.TestFloatPtrSlice:
 		origin = **x.(**testobj.TestFloatPtrSlice)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		(origin) = (origin)[:0]
 	}
+	return nil
 }

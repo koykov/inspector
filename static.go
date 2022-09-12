@@ -378,11 +378,11 @@ func (i StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) 
 func (i StaticInspector) Copy(x interface{}) (dst interface{}, err error) {
 	// todo cover with tests.
 	buf := ByteBuffer{}
-	err = i.CopyWB(x, dst, &buf)
+	err = i.CopyTo(x, dst, &buf)
 	return
 }
 
-func (i StaticInspector) CopyWB(src, dst interface{}, buf AccumulativeBuffer) error {
+func (i StaticInspector) CopyTo(src, dst interface{}, buf AccumulativeBuffer) error {
 	switch src.(type) {
 	case *bool:
 		dst = *src.(*bool)
@@ -432,7 +432,7 @@ func (i StaticInspector) CopyWB(src, dst interface{}, buf AccumulativeBuffer) er
 	return nil
 }
 
-func (i StaticInspector) Reset(x interface{}) {
+func (i StaticInspector) Reset(x interface{}) error {
 	switch x.(type) {
 	case bool:
 		x = false
@@ -499,6 +499,7 @@ func (i StaticInspector) Reset(x interface{}) {
 		var s string
 		x = &s
 	}
+	return nil
 }
 
 func (i StaticInspector) indBool(x interface{}) (bool, bool) {

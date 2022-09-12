@@ -255,11 +255,11 @@ func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	}
 	bc := i7.countBytes(&r)
 	var l testobj.TestPermission
-	err := i7.CopyWB(&r, &l, inspector.NewByteBuffer(bc))
+	err := i7.CopyTo(&r, &l, inspector.NewByteBuffer(bc))
 	return &l, err
 }
 
-func (i7 TestPermissionInspector) CopyWB(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i7 TestPermissionInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestPermission
 	switch src.(type) {
 	case testobj.TestPermission:
@@ -297,7 +297,10 @@ func (i7 TestPermissionInspector) countBytes(x *testobj.TestPermission) (c int) 
 
 func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := make(testobj.TestPermission, len(*r))
+		buf0 := (*l)
+		if buf0 == nil {
+			buf0 = make(testobj.TestPermission, len(*r))
+		}
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
@@ -305,28 +308,30 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 			lk0 = rk0
 			var lv0 bool
 			lv0 = rv0
-			(*l)[lk0] = lv0
+			buf0[lk0] = lv0
 		}
+		(*l) = buf0
 	}
 	return buf, nil
 }
 
-func (i7 TestPermissionInspector) Reset(x interface{}) {
+func (i7 TestPermissionInspector) Reset(x interface{}) error {
 	var origin testobj.TestPermission
 	_ = origin
 	switch x.(type) {
 	case testobj.TestPermission:
-		origin = x.(testobj.TestPermission)
+		return inspector.ErrMustPointerType
 	case *testobj.TestPermission:
 		origin = *x.(*testobj.TestPermission)
 	case **testobj.TestPermission:
 		origin = **x.(**testobj.TestPermission)
 	default:
-		return
+		return inspector.ErrUnsupportedType
 	}
 	if l := len((origin)); l > 0 {
 		for k, _ := range origin {
 			delete((origin), k)
 		}
 	}
+	return nil
 }
