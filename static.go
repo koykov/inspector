@@ -376,58 +376,259 @@ func (i StaticInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) 
 }
 
 func (i StaticInspector) Copy(x interface{}) (dst interface{}, err error) {
-	// todo cover with tests.
-	buf := ByteBuffer{}
-	err = i.CopyTo(x, dst, &buf)
+	switch x.(type) {
+	case bool:
+		dst = x.(bool)
+	case *bool:
+		dst = *x.(*bool)
+	case int:
+		dst = x.(int)
+	case *int:
+		dst = *x.(*int)
+	case int8:
+		dst = x.(int8)
+	case *int8:
+		dst = *x.(*int8)
+	case int16:
+		dst = x.(int16)
+	case *int16:
+		dst = *x.(*int16)
+	case int32:
+		dst = x.(int32)
+	case *int32:
+		dst = *x.(*int32)
+	case int64:
+		dst = x.(int64)
+	case *int64:
+		dst = *x.(*int64)
+	case uint:
+		dst = x.(uint)
+	case *uint:
+		dst = *x.(*uint)
+	case uint8:
+		dst = x.(uint8)
+	case *uint8:
+		dst = *x.(*uint8)
+	case uint16:
+		dst = x.(uint16)
+	case *uint16:
+		dst = *x.(*uint16)
+	case uint32:
+		dst = x.(uint32)
+	case *uint32:
+		dst = *x.(*uint32)
+	case uint64:
+		dst = x.(uint64)
+	case *uint64:
+		dst = *x.(*uint64)
+	case float32:
+		dst = x.(float32)
+	case *float32:
+		dst = *x.(*float32)
+	case float64:
+		dst = x.(float64)
+	case *float64:
+		dst = *x.(*float64)
+	case []byte:
+		origin := x.([]byte)
+		cpy := append([]byte(nil), origin...)
+		dst = cpy
+	case *[]byte:
+		origin := *x.(*[]byte)
+		cpy := append([]byte(nil), origin...)
+		dst = cpy
+	case string:
+		origin := x.(string)
+		cpy := append([]byte(nil), origin...)
+		dst = fastconv.B2S(cpy)
+	case *string:
+		origin := *x.(*string)
+		cpy := append([]byte(nil), origin...)
+		dst = fastconv.B2S(cpy)
+	default:
+		return nil, ErrUnsupportedType
+	}
 	return
 }
 
 func (i StaticInspector) CopyTo(src, dst interface{}, buf AccumulativeBuffer) error {
 	switch src.(type) {
+	case bool:
+		if _, ok := dst.(*bool); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*bool) = src.(bool)
 	case *bool:
-		dst = *src.(*bool)
+		if _, ok := dst.(*bool); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*bool) = *src.(*bool)
+	case int:
+		if _, ok := dst.(*int); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int) = src.(int)
 	case *int:
-		dst = *src.(*int)
+		if _, ok := dst.(*int); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int) = *src.(*int)
+	case int8:
+		if _, ok := dst.(*int8); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int8) = src.(int8)
 	case *int8:
-		dst = *src.(*int8)
+		if _, ok := dst.(*int8); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int8) = *src.(*int8)
+	case int16:
+		if _, ok := dst.(*int16); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int16) = src.(int16)
 	case *int16:
-		dst = *src.(*int16)
+		if _, ok := dst.(*int16); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int16) = *src.(*int16)
+	case int32:
+		if _, ok := dst.(*int32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int32) = src.(int32)
 	case *int32:
-		dst = *src.(*int32)
+		if _, ok := dst.(*int32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int32) = *src.(*int32)
+	case int64:
+		if _, ok := dst.(*int64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int64) = src.(int64)
 	case *int64:
-		dst = *src.(*int64)
+		if _, ok := dst.(*int64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*int64) = *src.(*int64)
+	case uint:
+		if _, ok := dst.(*uint); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint) = src.(uint)
 	case *uint:
-		dst = *src.(*uint)
+		if _, ok := dst.(*uint); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint) = *src.(*uint)
+	case uint8:
+		if _, ok := dst.(*uint8); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint8) = src.(uint8)
 	case *uint8:
-		dst = *src.(*uint8)
+		if _, ok := dst.(*uint8); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint8) = *src.(*uint8)
+	case uint16:
+		if _, ok := dst.(*uint16); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint16) = src.(uint16)
 	case *uint16:
-		dst = *src.(*uint16)
+		if _, ok := dst.(*uint16); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint16) = *src.(*uint16)
+	case uint32:
+		if _, ok := dst.(*uint32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint32) = src.(uint32)
 	case *uint32:
-		dst = *src.(*uint32)
+		if _, ok := dst.(*uint32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint32) = *src.(*uint32)
+	case uint64:
+		if _, ok := dst.(*uint64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint64) = src.(uint64)
 	case *uint64:
-		dst = *src.(*uint64)
+		if _, ok := dst.(*uint64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*uint64) = *src.(*uint64)
+	case float32:
+		if _, ok := dst.(*float32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*float32) = src.(float32)
 	case *float32:
-		dst = *src.(*float32)
+		if _, ok := dst.(*float32); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*float32) = *src.(*float32)
+	case float64:
+		if _, ok := dst.(*float64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*float64) = src.(float64)
 	case *float64:
-		dst = *src.(*float64)
+		if _, ok := dst.(*float64); !ok {
+			return ErrMustPointerType
+		}
+		*dst.(*float64) = *src.(*float64)
 	case []byte:
-		p := src.([]byte)
-		bb := buf.AcquireBytes()
-		offset := len(bb)
-		bb = append(bb, p...)
-		dst = bb[offset:]
-		buf.ReleaseBytes(bb)
+		p, ok := dst.(*[]byte)
+		if !ok {
+			return ErrMustPointerType
+		}
+		origin := src.([]byte)
+		buf1 := buf.AcquireBytes()
+		off := len(buf1)
+		buf1 = append(buf1, origin...)
+		buf.ReleaseBytes(buf1)
+		*p = buf1[off:]
 	case *[]byte:
-		p := *src.(*[]byte)
-		bb := buf.AcquireBytes()
-		offset := len(bb)
-		bb = append(bb, p...)
-		dst = bb[offset:]
-		buf.ReleaseBytes(bb)
+		p, ok := dst.(*[]byte)
+		if !ok {
+			return ErrMustPointerType
+		}
+		origin := src.([]byte)
+		buf1 := buf.AcquireBytes()
+		off := len(buf1)
+		buf1 = append(buf1, origin...)
+		buf.ReleaseBytes(buf1)
+		*p = buf1[off:]
+	case string:
+		p, ok := dst.(*string)
+		if !ok {
+			return ErrMustPointerType
+		}
+		origin := src.(string)
+		buf1 := buf.AcquireBytes()
+		off := len(buf1)
+		buf1 = append(buf1, origin...)
+		buf.ReleaseBytes(buf1)
+		*p = fastconv.B2S(buf1[off:])
 	case *string:
-		dst = *src.(*string)
+		p, ok := dst.(*string)
+		if !ok {
+			return ErrMustPointerType
+		}
+		origin := *src.(*string)
+		buf1 := buf.AcquireBytes()
+		off := len(buf1)
+		buf1 = append(buf1, origin...)
+		buf.ReleaseBytes(buf1)
+		*p = fastconv.B2S(buf1[off:])
 	default:
-		dst = src
+		return ErrUnsupportedType
 	}
 	return nil
 }
