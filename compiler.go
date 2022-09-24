@@ -1172,8 +1172,10 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
 		c.wl("if ", ln, ">0 {")
 		lb := "buf" + strconv.Itoa(depth)
-		c.wl(lb, ":=", c.fmtVd(node, l, depth))
-		c.wl("if ", lb, "==nil {")
+		c.wl("var ", lb, " ", c.fmtT(node))
+		c.wl("if ", l, "!=nil{")
+		c.wl(lb, "=", c.fmtVd(node, l, depth))
+		c.wl("} else {")
 		c.wl(lb, "=make(", c.fmtT(node), ",", ln, ")")
 		c.wl("}")
 		c.wl("_=", lb)
@@ -1193,7 +1195,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		}
 		c.wl(lb, "[", lk, "]=", pfx, lv)
 		c.wl("}")
-		c.wl(c.fmtVd(node, l, depth), "=", lb)
+		c.wl(l, "=", c.fmtP(node, lb, depth))
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {

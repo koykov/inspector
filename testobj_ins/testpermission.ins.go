@@ -297,8 +297,10 @@ func (i7 TestPermissionInspector) countBytes(x *testobj.TestPermission) (c int) 
 
 func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) ([]byte, error) {
 	if len(*r) > 0 {
-		buf0 := (*l)
-		if buf0 == nil {
+		var buf0 testobj.TestPermission
+		if l != nil {
+			buf0 = (*l)
+		} else {
 			buf0 = make(testobj.TestPermission, len(*r))
 		}
 		_ = buf0
@@ -310,7 +312,7 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 			lv0 = rv0
 			buf0[lk0] = lv0
 		}
-		(*l) = buf0
+		l = &buf0
 	}
 	return buf, nil
 }

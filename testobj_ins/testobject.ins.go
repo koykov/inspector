@@ -1209,8 +1209,10 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 	l.Cost = r.Cost
 	if r.Permission != nil {
 		if len(*r.Permission) > 0 {
-			buf1 := (*l.Permission)
-			if buf1 == nil {
+			var buf1 testobj.TestPermission
+			if l.Permission != nil {
+				buf1 = (*l.Permission)
+			} else {
 				buf1 = make(testobj.TestPermission, len(*r.Permission))
 			}
 			_ = buf1
@@ -1222,12 +1224,14 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 				lv1 = rv1
 				buf1[lk1] = lv1
 			}
-			(*l.Permission) = buf1
+			l.Permission = &buf1
 		}
 	}
 	if len(r.HistoryTree) > 0 {
-		buf1 := (l.HistoryTree)
-		if buf1 == nil {
+		var buf1 map[string]*testobj.TestHistory
+		if l.HistoryTree != nil {
+			buf1 = (l.HistoryTree)
+		} else {
 			buf1 = make(map[string]*testobj.TestHistory, len(r.HistoryTree))
 		}
 		_ = buf1
@@ -1241,11 +1245,13 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 			buf, lv1.Comment = inspector.Bufferize(buf, rv1.Comment)
 			buf1[lk1] = &lv1
 		}
-		(l.HistoryTree) = buf1
+		l.HistoryTree = buf1
 	}
 	if len(r.Flags) > 0 {
-		buf1 := (l.Flags)
-		if buf1 == nil {
+		var buf1 testobj.TestFlag
+		if l.Flags != nil {
+			buf1 = (l.Flags)
+		} else {
 			buf1 = make(testobj.TestFlag, len(r.Flags))
 		}
 		_ = buf1
@@ -1257,7 +1263,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 			lv1 = rv1
 			buf1[lk1] = lv1
 		}
-		(l.Flags) = buf1
+		l.Flags = buf1
 	}
 	if r.Finance != nil {
 		if l.Finance == nil {

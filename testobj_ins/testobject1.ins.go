@@ -10618,8 +10618,10 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		l.StructSliceLiteral = buf1
 	}
 	if len(r.IntStringMap) > 0 {
-		buf1 := (l.IntStringMap)
-		if buf1 == nil {
+		var buf1 map[int]string
+		if l.IntStringMap != nil {
+			buf1 = (l.IntStringMap)
+		} else {
 			buf1 = make(map[int]string, len(r.IntStringMap))
 		}
 		_ = buf1
@@ -10631,11 +10633,13 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			buf, lv1 = inspector.BufferizeString(buf, rv1)
 			buf1[lk1] = lv1
 		}
-		(l.IntStringMap) = buf1
+		l.IntStringMap = buf1
 	}
 	if len(r.IntStringPtrMap) > 0 {
-		buf1 := (l.IntStringPtrMap)
-		if buf1 == nil {
+		var buf1 map[int]*string
+		if l.IntStringPtrMap != nil {
+			buf1 = (l.IntStringPtrMap)
+		} else {
 			buf1 = make(map[int]*string, len(r.IntStringPtrMap))
 		}
 		_ = buf1
@@ -10647,12 +10651,14 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			buf, *lv1 = inspector.BufferizeString(buf, *rv1)
 			buf1[lk1] = lv1
 		}
-		(l.IntStringPtrMap) = buf1
+		l.IntStringPtrMap = buf1
 	}
 	if r.IntStringMapPtr != nil {
 		if len(*r.IntStringMapPtr) > 0 {
-			buf1 := (*l.IntStringMapPtr)
-			if buf1 == nil {
+			var buf1 map[int]string
+			if l.IntStringMapPtr != nil {
+				buf1 = (*l.IntStringMapPtr)
+			} else {
 				buf1 = make(map[int]string, len(*r.IntStringMapPtr))
 			}
 			_ = buf1
@@ -10664,13 +10670,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				buf, lv1 = inspector.BufferizeString(buf, rv1)
 				buf1[lk1] = lv1
 			}
-			(*l.IntStringMapPtr) = buf1
+			l.IntStringMapPtr = &buf1
 		}
 	}
 	if r.IntStringPtrMapPtr != nil {
 		if len(*r.IntStringPtrMapPtr) > 0 {
-			buf1 := (*l.IntStringPtrMapPtr)
-			if buf1 == nil {
+			var buf1 map[int]*string
+			if l.IntStringPtrMapPtr != nil {
+				buf1 = (*l.IntStringPtrMapPtr)
+			} else {
 				buf1 = make(map[int]*string, len(*r.IntStringPtrMapPtr))
 			}
 			_ = buf1
@@ -10682,13 +10690,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				buf, *lv1 = inspector.BufferizeString(buf, *rv1)
 				buf1[lk1] = lv1
 			}
-			(*l.IntStringPtrMapPtr) = buf1
+			l.IntStringPtrMapPtr = &buf1
 		}
 	}
 	if r.IntPtrStringPtrMapPtr != nil {
 		if len(*r.IntPtrStringPtrMapPtr) > 0 {
-			buf1 := (*l.IntPtrStringPtrMapPtr)
-			if buf1 == nil {
+			var buf1 map[*int]*string
+			if l.IntPtrStringPtrMapPtr != nil {
+				buf1 = (*l.IntPtrStringPtrMapPtr)
+			} else {
 				buf1 = make(map[*int]*string, len(*r.IntPtrStringPtrMapPtr))
 			}
 			_ = buf1
@@ -10700,12 +10710,14 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				buf, *lv1 = inspector.BufferizeString(buf, *rv1)
 				buf1[lk1] = lv1
 			}
-			(*l.IntPtrStringPtrMapPtr) = buf1
+			l.IntPtrStringPtrMapPtr = &buf1
 		}
 	}
 	if len(r.IntIntMapMap) > 0 {
-		buf1 := (l.IntIntMapMap)
-		if buf1 == nil {
+		var buf1 map[int32]map[int32]int32
+		if l.IntIntMapMap != nil {
+			buf1 = (l.IntIntMapMap)
+		} else {
 			buf1 = make(map[int32]map[int32]int32, len(r.IntIntMapMap))
 		}
 		_ = buf1
@@ -10715,8 +10727,10 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 map[int32]int32
 			if len(rv1) > 0 {
-				buf2 := (lv1)
-				if buf2 == nil {
+				var buf2 map[int32]int32
+				if lv1 != nil {
+					buf2 = (lv1)
+				} else {
 					buf2 = make(map[int32]int32, len(rv1))
 				}
 				_ = buf2
@@ -10728,15 +10742,17 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 					lv2 = rv2
 					buf2[lk2] = lv2
 				}
-				(lv1) = buf2
+				lv1 = buf2
 			}
 			buf1[lk1] = lv1
 		}
-		(l.IntIntMapMap) = buf1
+		l.IntIntMapMap = buf1
 	}
 	if len(r.StringFloatMap) > 0 {
-		buf1 := (l.StringFloatMap)
-		if buf1 == nil {
+		var buf1 testobj.TestStringFloatMap
+		if l.StringFloatMap != nil {
+			buf1 = (l.StringFloatMap)
+		} else {
 			buf1 = make(testobj.TestStringFloatMap, len(r.StringFloatMap))
 		}
 		_ = buf1
@@ -10748,11 +10764,13 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1 = rv1
 			buf1[lk1] = lv1
 		}
-		(l.StringFloatMap) = buf1
+		l.StringFloatMap = buf1
 	}
 	if len(r.StringFloatPtrMap) > 0 {
-		buf1 := (l.StringFloatPtrMap)
-		if buf1 == nil {
+		var buf1 testobj.TestStringFloatPtrMap
+		if l.StringFloatPtrMap != nil {
+			buf1 = (l.StringFloatPtrMap)
+		} else {
 			buf1 = make(testobj.TestStringFloatPtrMap, len(r.StringFloatPtrMap))
 		}
 		_ = buf1
@@ -10764,12 +10782,14 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1 = rv1
 			buf1[lk1] = lv1
 		}
-		(l.StringFloatPtrMap) = buf1
+		l.StringFloatPtrMap = buf1
 	}
 	if r.StringFloatMapPtr != nil {
 		if len(*r.StringFloatMapPtr) > 0 {
-			buf1 := (*l.StringFloatMapPtr)
-			if buf1 == nil {
+			var buf1 testobj.TestStringFloatMap
+			if l.StringFloatMapPtr != nil {
+				buf1 = (*l.StringFloatMapPtr)
+			} else {
 				buf1 = make(testobj.TestStringFloatMap, len(*r.StringFloatMapPtr))
 			}
 			_ = buf1
@@ -10781,13 +10801,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lv1 = rv1
 				buf1[lk1] = lv1
 			}
-			(*l.StringFloatMapPtr) = buf1
+			l.StringFloatMapPtr = &buf1
 		}
 	}
 	if r.StringFloatPtrMapPtr != nil {
 		if len(*r.StringFloatPtrMapPtr) > 0 {
-			buf1 := (*l.StringFloatPtrMapPtr)
-			if buf1 == nil {
+			var buf1 testobj.TestStringFloatPtrMap
+			if l.StringFloatPtrMapPtr != nil {
+				buf1 = (*l.StringFloatPtrMapPtr)
+			} else {
 				buf1 = make(testobj.TestStringFloatPtrMap, len(*r.StringFloatPtrMapPtr))
 			}
 			_ = buf1
@@ -10799,13 +10821,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lv1 = rv1
 				buf1[lk1] = lv1
 			}
-			(*l.StringFloatPtrMapPtr) = buf1
+			l.StringFloatPtrMapPtr = &buf1
 		}
 	}
 	if r.StringPtrFloatPtrMapPtr != nil {
 		if len(*r.StringPtrFloatPtrMapPtr) > 0 {
-			buf1 := (*l.StringPtrFloatPtrMapPtr)
-			if buf1 == nil {
+			var buf1 testobj.TestStringPtrFloatPtrMap
+			if l.StringPtrFloatPtrMapPtr != nil {
+				buf1 = (*l.StringPtrFloatPtrMapPtr)
+			} else {
 				buf1 = make(testobj.TestStringPtrFloatPtrMap, len(*r.StringPtrFloatPtrMapPtr))
 			}
 			_ = buf1
@@ -10817,12 +10841,14 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lv1 = rv1
 				buf1[lk1] = lv1
 			}
-			(*l.StringPtrFloatPtrMapPtr) = buf1
+			l.StringPtrFloatPtrMapPtr = &buf1
 		}
 	}
 	if len(r.FloatStructMap) > 0 {
-		buf1 := (l.FloatStructMap)
-		if buf1 == nil {
+		var buf1 map[float64]testobj.TestStruct
+		if l.FloatStructMap != nil {
+			buf1 = (l.FloatStructMap)
+		} else {
 			buf1 = make(map[float64]testobj.TestStruct, len(r.FloatStructMap))
 		}
 		_ = buf1
@@ -10848,11 +10874,13 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1.D = rv1.D
 			buf1[lk1] = lv1
 		}
-		(l.FloatStructMap) = buf1
+		l.FloatStructMap = buf1
 	}
 	if len(r.FloatStructPtrMap) > 0 {
-		buf1 := (l.FloatStructPtrMap)
-		if buf1 == nil {
+		var buf1 map[float64]*testobj.TestStruct
+		if l.FloatStructPtrMap != nil {
+			buf1 = (l.FloatStructPtrMap)
+		} else {
 			buf1 = make(map[float64]*testobj.TestStruct, len(r.FloatStructPtrMap))
 		}
 		_ = buf1
@@ -10878,11 +10906,13 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1.D = rv1.D
 			buf1[lk1] = &lv1
 		}
-		(l.FloatStructPtrMap) = buf1
+		l.FloatStructPtrMap = buf1
 	}
 	if len(r.FloatPtrStructMap) > 0 {
-		buf1 := (l.FloatPtrStructMap)
-		if buf1 == nil {
+		var buf1 map[*float64]testobj.TestStruct
+		if l.FloatPtrStructMap != nil {
+			buf1 = (l.FloatPtrStructMap)
+		} else {
 			buf1 = make(map[*float64]testobj.TestStruct, len(r.FloatPtrStructMap))
 		}
 		_ = buf1
@@ -10908,11 +10938,13 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1.D = rv1.D
 			buf1[lk1] = lv1
 		}
-		(l.FloatPtrStructMap) = buf1
+		l.FloatPtrStructMap = buf1
 	}
 	if len(r.FloatPtrStructPtrMap) > 0 {
-		buf1 := (l.FloatPtrStructPtrMap)
-		if buf1 == nil {
+		var buf1 map[*float64]*testobj.TestStruct
+		if l.FloatPtrStructPtrMap != nil {
+			buf1 = (l.FloatPtrStructPtrMap)
+		} else {
 			buf1 = make(map[*float64]*testobj.TestStruct, len(r.FloatPtrStructPtrMap))
 		}
 		_ = buf1
@@ -10938,12 +10970,14 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lv1.D = rv1.D
 			buf1[lk1] = &lv1
 		}
-		(l.FloatPtrStructPtrMap) = buf1
+		l.FloatPtrStructPtrMap = buf1
 	}
 	if r.FloatPtrStructPtrMapPtr != nil {
 		if len(*r.FloatPtrStructPtrMapPtr) > 0 {
-			buf1 := (*l.FloatPtrStructPtrMapPtr)
-			if buf1 == nil {
+			var buf1 map[*float64]*testobj.TestStruct
+			if l.FloatPtrStructPtrMapPtr != nil {
+				buf1 = (*l.FloatPtrStructPtrMapPtr)
+			} else {
 				buf1 = make(map[*float64]*testobj.TestStruct, len(*r.FloatPtrStructPtrMapPtr))
 			}
 			_ = buf1
@@ -10969,7 +11003,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lv1.D = rv1.D
 				buf1[lk1] = &lv1
 			}
-			(*l.FloatPtrStructPtrMapPtr) = buf1
+			l.FloatPtrStructPtrMapPtr = &buf1
 		}
 	}
 	l.NestedStruct.A = r.NestedStruct.A

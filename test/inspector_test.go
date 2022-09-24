@@ -297,9 +297,8 @@ func TestInspectorDeepEqual(t *testing.T) {
 
 func TestInspectorCopy(t *testing.T) {
 	ins := &testobj_ins.TestObjectInspector{}
-	obj := testobj.TestObject{
-		Name: []byte("foobar"),
-	}
+	obj := *testO
+	obj.Name = []byte("foobar")
 	cpy, _ := ins.Copy(obj)
 	obj.Name[0] = 'F'
 	if bytes.Equal(obj.Name, cpy.(*testobj.TestObject).Name) {
@@ -360,6 +359,24 @@ func BenchmarkInspector(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			testSetterPtr(b, ins, &ab)
 			ab.Reset()
+		}
+	})
+}
+
+func BenchmarkInspectorCopy(b *testing.B) {
+	b.Run("testobj", func(b *testing.B) {
+		var (
+			cpy testobj.TestObject
+			ins testobj_ins.TestObjectInspector
+			buf inspector.ByteBuffer
+		)
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			_ = ins.Reset(&cpy)
+			buf.Reset()
+			if err := ins.CopyTo(testO, &cpy, &buf); err != nil {
+				b.Fatal(err)
+			}
 		}
 	})
 }
