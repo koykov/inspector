@@ -325,20 +325,20 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 }
 
 func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) error {
-	var origin testobj.TestFloatPtrSlice
+	var origin *testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFloatPtrSlice:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFloatPtrSlice:
-		origin = *x.(*testobj.TestFloatPtrSlice)
+		origin = x.(*testobj.TestFloatPtrSlice)
 	case **testobj.TestFloatPtrSlice:
-		origin = **x.(**testobj.TestFloatPtrSlice)
+		origin = *x.(**testobj.TestFloatPtrSlice)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		(origin) = (origin)[:0]
+	if l := len((*origin)); l > 0 {
+		(*origin) = (*origin)[:0]
 	}
 	return nil
 }

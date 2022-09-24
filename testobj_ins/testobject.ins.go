@@ -1281,15 +1281,15 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 }
 
 func (i5 TestObjectInspector) Reset(x interface{}) error {
-	var origin testobj.TestObject
+	var origin *testobj.TestObject
 	_ = origin
 	switch x.(type) {
 	case testobj.TestObject:
 		return inspector.ErrMustPointerType
 	case *testobj.TestObject:
-		origin = *x.(*testobj.TestObject)
+		origin = x.(*testobj.TestObject)
 	case **testobj.TestObject:
-		origin = **x.(**testobj.TestObject)
+		origin = *x.(**testobj.TestObject)
 	default:
 		return inspector.ErrUnsupportedType
 	}

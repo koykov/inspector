@@ -311,21 +311,21 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, err
 }
 
 func (i1 TestFlagInspector) Reset(x interface{}) error {
-	var origin testobj.TestFlag
+	var origin *testobj.TestFlag
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFlag:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFlag:
-		origin = *x.(*testobj.TestFlag)
+		origin = x.(*testobj.TestFlag)
 	case **testobj.TestFlag:
-		origin = **x.(**testobj.TestFlag)
+		origin = *x.(**testobj.TestFlag)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		for k, _ := range origin {
-			delete((origin), k)
+	if l := len((*origin)); l > 0 {
+		for k, _ := range *origin {
+			delete((*origin), k)
 		}
 	}
 	return nil

@@ -314,21 +314,21 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 }
 
 func (i7 TestPermissionInspector) Reset(x interface{}) error {
-	var origin testobj.TestPermission
+	var origin *testobj.TestPermission
 	_ = origin
 	switch x.(type) {
 	case testobj.TestPermission:
 		return inspector.ErrMustPointerType
 	case *testobj.TestPermission:
-		origin = *x.(*testobj.TestPermission)
+		origin = x.(*testobj.TestPermission)
 	case **testobj.TestPermission:
-		origin = **x.(**testobj.TestPermission)
+		origin = *x.(**testobj.TestPermission)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		for k, _ := range origin {
-			delete((origin), k)
+	if l := len((*origin)); l > 0 {
+		for k, _ := range *origin {
+			delete((*origin), k)
 		}
 	}
 	return nil

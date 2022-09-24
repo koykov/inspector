@@ -832,22 +832,22 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 }
 
 func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) error {
-	var origin testobj.TestStructSliceLiteral
+	var origin *testobj.TestStructSliceLiteral
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStructSliceLiteral:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStructSliceLiteral:
-		origin = *x.(*testobj.TestStructSliceLiteral)
+		origin = x.(*testobj.TestStructSliceLiteral)
 	case **testobj.TestStructSliceLiteral:
-		origin = **x.(**testobj.TestStructSliceLiteral)
+		origin = *x.(**testobj.TestStructSliceLiteral)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		_ = (origin)[l-1]
+	if l := len((*origin)); l > 0 {
+		_ = (*origin)[l-1]
 		for i := 0; i < l; i++ {
-			x0 := (origin)[i]
+			x0 := (*origin)[i]
 			x0.A = 0
 			x0.S = ""
 			if l := len((x0.B)); l > 0 {
@@ -866,7 +866,7 @@ func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) error {
 			x0.F = 0
 			x0.D = 0
 		}
-		(origin) = (origin)[:0]
+		(*origin) = (*origin)[:0]
 	}
 	return nil
 }

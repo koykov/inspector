@@ -575,15 +575,15 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 
 	// Reset methods.
 	c.wl("func (", recv, " ", inst, ") Reset(x interface{}) error {")
-	c.wl("var origin ", pname)
+	c.wl("var origin *", pname)
 	c.wl("_=origin")
 	c.wl("switch x.(type) {")
 	c.wl("case ", pname, ":")
 	c.wl("return inspector.ErrMustPointerType")
 	c.wl("case *", pname, ":")
-	c.wl("origin = *x.(*", pname, ")")
+	c.wl("origin = x.(*", pname, ")")
 	c.wl("case **", pname, ":")
-	c.wl("origin = **x.(**", pname, ")")
+	c.wl("origin = *x.(**", pname, ")")
 	c.wl("default:")
 	c.wl("return inspector.ErrUnsupportedType")
 	c.wl("}")
@@ -1315,29 +1315,29 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			}
 		}
 	case typeMap:
-		c.wl("if l:=len(", c.fmtV(node, v), ");l>0{")
-		c.wl("for k,_:=range ", c.fmtV(node, v), "{")
-		c.wl("delete(", c.fmtV(node, v), ",k)")
+		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
+		c.wl("for k,_:=range ", c.fmtVd(node, v, depth), "{")
+		c.wl("delete(", c.fmtVd(node, v, depth), ",k)")
 		c.wl("}")
 		c.wl("}")
 	case typeSlice:
-		c.wl("if l:=len(", c.fmtV(node, v), ");l>0{")
+		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
 		if node.typn == "[]byte" {
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 		} else {
 			if node.slct.typ != typeBasic {
-				c.wl("_=", c.fmtV(node, v), "[l-1]")
+				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
 				nv := "x" + strconv.Itoa(depth)
 				c.wl("for i:=0;i<l;i++{")
 				pfx := "&"
 				if node.slct.ptr {
 					pfx = ""
 				}
-				c.wl(nv, ":=", pfx, c.fmtV(node, v), "[i]")
+				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
 				c.wl("}")
 			}
-			c.wl(c.fmtV(node, v), "=", c.fmtV(node, v), "[:0]")
+			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 		}
 		c.wl("}")
 	case typeBasic:

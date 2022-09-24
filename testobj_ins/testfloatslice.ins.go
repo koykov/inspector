@@ -323,20 +323,20 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 }
 
 func (i3 TestFloatSliceInspector) Reset(x interface{}) error {
-	var origin testobj.TestFloatSlice
+	var origin *testobj.TestFloatSlice
 	_ = origin
 	switch x.(type) {
 	case testobj.TestFloatSlice:
 		return inspector.ErrMustPointerType
 	case *testobj.TestFloatSlice:
-		origin = *x.(*testobj.TestFloatSlice)
+		origin = x.(*testobj.TestFloatSlice)
 	case **testobj.TestFloatSlice:
-		origin = **x.(**testobj.TestFloatSlice)
+		origin = *x.(**testobj.TestFloatSlice)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		(origin) = (origin)[:0]
+	if l := len((*origin)); l > 0 {
+		(*origin) = (*origin)[:0]
 	}
 	return nil
 }

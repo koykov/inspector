@@ -328,15 +328,15 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) ([]byt
 }
 
 func (i4 TestHistoryInspector) Reset(x interface{}) error {
-	var origin testobj.TestHistory
+	var origin *testobj.TestHistory
 	_ = origin
 	switch x.(type) {
 	case testobj.TestHistory:
 		return inspector.ErrMustPointerType
 	case *testobj.TestHistory:
-		origin = *x.(*testobj.TestHistory)
+		origin = x.(*testobj.TestHistory)
 	case **testobj.TestHistory:
-		origin = **x.(**testobj.TestHistory)
+		origin = *x.(**testobj.TestHistory)
 	default:
 		return inspector.ErrUnsupportedType
 	}

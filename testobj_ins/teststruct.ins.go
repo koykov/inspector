@@ -746,15 +746,15 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) ([]byte
 }
 
 func (i11 TestStructInspector) Reset(x interface{}) error {
-	var origin testobj.TestStruct
+	var origin *testobj.TestStruct
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStruct:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStruct:
-		origin = *x.(*testobj.TestStruct)
+		origin = x.(*testobj.TestStruct)
 	case **testobj.TestStruct:
-		origin = **x.(**testobj.TestStruct)
+		origin = *x.(**testobj.TestStruct)
 	default:
 		return inspector.ErrUnsupportedType
 	}

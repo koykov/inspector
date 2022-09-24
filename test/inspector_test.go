@@ -379,4 +379,75 @@ func BenchmarkInspectorCopy(b *testing.B) {
 			}
 		}
 	})
+	fn1 := func(b *testing.B, origin *testobj.TestObject1) {
+		var (
+			cpy testobj.TestObject1
+			ins testobj_ins.TestObject1Inspector
+			buf inspector.ByteBuffer
+		)
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			if err := ins.Reset(&cpy); err != nil {
+				b.Fatal(err)
+			}
+			buf.Reset()
+			if err := ins.CopyTo(origin, &cpy, &buf); err != nil {
+				b.Fatal(err)
+			}
+		}
+	}
+	b.Run("testobj1+alloc-free-cases", func(b *testing.B) {
+		origin := testobj.TestObject1{
+			IntSlice:        []int32{0, 1, 2, 3, 4, 5},
+			ByteSlice:       []byte("lorem ipsum ..."),
+			FloatSlice:      testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+			StructSlice:     []testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+			IntStringMap:    map[int]string{0: "foo", 1: "bar", 2: "qwe"},
+			StringFloatMap:  testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
+			FloatStructMap:  map[float64]testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+			NestedStruct:    testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
+			NestedStructPtr: &testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
+		}
+		fn1(b, &origin)
+	})
+	b.Run("testobj1+string maps", func(b *testing.B) {
+		origin := testobj.TestObject1{
+			IntSlice:       []int32{0, 1, 2, 3, 4, 5},
+			ByteSlice:      []byte("lorem ipsum ..."),
+			FloatSlice:     testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+			IntStringMap:   map[int]string{0: "foo", 1: "bar", 2: "qwe"},
+			StringFloatMap: testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
+		}
+		fn1(b, &origin)
+	})
+	b.Run("testobj1+struct pointer slice", func(b *testing.B) {
+		origin := testobj.TestObject1{
+			IntSlice:           []int32{0, 1, 2, 3, 4, 5},
+			ByteSlice:          []byte("lorem ipsum ..."),
+			FloatSlice:         testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+			StructPtrSlice:     []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+			StructSliceLiteral: []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+		}
+		fn1(b, &origin)
+	})
+	b.Run("testobj1+nested maps", func(b *testing.B) {
+		origin := testobj.TestObject1{
+			IntSlice:   []int32{0, 1, 2, 3, 4, 5},
+			ByteSlice:  []byte("lorem ipsum ..."),
+			FloatSlice: testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+			IntIntMapMap: map[int32]map[int32]int32{
+				0: {0: 1, 1: 2, 2: 3},
+			},
+		}
+		fn1(b, &origin)
+	})
+	b.Run("testobj1+struct ptr map", func(b *testing.B) {
+		origin := testobj.TestObject1{
+			IntSlice:          []int32{0, 1, 2, 3, 4, 5},
+			ByteSlice:         []byte("lorem ipsum ..."),
+			FloatSlice:        testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+			FloatStructPtrMap: map[float64]*testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+		}
+		fn1(b, &origin)
+	})
 }

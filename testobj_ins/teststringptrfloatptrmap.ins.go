@@ -312,21 +312,21 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 }
 
 func (i10 TestStringPtrFloatPtrMapInspector) Reset(x interface{}) error {
-	var origin testobj.TestStringPtrFloatPtrMap
+	var origin *testobj.TestStringPtrFloatPtrMap
 	_ = origin
 	switch x.(type) {
 	case testobj.TestStringPtrFloatPtrMap:
 		return inspector.ErrMustPointerType
 	case *testobj.TestStringPtrFloatPtrMap:
-		origin = *x.(*testobj.TestStringPtrFloatPtrMap)
+		origin = x.(*testobj.TestStringPtrFloatPtrMap)
 	case **testobj.TestStringPtrFloatPtrMap:
-		origin = **x.(**testobj.TestStringPtrFloatPtrMap)
+		origin = *x.(**testobj.TestStringPtrFloatPtrMap)
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if l := len((origin)); l > 0 {
-		for k, _ := range origin {
-			delete((origin), k)
+	if l := len((*origin)); l > 0 {
+		for k, _ := range *origin {
+			delete((*origin), k)
 		}
 	}
 	return nil

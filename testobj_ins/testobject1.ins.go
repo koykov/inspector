@@ -10977,15 +10977,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 }
 
 func (i6 TestObject1Inspector) Reset(x interface{}) error {
-	var origin testobj.TestObject1
+	var origin *testobj.TestObject1
 	_ = origin
 	switch x.(type) {
 	case testobj.TestObject1:
 		return inspector.ErrMustPointerType
 	case *testobj.TestObject1:
-		origin = *x.(*testobj.TestObject1)
+		origin = x.(*testobj.TestObject1)
 	case **testobj.TestObject1:
-		origin = **x.(**testobj.TestObject1)
+		origin = *x.(**testobj.TestObject1)
 	default:
 		return inspector.ErrUnsupportedType
 	}
