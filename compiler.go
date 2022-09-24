@@ -1171,14 +1171,11 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 	case typeMap:
 		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
 		c.wl("if ", ln, ">0 {")
-		lb := "buf" + strconv.Itoa(depth)
 		c.wl("if ", l, "==nil{")
-		lb1 := "z" + strconv.Itoa(depth)
+		lb1 := "buf" + strconv.Itoa(depth)
 		c.wl(lb1, ":=make(", c.fmtT(node), ",", ln, ")")
 		c.wl(l, "=", c.fmtP(node, lb1, depth))
 		c.wl("}")
-		c.wl(lb, ":=", c.fmtVd(node, l, depth))
-		c.wl("_=", lb)
 		rk := "rk" + strconv.Itoa(depth)
 		rv := "rv" + strconv.Itoa(depth)
 		c.wl("for ", rk, ",", rv, ":=range ", c.fmtVnb(node, r, depth), "{")
@@ -1193,9 +1190,8 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		if node.mapv.ptr && node.mapv.typ != typeBasic {
 			pfx = "&"
 		}
-		c.wl(lb, "[", lk, "]=", pfx, lv)
+		c.wl(c.fmtVd(node, l, depth), "[", lk, "]=", pfx, lv)
 		c.wl("}")
-		c.wl(l, "=", c.fmtP(node, lb, depth))
 		c.wl("}")
 	case typeSlice:
 		if node.typn == "[]byte" {

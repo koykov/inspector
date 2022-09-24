@@ -296,20 +296,17 @@ func (i9 TestStringFloatPtrMapInspector) countBytes(x *testobj.TestStringFloatPt
 func (i9 TestStringFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatPtrMap) ([]byte, error) {
 	if len(*r) > 0 {
 		if l == nil {
-			z0 := make(testobj.TestStringFloatPtrMap, len(*r))
-			l = &z0
+			buf0 := make(testobj.TestStringFloatPtrMap, len(*r))
+			l = &buf0
 		}
-		buf0 := (*l)
-		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
 			var lk0 string
 			buf, lk0 = inspector.BufferizeString(buf, rk0)
 			var lv0 *float64
 			lv0 = rv0
-			buf0[lk0] = lv0
+			(*l)[lk0] = lv0
 		}
-		l = &buf0
 	}
 	return buf, nil
 }
