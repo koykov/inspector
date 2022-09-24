@@ -295,12 +295,11 @@ func (i10 TestStringPtrFloatPtrMapInspector) countBytes(x *testobj.TestStringPtr
 
 func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStringPtrFloatPtrMap) ([]byte, error) {
 	if len(*r) > 0 {
-		var buf0 testobj.TestStringPtrFloatPtrMap
-		if l != nil {
-			buf0 = (*l)
-		} else {
-			buf0 = make(testobj.TestStringPtrFloatPtrMap, len(*r))
+		if l == nil {
+			z0 := make(testobj.TestStringPtrFloatPtrMap, len(*r))
+			l = &z0
 		}
+		buf0 := (*l)
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0

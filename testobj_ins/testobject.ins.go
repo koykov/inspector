@@ -1209,12 +1209,11 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 	l.Cost = r.Cost
 	if r.Permission != nil {
 		if len(*r.Permission) > 0 {
-			var buf1 testobj.TestPermission
-			if l.Permission != nil {
-				buf1 = (*l.Permission)
-			} else {
-				buf1 = make(testobj.TestPermission, len(*r.Permission))
+			if l.Permission == nil {
+				z1 := make(testobj.TestPermission, len(*r.Permission))
+				l.Permission = &z1
 			}
+			buf1 := (*l.Permission)
 			_ = buf1
 			for rk1, rv1 := range *r.Permission {
 				_, _ = rk1, rv1
@@ -1228,12 +1227,11 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 		}
 	}
 	if len(r.HistoryTree) > 0 {
-		var buf1 map[string]*testobj.TestHistory
-		if l.HistoryTree != nil {
-			buf1 = (l.HistoryTree)
-		} else {
-			buf1 = make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+		if l.HistoryTree == nil {
+			z1 := make(map[string]*testobj.TestHistory, len(r.HistoryTree))
+			l.HistoryTree = z1
 		}
+		buf1 := (l.HistoryTree)
 		_ = buf1
 		for rk1, rv1 := range r.HistoryTree {
 			_, _ = rk1, rv1
@@ -1248,12 +1246,11 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 		l.HistoryTree = buf1
 	}
 	if len(r.Flags) > 0 {
-		var buf1 testobj.TestFlag
-		if l.Flags != nil {
-			buf1 = (l.Flags)
-		} else {
-			buf1 = make(testobj.TestFlag, len(r.Flags))
+		if l.Flags == nil {
+			z1 := make(testobj.TestFlag, len(r.Flags))
+			l.Flags = z1
 		}
+		buf1 := (l.Flags)
 		_ = buf1
 		for rk1, rv1 := range r.Flags {
 			_, _ = rk1, rv1

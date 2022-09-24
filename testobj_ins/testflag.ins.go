@@ -294,12 +294,11 @@ func (i1 TestFlagInspector) countBytes(x *testobj.TestFlag) (c int) {
 
 func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, error) {
 	if len(*r) > 0 {
-		var buf0 testobj.TestFlag
-		if l != nil {
-			buf0 = (*l)
-		} else {
-			buf0 = make(testobj.TestFlag, len(*r))
+		if l == nil {
+			z0 := make(testobj.TestFlag, len(*r))
+			l = &z0
 		}
+		buf0 := (*l)
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0

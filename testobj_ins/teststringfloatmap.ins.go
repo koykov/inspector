@@ -294,12 +294,11 @@ func (i8 TestStringFloatMapInspector) countBytes(x *testobj.TestStringFloatMap) 
 
 func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFloatMap) ([]byte, error) {
 	if len(*r) > 0 {
-		var buf0 testobj.TestStringFloatMap
-		if l != nil {
-			buf0 = (*l)
-		} else {
-			buf0 = make(testobj.TestStringFloatMap, len(*r))
+		if l == nil {
+			z0 := make(testobj.TestStringFloatMap, len(*r))
+			l = &z0
 		}
+		buf0 := (*l)
 		_ = buf0
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
