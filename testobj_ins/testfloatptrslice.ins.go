@@ -64,7 +64,7 @@ func (i2 TestFloatPtrSliceInspector) GetTo(src any, buf *any, path ...string) (e
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i2 TestFloatPtrSliceInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -144,7 +144,7 @@ func (i2 TestFloatPtrSliceInspector) Loop(src any, l inspector.Iterator, buf *[]
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i2 TestFloatPtrSliceInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -186,7 +186,7 @@ func (i2 TestFloatPtrSliceInspector) SetWB(dst, value any, buf inspector.Accumul
 }
 
 func (i2 TestFloatPtrSliceInspector) Set(dst, value any, path ...string) error {
-	return i2.SetWB(dst, value, nil, path...)
+	return i2.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i2 TestFloatPtrSliceInspector) DeepEqual(l, r any) bool {

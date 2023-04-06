@@ -10,11 +10,11 @@ type Inspector interface {
 	GetTo(src any, buf *any, path ...string) error
 	// Set sets value to dst according path.
 	Set(dst, value any, path ...string) error
-	// SetWB is a buffered version of Set().
-	SetWB(dst, value any, buf AccumulativeBuffer, path ...string) error
-	// Cmp compares value according path with right using cond.
-	// Result will be present in result.
-	Cmp(src any, cond Op, right string, result *bool, path ...string) error
+	// SetWithBuffer is a buffered version of Set().
+	SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error
+	// Compare applies condition cond to value in src by path and right.
+	// Result will set to result buffer.
+	Compare(src any, cond Op, right string, result *bool, path ...string) error
 	// Loop iterates in src value taking by path using l looper.
 	Loop(src any, l Iterator, buf *[]byte, path ...string) error
 	// DeepEqual compares l and r.

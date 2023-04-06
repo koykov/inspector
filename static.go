@@ -32,11 +32,11 @@ func (i StaticInspector) Set(_, _ any, _ ...string) error {
 	return nil
 }
 
-func (i StaticInspector) SetWB(_, _ any, _ AccumulativeBuffer, _ ...string) error {
+func (i StaticInspector) SetWithBuffer(_, _ any, _ AccumulativeBuffer, _ ...string) error {
 	return nil
 }
 
-func (i StaticInspector) Cmp(src any, cond Op, right string, result *bool, _ ...string) error {
+func (i StaticInspector) Compare(src any, cond Op, right string, result *bool, _ ...string) error {
 	switch src.(type) {
 	case int:
 		if r, err := strconv.ParseInt(right, 0, 0); err == nil {

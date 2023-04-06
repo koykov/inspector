@@ -54,7 +54,7 @@ func (i8 TestStringFloatMapInspector) GetTo(src any, buf *any, path ...string) (
 	return
 }
 
-func (i8 TestStringFloatMapInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i8 TestStringFloatMapInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -139,7 +139,7 @@ func (i8 TestStringFloatMapInspector) Loop(src any, l inspector.Iterator, buf *[
 	return
 }
 
-func (i8 TestStringFloatMapInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i8 TestStringFloatMapInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -169,7 +169,7 @@ func (i8 TestStringFloatMapInspector) SetWB(dst, value any, buf inspector.Accumu
 }
 
 func (i8 TestStringFloatMapInspector) Set(dst, value any, path ...string) error {
-	return i8.SetWB(dst, value, nil, path...)
+	return i8.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i8 TestStringFloatMapInspector) DeepEqual(l, r any) bool {

@@ -497,7 +497,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Compare method.
-	c.wl("func (", recv, " ", inst, ") Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
+	c.wl("func (", recv, " ", inst, ") Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
 	c.wdl(funcHeader)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeCmp)
 	if err != nil {
@@ -515,7 +515,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Setter methods.
-	c.wl("func (", recv, " ", inst, ") SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {")
+	c.wl("func (", recv, " ", inst, ") SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {")
 	c.wdl(funcHeaderSet)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
 	if err != nil {
@@ -523,7 +523,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	}
 	c.wdl("return nil }")
 	c.wl("func (", recv, " ", inst, ") Set(dst, value any, path ...string) error {")
-	c.wl("return ", recv, ".SetWB(dst, value, nil, path...)")
+	c.wl("return ", recv, ".SetWithBuffer(dst, value, nil, path...)")
 	c.wdl("}")
 
 	// DeepEqual methods.

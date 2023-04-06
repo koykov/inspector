@@ -1478,7 +1478,7 @@ func (i6 TestObject1Inspector) GetTo(src any, buf *any, path ...string) (err err
 	return
 }
 
-func (i6 TestObject1Inspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -7145,7 +7145,7 @@ func (i6 TestObject1Inspector) Loop(src any, l inspector.Iterator, buf *[]byte, 
 	return
 }
 
-func (i6 TestObject1Inspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -8859,7 +8859,7 @@ func (i6 TestObject1Inspector) SetWB(dst, value any, buf inspector.AccumulativeB
 }
 
 func (i6 TestObject1Inspector) Set(dst, value any, path ...string) error {
-	return i6.SetWB(dst, value, nil, path...)
+	return i6.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i6 TestObject1Inspector) DeepEqual(l, r any) bool {
