@@ -102,7 +102,7 @@ func (i1 TestFlagInspector) Cmp(src any, cond inspector.Op, right string, result
 	return
 }
 
-func (i1 TestFlagInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i1 TestFlagInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

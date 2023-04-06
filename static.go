@@ -230,7 +230,7 @@ func (i StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
 	return false
 }
 
-func (i StaticInspector) Loop(_ any, _ Looper, _ *[]byte, _ ...string) error {
+func (i StaticInspector) Loop(_ any, _ Iterator, _ *[]byte, _ ...string) error {
 	return nil
 }
 

@@ -1,7 +1,7 @@
 package inspector
 
-// Looper signature.
-type Looper interface {
+// Iterator signature.
+type Iterator interface {
 	// RequireKey checks set key requirement.
 	RequireKey() bool
 	// SetKey sets the key value and inspector to hidden context.

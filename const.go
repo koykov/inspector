@@ -1,9 +1,9 @@
 package inspector
 
-// Operation types.
+// Op describes operation type.
 type Op int
 
-// Loop control type.
+// LoopCtl describes loop control type.
 type LoopCtl int
 
 const (
@@ -25,3 +25,5 @@ const (
 
 	FloatPrecision = 1e-3
 )
+
+var _, _, _, _ = OpUnk, OpInc, OpDec, LoopCtlNone

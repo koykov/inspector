@@ -282,7 +282,7 @@ func (i0 TestFinanceInspector) Cmp(src any, cond inspector.Op, right string, res
 	return
 }
 
-func (i0 TestFinanceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i0 TestFinanceInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

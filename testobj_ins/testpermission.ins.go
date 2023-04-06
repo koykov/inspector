@@ -103,7 +103,7 @@ func (i7 TestPermissionInspector) Cmp(src any, cond inspector.Op, right string, 
 	return
 }
 
-func (i7 TestPermissionInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i7 TestPermissionInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

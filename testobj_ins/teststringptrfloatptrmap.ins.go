@@ -95,7 +95,7 @@ func (i10 TestStringPtrFloatPtrMapInspector) Cmp(src any, cond inspector.Op, rig
 	return
 }
 
-func (i10 TestStringPtrFloatPtrMapInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i10 TestStringPtrFloatPtrMapInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

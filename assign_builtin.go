@@ -15,7 +15,7 @@ var (
 	reIsDecFloat = regexp.MustCompile(`^[-+]?[\d]*\.?[\d]+([eE][-+]?[\d]+)?$`)
 )
 
-// Assign source to bytes destination.
+// AssignToBytes assigns(converts) source to bytes destination.
 func AssignToBytes(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *[]byte:
@@ -57,7 +57,7 @@ func AssignToBytes(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	return
 }
 
-// Assign source to string destination.
+// AssignToStr assigns(converts) source to string destination.
 func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *string:
@@ -100,7 +100,7 @@ func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	return
 }
 
-// Assign source to bool destination.
+// AssignToBool assign(converts) source to bool destination.
 func AssignToBool(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	switch dst.(type) {
 	case *bool:
@@ -200,7 +200,7 @@ func AssignToBool(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	return
 }
 
-// Assign source to int destination.
+// AssignToInt assigns(converts) source to int destination.
 func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var i int64
 	switch src.(type) {
@@ -262,7 +262,7 @@ func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	return
 }
 
-// Assign source to unsigned int destination.
+// AssignToUint assigns(converts) source to unsigned int destination.
 func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var u uint64
 	switch src.(type) {
@@ -324,7 +324,7 @@ func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	return
 }
 
-// Assign source to float destination.
+// AssignToFloat assigns(converts) source to float destination.
 func AssignToFloat(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var f float64
 	switch src.(type) {

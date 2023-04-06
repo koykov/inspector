@@ -631,7 +631,7 @@ func (i5 TestObjectInspector) Cmp(src any, cond inspector.Op, right string, resu
 	return
 }
 
-func (i5 TestObjectInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i5 TestObjectInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

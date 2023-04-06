@@ -496,7 +496,7 @@ func (i12 TestStructSliceLiteralInspector) Cmp(src any, cond inspector.Op, right
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}

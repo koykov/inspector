@@ -102,7 +102,7 @@ func (i8 TestStringFloatMapInspector) Cmp(src any, cond inspector.Op, right stri
 	return
 }
 
-func (i8 TestStringFloatMapInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i8 TestStringFloatMapInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}

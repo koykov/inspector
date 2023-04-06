@@ -110,7 +110,7 @@ func (i2 TestFloatPtrSliceInspector) Cmp(src any, cond inspector.Op, right strin
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i2 TestFloatPtrSliceInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}

@@ -506,7 +506,7 @@ if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
 	c.wdl("return }")
 
 	// Loop method.
-	c.wl("func (", recv, " ", inst, ") Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {")
+	c.wl("func (", recv, " ", inst, ") Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {")
 	c.wdl(funcHeaderLoop)
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeLoop)
 	if err != nil {

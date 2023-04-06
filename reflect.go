@@ -54,7 +54,7 @@ func (i ReflectInspector) SetWB(_, _ any, _ AccumulativeBuffer, _ ...string) err
 	return nil
 }
 
-func (i ReflectInspector) Loop(_ any, _ Looper, _ *[]byte, _ ...string) (err error) {
+func (i ReflectInspector) Loop(_ any, _ Iterator, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }
