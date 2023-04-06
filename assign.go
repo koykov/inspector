@@ -4,7 +4,7 @@ package inspector
 //
 // Assigns src to dst with dynamic typecasting.
 // Returns true if typecasting success, false otherwise.
-type AssignFn func(dst, src interface{}, buf AccumulativeBuffer) bool
+type AssignFn func(dst, src any, buf AccumulativeBuffer) bool
 
 var (
 	// Registry of assign functions.
@@ -22,7 +22,7 @@ func RegisterAssignFn(fn AssignFn) {
 }
 
 // Generic assign function.
-func Assign(dst, src interface{}) (ok bool) {
+func Assign(dst, src any) (ok bool) {
 	return AssignBuf(dst, src, nil)
 }
 
@@ -30,7 +30,7 @@ func Assign(dst, src interface{}) (ok bool) {
 //
 // Walks other registered assign callbacks and try to execute each of them.
 // Stops when current callback return true.
-func AssignBuf(dst, src interface{}, buf AccumulativeBuffer) (ok bool) {
+func AssignBuf(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	for _, fn := range assignFnRegistry {
 		if ok = fn(dst, src, buf); ok {
 			return

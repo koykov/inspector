@@ -17,13 +17,13 @@ func (i9 TestStringFloatPtrMapInspector) TypeName() string {
 	return "TestStringFloatPtrMap"
 }
 
-func (i9 TestStringFloatPtrMapInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i9 TestStringFloatPtrMapInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i9.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i9 TestStringFloatPtrMapInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i9 TestStringFloatPtrMapInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -56,7 +56,7 @@ func (i9 TestStringFloatPtrMapInspector) GetTo(src interface{}, buf *interface{}
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i9 TestStringFloatPtrMapInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -95,7 +95,7 @@ func (i9 TestStringFloatPtrMapInspector) Cmp(src interface{}, cond inspector.Op,
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i9 TestStringFloatPtrMapInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -132,7 +132,7 @@ func (i9 TestStringFloatPtrMapInspector) Loop(src interface{}, l inspector.Loope
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i9 TestStringFloatPtrMapInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -164,15 +164,15 @@ func (i9 TestStringFloatPtrMapInspector) SetWB(dst, value interface{}, buf inspe
 	return nil
 }
 
-func (i9 TestStringFloatPtrMapInspector) Set(dst, value interface{}, path ...string) error {
+func (i9 TestStringFloatPtrMapInspector) Set(dst, value any, path ...string) error {
 	return i9.SetWB(dst, value, nil, path...)
 }
 
-func (i9 TestStringFloatPtrMapInspector) DeepEqual(l, r interface{}) bool {
+func (i9 TestStringFloatPtrMapInspector) DeepEqual(l, r any) bool {
 	return i9.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i9 TestStringFloatPtrMapInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i9 TestStringFloatPtrMapInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestStringFloatPtrMap
 		leq, req bool
@@ -224,7 +224,7 @@ func (i9 TestStringFloatPtrMapInspector) DeepEqualWithOptions(l, r interface{}, 
 	return true
 }
 
-func (i9 TestStringFloatPtrMapInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i9 TestStringFloatPtrMapInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestStringFloatPtrMap
 	switch typ {
 	case inspector.EncodingJSON:
@@ -235,7 +235,7 @@ func (i9 TestStringFloatPtrMapInspector) Unmarshal(p []byte, typ inspector.Encod
 	}
 }
 
-func (i9 TestStringFloatPtrMapInspector) Copy(x interface{}) (interface{}, error) {
+func (i9 TestStringFloatPtrMapInspector) Copy(x any) (any, error) {
 	var r testobj.TestStringFloatPtrMap
 	switch x.(type) {
 	case testobj.TestStringFloatPtrMap:
@@ -253,7 +253,7 @@ func (i9 TestStringFloatPtrMapInspector) Copy(x interface{}) (interface{}, error
 	return &l, err
 }
 
-func (i9 TestStringFloatPtrMapInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i9 TestStringFloatPtrMapInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStringFloatPtrMap
 	switch src.(type) {
 	case testobj.TestStringFloatPtrMap:
@@ -311,7 +311,7 @@ func (i9 TestStringFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestStrin
 	return buf, nil
 }
 
-func (i9 TestStringFloatPtrMapInspector) Reset(x interface{}) error {
+func (i9 TestStringFloatPtrMapInspector) Reset(x any) error {
 	var origin *testobj.TestStringFloatPtrMap
 	_ = origin
 	switch x.(type) {

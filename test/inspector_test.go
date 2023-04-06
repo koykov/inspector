@@ -165,7 +165,7 @@ func testGetter(t testing.TB, i inspector.Inspector) {
 	}
 }
 
-func testGetterPtr(t testing.TB, i inspector.Inspector, buf interface{}) {
+func testGetterPtr(t testing.TB, i inspector.Inspector, buf any) {
 	_ = i.GetTo(testO, &buf, p0...)
 	if *buf.(*string) != "foo" {
 		t.Error("object.Id: mismatch result and expectation")
@@ -267,7 +267,7 @@ func TestInspector(t *testing.T) {
 		testGetter(t, &inspector.ReflectInspector{})
 	})
 	t.Run("cg/get", func(t *testing.T) {
-		var buf interface{}
+		var buf any
 		testGetterPtr(t, &testobj_ins.TestObjectInspector{}, buf)
 	})
 	t.Run("cg/cmp", func(t *testing.T) {
@@ -331,7 +331,7 @@ func BenchmarkInspector(b *testing.B) {
 	})
 	b.Run("cg/get", func(b *testing.B) {
 		ins := &testobj_ins.TestObjectInspector{}
-		var buf interface{}
+		var buf any
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
 			testGetterPtr(b, ins, buf)

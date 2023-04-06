@@ -18,13 +18,13 @@ func (i2 TestFloatPtrSliceInspector) TypeName() string {
 	return "TestFloatPtrSlice"
 }
 
-func (i2 TestFloatPtrSliceInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i2 TestFloatPtrSliceInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i2.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i2 TestFloatPtrSliceInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i2 TestFloatPtrSliceInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (i2 TestFloatPtrSliceInspector) GetTo(src interface{}, buf *interface{}, pa
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i2 TestFloatPtrSliceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -110,7 +110,7 @@ func (i2 TestFloatPtrSliceInspector) Cmp(src interface{}, cond inspector.Op, rig
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i2 TestFloatPtrSliceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -144,7 +144,7 @@ func (i2 TestFloatPtrSliceInspector) Loop(src interface{}, l inspector.Looper, b
 	return
 }
 
-func (i2 TestFloatPtrSliceInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i2 TestFloatPtrSliceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -185,15 +185,15 @@ func (i2 TestFloatPtrSliceInspector) SetWB(dst, value interface{}, buf inspector
 	return nil
 }
 
-func (i2 TestFloatPtrSliceInspector) Set(dst, value interface{}, path ...string) error {
+func (i2 TestFloatPtrSliceInspector) Set(dst, value any, path ...string) error {
 	return i2.SetWB(dst, value, nil, path...)
 }
 
-func (i2 TestFloatPtrSliceInspector) DeepEqual(l, r interface{}) bool {
+func (i2 TestFloatPtrSliceInspector) DeepEqual(l, r any) bool {
 	return i2.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i2 TestFloatPtrSliceInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i2 TestFloatPtrSliceInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFloatPtrSlice
 		leq, req bool
@@ -242,7 +242,7 @@ func (i2 TestFloatPtrSliceInspector) DeepEqualWithOptions(l, r interface{}, opts
 	return true
 }
 
-func (i2 TestFloatPtrSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i2 TestFloatPtrSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestFloatPtrSlice
 	switch typ {
 	case inspector.EncodingJSON:
@@ -253,7 +253,7 @@ func (i2 TestFloatPtrSliceInspector) Unmarshal(p []byte, typ inspector.Encoding)
 	}
 }
 
-func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
+func (i2 TestFloatPtrSliceInspector) Copy(x any) (any, error) {
 	var r testobj.TestFloatPtrSlice
 	switch x.(type) {
 	case testobj.TestFloatPtrSlice:
@@ -271,7 +271,7 @@ func (i2 TestFloatPtrSliceInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i2 TestFloatPtrSliceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i2 TestFloatPtrSliceInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFloatPtrSlice
 	switch src.(type) {
 	case testobj.TestFloatPtrSlice:
@@ -324,7 +324,7 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 	return buf, nil
 }
 
-func (i2 TestFloatPtrSliceInspector) Reset(x interface{}) error {
+func (i2 TestFloatPtrSliceInspector) Reset(x any) error {
 	var origin *testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {

@@ -5,9 +5,9 @@ type Looper interface {
 	// RequireKey checks set key requirement.
 	RequireKey() bool
 	// SetKey sets the key value and inspector to hidden context.
-	SetKey(val interface{}, ins Inspector)
+	SetKey(val any, ins Inspector)
 	// SetVal sets the value and inspector to context.
-	SetVal(val interface{}, ins Inspector)
+	SetVal(val any, ins Inspector)
 	// Iterate performs the iteration.
 	Iterate() LoopCtl
 }

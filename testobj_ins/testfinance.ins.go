@@ -20,13 +20,13 @@ func (i0 TestFinanceInspector) TypeName() string {
 	return "TestFinance"
 }
 
-func (i0 TestFinanceInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i0 TestFinanceInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i0.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i0 TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i0 TestFinanceInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -100,7 +100,7 @@ func (i0 TestFinanceInspector) GetTo(src interface{}, buf *interface{}, path ...
 	return
 }
 
-func (i0 TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i0 TestFinanceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -282,7 +282,7 @@ func (i0 TestFinanceInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i0 TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i0 TestFinanceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -325,7 +325,7 @@ func (i0 TestFinanceInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i0 TestFinanceInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i0 TestFinanceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -406,15 +406,15 @@ func (i0 TestFinanceInspector) SetWB(dst, value interface{}, buf inspector.Accum
 	return nil
 }
 
-func (i0 TestFinanceInspector) Set(dst, value interface{}, path ...string) error {
+func (i0 TestFinanceInspector) Set(dst, value any, path ...string) error {
 	return i0.SetWB(dst, value, nil, path...)
 }
 
-func (i0 TestFinanceInspector) DeepEqual(l, r interface{}) bool {
+func (i0 TestFinanceInspector) DeepEqual(l, r any) bool {
 	return i0.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i0 TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i0 TestFinanceInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFinance
 		leq, req bool
@@ -481,7 +481,7 @@ func (i0 TestFinanceInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	return true
 }
 
-func (i0 TestFinanceInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i0 TestFinanceInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestFinance
 	switch typ {
 	case inspector.EncodingJSON:
@@ -492,7 +492,7 @@ func (i0 TestFinanceInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
+func (i0 TestFinanceInspector) Copy(x any) (any, error) {
 	var r testobj.TestFinance
 	switch x.(type) {
 	case testobj.TestFinance:
@@ -510,7 +510,7 @@ func (i0 TestFinanceInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i0 TestFinanceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i0 TestFinanceInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFinance
 	switch src.(type) {
 	case testobj.TestFinance:
@@ -573,7 +573,7 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 	return buf, nil
 }
 
-func (i0 TestFinanceInspector) Reset(x interface{}) error {
+func (i0 TestFinanceInspector) Reset(x any) error {
 	var origin *testobj.TestFinance
 	_ = origin
 	switch x.(type) {

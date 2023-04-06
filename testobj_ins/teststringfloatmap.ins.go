@@ -18,13 +18,13 @@ func (i8 TestStringFloatMapInspector) TypeName() string {
 	return "TestStringFloatMap"
 }
 
-func (i8 TestStringFloatMapInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i8 TestStringFloatMapInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i8.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i8 TestStringFloatMapInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i8 TestStringFloatMapInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -54,7 +54,7 @@ func (i8 TestStringFloatMapInspector) GetTo(src interface{}, buf *interface{}, p
 	return
 }
 
-func (i8 TestStringFloatMapInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i8 TestStringFloatMapInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -102,7 +102,7 @@ func (i8 TestStringFloatMapInspector) Cmp(src interface{}, cond inspector.Op, ri
 	return
 }
 
-func (i8 TestStringFloatMapInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i8 TestStringFloatMapInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -139,7 +139,7 @@ func (i8 TestStringFloatMapInspector) Loop(src interface{}, l inspector.Looper, 
 	return
 }
 
-func (i8 TestStringFloatMapInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i8 TestStringFloatMapInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -168,15 +168,15 @@ func (i8 TestStringFloatMapInspector) SetWB(dst, value interface{}, buf inspecto
 	return nil
 }
 
-func (i8 TestStringFloatMapInspector) Set(dst, value interface{}, path ...string) error {
+func (i8 TestStringFloatMapInspector) Set(dst, value any, path ...string) error {
 	return i8.SetWB(dst, value, nil, path...)
 }
 
-func (i8 TestStringFloatMapInspector) DeepEqual(l, r interface{}) bool {
+func (i8 TestStringFloatMapInspector) DeepEqual(l, r any) bool {
 	return i8.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i8 TestStringFloatMapInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i8 TestStringFloatMapInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestStringFloatMap
 		leq, req bool
@@ -223,7 +223,7 @@ func (i8 TestStringFloatMapInspector) DeepEqualWithOptions(l, r interface{}, opt
 	return true
 }
 
-func (i8 TestStringFloatMapInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i8 TestStringFloatMapInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestStringFloatMap
 	switch typ {
 	case inspector.EncodingJSON:
@@ -234,7 +234,7 @@ func (i8 TestStringFloatMapInspector) Unmarshal(p []byte, typ inspector.Encoding
 	}
 }
 
-func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
+func (i8 TestStringFloatMapInspector) Copy(x any) (any, error) {
 	var r testobj.TestStringFloatMap
 	switch x.(type) {
 	case testobj.TestStringFloatMap:
@@ -252,7 +252,7 @@ func (i8 TestStringFloatMapInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i8 TestStringFloatMapInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i8 TestStringFloatMapInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStringFloatMap
 	switch src.(type) {
 	case testobj.TestStringFloatMap:
@@ -310,7 +310,7 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 	return buf, nil
 }
 
-func (i8 TestStringFloatMapInspector) Reset(x interface{}) error {
+func (i8 TestStringFloatMapInspector) Reset(x any) error {
 	var origin *testobj.TestStringFloatMap
 	_ = origin
 	switch x.(type) {

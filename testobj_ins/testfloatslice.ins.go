@@ -18,13 +18,13 @@ func (i3 TestFloatSliceInspector) TypeName() string {
 	return "TestFloatSlice"
 }
 
-func (i3 TestFloatSliceInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i3 TestFloatSliceInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i3.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i3 TestFloatSliceInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i3 TestFloatSliceInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -61,7 +61,7 @@ func (i3 TestFloatSliceInspector) GetTo(src interface{}, buf *interface{}, path 
 	return
 }
 
-func (i3 TestFloatSliceInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i3 TestFloatSliceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -116,7 +116,7 @@ func (i3 TestFloatSliceInspector) Cmp(src interface{}, cond inspector.Op, right 
 	return
 }
 
-func (i3 TestFloatSliceInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i3 TestFloatSliceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -150,7 +150,7 @@ func (i3 TestFloatSliceInspector) Loop(src interface{}, l inspector.Looper, buf 
 	return
 }
 
-func (i3 TestFloatSliceInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i3 TestFloatSliceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -188,15 +188,15 @@ func (i3 TestFloatSliceInspector) SetWB(dst, value interface{}, buf inspector.Ac
 	return nil
 }
 
-func (i3 TestFloatSliceInspector) Set(dst, value interface{}, path ...string) error {
+func (i3 TestFloatSliceInspector) Set(dst, value any, path ...string) error {
 	return i3.SetWB(dst, value, nil, path...)
 }
 
-func (i3 TestFloatSliceInspector) DeepEqual(l, r interface{}) bool {
+func (i3 TestFloatSliceInspector) DeepEqual(l, r any) bool {
 	return i3.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i3 TestFloatSliceInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i3 TestFloatSliceInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFloatSlice
 		leq, req bool
@@ -240,7 +240,7 @@ func (i3 TestFloatSliceInspector) DeepEqualWithOptions(l, r interface{}, opts *i
 	return true
 }
 
-func (i3 TestFloatSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i3 TestFloatSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestFloatSlice
 	switch typ {
 	case inspector.EncodingJSON:
@@ -251,7 +251,7 @@ func (i3 TestFloatSliceInspector) Unmarshal(p []byte, typ inspector.Encoding) (i
 	}
 }
 
-func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
+func (i3 TestFloatSliceInspector) Copy(x any) (any, error) {
 	var r testobj.TestFloatSlice
 	switch x.(type) {
 	case testobj.TestFloatSlice:
@@ -269,7 +269,7 @@ func (i3 TestFloatSliceInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i3 TestFloatSliceInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i3 TestFloatSliceInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFloatSlice
 	switch src.(type) {
 	case testobj.TestFloatSlice:
@@ -322,7 +322,7 @@ func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) 
 	return buf, nil
 }
 
-func (i3 TestFloatSliceInspector) Reset(x interface{}) error {
+func (i3 TestFloatSliceInspector) Reset(x any) error {
 	var origin *testobj.TestFloatSlice
 	_ = origin
 	switch x.(type) {
