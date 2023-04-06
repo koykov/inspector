@@ -202,23 +202,23 @@ func testGetterPtr(t testing.TB, i inspector.Inspector, buf any) {
 	}
 }
 
-func testCmpPtr(t testing.TB, i inspector.Inspector, buf *bool) {
-	_ = i.Cmp(testO, inspector.OpEq, "foo", buf, p0...)
+func testComparePtr(t testing.TB, i inspector.Inspector, buf *bool) {
+	_ = i.Compare(testO, inspector.OpEq, "foo", buf, p0...)
 	if !*buf {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	_ = i.Cmp(testO, inspector.OpEq, "bar", buf, p1...)
+	_ = i.Compare(testO, inspector.OpEq, "bar", buf, p1...)
 	if !*buf {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	_ = i.Cmp(testO, inspector.OpGtq, "60", buf, p7...)
+	_ = i.Compare(testO, inspector.OpGtq, "60", buf, p7...)
 	if !*buf {
 		t.Error("object.Status: mismatch result and expectation")
 	}
 
-	_ = i.Cmp(testO, inspector.OpLtq, "5000", buf, p8...)
+	_ = i.Compare(testO, inspector.OpLtq, "5000", buf, p8...)
 	if !*buf {
 		t.Error("object.Finance.MoneyIn: mismatch result and expectation")
 	}
@@ -226,37 +226,37 @@ func testCmpPtr(t testing.TB, i inspector.Inspector, buf *bool) {
 
 func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.AccumulativeBuffer) {
 	testO.Id = ""
-	_ = i.SetWB(testO, 1984, ab, p0...)
+	_ = i.SetWithBuffer(testO, 1984, ab, p0...)
 	if testO.Id != "1984" {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, 2000, ab, p1...)
+	_ = i.SetWithBuffer(testO, 2000, ab, p1...)
 	if !bytes.Equal(testO.Name, expectName) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, false, ab, p2...)
+	_ = i.SetWithBuffer(testO, false, ab, p2...)
 	if (*testO.Permission)[23] != false {
 		t.Error("object.Permission.23: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, int32(23), ab, p3...)
+	_ = i.SetWithBuffer(testO, int32(23), ab, p3...)
 	if testO.Flags["export"] != 23 {
 		t.Error("object.Flags.export: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, float64(9000), ab, p4...)
+	_ = i.SetWithBuffer(testO, float64(9000), ab, p4...)
 	if testO.Finance.Balance != 9000 {
 		t.Error("object.Finance.Balance: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, int64(153465345246), ab, p5...)
+	_ = i.SetWithBuffer(testO, int64(153465345246), ab, p5...)
 	if testO.Finance.History[1].DateUnix != 153465345246 {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	_ = i.SetWB(testO, &expectComment1, ab, p6...)
+	_ = i.SetWithBuffer(testO, &expectComment1, ab, p6...)
 	if !bytes.Equal(testO.Finance.History[0].Comment, expectComment1) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}
@@ -272,7 +272,7 @@ func TestInspector(t *testing.T) {
 	})
 	t.Run("cg/cmp", func(t *testing.T) {
 		var buf bool
-		testCmpPtr(t, &testobj_ins.TestObjectInspector{}, &buf)
+		testComparePtr(t, &testobj_ins.TestObjectInspector{}, &buf)
 	})
 	t.Run("cg/set", func(t *testing.T) {
 		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, nil)
@@ -342,7 +342,7 @@ func BenchmarkInspector(b *testing.B) {
 		var buf bool
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
-			testCmpPtr(b, ins, &buf)
+			testComparePtr(b, ins, &buf)
 		}
 	})
 	b.Run("cg/set", func(b *testing.B) {
