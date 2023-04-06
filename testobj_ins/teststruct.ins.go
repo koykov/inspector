@@ -20,13 +20,13 @@ func (i11 TestStructInspector) TypeName() string {
 	return "TestStruct"
 }
 
-func (i11 TestStructInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i11 TestStructInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i11.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i11 TestStructInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i11 TestStructInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -111,7 +111,7 @@ func (i11 TestStructInspector) GetTo(src interface{}, buf *interface{}, path ...
 	return
 }
 
-func (i11 TestStructInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i11 TestStructInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -465,7 +465,7 @@ func (i11 TestStructInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i11 TestStructInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i11 TestStructInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -489,7 +489,7 @@ func (i11 TestStructInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i11 TestStructInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i11 TestStructInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -573,15 +573,15 @@ func (i11 TestStructInspector) SetWB(dst, value interface{}, buf inspector.Accum
 	return nil
 }
 
-func (i11 TestStructInspector) Set(dst, value interface{}, path ...string) error {
+func (i11 TestStructInspector) Set(dst, value any, path ...string) error {
 	return i11.SetWB(dst, value, nil, path...)
 }
 
-func (i11 TestStructInspector) DeepEqual(l, r interface{}) bool {
+func (i11 TestStructInspector) DeepEqual(l, r any) bool {
 	return i11.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i11 TestStructInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i11 TestStructInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestStruct
 		leq, req bool
@@ -659,7 +659,7 @@ func (i11 TestStructInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	return true
 }
 
-func (i11 TestStructInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i11 TestStructInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestStruct
 	switch typ {
 	case inspector.EncodingJSON:
@@ -670,7 +670,7 @@ func (i11 TestStructInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
+func (i11 TestStructInspector) Copy(x any) (any, error) {
 	var r testobj.TestStruct
 	switch x.(type) {
 	case testobj.TestStruct:
@@ -688,7 +688,7 @@ func (i11 TestStructInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i11 TestStructInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i11 TestStructInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStruct
 	switch src.(type) {
 	case testobj.TestStruct:
@@ -745,7 +745,7 @@ func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) ([]byte
 	return buf, nil
 }
 
-func (i11 TestStructInspector) Reset(x interface{}) error {
+func (i11 TestStructInspector) Reset(x any) error {
 	var origin *testobj.TestStruct
 	_ = origin
 	switch x.(type) {

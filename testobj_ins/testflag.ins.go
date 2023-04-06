@@ -18,13 +18,13 @@ func (i1 TestFlagInspector) TypeName() string {
 	return "TestFlag"
 }
 
-func (i1 TestFlagInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i1 TestFlagInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i1.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i1 TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i1 TestFlagInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -54,7 +54,7 @@ func (i1 TestFlagInspector) GetTo(src interface{}, buf *interface{}, path ...str
 	return
 }
 
-func (i1 TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i1 TestFlagInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -102,7 +102,7 @@ func (i1 TestFlagInspector) Cmp(src interface{}, cond inspector.Op, right string
 	return
 }
 
-func (i1 TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i1 TestFlagInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -139,7 +139,7 @@ func (i1 TestFlagInspector) Loop(src interface{}, l inspector.Looper, buf *[]byt
 	return
 }
 
-func (i1 TestFlagInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i1 TestFlagInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -168,15 +168,15 @@ func (i1 TestFlagInspector) SetWB(dst, value interface{}, buf inspector.Accumula
 	return nil
 }
 
-func (i1 TestFlagInspector) Set(dst, value interface{}, path ...string) error {
+func (i1 TestFlagInspector) Set(dst, value any, path ...string) error {
 	return i1.SetWB(dst, value, nil, path...)
 }
 
-func (i1 TestFlagInspector) DeepEqual(l, r interface{}) bool {
+func (i1 TestFlagInspector) DeepEqual(l, r any) bool {
 	return i1.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i1 TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i1 TestFlagInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestFlag
 		leq, req bool
@@ -223,7 +223,7 @@ func (i1 TestFlagInspector) DeepEqualWithOptions(l, r interface{}, opts *inspect
 	return true
 }
 
-func (i1 TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i1 TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestFlag
 	switch typ {
 	case inspector.EncodingJSON:
@@ -234,7 +234,7 @@ func (i1 TestFlagInspector) Unmarshal(p []byte, typ inspector.Encoding) (interfa
 	}
 }
 
-func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
+func (i1 TestFlagInspector) Copy(x any) (any, error) {
 	var r testobj.TestFlag
 	switch x.(type) {
 	case testobj.TestFlag:
@@ -252,7 +252,7 @@ func (i1 TestFlagInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i1 TestFlagInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i1 TestFlagInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestFlag
 	switch src.(type) {
 	case testobj.TestFlag:
@@ -310,7 +310,7 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, err
 	return buf, nil
 }
 
-func (i1 TestFlagInspector) Reset(x interface{}) error {
+func (i1 TestFlagInspector) Reset(x any) error {
 	var origin *testobj.TestFlag
 	_ = origin
 	switch x.(type) {

@@ -17,11 +17,11 @@ func (i ReflectInspector) TypeName() string {
 	return "reflect"
 }
 
-func (i ReflectInspector) Get(src interface{}, path ...string) (interface{}, error) {
+func (i ReflectInspector) Get(src any, path ...string) (any, error) {
 	var (
-		r interface{}
+		r any
 		c int
-		k interface{}
+		k any
 	)
 	r = src
 	for c, k = range path {
@@ -33,41 +33,41 @@ func (i ReflectInspector) Get(src interface{}, path ...string) (interface{}, err
 	return r, nil
 }
 
-func (i ReflectInspector) GetTo(src interface{}, buf *interface{}, path ...string) error {
+func (i ReflectInspector) GetTo(src any, buf *any, path ...string) error {
 	var err error
 	*buf, err = i.Get(src, path...)
 	return err
 }
 
-func (i ReflectInspector) Cmp(_ interface{}, _ Op, _ string, _ *bool, _ ...string) error {
+func (i ReflectInspector) Cmp(_ any, _ Op, _ string, _ *bool, _ ...string) error {
 	// Empty method, I'm too lazy to implement it now.
 	return nil
 }
 
-func (i ReflectInspector) Set(_, _ interface{}, _ ...string) error {
+func (i ReflectInspector) Set(_, _ any, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
 	return nil
 }
 
-func (i ReflectInspector) SetWB(_, _ interface{}, _ AccumulativeBuffer, _ ...string) error {
+func (i ReflectInspector) SetWB(_, _ any, _ AccumulativeBuffer, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
 	return nil
 }
 
-func (i ReflectInspector) Loop(_ interface{}, _ Looper, _ *[]byte, _ ...string) (err error) {
+func (i ReflectInspector) Loop(_ any, _ Looper, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }
 
-func (i ReflectInspector) DeepEqual(l, r interface{}) bool {
+func (i ReflectInspector) DeepEqual(l, r any) bool {
 	return reflect.DeepEqual(l, r)
 }
 
-func (i ReflectInspector) DeepEqualWithOptions(l, r interface{}, _ *DEQOptions) bool {
+func (i ReflectInspector) DeepEqualWithOptions(l, r any, _ *DEQOptions) bool {
 	return reflect.DeepEqual(l, r)
 }
 
-func (i ReflectInspector) inspect(node interface{}, key string) interface{} {
+func (i ReflectInspector) inspect(node any, key string) any {
 	v := reflect.ValueOf(node)
 	switch v.Kind() {
 	case reflect.Ptr:
@@ -117,8 +117,8 @@ func (i ReflectInspector) inspect(node interface{}, key string) interface{} {
 	return nil
 }
 
-func (i ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error) {
-	var x interface{}
+func (i ReflectInspector) Unmarshal(p []byte, typ Encoding) (any, error) {
+	var x any
 	switch typ {
 	case EncodingJSON:
 		err := json.Unmarshal(p, &x)
@@ -128,12 +128,12 @@ func (i ReflectInspector) Unmarshal(p []byte, typ Encoding) (interface{}, error)
 	}
 }
 
-func (i ReflectInspector) Copy(x interface{}) (interface{}, error) {
+func (i ReflectInspector) Copy(x any) (any, error) {
 	return x, nil
 }
 
-func (i ReflectInspector) CopyTo(_, _ interface{}, _ AccumulativeBuffer) error {
+func (i ReflectInspector) CopyTo(_, _ any, _ AccumulativeBuffer) error {
 	return nil
 }
 
-func (i ReflectInspector) Reset(_ interface{}) error { return nil }
+func (i ReflectInspector) Reset(_ any) error { return nil }

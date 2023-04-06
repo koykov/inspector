@@ -5,30 +5,30 @@ type Inspector interface {
 	// TypeName returns name of underlying type.
 	TypeName() string
 	// Get returns value from src according path.
-	Get(src interface{}, path ...string) (interface{}, error)
+	Get(src any, path ...string) (any, error)
 	// GetTo writes value from src to buf according path.
-	GetTo(src interface{}, buf *interface{}, path ...string) error
+	GetTo(src any, buf *any, path ...string) error
 	// Set sets value to dst according path.
-	Set(dst, value interface{}, path ...string) error
+	Set(dst, value any, path ...string) error
 	// SetWB is a buffered version of Set().
-	SetWB(dst, value interface{}, buf AccumulativeBuffer, path ...string) error
+	SetWB(dst, value any, buf AccumulativeBuffer, path ...string) error
 	// Cmp compares value according path with right using cond.
 	// Result will be present in result.
-	Cmp(src interface{}, cond Op, right string, result *bool, path ...string) error
+	Cmp(src any, cond Op, right string, result *bool, path ...string) error
 	// Loop iterates in src value taking by path using l looper.
-	Loop(src interface{}, l Looper, buf *[]byte, path ...string) error
+	Loop(src any, l Looper, buf *[]byte, path ...string) error
 	// DeepEqual compares l and r.
-	DeepEqual(l, r interface{}) bool
+	DeepEqual(l, r any) bool
 	// DeepEqualWithOptions compares l and r corresponding options.
-	DeepEqualWithOptions(l, r interface{}, options *DEQOptions) bool
+	DeepEqualWithOptions(l, r any, options *DEQOptions) bool
 	// Unmarshal parses encoded data according encoding type.
-	Unmarshal(p []byte, typ Encoding) (interface{}, error)
+	Unmarshal(p []byte, typ Encoding) (any, error)
 	// Copy makes a copy of x.
-	Copy(x interface{}) (interface{}, error)
+	Copy(x any) (any, error)
 	// CopyTo makes a copy of src to dst using buffer.
-	CopyTo(src, dst interface{}, buf AccumulativeBuffer) error
+	CopyTo(src, dst any, buf AccumulativeBuffer) error
 	// Reset resets x.
-	Reset(x interface{}) error
+	Reset(x any) error
 }
 
 func init() {

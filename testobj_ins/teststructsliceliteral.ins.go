@@ -20,13 +20,13 @@ func (i12 TestStructSliceLiteralInspector) TypeName() string {
 	return "TestStructSliceLiteral"
 }
 
-func (i12 TestStructSliceLiteralInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i12 TestStructSliceLiteralInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i12.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i12 TestStructSliceLiteralInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -127,7 +127,7 @@ func (i12 TestStructSliceLiteralInspector) GetTo(src interface{}, buf *interface
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -496,7 +496,7 @@ func (i12 TestStructSliceLiteralInspector) Cmp(src interface{}, cond inspector.O
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -530,7 +530,7 @@ func (i12 TestStructSliceLiteralInspector) Loop(src interface{}, l inspector.Loo
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i12 TestStructSliceLiteralInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -631,15 +631,15 @@ func (i12 TestStructSliceLiteralInspector) SetWB(dst, value interface{}, buf ins
 	return nil
 }
 
-func (i12 TestStructSliceLiteralInspector) Set(dst, value interface{}, path ...string) error {
+func (i12 TestStructSliceLiteralInspector) Set(dst, value any, path ...string) error {
 	return i12.SetWB(dst, value, nil, path...)
 }
 
-func (i12 TestStructSliceLiteralInspector) DeepEqual(l, r interface{}) bool {
+func (i12 TestStructSliceLiteralInspector) DeepEqual(l, r any) bool {
 	return i12.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i12 TestStructSliceLiteralInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i12 TestStructSliceLiteralInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestStructSliceLiteral
 		leq, req bool
@@ -730,7 +730,7 @@ func (i12 TestStructSliceLiteralInspector) DeepEqualWithOptions(l, r interface{}
 	return true
 }
 
-func (i12 TestStructSliceLiteralInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i12 TestStructSliceLiteralInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestStructSliceLiteral
 	switch typ {
 	case inspector.EncodingJSON:
@@ -741,7 +741,7 @@ func (i12 TestStructSliceLiteralInspector) Unmarshal(p []byte, typ inspector.Enc
 	}
 }
 
-func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, error) {
+func (i12 TestStructSliceLiteralInspector) Copy(x any) (any, error) {
 	var r testobj.TestStructSliceLiteral
 	switch x.(type) {
 	case testobj.TestStructSliceLiteral:
@@ -759,7 +759,7 @@ func (i12 TestStructSliceLiteralInspector) Copy(x interface{}) (interface{}, err
 	return &l, err
 }
 
-func (i12 TestStructSliceLiteralInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i12 TestStructSliceLiteralInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestStructSliceLiteral
 	switch src.(type) {
 	case testobj.TestStructSliceLiteral:
@@ -831,7 +831,7 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 	return buf, nil
 }
 
-func (i12 TestStructSliceLiteralInspector) Reset(x interface{}) error {
+func (i12 TestStructSliceLiteralInspector) Reset(x any) error {
 	var origin *testobj.TestStructSliceLiteral
 	_ = origin
 	switch x.(type) {

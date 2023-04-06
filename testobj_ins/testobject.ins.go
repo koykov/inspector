@@ -20,13 +20,13 @@ func (i5 TestObjectInspector) TypeName() string {
 	return "TestObject"
 }
 
-func (i5 TestObjectInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i5 TestObjectInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i5.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i5 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i5 TestObjectInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -194,7 +194,7 @@ func (i5 TestObjectInspector) GetTo(src interface{}, buf *interface{}, path ...s
 	return
 }
 
-func (i5 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i5 TestObjectInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -631,7 +631,7 @@ func (i5 TestObjectInspector) Cmp(src interface{}, cond inspector.Op, right stri
 	return
 }
 
-func (i5 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i5 TestObjectInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -743,7 +743,7 @@ func (i5 TestObjectInspector) Loop(src interface{}, l inspector.Looper, buf *[]b
 	return
 }
 
-func (i5 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i5 TestObjectInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -946,15 +946,15 @@ func (i5 TestObjectInspector) SetWB(dst, value interface{}, buf inspector.Accumu
 	return nil
 }
 
-func (i5 TestObjectInspector) Set(dst, value interface{}, path ...string) error {
+func (i5 TestObjectInspector) Set(dst, value any, path ...string) error {
 	return i5.SetWB(dst, value, nil, path...)
 }
 
-func (i5 TestObjectInspector) DeepEqual(l, r interface{}) bool {
+func (i5 TestObjectInspector) DeepEqual(l, r any) bool {
 	return i5.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i5 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i5 TestObjectInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestObject
 		leq, req bool
@@ -1119,7 +1119,7 @@ func (i5 TestObjectInspector) DeepEqualWithOptions(l, r interface{}, opts *inspe
 	return true
 }
 
-func (i5 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i5 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestObject
 	switch typ {
 	case inspector.EncodingJSON:
@@ -1130,7 +1130,7 @@ func (i5 TestObjectInspector) Unmarshal(p []byte, typ inspector.Encoding) (inter
 	}
 }
 
-func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
+func (i5 TestObjectInspector) Copy(x any) (any, error) {
 	var r testobj.TestObject
 	switch x.(type) {
 	case testobj.TestObject:
@@ -1148,7 +1148,7 @@ func (i5 TestObjectInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i5 TestObjectInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i5 TestObjectInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestObject
 	switch src.(type) {
 	case testobj.TestObject:
@@ -1280,7 +1280,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 	return buf, nil
 }
 
-func (i5 TestObjectInspector) Reset(x interface{}) error {
+func (i5 TestObjectInspector) Reset(x any) error {
 	var origin *testobj.TestObject
 	_ = origin
 	switch x.(type) {

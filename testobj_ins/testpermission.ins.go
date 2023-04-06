@@ -18,13 +18,13 @@ func (i7 TestPermissionInspector) TypeName() string {
 	return "TestPermission"
 }
 
-func (i7 TestPermissionInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i7 TestPermissionInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i7.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i7 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -59,7 +59,7 @@ func (i7 TestPermissionInspector) GetTo(src interface{}, buf *interface{}, path 
 	return
 }
 
-func (i7 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i7 TestPermissionInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -103,7 +103,7 @@ func (i7 TestPermissionInspector) Cmp(src interface{}, cond inspector.Op, right 
 	return
 }
 
-func (i7 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i7 TestPermissionInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -140,7 +140,7 @@ func (i7 TestPermissionInspector) Loop(src interface{}, l inspector.Looper, buf 
 	return
 }
 
-func (i7 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i7 TestPermissionInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -175,15 +175,15 @@ func (i7 TestPermissionInspector) SetWB(dst, value interface{}, buf inspector.Ac
 	return nil
 }
 
-func (i7 TestPermissionInspector) Set(dst, value interface{}, path ...string) error {
+func (i7 TestPermissionInspector) Set(dst, value any, path ...string) error {
 	return i7.SetWB(dst, value, nil, path...)
 }
 
-func (i7 TestPermissionInspector) DeepEqual(l, r interface{}) bool {
+func (i7 TestPermissionInspector) DeepEqual(l, r any) bool {
 	return i7.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i7 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i7 TestPermissionInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestPermission
 		leq, req bool
@@ -230,7 +230,7 @@ func (i7 TestPermissionInspector) DeepEqualWithOptions(l, r interface{}, opts *i
 	return true
 }
 
-func (i7 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i7 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestPermission
 	switch typ {
 	case inspector.EncodingJSON:
@@ -241,7 +241,7 @@ func (i7 TestPermissionInspector) Unmarshal(p []byte, typ inspector.Encoding) (i
 	}
 }
 
-func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
+func (i7 TestPermissionInspector) Copy(x any) (any, error) {
 	var r testobj.TestPermission
 	switch x.(type) {
 	case testobj.TestPermission:
@@ -259,7 +259,7 @@ func (i7 TestPermissionInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i7 TestPermissionInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i7 TestPermissionInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestPermission
 	switch src.(type) {
 	case testobj.TestPermission:
@@ -313,7 +313,7 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 	return buf, nil
 }
 
-func (i7 TestPermissionInspector) Reset(x interface{}) error {
+func (i7 TestPermissionInspector) Reset(x any) error {
 	var origin *testobj.TestPermission
 	_ = origin
 	switch x.(type) {

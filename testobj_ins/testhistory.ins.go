@@ -20,13 +20,13 @@ func (i4 TestHistoryInspector) TypeName() string {
 	return "TestHistory"
 }
 
-func (i4 TestHistoryInspector) Get(src interface{}, path ...string) (interface{}, error) {
-	var buf interface{}
+func (i4 TestHistoryInspector) Get(src any, path ...string) (any, error) {
+	var buf any
 	err := i4.GetTo(src, &buf, path...)
 	return buf, err
 }
 
-func (i4 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...string) (err error) {
+func (i4 TestHistoryInspector) GetTo(src any, buf *any, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (i4 TestHistoryInspector) GetTo(src interface{}, buf *interface{}, path ...
 	return
 }
 
-func (i4 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i4 TestHistoryInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -144,7 +144,7 @@ func (i4 TestHistoryInspector) Cmp(src interface{}, cond inspector.Op, right str
 	return
 }
 
-func (i4 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i4 TestHistoryInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -168,7 +168,7 @@ func (i4 TestHistoryInspector) Loop(src interface{}, l inspector.Looper, buf *[]
 	return
 }
 
-func (i4 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i4 TestHistoryInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -204,15 +204,15 @@ func (i4 TestHistoryInspector) SetWB(dst, value interface{}, buf inspector.Accum
 	return nil
 }
 
-func (i4 TestHistoryInspector) Set(dst, value interface{}, path ...string) error {
+func (i4 TestHistoryInspector) Set(dst, value any, path ...string) error {
 	return i4.SetWB(dst, value, nil, path...)
 }
 
-func (i4 TestHistoryInspector) DeepEqual(l, r interface{}) bool {
+func (i4 TestHistoryInspector) DeepEqual(l, r any) bool {
 	return i4.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i4 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *inspector.DEQOptions) bool {
+func (i4 TestHistoryInspector) DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {
 	var (
 		lx, rx   *testobj.TestHistory
 		leq, req bool
@@ -254,7 +254,7 @@ func (i4 TestHistoryInspector) DeepEqualWithOptions(l, r interface{}, opts *insp
 	return true
 }
 
-func (i4 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (interface{}, error) {
+func (i4 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (any, error) {
 	var x testobj.TestHistory
 	switch typ {
 	case inspector.EncodingJSON:
@@ -265,7 +265,7 @@ func (i4 TestHistoryInspector) Unmarshal(p []byte, typ inspector.Encoding) (inte
 	}
 }
 
-func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
+func (i4 TestHistoryInspector) Copy(x any) (any, error) {
 	var r testobj.TestHistory
 	switch x.(type) {
 	case testobj.TestHistory:
@@ -283,7 +283,7 @@ func (i4 TestHistoryInspector) Copy(x interface{}) (interface{}, error) {
 	return &l, err
 }
 
-func (i4 TestHistoryInspector) CopyTo(src, dst interface{}, buf inspector.AccumulativeBuffer) error {
+func (i4 TestHistoryInspector) CopyTo(src, dst any, buf inspector.AccumulativeBuffer) error {
 	var r testobj.TestHistory
 	switch src.(type) {
 	case testobj.TestHistory:
@@ -327,7 +327,7 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) ([]byt
 	return buf, nil
 }
 
-func (i4 TestHistoryInspector) Reset(x interface{}) error {
+func (i4 TestHistoryInspector) Reset(x any) error {
 	var origin *testobj.TestHistory
 	_ = origin
 	switch x.(type) {
