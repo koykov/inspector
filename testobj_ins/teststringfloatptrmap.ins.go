@@ -56,7 +56,7 @@ func (i9 TestStringFloatPtrMapInspector) GetTo(src any, buf *any, path ...string
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i9 TestStringFloatPtrMapInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -95,7 +95,7 @@ func (i9 TestStringFloatPtrMapInspector) Cmp(src any, cond inspector.Op, right s
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i9 TestStringFloatPtrMapInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -132,7 +132,7 @@ func (i9 TestStringFloatPtrMapInspector) Loop(src any, l inspector.Looper, buf *
 	return
 }
 
-func (i9 TestStringFloatPtrMapInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i9 TestStringFloatPtrMapInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -165,7 +165,7 @@ func (i9 TestStringFloatPtrMapInspector) SetWB(dst, value any, buf inspector.Acc
 }
 
 func (i9 TestStringFloatPtrMapInspector) Set(dst, value any, path ...string) error {
-	return i9.SetWB(dst, value, nil, path...)
+	return i9.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i9 TestStringFloatPtrMapInspector) DeepEqual(l, r any) bool {

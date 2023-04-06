@@ -127,7 +127,7 @@ func (i12 TestStructSliceLiteralInspector) GetTo(src any, buf *any, path ...stri
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -496,7 +496,7 @@ func (i12 TestStructSliceLiteralInspector) Cmp(src any, cond inspector.Op, right
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -530,7 +530,7 @@ func (i12 TestStructSliceLiteralInspector) Loop(src any, l inspector.Looper, buf
 	return
 }
 
-func (i12 TestStructSliceLiteralInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i12 TestStructSliceLiteralInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -632,7 +632,7 @@ func (i12 TestStructSliceLiteralInspector) SetWB(dst, value any, buf inspector.A
 }
 
 func (i12 TestStructSliceLiteralInspector) Set(dst, value any, path ...string) error {
-	return i12.SetWB(dst, value, nil, path...)
+	return i12.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i12 TestStructSliceLiteralInspector) DeepEqual(l, r any) bool {

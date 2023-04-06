@@ -59,7 +59,7 @@ func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err 
 	return
 }
 
-func (i7 TestPermissionInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i7 TestPermissionInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -103,7 +103,7 @@ func (i7 TestPermissionInspector) Cmp(src any, cond inspector.Op, right string, 
 	return
 }
 
-func (i7 TestPermissionInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i7 TestPermissionInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -140,7 +140,7 @@ func (i7 TestPermissionInspector) Loop(src any, l inspector.Looper, buf *[]byte,
 	return
 }
 
-func (i7 TestPermissionInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i7 TestPermissionInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -176,7 +176,7 @@ func (i7 TestPermissionInspector) SetWB(dst, value any, buf inspector.Accumulati
 }
 
 func (i7 TestPermissionInspector) Set(dst, value any, path ...string) error {
-	return i7.SetWB(dst, value, nil, path...)
+	return i7.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i7 TestPermissionInspector) DeepEqual(l, r any) bool {

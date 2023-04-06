@@ -54,7 +54,7 @@ func (i1 TestFlagInspector) GetTo(src any, buf *any, path ...string) (err error)
 	return
 }
 
-func (i1 TestFlagInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i1 TestFlagInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -102,7 +102,7 @@ func (i1 TestFlagInspector) Cmp(src any, cond inspector.Op, right string, result
 	return
 }
 
-func (i1 TestFlagInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i1 TestFlagInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -139,7 +139,7 @@ func (i1 TestFlagInspector) Loop(src any, l inspector.Looper, buf *[]byte, path 
 	return
 }
 
-func (i1 TestFlagInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i1 TestFlagInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -169,7 +169,7 @@ func (i1 TestFlagInspector) SetWB(dst, value any, buf inspector.AccumulativeBuff
 }
 
 func (i1 TestFlagInspector) Set(dst, value any, path ...string) error {
-	return i1.SetWB(dst, value, nil, path...)
+	return i1.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i1 TestFlagInspector) DeepEqual(l, r any) bool {

@@ -61,7 +61,7 @@ func (i3 TestFloatSliceInspector) GetTo(src any, buf *any, path ...string) (err 
 	return
 }
 
-func (i3 TestFloatSliceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i3 TestFloatSliceInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -116,7 +116,7 @@ func (i3 TestFloatSliceInspector) Cmp(src any, cond inspector.Op, right string, 
 	return
 }
 
-func (i3 TestFloatSliceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i3 TestFloatSliceInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if src == nil {
 		return
 	}
@@ -150,7 +150,7 @@ func (i3 TestFloatSliceInspector) Loop(src any, l inspector.Looper, buf *[]byte,
 	return
 }
 
-func (i3 TestFloatSliceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i3 TestFloatSliceInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -189,7 +189,7 @@ func (i3 TestFloatSliceInspector) SetWB(dst, value any, buf inspector.Accumulati
 }
 
 func (i3 TestFloatSliceInspector) Set(dst, value any, path ...string) error {
-	return i3.SetWB(dst, value, nil, path...)
+	return i3.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i3 TestFloatSliceInspector) DeepEqual(l, r any) bool {

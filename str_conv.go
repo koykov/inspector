@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Str to X conversion object.
+// StrConv describes string to X conversion object.
 type StrConv struct {
 	// Code snippet.
 	Snippet string
@@ -23,12 +23,12 @@ var (
 	ErrNoConvFunc = errors.New("convert function doesn't exists")
 )
 
-// Register new snippet.
-func RegisterStrToFunc(typ, snippet string, imports []string) {
+// RegisterStrToXFn registers new snippet.
+func RegisterStrToXFn(typ, snippet string, imports []string) {
 	convSnippetRegistry[typ] = StrConv{snippet, imports}
 }
 
-// Build a conversion snippet according arguments.
+// StrConvSnippet builds a conversion snippet according arguments.
 func StrConvSnippet(s, typn, typu, _var string) (string, []string, error) {
 	var (
 		sc StrConv

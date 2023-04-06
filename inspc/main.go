@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -51,7 +50,7 @@ func init() {
 
 	// Check and read blacklist file.
 	if len(*fBl) > 0 {
-		contents, err := ioutil.ReadFile(*fBl)
+		contents, err := os.ReadFile(*fBl)
 		if err != nil {
 			log.Fatal(err)
 		}

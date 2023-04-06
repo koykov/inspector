@@ -63,7 +63,7 @@ func (i4 TestHistoryInspector) GetTo(src any, buf *any, path ...string) (err err
 	return
 }
 
-func (i4 TestHistoryInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -144,7 +144,7 @@ func (i4 TestHistoryInspector) Cmp(src any, cond inspector.Op, right string, res
 	return
 }
 
-func (i4 TestHistoryInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i4 TestHistoryInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -168,7 +168,7 @@ func (i4 TestHistoryInspector) Loop(src any, l inspector.Looper, buf *[]byte, pa
 	return
 }
 
-func (i4 TestHistoryInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i4 TestHistoryInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -205,7 +205,7 @@ func (i4 TestHistoryInspector) SetWB(dst, value any, buf inspector.AccumulativeB
 }
 
 func (i4 TestHistoryInspector) Set(dst, value any, path ...string) error {
-	return i4.SetWB(dst, value, nil, path...)
+	return i4.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i4 TestHistoryInspector) DeepEqual(l, r any) bool {

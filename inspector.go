@@ -10,13 +10,13 @@ type Inspector interface {
 	GetTo(src any, buf *any, path ...string) error
 	// Set sets value to dst according path.
 	Set(dst, value any, path ...string) error
-	// SetWB is a buffered version of Set().
-	SetWB(dst, value any, buf AccumulativeBuffer, path ...string) error
-	// Cmp compares value according path with right using cond.
-	// Result will be present in result.
-	Cmp(src any, cond Op, right string, result *bool, path ...string) error
+	// SetWithBuffer is a buffered version of Set().
+	SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error
+	// Compare applies condition cond to value in src by path and right.
+	// Result will set to result buffer.
+	Compare(src any, cond Op, right string, result *bool, path ...string) error
 	// Loop iterates in src value taking by path using l looper.
-	Loop(src any, l Looper, buf *[]byte, path ...string) error
+	Loop(src any, l Iterator, buf *[]byte, path ...string) error
 	// DeepEqual compares l and r.
 	DeepEqual(l, r any) bool
 	// DeepEqualWithOptions compares l and r corresponding options.
@@ -38,27 +38,27 @@ func init() {
 
 	// Register snippets to convert string to built-in types.
 	imp := []string{`"strconv"`}
-	RegisterStrToFunc("bool", strToBoolSnippet("bool"), imp)
+	RegisterStrToXFn("bool", strToBoolSnippet("bool"), imp)
 
-	RegisterStrToFunc("int", strToIntSnippet("int"), imp)
-	RegisterStrToFunc("int8", strToIntSnippet("int8"), imp)
-	RegisterStrToFunc("int16", strToIntSnippet("int16"), imp)
-	RegisterStrToFunc("int32", strToIntSnippet("int32"), imp)
-	RegisterStrToFunc("int64", strToIntSnippet("int64"), imp)
+	RegisterStrToXFn("int", strToIntSnippet("int"), imp)
+	RegisterStrToXFn("int8", strToIntSnippet("int8"), imp)
+	RegisterStrToXFn("int16", strToIntSnippet("int16"), imp)
+	RegisterStrToXFn("int32", strToIntSnippet("int32"), imp)
+	RegisterStrToXFn("int64", strToIntSnippet("int64"), imp)
 
-	RegisterStrToFunc("uint", strToUintSnippet("uint"), imp)
-	RegisterStrToFunc("uint8", strToUintSnippet("uint8"), imp)
-	RegisterStrToFunc("uint16", strToUintSnippet("uint16"), imp)
-	RegisterStrToFunc("uint32", strToUintSnippet("uint32"), imp)
-	RegisterStrToFunc("uint64", strToUintSnippet("uint64"), imp)
+	RegisterStrToXFn("uint", strToUintSnippet("uint"), imp)
+	RegisterStrToXFn("uint8", strToUintSnippet("uint8"), imp)
+	RegisterStrToXFn("uint16", strToUintSnippet("uint16"), imp)
+	RegisterStrToXFn("uint32", strToUintSnippet("uint32"), imp)
+	RegisterStrToXFn("uint64", strToUintSnippet("uint64"), imp)
 
-	RegisterStrToFunc("float32", strToFloatSnippet("float32"), imp)
-	RegisterStrToFunc("float64", strToFloatSnippet("float64"), imp)
+	RegisterStrToXFn("float32", strToFloatSnippet("float32"), imp)
+	RegisterStrToXFn("float64", strToFloatSnippet("float64"), imp)
 
 	imp = []string{`"bytes"`, `"github.com/koykov/fastconv"`}
-	RegisterStrToFunc("[]byte", strToBytesSnippet("[]byte"), imp)
-	RegisterStrToFunc("string", strToStrSnippet("string"), nil)
-	RegisterStrToFunc("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/fastconv"`})
+	RegisterStrToXFn("[]byte", strToBytesSnippet("[]byte"), imp)
+	RegisterStrToXFn("string", strToStrSnippet("string"), nil)
+	RegisterStrToXFn("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/fastconv"`})
 
 	// Register functions to typecast to built-in types.
 	RegisterAssignFn(AssignToBytes)

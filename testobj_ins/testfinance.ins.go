@@ -100,7 +100,7 @@ func (i0 TestFinanceInspector) GetTo(src any, buf *any, path ...string) (err err
 	return
 }
 
-func (i0 TestFinanceInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i0 TestFinanceInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -282,7 +282,7 @@ func (i0 TestFinanceInspector) Cmp(src any, cond inspector.Op, right string, res
 	return
 }
 
-func (i0 TestFinanceInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i0 TestFinanceInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -325,7 +325,7 @@ func (i0 TestFinanceInspector) Loop(src any, l inspector.Looper, buf *[]byte, pa
 	return
 }
 
-func (i0 TestFinanceInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i0 TestFinanceInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -407,7 +407,7 @@ func (i0 TestFinanceInspector) SetWB(dst, value any, buf inspector.AccumulativeB
 }
 
 func (i0 TestFinanceInspector) Set(dst, value any, path ...string) error {
-	return i0.SetWB(dst, value, nil, path...)
+	return i0.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i0 TestFinanceInspector) DeepEqual(l, r any) bool {

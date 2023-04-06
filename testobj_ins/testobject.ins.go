@@ -194,7 +194,7 @@ func (i5 TestObjectInspector) GetTo(src any, buf *any, path ...string) (err erro
 	return
 }
 
-func (i5 TestObjectInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -631,7 +631,7 @@ func (i5 TestObjectInspector) Cmp(src any, cond inspector.Op, right string, resu
 	return
 }
 
-func (i5 TestObjectInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i5 TestObjectInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -743,7 +743,7 @@ func (i5 TestObjectInspector) Loop(src any, l inspector.Looper, buf *[]byte, pat
 	return
 }
 
-func (i5 TestObjectInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i5 TestObjectInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -947,7 +947,7 @@ func (i5 TestObjectInspector) SetWB(dst, value any, buf inspector.AccumulativeBu
 }
 
 func (i5 TestObjectInspector) Set(dst, value any, path ...string) error {
-	return i5.SetWB(dst, value, nil, path...)
+	return i5.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i5 TestObjectInspector) DeepEqual(l, r any) bool {

@@ -23,7 +23,7 @@ func NewByteBuffer(size int) *ByteBuffer {
 	return &b
 }
 
-func (ab ByteBuffer) AcquireBytes() []byte {
+func (ab *ByteBuffer) AcquireBytes() []byte {
 	return ab.b
 }
 

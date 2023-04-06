@@ -39,7 +39,7 @@ func (i ReflectInspector) GetTo(src any, buf *any, path ...string) error {
 	return err
 }
 
-func (i ReflectInspector) Cmp(_ any, _ Op, _ string, _ *bool, _ ...string) error {
+func (i ReflectInspector) Compare(_ any, _ Op, _ string, _ *bool, _ ...string) error {
 	// Empty method, I'm too lazy to implement it now.
 	return nil
 }
@@ -49,12 +49,12 @@ func (i ReflectInspector) Set(_, _ any, _ ...string) error {
 	return nil
 }
 
-func (i ReflectInspector) SetWB(_, _ any, _ AccumulativeBuffer, _ ...string) error {
+func (i ReflectInspector) SetWithBuffer(_, _ any, _ AccumulativeBuffer, _ ...string) error {
 	// Empty method, there is no way to update data using reflection.
 	return nil
 }
 
-func (i ReflectInspector) Loop(_ any, _ Looper, _ *[]byte, _ ...string) (err error) {
+func (i ReflectInspector) Loop(_ any, _ Iterator, _ *[]byte, _ ...string) (err error) {
 	// Empty method. todo implement it
 	return nil
 }

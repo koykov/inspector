@@ -111,7 +111,7 @@ func (i11 TestStructInspector) GetTo(src any, buf *any, path ...string) (err err
 	return
 }
 
-func (i11 TestStructInspector) Cmp(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
+func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -465,7 +465,7 @@ func (i11 TestStructInspector) Cmp(src any, cond inspector.Op, right string, res
 	return
 }
 
-func (i11 TestStructInspector) Loop(src any, l inspector.Looper, buf *[]byte, path ...string) (err error) {
+func (i11 TestStructInspector) Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {
 	if len(path) == 0 {
 		return
 	}
@@ -489,7 +489,7 @@ func (i11 TestStructInspector) Loop(src any, l inspector.Looper, buf *[]byte, pa
 	return
 }
 
-func (i11 TestStructInspector) SetWB(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
+func (i11 TestStructInspector) SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {
 	if len(path) == 0 {
 		return nil
 	}
@@ -574,7 +574,7 @@ func (i11 TestStructInspector) SetWB(dst, value any, buf inspector.AccumulativeB
 }
 
 func (i11 TestStructInspector) Set(dst, value any, path ...string) error {
-	return i11.SetWB(dst, value, nil, path...)
+	return i11.SetWithBuffer(dst, value, nil, path...)
 }
 
 func (i11 TestStructInspector) DeepEqual(l, r any) bool {
