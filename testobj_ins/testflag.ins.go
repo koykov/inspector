@@ -334,12 +334,6 @@ func (i1 TestFlagInspector) Length(src any, result *int, path ...string) error {
 		*result = len(*x)
 		return nil
 	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[path[0]]; ok {
-		_ = x0
-	}
 	return nil
 }
 
@@ -360,14 +354,11 @@ func (i1 TestFlagInspector) Capacity(src any, result *int, path ...string) error
 	}
 
 	*result = 0
+	if x == nil {
+		return nil
+	}
 	if len(path) == 0 {
 		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[path[0]]; ok {
-		_ = x0
 	}
 	return nil
 }

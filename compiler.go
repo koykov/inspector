@@ -105,6 +105,8 @@ type node struct {
 	slct *node
 	// Flag if node contains bytes or string inside.
 	hasb bool
+	// Flag if node contains string/bytes/slice/map inside.
+	hasc bool
 }
 
 var (
@@ -334,6 +336,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 			}
 			node.chld = append(node.chld, ch)
 			node.hasb = node.hasb || ch.hasb
+			node.hasc = node.hasc || ch.hasc
 		}
 		return node, nil
 	}
@@ -345,6 +348,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		node.mapk, err = c.parseType(m.Key())
 		node.mapv, err = c.parseType(m.Elem())
 		node.hasb = node.mapk.hasb || node.mapv.hasb
+		node.hasc = true
 		return node, err
 	}
 
@@ -354,6 +358,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		node.typ = typeSlice
 		node.slct, err = c.parseType(s.Elem())
 		node.hasb = node.typn == "[]byte" || node.slct.hasb
+		node.hasc = true
 		return node, err
 	}
 
@@ -361,6 +366,7 @@ func (c *Compiler) parseType(t types.Type) (*node, error) {
 		// Fill up the underlying type of basic node.
 		node.typu = b.Name()
 		node.hasb = node.typu == "string"
+		node.hasc = node.hasb
 	}
 
 	return node, nil
@@ -1331,11 +1337,6 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 		return node.typ == typeStruct || node.typ == typeMap || (node.typ == typeSlice && node.typu != "[]byte")
 	}
 
-	// requireLenCheck := node_.typ == typeStruct || node_.typ == typeMap || (node_.typ == typeSlice && node_.typu != "[]byte")
-	//
-	// if requireLenCheck {
-	// 	c.wl("if len(path) > ", depths, " {")
-	// }
 	if node_.ptr {
 		// Value may be nil on pointer types.
 		c.wl("if ", v, " == nil { return nil }")
@@ -1347,7 +1348,7 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 	switch node_.typ {
 	case typeStruct:
 		for _, ch := range node_.chld {
-			if ch.typ == typeBasic {
+			if ch.typ == typeBasic || !ch.hasc {
 				continue
 			}
 			c.wl("if path[", depths, "] == ", `"`, ch.name, `" {`)
@@ -1372,6 +1373,9 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 			c.wl("*result=", fn, "(", c.fmtVnb(node_, v, depth), ")")
 			c.wl("return nil")
 			c.wl("}")
+		}
+		if !node_.mapv.hasc {
+			return nil
 		}
 		nv := "x" + strconv.Itoa(depth)
 		c.wl("if len(path) < ", strconv.Itoa(depth+1), " { return nil }")
@@ -1413,6 +1417,9 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 			c.wl("*result=", fn, "(", c.fmtVnb(node_, v, depth), ")")
 			c.wl("return nil")
 		} else {
+			if !node_.slct.hasc {
+				return nil
+			}
 			c.wl("if len(path)==", depths, "{")
 			c.wl("*result=", fn, "(", c.fmtVnb(node_, v, depth), ")")
 			c.wl("return nil")

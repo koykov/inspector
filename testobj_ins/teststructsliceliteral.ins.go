@@ -48,11 +48,11 @@ func (i12 TestStructSliceLiteralInspector) GetTo(src any, buf *any, path ...stri
 
 	if len(path) > 0 {
 		var i int
-		t401, err401 := strconv.ParseInt(path[0], 0, 0)
-		if err401 != nil {
-			return err401
+		t371, err371 := strconv.ParseInt(path[0], 0, 0)
+		if err371 != nil {
+			return err371
 		}
-		i = int(t401)
+		i = int(t371)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -148,11 +148,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 
 	if len(path) > 0 {
 		var i int
-		t402, err402 := strconv.ParseInt(path[0], 0, 0)
-		if err402 != nil {
-			return err402
+		t372, err372 := strconv.ParseInt(path[0], 0, 0)
+		if err372 != nil {
+			return err372
 		}
-		i = int(t402)
+		i = int(t372)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -162,9 +162,9 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "A" {
 					var rightExact byte
-					t403 := fastconv.S2B(right)
-					if len(t403) > 0 {
-						rightExact = t403[0]
+					t373 := fastconv.S2B(right)
+					if len(t373) > 0 {
+						rightExact = t373[0]
 					}
 
 					switch cond {
@@ -216,11 +216,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "I" {
 					var rightExact int
-					t406, err406 := strconv.ParseInt(right, 0, 0)
-					if err406 != nil {
-						return err406
+					t376, err376 := strconv.ParseInt(right, 0, 0)
+					if err376 != nil {
+						return err376
 					}
-					rightExact = int(t406)
+					rightExact = int(t376)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.I == rightExact
@@ -239,11 +239,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "I8" {
 					var rightExact int8
-					t407, err407 := strconv.ParseInt(right, 0, 0)
-					if err407 != nil {
-						return err407
+					t377, err377 := strconv.ParseInt(right, 0, 0)
+					if err377 != nil {
+						return err377
 					}
-					rightExact = int8(t407)
+					rightExact = int8(t377)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.I8 == rightExact
@@ -262,11 +262,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "I16" {
 					var rightExact int16
-					t408, err408 := strconv.ParseInt(right, 0, 0)
-					if err408 != nil {
-						return err408
+					t378, err378 := strconv.ParseInt(right, 0, 0)
+					if err378 != nil {
+						return err378
 					}
-					rightExact = int16(t408)
+					rightExact = int16(t378)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.I16 == rightExact
@@ -285,11 +285,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "I32" {
 					var rightExact int32
-					t409, err409 := strconv.ParseInt(right, 0, 0)
-					if err409 != nil {
-						return err409
+					t379, err379 := strconv.ParseInt(right, 0, 0)
+					if err379 != nil {
+						return err379
 					}
-					rightExact = int32(t409)
+					rightExact = int32(t379)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.I32 == rightExact
@@ -308,11 +308,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "I64" {
 					var rightExact int64
-					t410, err410 := strconv.ParseInt(right, 0, 0)
-					if err410 != nil {
-						return err410
+					t380, err380 := strconv.ParseInt(right, 0, 0)
+					if err380 != nil {
+						return err380
 					}
-					rightExact = int64(t410)
+					rightExact = int64(t380)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.I64 == rightExact
@@ -331,11 +331,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "U" {
 					var rightExact uint
-					t411, err411 := strconv.ParseUint(right, 0, 0)
-					if err411 != nil {
-						return err411
+					t381, err381 := strconv.ParseUint(right, 0, 0)
+					if err381 != nil {
+						return err381
 					}
-					rightExact = uint(t411)
+					rightExact = uint(t381)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.U == rightExact
@@ -354,11 +354,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "U8" {
 					var rightExact uint8
-					t412, err412 := strconv.ParseUint(right, 0, 0)
-					if err412 != nil {
-						return err412
+					t382, err382 := strconv.ParseUint(right, 0, 0)
+					if err382 != nil {
+						return err382
 					}
-					rightExact = uint8(t412)
+					rightExact = uint8(t382)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.U8 == rightExact
@@ -377,11 +377,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "U16" {
 					var rightExact uint16
-					t413, err413 := strconv.ParseUint(right, 0, 0)
-					if err413 != nil {
-						return err413
+					t383, err383 := strconv.ParseUint(right, 0, 0)
+					if err383 != nil {
+						return err383
 					}
-					rightExact = uint16(t413)
+					rightExact = uint16(t383)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.U16 == rightExact
@@ -400,11 +400,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "U32" {
 					var rightExact uint32
-					t414, err414 := strconv.ParseUint(right, 0, 0)
-					if err414 != nil {
-						return err414
+					t384, err384 := strconv.ParseUint(right, 0, 0)
+					if err384 != nil {
+						return err384
 					}
-					rightExact = uint32(t414)
+					rightExact = uint32(t384)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.U32 == rightExact
@@ -423,11 +423,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "U64" {
 					var rightExact uint64
-					t415, err415 := strconv.ParseUint(right, 0, 0)
-					if err415 != nil {
-						return err415
+					t385, err385 := strconv.ParseUint(right, 0, 0)
+					if err385 != nil {
+						return err385
 					}
-					rightExact = uint64(t415)
+					rightExact = uint64(t385)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.U64 == rightExact
@@ -446,11 +446,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "F" {
 					var rightExact float32
-					t416, err416 := strconv.ParseFloat(right, 0)
-					if err416 != nil {
-						return err416
+					t386, err386 := strconv.ParseFloat(right, 0)
+					if err386 != nil {
+						return err386
 					}
-					rightExact = float32(t416)
+					rightExact = float32(t386)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.F == rightExact
@@ -469,11 +469,11 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "D" {
 					var rightExact float64
-					t417, err417 := strconv.ParseFloat(right, 0)
-					if err417 != nil {
-						return err417
+					t387, err387 := strconv.ParseFloat(right, 0)
+					if err387 != nil {
+						return err387
 					}
-					rightExact = float64(t417)
+					rightExact = float64(t387)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.D == rightExact
@@ -551,11 +551,11 @@ func (i12 TestStructSliceLiteralInspector) SetWithBuffer(dst, value any, buf ins
 
 	if len(path) > 0 {
 		var i int
-		t418, err418 := strconv.ParseInt(path[0], 0, 0)
-		if err418 != nil {
-			return err418
+		t388, err388 := strconv.ParseInt(path[0], 0, 0)
+		if err388 != nil {
+			return err388
 		}
-		i = int(t418)
+		i = int(t388)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -859,11 +859,11 @@ func (i12 TestStructSliceLiteralInspector) Length(src any, result *int, path ...
 		return nil
 	}
 	var i int
-	t419, err419 := strconv.ParseInt(path[0], 0, 0)
-	if err419 != nil {
-		return err419
+	t389, err389 := strconv.ParseInt(path[0], 0, 0)
+	if err389 != nil {
+		return err389
 	}
-	i = int(t419)
+	i = int(t389)
 	if len(*x) > i {
 		x0 := (*x)[i]
 		_ = x0
@@ -909,11 +909,11 @@ func (i12 TestStructSliceLiteralInspector) Capacity(src any, result *int, path .
 		return nil
 	}
 	var i int
-	t420, err420 := strconv.ParseInt(path[0], 0, 0)
-	if err420 != nil {
-		return err420
+	t390, err390 := strconv.ParseInt(path[0], 0, 0)
+	if err390 != nil {
+		return err390
 	}
-	i = int(t420)
+	i = int(t390)
 	if len(*x) > i {
 		x0 := (*x)[i]
 		_ = x0

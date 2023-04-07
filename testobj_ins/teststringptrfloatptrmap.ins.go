@@ -335,15 +335,6 @@ func (i10 TestStringPtrFloatPtrMapInspector) Length(src any, result *int, path .
 		*result = len(*x)
 		return nil
 	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[&path[0]]; ok {
-		_ = x0
-		if x0 == nil {
-			return nil
-		}
-	}
 	return nil
 }
 
@@ -364,17 +355,11 @@ func (i10 TestStringPtrFloatPtrMapInspector) Capacity(src any, result *int, path
 	}
 
 	*result = 0
+	if x == nil {
+		return nil
+	}
 	if len(path) == 0 {
 		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[&path[0]]; ok {
-		_ = x0
-		if x0 == nil {
-			return nil
-		}
 	}
 	return nil
 }

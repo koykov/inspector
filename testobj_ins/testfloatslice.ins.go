@@ -46,11 +46,11 @@ func (i3 TestFloatSliceInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var i int
-		t18, err18 := strconv.ParseInt(path[0], 0, 0)
-		if err18 != nil {
-			return err18
+		t16, err16 := strconv.ParseInt(path[0], 0, 0)
+		if err16 != nil {
+			return err16
 		}
-		i = int(t18)
+		i = int(t16)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -82,20 +82,20 @@ func (i3 TestFloatSliceInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var i int
-		t19, err19 := strconv.ParseInt(path[0], 0, 0)
-		if err19 != nil {
-			return err19
+		t17, err17 := strconv.ParseInt(path[0], 0, 0)
+		if err17 != nil {
+			return err17
 		}
-		i = int(t19)
+		i = int(t17)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
 			var rightExact float32
-			t20, err20 := strconv.ParseFloat(right, 0)
-			if err20 != nil {
-				return err20
+			t18, err18 := strconv.ParseFloat(right, 0)
+			if err18 != nil {
+				return err18
 			}
-			rightExact = float32(t20)
+			rightExact = float32(t18)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -171,11 +171,11 @@ func (i3 TestFloatSliceInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var i int
-		t21, err21 := strconv.ParseInt(path[0], 0, 0)
-		if err21 != nil {
-			return err21
+		t19, err19 := strconv.ParseInt(path[0], 0, 0)
+		if err19 != nil {
+			return err19
 		}
-		i = int(t21)
+		i = int(t19)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -342,23 +342,6 @@ func (i3 TestFloatSliceInspector) Length(src any, result *int, path ...string) e
 	if len(path) == 0 {
 		return nil
 	}
-	if len(path) == 0 {
-		*result = len(*x)
-		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	var i int
-	t22, err22 := strconv.ParseInt(path[0], 0, 0)
-	if err22 != nil {
-		return err22
-	}
-	i = int(t22)
-	if len(*x) > i {
-		x0 := (*x)[i]
-		_ = x0
-	}
 	return nil
 }
 
@@ -381,23 +364,6 @@ func (i3 TestFloatSliceInspector) Capacity(src any, result *int, path ...string)
 	*result = 0
 	if len(path) == 0 {
 		return nil
-	}
-	if len(path) == 0 {
-		*result = cap(*x)
-		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	var i int
-	t23, err23 := strconv.ParseInt(path[0], 0, 0)
-	if err23 != nil {
-		return err23
-	}
-	i = int(t23)
-	if len(*x) > i {
-		x0 := (*x)[i]
-		_ = x0
 	}
 	return nil
 }

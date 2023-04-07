@@ -344,26 +344,6 @@ func (i2 TestFloatPtrSliceInspector) Length(src any, result *int, path ...string
 	if len(path) == 0 {
 		return nil
 	}
-	if len(path) == 0 {
-		*result = len(*x)
-		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	var i int
-	t16, err16 := strconv.ParseInt(path[0], 0, 0)
-	if err16 != nil {
-		return err16
-	}
-	i = int(t16)
-	if len(*x) > i {
-		x0 := (*x)[i]
-		_ = x0
-		if x0 == nil {
-			return nil
-		}
-	}
 	return nil
 }
 
@@ -386,26 +366,6 @@ func (i2 TestFloatPtrSliceInspector) Capacity(src any, result *int, path ...stri
 	*result = 0
 	if len(path) == 0 {
 		return nil
-	}
-	if len(path) == 0 {
-		*result = cap(*x)
-		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	var i int
-	t17, err17 := strconv.ParseInt(path[0], 0, 0)
-	if err17 != nil {
-		return err17
-	}
-	i = int(t17)
-	if len(*x) > i {
-		x0 := (*x)[i]
-		_ = x0
-		if x0 == nil {
-			return nil
-		}
 	}
 	return nil
 }

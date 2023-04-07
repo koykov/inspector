@@ -46,11 +46,11 @@ func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var k int32
-		t379, err379 := strconv.ParseInt(path[0], 0, 0)
-		if err379 != nil {
-			return err379
+		t351, err351 := strconv.ParseInt(path[0], 0, 0)
+		if err351 != nil {
+			return err351
 		}
-		k = int32(t379)
+		k = int32(t351)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -80,19 +80,19 @@ func (i7 TestPermissionInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var k int32
-		t380, err380 := strconv.ParseInt(path[0], 0, 0)
-		if err380 != nil {
-			return err380
+		t352, err352 := strconv.ParseInt(path[0], 0, 0)
+		if err352 != nil {
+			return err352
 		}
-		k = int32(t380)
+		k = int32(t352)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t381, err381 := strconv.ParseBool(right)
-		if err381 != nil {
-			return err381
+		t353, err353 := strconv.ParseBool(right)
+		if err353 != nil {
+			return err353
 		}
-		rightExact = bool(t381)
+		rightExact = bool(t353)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -161,11 +161,11 @@ func (i7 TestPermissionInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t382, err382 := strconv.ParseInt(path[0], 0, 0)
-		if err382 != nil {
-			return err382
+		t354, err354 := strconv.ParseInt(path[0], 0, 0)
+		if err354 != nil {
+			return err354
 		}
-		k = int32(t382)
+		k = int32(t354)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
@@ -337,17 +337,6 @@ func (i7 TestPermissionInspector) Length(src any, result *int, path ...string) e
 		*result = len(*x)
 		return nil
 	}
-	if len(path) < 1 {
-		return nil
-	}
-	var k int32
-	t383, err383 := strconv.ParseInt(path[0], 0, 0)
-	if err383 != nil {
-		return err383
-	}
-	k = int32(t383)
-	x0 := (*x)[k]
-	_ = x0
 	return nil
 }
 
@@ -368,20 +357,12 @@ func (i7 TestPermissionInspector) Capacity(src any, result *int, path ...string)
 	}
 
 	*result = 0
+	if x == nil {
+		return nil
+	}
 	if len(path) == 0 {
 		return nil
 	}
-	if len(path) < 1 {
-		return nil
-	}
-	var k int32
-	t384, err384 := strconv.ParseInt(path[0], 0, 0)
-	if err384 != nil {
-		return err384
-	}
-	k = int32(t384)
-	x0 := (*x)[k]
-	_ = x0
 	return nil
 }
 

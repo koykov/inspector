@@ -85,11 +85,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t24, err24 := strconv.ParseInt(right, 0, 0)
-			if err24 != nil {
-				return err24
+			t20, err20 := strconv.ParseInt(right, 0, 0)
+			if err20 != nil {
+				return err20
 			}
-			rightExact = int64(t24)
+			rightExact = int64(t20)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -108,11 +108,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t25, err25 := strconv.ParseFloat(right, 0)
-			if err25 != nil {
-				return err25
+			t21, err21 := strconv.ParseFloat(right, 0)
+			if err21 != nil {
+				return err21
 			}
-			rightExact = float64(t25)
+			rightExact = float64(t21)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact

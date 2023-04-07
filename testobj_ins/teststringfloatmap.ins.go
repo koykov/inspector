@@ -77,11 +77,11 @@ func (i8 TestStringFloatMapInspector) Compare(src any, cond inspector.Op, right 
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact float64
-			t385, err385 := strconv.ParseFloat(right, 0)
-			if err385 != nil {
-				return err385
+			t355, err355 := strconv.ParseFloat(right, 0)
+			if err355 != nil {
+				return err355
 			}
-			rightExact = float64(t385)
+			rightExact = float64(t355)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -334,12 +334,6 @@ func (i8 TestStringFloatMapInspector) Length(src any, result *int, path ...strin
 		*result = len(*x)
 		return nil
 	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[path[0]]; ok {
-		_ = x0
-	}
 	return nil
 }
 
@@ -360,14 +354,11 @@ func (i8 TestStringFloatMapInspector) Capacity(src any, result *int, path ...str
 	}
 
 	*result = 0
+	if x == nil {
+		return nil
+	}
 	if len(path) == 0 {
 		return nil
-	}
-	if len(path) < 1 {
-		return nil
-	}
-	if x0, ok := (*x)[path[0]]; ok {
-		_ = x0
 	}
 	return nil
 }
