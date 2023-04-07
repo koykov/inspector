@@ -573,6 +573,104 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 	return buf, nil
 }
 
+func (i0 TestFinanceInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if path[0] == "History" {
+		if len(path) == 1 {
+			*result = len(x.History)
+			return nil
+		}
+		if len(path) < 2 {
+			return nil
+		}
+		var i int
+		t10, err10 := strconv.ParseInt(path[1], 0, 0)
+		if err10 != nil {
+			return err10
+		}
+		i = int(t10)
+		if len(x.History) > i {
+			x1 := &(x.History)[i]
+			_ = x1
+			if len(path) < 3 {
+				return nil
+			}
+			if path[2] == "Comment" {
+				*result = len(x1.Comment)
+				return nil
+			}
+		}
+	}
+	return nil
+}
+
+func (i0 TestFinanceInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if path[0] == "History" {
+		if len(path) == 1 {
+			*result = cap(x.History)
+			return nil
+		}
+		if len(path) < 2 {
+			return nil
+		}
+		var i int
+		t11, err11 := strconv.ParseInt(path[1], 0, 0)
+		if err11 != nil {
+			return err11
+		}
+		i = int(t11)
+		if len(x.History) > i {
+			x1 := &(x.History)[i]
+			_ = x1
+			if len(path) < 3 {
+				return nil
+			}
+			if path[2] == "Comment" {
+				*result = cap(x1.Comment)
+				return nil
+			}
+		}
+	}
+	return nil
+}
+
 func (i0 TestFinanceInspector) Reset(x any) error {
 	var origin *testobj.TestFinance
 	_ = origin

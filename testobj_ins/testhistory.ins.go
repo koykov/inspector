@@ -85,11 +85,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t18, err18 := strconv.ParseInt(right, 0, 0)
-			if err18 != nil {
-				return err18
+			t24, err24 := strconv.ParseInt(right, 0, 0)
+			if err24 != nil {
+				return err24
 			}
-			rightExact = int64(t18)
+			rightExact = int64(t24)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -108,11 +108,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t19, err19 := strconv.ParseFloat(right, 0)
-			if err19 != nil {
-				return err19
+			t25, err25 := strconv.ParseFloat(right, 0)
+			if err25 != nil {
+				return err25
 			}
-			rightExact = float64(t19)
+			rightExact = float64(t25)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -325,6 +325,60 @@ func (i4 TestHistoryInspector) cpy(buf []byte, l, r *testobj.TestHistory) ([]byt
 	l.Cost = r.Cost
 	buf, l.Comment = inspector.Bufferize(buf, r.Comment)
 	return buf, nil
+}
+
+func (i4 TestHistoryInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if path[0] == "Comment" {
+		*result = len(x.Comment)
+		return nil
+	}
+	return nil
+}
+
+func (i4 TestHistoryInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if path[0] == "Comment" {
+		*result = cap(x.Comment)
+		return nil
+	}
+	return nil
 }
 
 func (i4 TestHistoryInspector) Reset(x any) error {

@@ -77,11 +77,11 @@ func (i8 TestStringFloatMapInspector) Compare(src any, cond inspector.Op, right 
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact float64
-			t319, err319 := strconv.ParseFloat(right, 0)
-			if err319 != nil {
-				return err319
+			t385, err385 := strconv.ParseFloat(right, 0)
+			if err385 != nil {
+				return err385
 			}
-			rightExact = float64(t319)
+			rightExact = float64(t385)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -308,6 +308,68 @@ func (i8 TestStringFloatMapInspector) cpy(buf []byte, l, r *testobj.TestStringFl
 		}
 	}
 	return buf, nil
+}
+
+func (i8 TestStringFloatMapInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringFloatMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringFloatMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringFloatMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringFloatMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) == 0 {
+		*result = len(*x)
+		return nil
+	}
+	if len(path) < 1 {
+		return nil
+	}
+	if x0, ok := (*x)[path[0]]; ok {
+		_ = x0
+	}
+	return nil
+}
+
+func (i8 TestStringFloatMapInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringFloatMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringFloatMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringFloatMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringFloatMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) < 1 {
+		return nil
+	}
+	if x0, ok := (*x)[path[0]]; ok {
+		_ = x0
+	}
+	return nil
 }
 
 func (i8 TestStringFloatMapInspector) Reset(x any) error {

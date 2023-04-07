@@ -27,6 +27,10 @@ type Inspector interface {
 	Copy(x any) (any, error)
 	// CopyTo makes a copy of src to dst using buffer.
 	CopyTo(src, dst any, buf AccumulativeBuffer) error
+	// Length puts length of field value by path in src to the buffer.
+	Length(src any, result *int, path ...string) error
+	// Capacity puts capacity of field value by path in src to the buffer.
+	Capacity(src any, result *int, path ...string) error
 	// Reset resets x.
 	Reset(x any) error
 }

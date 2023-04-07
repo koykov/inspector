@@ -311,6 +311,74 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 	return buf, nil
 }
 
+func (i10 TestStringPtrFloatPtrMapInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringPtrFloatPtrMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringPtrFloatPtrMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringPtrFloatPtrMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringPtrFloatPtrMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) == 0 {
+		*result = len(*x)
+		return nil
+	}
+	if len(path) < 1 {
+		return nil
+	}
+	if x0, ok := (*x)[&path[0]]; ok {
+		_ = x0
+		if x0 == nil {
+			return nil
+		}
+	}
+	return nil
+}
+
+func (i10 TestStringPtrFloatPtrMapInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringPtrFloatPtrMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringPtrFloatPtrMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringPtrFloatPtrMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringPtrFloatPtrMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) < 1 {
+		return nil
+	}
+	if x0, ok := (*x)[&path[0]]; ok {
+		_ = x0
+		if x0 == nil {
+			return nil
+		}
+	}
+	return nil
+}
+
 func (i10 TestStringPtrFloatPtrMapInspector) Reset(x any) error {
 	var origin *testobj.TestStringPtrFloatPtrMap
 	_ = origin
