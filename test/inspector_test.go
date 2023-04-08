@@ -225,39 +225,42 @@ func testComparePtr(t testing.TB, i inspector.Inspector, buf *bool) {
 }
 
 func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.AccumulativeBuffer) {
-	testO.Id = ""
-	_ = i.SetWithBuffer(testO, 1984, ab, p0...)
-	if testO.Id != "1984" {
+	cins := testobj_ins.TestObjectInspector{}
+	obj1, _ := cins.Copy(testO)
+	obj := obj1.(*testobj.TestObject)
+	obj.Id = ""
+	_ = i.SetWithBuffer(obj, 1984, ab, p0...)
+	if obj.Id != "1984" {
 		t.Error("object.Id: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, 2000, ab, p1...)
-	if !bytes.Equal(testO.Name, expectName) {
+	_ = i.SetWithBuffer(obj, 2000, ab, p1...)
+	if !bytes.Equal(obj.Name, expectName) {
 		t.Error("object.Name: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, false, ab, p2...)
-	if (*testO.Permission)[23] != false {
+	_ = i.SetWithBuffer(obj, false, ab, p2...)
+	if (*obj.Permission)[23] != false {
 		t.Error("object.Permission.23: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, int32(23), ab, p3...)
-	if testO.Flags["export"] != 23 {
+	_ = i.SetWithBuffer(obj, int32(23), ab, p3...)
+	if obj.Flags["export"] != 23 {
 		t.Error("object.Flags.export: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, float64(9000), ab, p4...)
-	if testO.Finance.Balance != 9000 {
+	_ = i.SetWithBuffer(obj, float64(9000), ab, p4...)
+	if obj.Finance.Balance != 9000 {
 		t.Error("object.Finance.Balance: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, int64(153465345246), ab, p5...)
-	if testO.Finance.History[1].DateUnix != 153465345246 {
+	_ = i.SetWithBuffer(obj, int64(153465345246), ab, p5...)
+	if obj.Finance.History[1].DateUnix != 153465345246 {
 		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
 	}
 
-	_ = i.SetWithBuffer(testO, &expectComment1, ab, p6...)
-	if !bytes.Equal(testO.Finance.History[0].Comment, expectComment1) {
+	_ = i.SetWithBuffer(obj, &expectComment1, ab, p6...)
+	if !bytes.Equal(obj.Finance.History[0].Comment, expectComment1) {
 		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
 	}
 }
@@ -302,6 +305,45 @@ func TestInspectorCopy(t *testing.T) {
 	cpy, _ := ins.Copy(obj)
 	obj.Name[0] = 'F'
 	if bytes.Equal(obj.Name, cpy.(*testobj.TestObject).Name) {
+		t.FailNow()
+	}
+}
+
+func TestInspectorLenCap(t *testing.T) {
+	ins := testobj_ins.TestObjectInspector{}
+	obj := *testO
+	var l, c int
+
+	_ = ins.Length(obj, &l, p0...)
+	if l != 3 {
+		t.FailNow()
+	}
+
+	_ = ins.Length(obj, &l, p1...)
+	_ = ins.Capacity(obj, &c, p1...)
+	if l != 3 || c != 3 {
+		t.FailNow()
+	}
+
+	_ = ins.Length(obj, &l, "Permission")
+	if l != 2 {
+		t.FailNow()
+	}
+
+	_ = ins.Length(obj, &l, "Flags")
+	if l != 4 {
+		t.FailNow()
+	}
+
+	_ = ins.Length(obj, &l, "Finance", "History")
+	_ = ins.Capacity(obj, &c, "Finance", "History")
+	if l != 3 || c != 3 {
+		t.FailNow()
+	}
+
+	_ = ins.Length(obj, &l, p6...)
+	_ = ins.Capacity(obj, &c, p6...)
+	if l != 14 || c != 14 {
 		t.FailNow()
 	}
 }
@@ -449,5 +491,31 @@ func BenchmarkInspectorCopy(b *testing.B) {
 			FloatStructPtrMap: map[float64]*testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
 		}
 		fn1(b, &origin)
+	})
+}
+
+func BenchmarkInspectorLenCap(b *testing.B) {
+	ins := testobj_ins.TestObjectInspector{}
+	obj := *testO
+	path := []string{"Finance", "History"}
+	b.Run("len", func(b *testing.B) {
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			var l int
+			_ = ins.Length(obj, &l, path...)
+			if l != 3 {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("cap", func(b *testing.B) {
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			var c int
+			_ = ins.Capacity(obj, &c, path...)
+			if c != 3 {
+				b.FailNow()
+			}
+		}
 	})
 }
