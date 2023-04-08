@@ -873,6 +873,10 @@ func (i12 TestStructSliceLiteralInspector) Length(src any, result *int, path ...
 		if x0 == nil {
 			return nil
 		}
+		if path[1] == "S" {
+			*result = len(x0.S)
+			return nil
+		}
 		if path[1] == "B" {
 			*result = len(x0.B)
 			return nil
@@ -922,6 +926,8 @@ func (i12 TestStructSliceLiteralInspector) Capacity(src any, result *int, path .
 		}
 		if x0 == nil {
 			return nil
+		}
+		if path[1] == "S" {
 		}
 		if path[1] == "B" {
 			*result = cap(x0.B)

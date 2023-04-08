@@ -1348,7 +1348,7 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 	switch node_.typ {
 	case typeStruct:
 		for _, ch := range node_.chld {
-			if ch.typ == typeBasic || !ch.hasc {
+			if (ch.typ == typeBasic && ch.typu != "string") || !ch.hasc {
 				continue
 			}
 			c.wl("if path[", depths, "] == ", `"`, ch.name, `" {`)

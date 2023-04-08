@@ -11074,6 +11074,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 			if len(path) < 3 {
 				return nil
 			}
+			if path[2] == "S" {
+				*result = len(x1.S)
+				return nil
+			}
 			if path[2] == "B" {
 				*result = len(x1.B)
 				return nil
@@ -11101,6 +11105,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 				return nil
 			}
 			if x1 == nil {
+				return nil
+			}
+			if path[2] == "S" {
+				*result = len(x1.S)
 				return nil
 			}
 			if path[2] == "B" {
@@ -11131,6 +11139,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 				x1 := &(*x.StructSlicePtr)[i]
 				_ = x1
 				if len(path) < 3 {
+					return nil
+				}
+				if path[2] == "S" {
+					*result = len(x1.S)
 					return nil
 				}
 				if path[2] == "B" {
@@ -11167,6 +11179,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 				if x1 == nil {
 					return nil
 				}
+				if path[2] == "S" {
+					*result = len(x1.S)
+					return nil
+				}
 				if path[2] == "B" {
 					*result = len(x1.B)
 					return nil
@@ -11195,6 +11211,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 				return nil
 			}
 			if x1 == nil {
+				return nil
+			}
+			if path[2] == "S" {
+				*result = len(x1.S)
 				return nil
 			}
 			if path[2] == "B" {
@@ -11410,6 +11430,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 		if len(path) < 3 {
 			return nil
 		}
+		if path[2] == "S" {
+			*result = len(x1.S)
+			return nil
+		}
 		if path[2] == "B" {
 			*result = len(x1.B)
 			return nil
@@ -11437,6 +11461,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 		if x1 == nil {
 			return nil
 		}
+		if path[2] == "S" {
+			*result = len(x1.S)
+			return nil
+		}
 		if path[2] == "B" {
 			*result = len(x1.B)
 			return nil
@@ -11459,6 +11487,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 		x1 := (x.FloatPtrStructMap)[&k]
 		_ = x1
 		if len(path) < 3 {
+			return nil
+		}
+		if path[2] == "S" {
+			*result = len(x1.S)
 			return nil
 		}
 		if path[2] == "B" {
@@ -11486,6 +11518,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 			return nil
 		}
 		if x1 == nil {
+			return nil
+		}
+		if path[2] == "S" {
+			*result = len(x1.S)
 			return nil
 		}
 		if path[2] == "B" {
@@ -11519,6 +11555,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 			if x1 == nil {
 				return nil
 			}
+			if path[2] == "S" {
+				*result = len(x1.S)
+				return nil
+			}
 			if path[2] == "B" {
 				*result = len(x1.B)
 				return nil
@@ -11526,6 +11566,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 		}
 	}
 	if path[0] == "NestedStruct" {
+		if path[1] == "S" {
+			*result = len(x.NestedStruct.S)
+			return nil
+		}
 		if path[1] == "B" {
 			*result = len(x.NestedStruct.B)
 			return nil
@@ -11534,6 +11578,10 @@ func (i6 TestObject1Inspector) Length(src any, result *int, path ...string) erro
 	if path[0] == "NestedStructPtr" {
 		if x.NestedStructPtr != nil {
 			if x.NestedStructPtr == nil {
+				return nil
+			}
+			if path[1] == "S" {
+				*result = len(x.NestedStructPtr.S)
 				return nil
 			}
 			if path[1] == "B" {
@@ -11643,6 +11691,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 			if len(path) < 3 {
 				return nil
 			}
+			if path[2] == "S" {
+			}
 			if path[2] == "B" {
 				*result = cap(x1.B)
 				return nil
@@ -11671,6 +11721,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 			}
 			if x1 == nil {
 				return nil
+			}
+			if path[2] == "S" {
 			}
 			if path[2] == "B" {
 				*result = cap(x1.B)
@@ -11701,6 +11753,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 				_ = x1
 				if len(path) < 3 {
 					return nil
+				}
+				if path[2] == "S" {
 				}
 				if path[2] == "B" {
 					*result = cap(x1.B)
@@ -11736,6 +11790,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 				if x1 == nil {
 					return nil
 				}
+				if path[2] == "S" {
+				}
 				if path[2] == "B" {
 					*result = cap(x1.B)
 					return nil
@@ -11765,6 +11821,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 			}
 			if x1 == nil {
 				return nil
+			}
+			if path[2] == "S" {
 			}
 			if path[2] == "B" {
 				*result = cap(x1.B)
@@ -11917,6 +11975,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		if len(path) < 3 {
 			return nil
 		}
+		if path[2] == "S" {
+		}
 		if path[2] == "B" {
 			*result = cap(x1.B)
 			return nil
@@ -11940,6 +12000,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		if x1 == nil {
 			return nil
 		}
+		if path[2] == "S" {
+		}
 		if path[2] == "B" {
 			*result = cap(x1.B)
 			return nil
@@ -11959,6 +12021,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		_ = x1
 		if len(path) < 3 {
 			return nil
+		}
+		if path[2] == "S" {
 		}
 		if path[2] == "B" {
 			*result = cap(x1.B)
@@ -11982,6 +12046,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		}
 		if x1 == nil {
 			return nil
+		}
+		if path[2] == "S" {
 		}
 		if path[2] == "B" {
 			*result = cap(x1.B)
@@ -12010,6 +12076,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 			if x1 == nil {
 				return nil
 			}
+			if path[2] == "S" {
+			}
 			if path[2] == "B" {
 				*result = cap(x1.B)
 				return nil
@@ -12017,6 +12085,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		}
 	}
 	if path[0] == "NestedStruct" {
+		if path[1] == "S" {
+		}
 		if path[1] == "B" {
 			*result = cap(x.NestedStruct.B)
 			return nil
@@ -12026,6 +12096,8 @@ func (i6 TestObject1Inspector) Capacity(src any, result *int, path ...string) er
 		if x.NestedStructPtr != nil {
 			if x.NestedStructPtr == nil {
 				return nil
+			}
+			if path[1] == "S" {
 			}
 			if path[1] == "B" {
 				*result = cap(x.NestedStructPtr.B)

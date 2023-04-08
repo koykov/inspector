@@ -765,6 +765,10 @@ func (i11 TestStructInspector) Length(src any, result *int, path ...string) erro
 	if len(path) == 0 {
 		return nil
 	}
+	if path[0] == "S" {
+		*result = len(x.S)
+		return nil
+	}
 	if path[0] == "B" {
 		*result = len(x.B)
 		return nil
@@ -791,6 +795,8 @@ func (i11 TestStructInspector) Capacity(src any, result *int, path ...string) er
 	*result = 0
 	if len(path) == 0 {
 		return nil
+	}
+	if path[0] == "S" {
 	}
 	if path[0] == "B" {
 		*result = cap(x.B)

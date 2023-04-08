@@ -1300,6 +1300,10 @@ func (i5 TestObjectInspector) Length(src any, result *int, path ...string) error
 	if len(path) == 0 {
 		return nil
 	}
+	if path[0] == "Id" {
+		*result = len(x.Id)
+		return nil
+	}
 	if path[0] == "Name" {
 		*result = len(x.Name)
 		return nil
@@ -1398,6 +1402,8 @@ func (i5 TestObjectInspector) Capacity(src any, result *int, path ...string) err
 	*result = 0
 	if len(path) == 0 {
 		return nil
+	}
+	if path[0] == "Id" {
 	}
 	if path[0] == "Name" {
 		*result = cap(x.Name)
