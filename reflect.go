@@ -136,4 +136,8 @@ func (i ReflectInspector) CopyTo(_, _ any, _ AccumulativeBuffer) error {
 	return nil
 }
 
+func (i ReflectInspector) Length(_ any, _ *int, _ ...string) error { return nil }
+
+func (i ReflectInspector) Capacity(_ any, _ *int, _ ...string) error { return nil }
+
 func (i ReflectInspector) Reset(_ any) error { return nil }

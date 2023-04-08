@@ -46,11 +46,11 @@ func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var k int32
-		t315, err315 := strconv.ParseInt(path[0], 0, 0)
-		if err315 != nil {
-			return err315
+		t351, err351 := strconv.ParseInt(path[0], 0, 0)
+		if err351 != nil {
+			return err351
 		}
-		k = int32(t315)
+		k = int32(t351)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -80,19 +80,19 @@ func (i7 TestPermissionInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var k int32
-		t316, err316 := strconv.ParseInt(path[0], 0, 0)
-		if err316 != nil {
-			return err316
+		t352, err352 := strconv.ParseInt(path[0], 0, 0)
+		if err352 != nil {
+			return err352
 		}
-		k = int32(t316)
+		k = int32(t352)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t317, err317 := strconv.ParseBool(right)
-		if err317 != nil {
-			return err317
+		t353, err353 := strconv.ParseBool(right)
+		if err353 != nil {
+			return err353
 		}
-		rightExact = bool(t317)
+		rightExact = bool(t353)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -161,11 +161,11 @@ func (i7 TestPermissionInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t318, err318 := strconv.ParseInt(path[0], 0, 0)
-		if err318 != nil {
-			return err318
+		t354, err354 := strconv.ParseInt(path[0], 0, 0)
+		if err354 != nil {
+			return err354
 		}
-		k = int32(t318)
+		k = int32(t354)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
@@ -311,6 +311,59 @@ func (i7 TestPermissionInspector) cpy(buf []byte, l, r *testobj.TestPermission) 
 		}
 	}
 	return buf, nil
+}
+
+func (i7 TestPermissionInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestPermission
+	_ = x
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestPermission); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) == 0 {
+		*result = len(*x)
+		return nil
+	}
+	return nil
+}
+
+func (i7 TestPermissionInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestPermission
+	_ = x
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestPermission); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if x == nil {
+		return nil
+	}
+	if len(path) == 0 {
+		return nil
+	}
+	return nil
 }
 
 func (i7 TestPermissionInspector) Reset(x any) error {

@@ -77,11 +77,11 @@ func (i1 TestFlagInspector) Compare(src any, cond inspector.Op, right string, re
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact int32
-			t10, err10 := strconv.ParseInt(right, 0, 0)
-			if err10 != nil {
-				return err10
+			t12, err12 := strconv.ParseInt(right, 0, 0)
+			if err12 != nil {
+				return err12
 			}
-			rightExact = int32(t10)
+			rightExact = int32(t12)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -308,6 +308,59 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, err
 		}
 	}
 	return buf, nil
+}
+
+func (i1 TestFlagInspector) Length(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFlag
+	_ = x
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFlag); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if len(path) == 0 {
+		return nil
+	}
+	if len(path) == 0 {
+		*result = len(*x)
+		return nil
+	}
+	return nil
+}
+
+func (i1 TestFlagInspector) Capacity(src any, result *int, path ...string) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFlag
+	_ = x
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFlag); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	*result = 0
+	if x == nil {
+		return nil
+	}
+	if len(path) == 0 {
+		return nil
+	}
+	return nil
 }
 
 func (i1 TestFlagInspector) Reset(x any) error {

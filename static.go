@@ -633,6 +633,18 @@ func (i StaticInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 	return nil
 }
 
+func (i StaticInspector) Length(x any, result *int, _ ...string) error {
+	l, _ := i.lc(x)
+	*result = l
+	return nil
+}
+
+func (i StaticInspector) Capacity(x any, result *int, _ ...string) error {
+	_, c := i.lc(x)
+	*result = c
+	return nil
+}
+
 func (i StaticInspector) Reset(x any) error {
 	switch x.(type) {
 	case bool:
@@ -866,4 +878,23 @@ func (i StaticInspector) indBytes(x any) ([]byte, bool) {
 
 func (i StaticInspector) eqlf64(a, b float64) bool {
 	return math.Abs(a-b) <= FloatPrecision
+}
+
+func (i StaticInspector) lc(x any) (int, int) {
+	switch x.(type) {
+	case []byte:
+		p := x.([]byte)
+		return len(p), cap(p)
+	case *[]byte:
+		p := *x.(*[]byte)
+		return len(p), cap(p)
+	case string:
+		s := x.(string)
+		return len(s), len(s)
+	case *string:
+		s := *x.(*string)
+		return len(s), len(s)
+	default:
+		return 0, 0
+	}
 }
