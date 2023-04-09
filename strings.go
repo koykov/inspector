@@ -122,8 +122,53 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 }
 
 func (i StringsInspector) Compare(src any, cond Op, right string, result *bool, path ...string) error {
-	_, _, _, _, _ = src, cond, right, result, path
-	// todo: implement me
+	if len(path) != 1 {
+		return nil
+	}
+	var (
+		ss []string
+		pp [][]byte
+	)
+	switch src.(type) {
+	case []string:
+		ss = src.([]string)
+	case *[]string:
+		ss = *(src.(*[]string))
+	case [][]byte:
+		pp = src.([][]byte)
+	case *[][]byte:
+		pp = *(src.(*[][]byte))
+	default:
+		return nil
+	}
+	idx, err := strconv.Atoi(path[0])
+	if err != nil {
+		return err
+	}
+	if idx < 0 {
+		return nil
+	}
+	var s string
+	switch {
+	case len(ss) > 0 && idx < len(ss):
+		s = ss[idx]
+	case len(pp) > 0 && idx < len(pp):
+		s = fastconv.B2S(pp[idx])
+	}
+	switch cond {
+	case OpNq:
+		*result = s != right
+	case OpEq:
+		*result = s == right
+	case OpGt:
+		*result = s > right
+	case OpGtq:
+		*result = s >= right
+	case OpLt:
+		*result = s < right
+	case OpLtq:
+		*result = s <= right
+	}
 	return nil
 }
 

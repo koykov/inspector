@@ -22,6 +22,17 @@ func TestStrings(t *testing.T) {
 			t.FailNow()
 		}
 	})
+	t.Run("compare", func(t *testing.T) {
+		var r bool
+		_ = ins.Compare(&ss, inspector.OpEq, "asd", &r, "1")
+		if !r {
+			t.FailNow()
+		}
+		_ = ins.Compare(&ss, inspector.OpNq, "bar", &r, "1")
+		if !r {
+			t.FailNow()
+		}
+	})
 }
 
 func BenchmarkStrings(b *testing.B) {
@@ -46,6 +57,18 @@ func BenchmarkStrings(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			_ = ins.SetWithBuffer(&ss, &s, &buf, p...)
 			if ss[1] != "asd" {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("compare", func(b *testing.B) {
+		b.ReportAllocs()
+		s := "asd"
+		var r bool
+		p := []string{"1"}
+		for i := 0; i < b.N; i++ {
+			_ = ins.Compare(&ss, inspector.OpEq, s, &r, p...)
+			if !r {
 				b.FailNow()
 			}
 		}
