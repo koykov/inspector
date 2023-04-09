@@ -59,6 +59,13 @@ func TestStrings(t *testing.T) {
 			t.FailNow()
 		}
 	})
+	t.Run("deep equal", func(t *testing.T) {
+		pp := [][]byte{[]byte("foo"), []byte("asd")}
+		r := ins.DeepEqual(ss, pp)
+		if !r {
+			t.FailNow()
+		}
+	})
 }
 
 func BenchmarkStrings(b *testing.B) {
@@ -107,6 +114,16 @@ func BenchmarkStrings(b *testing.B) {
 			it.reset()
 			_ = ins.Loop(ss, &it, &buf)
 			if it.v[1] != "asd" {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("deep equal", func(b *testing.B) {
+		b.ReportAllocs()
+		pp := [][]byte{[]byte("foo"), []byte("asd")}
+		for i := 0; i < b.N; i++ {
+			r := ins.DeepEqual(&ss, &pp)
+			if !r {
 				b.FailNow()
 			}
 		}

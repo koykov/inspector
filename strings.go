@@ -1,6 +1,7 @@
 package inspector
 
 import (
+	"bytes"
 	"strconv"
 
 	"github.com/koykov/fastconv"
@@ -23,20 +24,8 @@ func (i StringsInspector) GetTo(src any, buf *any, path ...string) error {
 	if len(path) != 1 {
 		return nil
 	}
-	var (
-		ss []string
-		pp [][]byte
-	)
-	switch src.(type) {
-	case []string:
-		ss = src.([]string)
-	case *[]string:
-		ss = *(src.(*[]string))
-	case [][]byte:
-		pp = src.([][]byte)
-	case *[][]byte:
-		pp = *(src.(*[][]byte))
-	default:
+	ss, pp, ok := i.sp(src)
+	if !ok {
 		return nil
 	}
 	idx, err := strconv.Atoi(path[0])
@@ -64,20 +53,8 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 	if len(path) != 1 {
 		return nil
 	}
-	var (
-		ss []string
-		pp [][]byte
-	)
-	switch dst.(type) {
-	case []string:
-		ss = dst.([]string)
-	case *[]string:
-		ss = *(dst.(*[]string))
-	case [][]byte:
-		pp = dst.([][]byte)
-	case *[][]byte:
-		pp = *(dst.(*[][]byte))
-	default:
+	ss, pp, ok := i.sp(dst)
+	if !ok {
 		return nil
 	}
 	idx, err := strconv.Atoi(path[0])
@@ -125,20 +102,8 @@ func (i StringsInspector) Compare(src any, cond Op, right string, result *bool, 
 	if len(path) != 1 {
 		return nil
 	}
-	var (
-		ss []string
-		pp [][]byte
-	)
-	switch src.(type) {
-	case []string:
-		ss = src.([]string)
-	case *[]string:
-		ss = *(src.(*[]string))
-	case [][]byte:
-		pp = src.([][]byte)
-	case *[][]byte:
-		pp = *(src.(*[][]byte))
-	default:
+	ss, pp, ok := i.sp(src)
+	if !ok {
 		return nil
 	}
 	idx, err := strconv.Atoi(path[0])
@@ -176,20 +141,8 @@ func (i StringsInspector) Loop(src any, l Iterator, buf *[]byte, path ...string)
 	if len(path) > 0 {
 		return nil
 	}
-	var (
-		ss []string
-		pp [][]byte
-	)
-	switch src.(type) {
-	case []string:
-		ss = src.([]string)
-	case *[]string:
-		ss = *(src.(*[]string))
-	case [][]byte:
-		pp = src.([][]byte)
-	case *[][]byte:
-		pp = *(src.(*[][]byte))
-	default:
+	ss, pp, ok := i.sp(src)
+	if !ok {
 		return nil
 	}
 
@@ -229,14 +182,49 @@ func (i StringsInspector) Loop(src any, l Iterator, buf *[]byte, path ...string)
 }
 
 func (i StringsInspector) DeepEqual(l, r any) bool {
-	_, _ = l, r
-	// todo: implement me
-	return false
+	return i.DeepEqualWithOptions(l, r, nil)
 }
 
-func (i StringsInspector) DeepEqualWithOptions(l, r any, options *DEQOptions) bool {
-	_, _, _ = l, r, options
-	// todo: implement me
+func (i StringsInspector) DeepEqualWithOptions(l, r any, _ *DEQOptions) bool {
+	ssL, ppL, okL := i.sp(l)
+	if !okL {
+		return false
+	}
+	ssR, ppR, okR := i.sp(r)
+	if !okR {
+		return false
+	}
+	ssLn, ssRn, ppLn, ppRn := len(ssL), len(ssR), len(ppL), len(ppR)
+	switch {
+	case ssLn > 0 && ssRn > 0 && ssLn == ssRn:
+		for j := 0; j < ssLn; j++ {
+			if ssL[j] != ssR[j] {
+				return false
+			}
+		}
+		return true
+	case ssLn > 0 && ppRn > 0 && ssLn == ppRn:
+		for j := 0; j < ssLn; j++ {
+			if ssL[j] != fastconv.B2S(ppR[j]) {
+				return false
+			}
+		}
+		return true
+	case ppLn > 0 && ssRn > 0 && ppLn == ssRn:
+		for j := 0; j < ppLn; j++ {
+			if fastconv.B2S(ppL[j]) != ssR[j] {
+				return false
+			}
+		}
+		return true
+	case ppLn > 0 && ppRn > 0 && ppLn == ppRn:
+		for j := 0; j < ppLn; j++ {
+			if !bytes.Equal(ppL[j], ppR[j]) {
+				return false
+			}
+		}
+		return true
+	}
 	return false
 }
 
@@ -274,4 +262,21 @@ func (i StringsInspector) Reset(x any) error {
 	_ = x
 	// todo: implement me
 	return nil
+}
+
+func (i StringsInspector) sp(x any) (ss []string, pp [][]byte, ok bool) {
+	ok = true
+	switch x.(type) {
+	case []string:
+		ss = x.([]string)
+	case *[]string:
+		ss = *(x.(*[]string))
+	case [][]byte:
+		pp = x.([][]byte)
+	case *[][]byte:
+		pp = *(x.(*[][]byte))
+	default:
+		ok = false
+	}
+	return
 }
