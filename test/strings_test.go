@@ -6,6 +6,24 @@ import (
 	"github.com/koykov/inspector"
 )
 
+type testStringsIterator struct {
+	k [][]byte
+	v []string
+}
+
+func (i *testStringsIterator) RequireKey() bool { return true }
+func (i *testStringsIterator) SetKey(val any, _ inspector.Inspector) {
+	i.k = append(i.k, *val.(*[]byte))
+}
+func (i *testStringsIterator) SetVal(val any, _ inspector.Inspector) {
+	i.v = append(i.v, *val.(*string))
+}
+func (i *testStringsIterator) Iterate() inspector.LoopCtl { return inspector.LoopCtlNone }
+func (i *testStringsIterator) reset() {
+	i.k = i.k[:0]
+	i.v = i.v[:0]
+}
+
 func TestStrings(t *testing.T) {
 	ss := []string{"foo", "bar"}
 	ins := inspector.StringsInspector{}
@@ -30,6 +48,14 @@ func TestStrings(t *testing.T) {
 		}
 		_ = ins.Compare(&ss, inspector.OpNq, "bar", &r, "1")
 		if !r {
+			t.FailNow()
+		}
+	})
+	t.Run("loop", func(t *testing.T) {
+		var buf []byte
+		it := testStringsIterator{}
+		_ = ins.Loop(ss, &it, &buf)
+		if it.v[1] != "asd" {
 			t.FailNow()
 		}
 	})
@@ -69,6 +95,18 @@ func BenchmarkStrings(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			_ = ins.Compare(&ss, inspector.OpEq, s, &r, p...)
 			if !r {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("loop", func(b *testing.B) {
+		b.ReportAllocs()
+		var buf []byte
+		it := testStringsIterator{}
+		for i := 0; i < b.N; i++ {
+			it.reset()
+			_ = ins.Loop(ss, &it, &buf)
+			if it.v[1] != "asd" {
 				b.FailNow()
 			}
 		}

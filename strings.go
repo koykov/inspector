@@ -173,8 +173,58 @@ func (i StringsInspector) Compare(src any, cond Op, right string, result *bool, 
 }
 
 func (i StringsInspector) Loop(src any, l Iterator, buf *[]byte, path ...string) error {
-	_, _, _, _ = src, l, buf, path
-	// todo: implement me
+	if len(path) > 0 {
+		return nil
+	}
+	var (
+		ss []string
+		pp [][]byte
+	)
+	switch src.(type) {
+	case []string:
+		ss = src.([]string)
+	case *[]string:
+		ss = *(src.(*[]string))
+	case [][]byte:
+		pp = src.([][]byte)
+	case *[][]byte:
+		pp = *(src.(*[][]byte))
+	default:
+		return nil
+	}
+
+	switch {
+	case len(ss) > 0:
+		for j := 0; j < len(ss); j++ {
+			if l.RequireKey() {
+				*buf = strconv.AppendInt((*buf)[:0], int64(j), 10)
+				l.SetKey(buf, StaticInspector{})
+			}
+			l.SetVal(&ss[j], StaticInspector{})
+			ctl := l.Iterate()
+			if ctl == LoopCtlBrk {
+				break
+			}
+			if ctl == LoopCtlCnt {
+				continue
+			}
+		}
+	case len(pp) > 0:
+		for j := 0; j < len(pp); j++ {
+			if l.RequireKey() {
+				*buf = strconv.AppendInt((*buf)[:0], int64(j), 10)
+				l.SetKey(buf, StaticInspector{})
+			}
+			l.SetVal(&pp[j], StaticInspector{})
+			ctl := l.Iterate()
+			if ctl == LoopCtlBrk {
+				break
+			}
+			if ctl == LoopCtlCnt {
+				continue
+			}
+		}
+	}
 	return nil
 }
 
