@@ -1,6 +1,10 @@
 package inspector
 
-import "strconv"
+import (
+	"strconv"
+
+	"github.com/koykov/fastconv"
+)
 
 // StringsInspector is a built-in inspector for []string/[][]byte types.
 type StringsInspector struct{}
@@ -52,14 +56,68 @@ func (i StringsInspector) GetTo(src any, buf *any, path ...string) error {
 }
 
 func (i StringsInspector) Set(dst, value any, path ...string) error {
-	_, _, _ = dst, value, path
-	// todo: implement me
-	return nil
+	var buf ByteBuffer
+	return i.SetWithBuffer(dst, value, &buf, path...)
 }
 
 func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error {
-	_, _, _, _ = dst, value, buf, path
-	// todo: implement me
+	if len(path) != 1 {
+		return nil
+	}
+	var (
+		ss []string
+		pp [][]byte
+	)
+	switch dst.(type) {
+	case []string:
+		ss = dst.([]string)
+	case *[]string:
+		ss = *(dst.(*[]string))
+	case [][]byte:
+		pp = dst.([][]byte)
+	case *[][]byte:
+		pp = *(dst.(*[][]byte))
+	default:
+		return nil
+	}
+	idx, err := strconv.Atoi(path[0])
+	if err != nil {
+		return err
+	}
+	if idx < 0 {
+		return nil
+	}
+	var p []byte
+	switch {
+	case len(ss) > 0 && idx < len(ss):
+		switch value.(type) {
+		case string:
+			p = fastconv.S2B(value.(string))
+		case *string:
+			p = fastconv.S2B(*value.(*string))
+		}
+		if len(p) > 0 {
+			bp := buf.AcquireBytes()
+			off := len(bp)
+			bp = append(bp, p...)
+			buf.ReleaseBytes(bp)
+			ss[idx] = fastconv.B2S(bp[off:])
+		}
+	case len(pp) > 0 && idx < len(pp):
+		switch value.(type) {
+		case []byte:
+			p = value.([]byte)
+		case *[]byte:
+			p = *value.(*[]byte)
+		}
+		if len(p) > 0 {
+			bp := buf.AcquireBytes()
+			off := len(bp)
+			bp = append(bp, p...)
+			buf.ReleaseBytes(bp)
+			pp[idx] = bp[off:]
+		}
+	}
 	return nil
 }
 
