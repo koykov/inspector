@@ -2,6 +2,7 @@ package inspector
 
 import (
 	"bytes"
+	"encoding/json"
 	"strconv"
 
 	"github.com/koykov/fastconv"
@@ -74,11 +75,7 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 			p = fastconv.S2B(*value.(*string))
 		}
 		if len(p) > 0 {
-			bp := buf.AcquireBytes()
-			off := len(bp)
-			bp = append(bp, p...)
-			buf.ReleaseBytes(bp)
-			ss[idx] = fastconv.B2S(bp[off:])
+			ss[idx] = fastconv.B2S(buf.Bufferize(p))
 		}
 	case len(pp) > 0 && idx < len(pp):
 		switch value.(type) {
@@ -88,11 +85,7 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 			p = *value.(*[]byte)
 		}
 		if len(p) > 0 {
-			bp := buf.AcquireBytes()
-			off := len(bp)
-			bp = append(bp, p...)
-			buf.ReleaseBytes(bp)
-			pp[idx] = bp[off:]
+			pp[idx] = buf.Bufferize(p)
 		}
 	}
 	return nil
@@ -229,38 +222,135 @@ func (i StringsInspector) DeepEqualWithOptions(l, r any, _ *DEQOptions) bool {
 }
 
 func (i StringsInspector) Unmarshal(p []byte, typ Encoding) (any, error) {
-	_, _ = p, typ
-	// todo: implement me
-	return nil, nil
+	var x []string
+	switch typ {
+	case EncodingJSON:
+		err := json.Unmarshal(p, &x)
+		return &x, err
+	default:
+		return nil, ErrUnknownEncodingType
+	}
 }
 
 func (i StringsInspector) Copy(x any) (any, error) {
-	_ = x
-	// todo: implement me
-	return nil, nil
+	var buf ByteBuffer
+	var dst []string
+	err := i.CopyTo(x, &dst, &buf)
+	return dst, err
 }
 
 func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
-	_, _, _ = src, dst, buf
-	// todo: implement me
+	ssR, ppR, okR := i.sp(src)
+	if !okR {
+		return ErrUnsupportedType
+	}
+
+	var (
+		ss *[]string
+		pp *[][]byte
+	)
+	switch dst.(type) {
+	case []string:
+		return ErrMustPointerType
+	case *[]string:
+		ss = dst.(*[]string)
+		switch {
+		case len(ssR) > 0:
+			for j := 0; j < len(ssR); j++ {
+				cpy := buf.BufferizeString(ssR[j])
+				*ss = append(*ss, cpy)
+			}
+		case len(ppR) > 0:
+			for j := 0; j < len(ppR); j++ {
+				cpy := buf.Bufferize(ppR[j])
+				*ss = append(*ss, fastconv.B2S(cpy))
+			}
+		}
+	case [][]byte:
+		return ErrMustPointerType
+	case *[][]byte:
+		pp = dst.(*[][]byte)
+		switch {
+		case len(ssR) > 0:
+			for j := 0; j < len(ssR); j++ {
+				cpy := buf.BufferizeString(ssR[j])
+				*pp = append(*pp, fastconv.S2B(cpy))
+			}
+		case len(ppR) > 0:
+			for j := 0; j < len(ppR); j++ {
+				cpy := buf.Bufferize(ppR[j])
+				*pp = append(*pp, cpy)
+			}
+		}
+	default:
+		return ErrUnsupportedType
+	}
 	return nil
 }
 
 func (i StringsInspector) Length(src any, result *int, path ...string) error {
-	_, _, _ = src, result, path
-	// todo: implement me
+	ss, pp, ok := i.sp(src)
+	if !ok {
+		return nil
+	}
+
+	if len(path) == 1 {
+		idx, err := strconv.Atoi(path[0])
+		if err != nil {
+			return err
+		}
+		switch {
+		case len(ss) > 0 && idx >= 0 && idx < len(ss):
+			*result = len(ss[idx])
+		case len(pp) > 0 && idx >= 0 && idx < len(pp):
+			*result = len(pp[idx])
+		}
+	} else {
+		if len(ss) > 0 {
+			*result = len(ss)
+		}
+		if len(pp) > 0 {
+			*result = len(pp)
+		}
+	}
 	return nil
 }
 
 func (i StringsInspector) Capacity(src any, result *int, path ...string) error {
-	_, _, _ = src, result, path
-	// todo: implement me
+	_, pp, ok := i.sp(src)
+	if !ok {
+		return nil
+	}
+
+	if len(path) == 1 {
+		idx, err := strconv.Atoi(path[0])
+		if err != nil {
+			return err
+		}
+		if len(pp) > 0 && idx >= 0 && idx < len(pp) {
+			*result = cap(pp[idx])
+		}
+	} else {
+		if len(pp) > 0 {
+			*result = cap(pp)
+		}
+	}
 	return nil
 }
 
 func (i StringsInspector) Reset(x any) error {
-	_ = x
-	// todo: implement me
+	switch x.(type) {
+	case []string:
+		return ErrMustPointerType
+	case *[]string:
+		ss := x.(*[]string)
+		*ss = (*ss)[:0]
+	case [][]byte:
+		return ErrMustPointerType
+	case *[][]byte:
+		pp := x.(*[][]byte)
+		*pp = (*pp)[:0]
+	}
 	return nil
 }
 

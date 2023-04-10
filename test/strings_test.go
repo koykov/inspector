@@ -26,6 +26,7 @@ func (i *testStringsIterator) reset() {
 
 func TestStrings(t *testing.T) {
 	ss := []string{"foo", "bar"}
+	pp := [][]byte{[]byte("foo"), []byte("bar")}
 	ins := inspector.StringsInspector{}
 	t.Run("get", func(t *testing.T) {
 		x, _ := ins.Get(ss, "1")
@@ -66,10 +67,39 @@ func TestStrings(t *testing.T) {
 			t.FailNow()
 		}
 	})
+	t.Run("copy", func(t *testing.T) {
+		var ss1 []string
+		_ = ins.CopyTo(ss, &ss1, &inspector.ByteBuffer{})
+		if len(ss1) != len(ss) {
+			t.FailNow()
+		}
+	})
+	t.Run("len", func(t *testing.T) {
+		var r int
+		_ = ins.Length(ss, &r)
+		if r != 2 {
+			t.FailNow()
+		}
+	})
+	t.Run("cap", func(t *testing.T) {
+		var r int
+		_ = ins.Capacity(pp, &r, "1")
+		if r != 3 {
+			t.FailNow()
+		}
+	})
+	t.Run("reset", func(t *testing.T) {
+		ss1 := []string{"foo", "bar", "str"}
+		_ = ins.Reset(&ss1)
+		if len(ss1) != 0 && cap(ss1) != 3 {
+			t.FailNow()
+		}
+	})
 }
 
 func BenchmarkStrings(b *testing.B) {
 	ss := []string{"foo", "bar"}
+	pp := [][]byte{[]byte("foo"), []byte("bar")}
 	ins := inspector.StringsInspector{}
 	b.Run("get", func(b *testing.B) {
 		b.ReportAllocs()
@@ -124,6 +154,50 @@ func BenchmarkStrings(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			r := ins.DeepEqual(&ss, &pp)
 			if !r {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("copy", func(b *testing.B) {
+		b.ReportAllocs()
+		var ss1 []string
+		buf := inspector.ByteBuffer{}
+		for i := 0; i < b.N; i++ {
+			ss1 = ss1[:0]
+			buf.Reset()
+			_ = ins.CopyTo(ss, &ss1, &buf)
+			if len(ss1) != len(ss) {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("len", func(b *testing.B) {
+		b.ReportAllocs()
+		var r int
+		for i := 0; i < b.N; i++ {
+			_ = ins.Length(ss, &r)
+			if r != 2 {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("cap", func(b *testing.B) {
+		b.ReportAllocs()
+		var r int
+		p := []string{"1"}
+		for i := 0; i < b.N; i++ {
+			_ = ins.Capacity(pp, &r, p...)
+			if r != 3 {
+				b.FailNow()
+			}
+		}
+	})
+	b.Run("reset", func(b *testing.B) {
+		b.ReportAllocs()
+		ss1 := []string{"foo", "bar", "str"}
+		for i := 0; i < b.N; i++ {
+			_ = ins.Reset(&ss1)
+			if len(ss1) != 0 && cap(ss1) != 3 {
 				b.FailNow()
 			}
 		}
