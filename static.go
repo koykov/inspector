@@ -588,45 +588,25 @@ func (i StaticInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 		if !ok {
 			return ErrMustPointerType
 		}
-		origin := src.([]byte)
-		buf1 := buf.AcquireBytes()
-		off := len(buf1)
-		buf1 = append(buf1, origin...)
-		buf.ReleaseBytes(buf1)
-		*p = buf1[off:]
+		*p = buf.Bufferize(src.([]byte))
 	case *[]byte:
 		p, ok := dst.(*[]byte)
 		if !ok {
 			return ErrMustPointerType
 		}
-		origin := src.([]byte)
-		buf1 := buf.AcquireBytes()
-		off := len(buf1)
-		buf1 = append(buf1, origin...)
-		buf.ReleaseBytes(buf1)
-		*p = buf1[off:]
+		*p = buf.Bufferize(*src.(*[]byte))
 	case string:
 		p, ok := dst.(*string)
 		if !ok {
 			return ErrMustPointerType
 		}
-		origin := src.(string)
-		buf1 := buf.AcquireBytes()
-		off := len(buf1)
-		buf1 = append(buf1, origin...)
-		buf.ReleaseBytes(buf1)
-		*p = fastconv.B2S(buf1[off:])
+		*p = buf.BufferizeString(src.(string))
 	case *string:
 		p, ok := dst.(*string)
 		if !ok {
 			return ErrMustPointerType
 		}
-		origin := *src.(*string)
-		buf1 := buf.AcquireBytes()
-		off := len(buf1)
-		buf1 = append(buf1, origin...)
-		buf.ReleaseBytes(buf1)
-		*p = fastconv.B2S(buf1[off:])
+		*p = buf.BufferizeString(*src.(*string))
 	default:
 		return ErrUnsupportedType
 	}
