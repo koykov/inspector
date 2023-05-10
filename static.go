@@ -134,6 +134,14 @@ func (i StaticInspector) Compare(src any, cond Op, right string, result *bool, _
 		if r, err := strconv.ParseFloat(right, 0); err == nil {
 			*result = i.cmpFloat(*src.(*float64), cond, r)
 		}
+	case bool:
+		if r, err := strconv.ParseBool(right); err == nil {
+			*result = i.cmpBool(src.(bool), cond, r)
+		}
+	case *bool:
+		if r, err := strconv.ParseBool(right); err == nil {
+			*result = i.cmpBool(*src.(*bool), cond, r)
+		}
 	case []byte:
 		*result = i.cmpBytes(src.([]byte), cond, fastconv.S2B(right))
 	case *[]byte:
@@ -226,6 +234,16 @@ func (i StaticInspector) cmpBytes(left []byte, cond Op, right []byte) bool {
 		return bytes.Equal(left, right)
 	case OpNq:
 		return !bytes.Equal(left, right)
+	}
+	return false
+}
+
+func (i StaticInspector) cmpBool(left bool, cond Op, right bool) bool {
+	switch cond {
+	case OpEq:
+		return left == right
+	case OpNq:
+		return left != right
 	}
 	return false
 }

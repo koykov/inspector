@@ -57,6 +57,7 @@ var (
 	p6 = []string{"Finance", "History", "0", "Comment"}
 	p7 = []string{"Status"}
 	p8 = []string{"Finance", "MoneyIn"}
+	p9 = []string{"Finance", "AllowBuy"}
 
 	expectFoo      = []byte("bar")
 	expectName     = []byte("2000")
@@ -221,6 +222,11 @@ func testComparePtr(t testing.TB, i inspector.Inspector, buf *bool) {
 	_ = i.Compare(testO, inspector.OpLtq, "5000", buf, p8...)
 	if !*buf {
 		t.Error("object.Finance.MoneyIn: mismatch result and expectation")
+	}
+
+	_ = i.Compare(testO, inspector.OpEq, "true", buf, p9...)
+	if !*buf {
+		t.Error("object.Finance.AllowBuy: mismatch result and expectation")
 	}
 }
 
