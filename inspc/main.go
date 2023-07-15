@@ -55,10 +55,13 @@ func init() {
 	case len(dir) > 0:
 		target = inspector.TargetDirectory
 		src = dir
-		if len(dst) == 0 {
-			dst = pkg + "_ins"
+		_, err := os.Stat(absPkg)
+		if os.IsNotExist(err) {
+			log.Fatal("dir doesn't exists: ", pkg)
 		}
-		// todo implement me
+		if len(dst) == 0 {
+			dst = dir + "_ins"
+		}
 	case len(file) > 0:
 		target = inspector.TargetFile
 		src = file
@@ -93,7 +96,7 @@ func main() {
 	lg := log.New(os.Stdout, "", log.LstdFlags)
 
 	// Initiate the compiler.
-	c := inspector.NewCompiler(target, pkg, dst, bl, buf, lg)
+	c := inspector.NewCompiler(target, src, dst, bl, buf, lg)
 	// Parse and write compiled output to the destination directory.
 	err := c.Compile()
 	if err != nil {

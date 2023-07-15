@@ -148,23 +148,34 @@ func (c *Compiler) String() string {
 }
 
 func (c *Compiler) Compile() error {
-	if c.l != nil {
-		c.l.Print("Parse package " + c.pkg)
-	}
-	// Try import the package.
-	var conf loader.Config
-	conf.Import(c.pkg)
-	prog, err := conf.Load()
-	if err != nil {
-		return err
-	}
+	var err error
+	switch c.trg {
+	case TargetPackage:
+		if c.l != nil {
+			c.l.Print("Parse package " + c.pkg)
+		}
+		// Try import the package.
+		var conf loader.Config
+		conf.Import(c.pkg)
+		prog, err := conf.Load()
+		if err != nil {
+			return err
+		}
 
-	// Parse the package to nodes list.
-	pkg := prog.Package(c.pkg)
-	c.pkgName = pkg.Pkg.Name()
-	err = c.parsePkg(pkg)
-	if err != nil {
-		return err
+		// Parse the package to nodes list.
+		pkg := prog.Package(c.pkg)
+		c.pkgName = pkg.Pkg.Name()
+		err = c.parsePkg(pkg)
+		if err != nil {
+			return err
+		}
+	case TargetDirectory:
+		if c.l != nil {
+			c.l.Print("Parse directory " + c.pkg)
+		}
+		// todo implement me
+	case TargetFile:
+		// todo implement me
 	}
 
 	// Prepare destination.
