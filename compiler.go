@@ -12,12 +12,19 @@ import (
 	"golang.org/x/tools/go/loader"
 )
 
+type Target int
+
 // Internal node type.
 type typ int
 
 // Node compile mode.
 type mode int
 
+const (
+	TargetPackage Target = iota
+	TargetDirectory
+	TargetFile
+)
 const (
 	// Possible node's types.
 	typeStruct typ = iota
@@ -50,9 +57,10 @@ type Logger interface {
 }
 
 type Compiler struct {
+	trg Target
 	// Path to the package relative to $GOPATH/src.
 	pkg string
-	// THe same as pkg plus dot at the end, needs for internal logic.
+	// The same as pkg plus dot at the end, needs for internal logic.
 	pkgDot string
 	// Only package name.
 	pkgName string
@@ -120,10 +128,11 @@ var (
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 )
 
-func NewCompiler(pkg, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
+func NewCompiler(target Target, src, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
-		pkg:    pkg,
-		pkgDot: pkg + ".",
+		trg:    target,
+		pkg:    src,
+		pkgDot: src + ".",
 		dst:    dst,
 		bl:     bl,
 		uniq:   make(map[string]bool),
@@ -220,156 +229,6 @@ func (c *Compiler) Compile() error {
 // GetTotal returns the total number of compiled types.
 func (c *Compiler) GetTotal() int {
 	return c.cntr
-}
-
-// Parse package.
-func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
-	for _, scope := range pkg.Info.Scopes {
-		// Only scopes without parents available.
-		if parent := scope.Parent(); parent != nil {
-			for _, name := range parent.Names() {
-				// Get the object representation of scope.
-				o := parent.Lookup(name)
-				if !c.isExported(o) {
-					continue
-				}
-				// Get type of object and parse it.
-				t := o.Type()
-				node, err := c.parseType(t)
-				if err != nil {
-					return err
-				}
-				if node == nil || node.typ == typeBasic || reMap.MatchString(node.typn) || reSlc.MatchString(node.typn) {
-					continue
-				}
-				if node.typ == typeStruct {
-					// Make type name of struct node actual.
-					node.typn = o.Name()
-				}
-				node.pkg = o.Pkg().Name()
-				node.name = o.Name()
-				// Check and skip type if it is already parsed or blacklisted.
-				if _, ok := c.uniq[node.name]; ok {
-					continue
-				}
-				if len(c.bl) > 0 {
-					if _, ok := c.bl[node.name]; ok {
-						continue
-					}
-				}
-				c.uniq[node.name] = true
-
-				c.nodes = append(c.nodes, node)
-			}
-		}
-	}
-
-	return nil
-}
-
-// Main parse method.
-func (c *Compiler) parseType(t types.Type) (*node, error) {
-	// Prepare and fill up default node.
-	node := &node{
-		typ:  typeBasic,
-		typn: strings.Replace(t.String(), c.pkgDot, "", 1),
-		ptr:  false,
-	}
-	if n, ok := t.(*types.Named); ok {
-		node.typn = n.Obj().Name()
-		if n.Obj().Pkg() == nil {
-			return nil, nil
-		}
-		node.pkg = n.Obj().Pkg().Name()
-		node.pkgi = c.clearPkg(n.Obj().Pkg().Path())
-	}
-
-	// Get the underlying type.
-	u := t.Underlying()
-	// Common skips considering by underlying type.
-	if _, ok := u.(*types.Interface); ok {
-		return nil, nil
-	}
-	if _, ok := u.(*types.Signature); ok {
-		return nil, nil
-	}
-
-	if p, ok := u.(*types.Pointer); ok {
-		// Dereference pointer type and go inside to parse.
-		e := p.Elem()
-		u = e.Underlying()
-		unode, err := c.parseType(u)
-		if err != nil {
-			return node, err
-		}
-		if unode == nil {
-			return nil, nil
-		}
-		unode.ptr = true
-		if n, ok := e.(*types.Named); ok {
-			unode.typn = n.Obj().Name()
-			unode.pkg = n.Obj().Pkg().Name()
-			unode.pkgi = c.clearPkg(n.Obj().Pkg().Path())
-		}
-		return unode, err
-	}
-
-	if s, ok := u.(*types.Struct); ok {
-		// Walk over fields in struct and parse each of them as separate node.
-		node.typ = typeStruct
-		for i := 0; i < s.NumFields(); i++ {
-			f := s.Field(i)
-			if !f.Exported() {
-				continue
-			}
-			ch, err := c.parseType(f.Type())
-			if err != nil {
-				return node, err
-			}
-			if ch == nil {
-				continue
-			}
-			ch.name = f.Name()
-			if ch.ptr {
-				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
-				ch.typn = strings.Replace(ch.typn, "*", "", 1)
-			}
-			node.chld = append(node.chld, ch)
-			node.hasb = node.hasb || ch.hasb
-			node.hasc = node.hasc || ch.hasc
-		}
-		return node, nil
-	}
-
-	if m, ok := u.(*types.Map); ok {
-		// Just parse key and value types of map.
-		var err error
-		node.typ = typeMap
-		node.mapk, err = c.parseType(m.Key())
-		node.mapv, err = c.parseType(m.Elem())
-		node.hasb = node.mapk.hasb || node.mapv.hasb
-		node.hasc = true
-		return node, err
-	}
-
-	if s, ok := u.(*types.Slice); ok {
-		// Just parse value type of slice.
-		var err error
-		node.typ = typeSlice
-		node.slct, err = c.parseType(s.Elem())
-		node.hasb = node.typn == "[]byte" || node.slct.hasb
-		node.hasc = true
-		return node, err
-	}
-
-	if b, ok := u.(*types.Basic); ok {
-		// Fill up the underlying type of basic node.
-		node.typu = b.Name()
-		node.hasb = node.typu == "string"
-		node.hasc = node.hasb
-	}
-
-	return node, nil
 }
 
 // Format compiled inspector code using format package and write it to the given file.

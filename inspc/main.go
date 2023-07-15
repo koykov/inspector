@@ -5,19 +5,24 @@ import (
 	"flag"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/koykov/inspector"
 )
 
 var (
 	// Command line arguments.
-	fPkg = flag.String("pkg", "", "Package path. Should be relative to $GOPATH/src.")
-	fDst = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
-	fBl  = flag.String("bl", "", "Path to blacklist file.")
+	fPkg  = flag.String("pkg", "", "Package path. Should be relative to $GOPATH/src.")
+	fDir  = flag.String("dir", "", "Path to directory contains Go files.")
+	fFile = flag.String("file", "", "Path to Go file.")
+	fDst  = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
+	fBl   = flag.String("bl", "", "Path to blacklist file.")
 	// Dereferenced arguments.
-	pkg, dst string
-	absPkg   string
-	bl       = map[string]bool{}
+	pkg, dir, file, src, dst string
+
+	absPkg string
+	target inspector.Target
+	bl     = map[string]bool{}
 )
 
 func init() {
@@ -29,23 +34,43 @@ func init() {
 
 	flag.Parse()
 	pkg = *fPkg
+	dir = *fDir
+	file = *fFile
 	dst = *fDst
 
-	if len(pkg) == 0 {
-		log.Fatal("pkg option is required")
-	}
-
-	ps := string(os.PathSeparator)
-	// Get absolute path to the input package and check it existence.
-	absPkg = os.Getenv("GOPATH") + ps + "src" + ps + pkg
-	_, err := os.Stat(absPkg)
-	if os.IsNotExist(err) {
-		log.Fatal("pkg doesn't exists: ", pkg)
-	}
-
-	// Prepare destination dir.
-	if len(dst) == 0 {
-		dst = pkg + "_ins"
+	switch {
+	case len(pkg) > 0:
+		target = inspector.TargetPackage
+		src = pkg
+		ps := string(os.PathSeparator)
+		// Get absolute path to the input package and check it existence.
+		absPkg = os.Getenv("GOPATH") + ps + "src" + ps + pkg
+		_, err := os.Stat(absPkg)
+		if os.IsNotExist(err) {
+			log.Fatal("pkg doesn't exists: ", pkg)
+		}
+		if len(dst) == 0 {
+			dst = pkg + "_ins"
+		}
+	case len(dir) > 0:
+		target = inspector.TargetDirectory
+		src = dir
+		if len(dst) == 0 {
+			dst = pkg + "_ins"
+		}
+		// todo implement me
+	case len(file) > 0:
+		target = inspector.TargetFile
+		src = file
+		if len(dst) == 0 {
+			base := filepath.Base(file)
+			path_ := file[:len(file)-len(base)]
+			name := base[:len(base)-len(filepath.Ext(base))]
+			dst = path_ + string(os.PathSeparator) + name + "_ins.go"
+		}
+		// todo implement me
+	default:
+		log.Fatal("No pkg, dir or file option provided.")
 	}
 
 	// Check and read blacklist file.
@@ -68,7 +93,7 @@ func main() {
 	lg := log.New(os.Stdout, "", log.LstdFlags)
 
 	// Initiate the compiler.
-	c := inspector.NewCompiler(pkg, dst, bl, buf, lg)
+	c := inspector.NewCompiler(target, pkg, dst, bl, buf, lg)
 	// Parse and write compiled output to the destination directory.
 	err := c.Compile()
 	if err != nil {
