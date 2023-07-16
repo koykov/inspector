@@ -176,6 +176,7 @@ func (c *Compiler) Compile() error {
 		// todo implement me
 	case TargetFile:
 		// todo implement me
+		err = c.parseFile(c.pkg)
 	}
 
 	// Prepare destination.
