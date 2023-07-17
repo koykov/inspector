@@ -12,7 +12,7 @@ func marshal(w ByteStringWriter, nodes []*node) error {
 	_, _ = w.WriteString("\n<nodes>\n")
 	for i := 0; i < len(nodes); i++ {
 		node := nodes[i]
-		if err := marshalNode(w, node, 1); err != nil {
+		if err := marshalNode(w, "node", node, 1); err != nil {
 			return err
 		}
 	}
