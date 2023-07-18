@@ -85,24 +85,29 @@ func (c *Compiler) parseAstType(ts *ast.TypeSpec) (*node, error) {
 		}
 		_ = err
 	}
-	for i := 0; i < len(ts.TypeParams.List); i++ {
-		field := ts.TypeParams.List[i]
-		for j := 0; j < len(field.Names); j++ {
-			name := field.Names[j]
-			println(" *", name.String())
-		}
-	}
 	return node, nil
 }
 
 func (c *Compiler) parseAstExpr(expr ast.Expr) (*node, error) {
+	var pfx string
+	if arr, ok := expr.(*ast.ArrayType); ok {
+		expr = arr.Elt
+		pfx = "[]"
+	}
+	if star, ok := expr.(*ast.StarExpr); ok {
+		expr = star.X
+	}
+	if map_, ok := expr.(*ast.MapType); ok {
+		_ = map_
+		// ...
+	}
 	id, ok := expr.(*ast.Ident)
 	if !ok {
 		return nil, nil
 	}
 	node := &node{
 		typ:  typeBasic,
-		typn: strings.Replace(id.String(), c.pkgDot, "", 1),
+		typn: pfx + strings.Replace(id.String(), c.pkgDot, "", 1),
 		ptr:  false,
 	}
 	if id.Obj == nil {
