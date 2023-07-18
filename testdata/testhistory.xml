@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="struct" name="TestHistory" typeName="TestHistory" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<nodes>
+		<node type="basic" name="DateUnix" typeName="int64" underlyingName="int64"/>
+		<node type="basic" name="Cost" typeName="float64" underlyingName="float64"/>
+		<node type="slice" name="Comment" typeName="[]byte" hasBytes="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte"/>
+		</node>
+	</nodes>
+</node>

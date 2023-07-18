@@ -1,6 +1,7 @@
 package inspector
 
 import (
+	"bytes"
 	"go/format"
 	"go/types"
 	"os"
@@ -117,37 +118,9 @@ func (c *Compiler) String() string {
 }
 
 func (c *Compiler) Compile() error {
-	var err error
-	switch c.trg {
-	case TargetPackage:
-		if c.l != nil {
-			c.l.Print("Parse package " + c.pkg)
-		}
-		// Try import the package.
-		var conf loader.Config
-		conf.Import(c.pkg)
-		prog, err := conf.Load()
-		if err != nil {
-			return err
-		}
-
-		// Parse the package to nodes list.
-		pkg := prog.Package(c.pkg)
-		c.pkgName = pkg.Pkg.Name()
-		err = c.parsePkg(pkg)
-		if err != nil {
-			return err
-		}
-	case TargetDirectory:
-		if c.l != nil {
-			c.l.Print("Parse directory " + c.pkg)
-		}
-		// todo implement me
-	case TargetFile:
-		// todo implement me
-		err = c.parseFile(c.pkg)
+	if err := c.parse(); err != nil {
+		return err
 	}
-
 	// Prepare destination.
 	if c.l != nil {
 		c.l.Print("Prepare destination dir " + c.dst)
@@ -180,6 +153,7 @@ func (c *Compiler) Compile() error {
 	if c.l != nil {
 		c.l.Print("Compiling init to " + file)
 	}
+	var err error
 	err = c.writeInit()
 	if err != nil {
 		return err
@@ -205,6 +179,91 @@ func (c *Compiler) Compile() error {
 	}
 
 	return nil
+}
+
+func (c *Compiler) WriteXML() error {
+	if err := c.parse(); err != nil {
+		return err
+	}
+	// Prepare destination.
+	ps := string(os.PathSeparator)
+	if len(c.dstAbs) == 0 {
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		c.dstAbs = wd + ps + c.dst
+	}
+	if c.l != nil {
+		c.l.Print("Prepare destination dir " + c.dst)
+	}
+	dstExists := true
+	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
+		dstExists = false
+	}
+	if dstExists {
+		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
+			return err
+		}
+		if err := os.RemoveAll(c.dstAbs); err != nil {
+			return err
+		}
+	}
+	if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
+		return ErrDstNotExists
+	}
+
+	// Walk over nodes and compile each of them to separate file.
+	var buf bytes.Buffer
+	for _, node := range c.nodes {
+		file := strings.ToLower(node.name) + ".xml"
+		if c.l != nil {
+			c.l.Print("Writing ", node.name, " type to ", file)
+		}
+		buf.Reset()
+		if err := node.write(&buf); err != nil {
+			return err
+		}
+		if err := os.WriteFile(c.dstAbs+ps+file, buf.Bytes(), 0644); err != nil {
+			return err
+		}
+		c.cntr++
+	}
+	return nil
+}
+
+func (c *Compiler) parse() error {
+	var err error
+	switch c.trg {
+	case TargetPackage:
+		if c.l != nil {
+			c.l.Print("Parse package " + c.pkg)
+		}
+		// Try import the package.
+		var conf loader.Config
+		conf.Import(c.pkg)
+		prog, err := conf.Load()
+		if err != nil {
+			return err
+		}
+
+		// Parse the package to nodes list.
+		pkg := prog.Package(c.pkg)
+		c.pkgName = pkg.Pkg.Name()
+		err = c.parsePkg(pkg)
+		if err != nil {
+			return err
+		}
+	case TargetDirectory:
+		if c.l != nil {
+			c.l.Print("Parse directory " + c.pkg)
+		}
+		// todo implement me
+	case TargetFile:
+		// todo implement me
+		err = c.parseFile(c.pkg)
+	}
+	return err
 }
 
 // GetTotal returns the total number of compiled types.

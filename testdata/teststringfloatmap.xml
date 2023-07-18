@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="map" name="TestStringFloatMap" typeName="TestStringFloatMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+	<mapValue type="basic" typeName="float64" underlyingName="float64"/>
+</node>

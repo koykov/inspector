@@ -17,8 +17,10 @@ var (
 	fFile = flag.String("file", "", "Path to Go file.")
 	fDst  = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
 	fBl   = flag.String("bl", "", "Path to blacklist file.")
+	fXML  = flag.String("xml", "", "Path to generate XML output.")
 	// Dereferenced arguments.
 	pkg, dir, file, src, dst string
+	xml                      bool
 
 	absPkg string
 	target inspector.Target
@@ -37,6 +39,9 @@ func init() {
 	dir = *fDir
 	file = *fFile
 	dst = *fDst
+	if xml = len(*fXML) > 0; xml {
+		dst = *fXML
+	}
 
 	switch {
 	case len(pkg) > 0:
@@ -98,12 +103,23 @@ func main() {
 	// Initiate the compiler.
 	c := inspector.NewCompiler(target, src, dst, bl, buf, lg)
 	// Parse and write compiled output to the destination directory.
-	err := c.Compile()
+	var (
+		err error
+		msg string
+	)
+	switch {
+	case xml:
+		msg = "Total files generated:"
+		err = c.WriteXML()
+	default:
+		msg = "Total inspectors compiled:"
+		err = c.Compile()
+	}
 	if err != nil {
 		log.Fatal("compile failed with error: ", err)
 	}
 
 	// Brief report.
-	log.Println("Total inspectors compiled:", c.GetTotal())
+	log.Println(msg, c.GetTotal())
 	log.Println("Complete")
 }

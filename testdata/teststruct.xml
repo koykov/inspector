@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="struct" name="TestStruct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<nodes>
+		<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+		<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+		<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte"/>
+		</node>
+		<node type="basic" name="I" typeName="int" underlyingName="int"/>
+		<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+		<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+		<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+		<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+		<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+		<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+		<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+		<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+		<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+		<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+		<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+	</nodes>
+</node>

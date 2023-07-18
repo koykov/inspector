@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="map" name="TestPermission" typeName="TestPermission" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasLC="true">
+	<mapKey type="basic" typeName="int32" underlyingName="int32"/>
+	<mapValue type="basic" typeName="bool" underlyingName="bool"/>
+</node>
