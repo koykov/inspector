@@ -74,7 +74,13 @@ func (c *Compiler) parseAstType(ts *ast.TypeSpec) (*node, error) {
 		if s.Fields != nil {
 			for i := 0; i < len(s.Fields.List); i++ {
 				field := s.Fields.List[i]
-				_ = field
+				ch, err := c.parseAstField(field)
+				if err != nil {
+					return nil, err
+				}
+				node.chld = append(node.chld, ch)
+				node.hasb = node.hasb || ch.hasb
+				node.hasc = node.hasc || ch.hasc
 			}
 		}
 		_ = err
@@ -103,6 +109,17 @@ func (c *Compiler) parseAstExpr(expr ast.Expr) (*node, error) {
 		node.typu = id.String()
 		node.hasb = node.typu == "string"
 		node.hasc = node.hasb
+	}
+	return node, nil
+}
+
+func (c *Compiler) parseAstField(field *ast.Field) (*node, error) {
+	node, err := c.parseAstExpr(field.Type)
+	if err != nil {
+		return nil, err
+	}
+	if len(field.Names) > 0 {
+		node.name = field.Names[0].String()
 	}
 	return node, nil
 }
