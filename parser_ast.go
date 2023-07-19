@@ -72,6 +72,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
 	case *ast.StructType:
 		node.typ = typeStruct
 		node.typn = node.name
+		node.pkgi = c.imp_
 		s := expr.(*ast.StructType)
 		if s.Fields != nil {
 			for i := 0; i < len(s.Fields.List); i++ {

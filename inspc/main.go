@@ -15,12 +15,13 @@ var (
 	fPkg  = flag.String("pkg", "", "Package path. Should be relative to $GOPATH/src.")
 	fDir  = flag.String("dir", "", "Path to directory contains Go files.")
 	fFile = flag.String("file", "", "Path to Go file.")
+	fImp  = flag.String("import", "", "Package import path to use together with -dir/-file options.")
 	fDst  = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
 	fBl   = flag.String("bl", "", "Path to blacklist file.")
 	fXML  = flag.String("xml", "", "Path to generate XML output.")
 	// Dereferenced arguments.
-	pkg, dir, file, src, dst string
-	xml                      bool
+	pkg, dir, file, imp, src, dst string
+	xml                           bool
 
 	absPkg string
 	target inspector.Target
@@ -38,9 +39,14 @@ func init() {
 	pkg = *fPkg
 	dir = *fDir
 	file = *fFile
+	imp = *fImp
 	dst = *fDst
 	if xml = len(*fXML) > 0; xml {
 		dst = *fXML
+	}
+
+	if (len(dir) > 0 || len(file) > 0) && len(imp) == 0 {
+		log.Fatal("Param -imp is required.")
 	}
 
 	switch {
@@ -101,7 +107,7 @@ func main() {
 	lg := log.New(os.Stdout, "", log.LstdFlags)
 
 	// Initiate the compiler.
-	c := inspector.NewCompiler(target, src, dst, bl, buf, lg)
+	c := inspector.NewCompiler(target, src, dst, imp, bl, buf, lg)
 	// Parse and write compiled output to the destination directory.
 	var (
 		err error

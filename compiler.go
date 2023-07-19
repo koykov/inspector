@@ -60,7 +60,8 @@ type Logger interface {
 type Compiler struct {
 	trg Target
 	// Path to the package relative to $GOPATH/src.
-	pkg string
+	pkg  string
+	imp_ string
 	// The same as pkg plus dot at the end, needs for internal logic.
 	pkgDot string
 	// Only package name.
@@ -98,7 +99,7 @@ var (
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 )
 
-func NewCompiler(target Target, src, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
+func NewCompiler(target Target, src, dst, imp string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		trg:    target,
 		pkg:    src,
@@ -109,6 +110,10 @@ func NewCompiler(target Target, src, dst string, bl map[string]bool, w ByteStrin
 		wr:     w,
 		l:      l,
 		imp:    make([]string, 0),
+	}
+	if len(imp) > 0 {
+		c.imp_ = imp
+		c.pkgDot = imp + "."
 	}
 	return &c
 }
