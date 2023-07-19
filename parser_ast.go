@@ -23,7 +23,6 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 			return true
 		}
 		node, err := c.parseAstExpr1(ts.Type, ts.Name)
-		// node, err := c.parseAstType(ts)
 		if err != nil {
 			return true
 		}
@@ -51,7 +50,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
 	var err error
 	node := &node{typ: typeBasic}
 	if id != nil {
-		node.typn = strings.Replace(id.String(), c.pkgDot, "", 1)
+		node.name = strings.Replace(id.String(), c.pkgDot, "", 1)
 	}
 	switch expr.(type) {
 	case *ast.MapType:
@@ -100,6 +99,9 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
 		if node.slct, err = c.parseAstExpr1(s.Elt, nil); err != nil {
 			return nil, err
 		}
+		node.typn = "[]" + node.slct.typn
+		node.hasb = node.typn == "[]byte" || node.slct.hasb
+		node.hasc = true
 		return node, nil
 	case *ast.StarExpr:
 		s := expr.(*ast.StarExpr)
@@ -110,6 +112,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
 		return node, nil
 	case *ast.Ident:
 		id := expr.(*ast.Ident)
+		node.typn = id.String()
 		node.typu = id.String()
 		node.hasb = node.typu == "string"
 		node.hasc = node.hasb
