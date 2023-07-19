@@ -47,14 +47,19 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 }
 
 func (c *Compiler) parseAstType(ts *ast.TypeSpec) (*node, error) {
-	node := &node{
-		typ:  typeBasic,
-		typn: strings.Replace(ts.Name.String(), c.pkgDot, "", 1),
-		ptr:  false,
-	}
+	// node := &node{
+	// 	typ:  typeBasic,
+	// 	typn: strings.Replace(ts.Name.String(), c.pkgDot, "", 1),
+	// 	ptr:  false,
+	// }
 	if ts.Type == nil {
-		return nil, nil
+		return nil, ErrUnsupportedType
 	}
+	node, err := c.parseAstExpr(ts.Type)
+	if err != nil {
+		return nil, err
+	}
+
 	switch ts.Type.(type) {
 	case *ast.MapType:
 		m := ts.Type.(*ast.MapType)
@@ -99,7 +104,7 @@ func (c *Compiler) parseAstExpr(expr ast.Expr) (*node, error) {
 	}
 	if map_, ok := expr.(*ast.MapType); ok {
 		_ = map_
-		// ...
+		_ = map_.Key
 	}
 	id, ok := expr.(*ast.Ident)
 	if !ok {
