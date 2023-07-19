@@ -22,7 +22,8 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 		if !ok {
 			return true
 		}
-		node, err := c.parseAstType(ts)
+		node, err := c.parseAstExpr1(ts.Type, ts.Name)
+		// node, err := c.parseAstType(ts)
 		if err != nil {
 			return true
 		}
@@ -46,40 +47,39 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 	return nil
 }
 
-func (c *Compiler) parseAstType(ts *ast.TypeSpec) (*node, error) {
-	// node := &node{
-	// 	typ:  typeBasic,
-	// 	typn: strings.Replace(ts.Name.String(), c.pkgDot, "", 1),
-	// 	ptr:  false,
-	// }
-	if ts.Type == nil {
-		return nil, ErrUnsupportedType
+func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
+	var err error
+	node := &node{typ: typeBasic}
+	if id != nil {
+		node.typn = strings.Replace(id.String(), c.pkgDot, "", 1)
 	}
-	node, err := c.parseAstExpr(ts.Type)
-	if err != nil {
-		return nil, err
-	}
-
-	switch ts.Type.(type) {
+	switch expr.(type) {
 	case *ast.MapType:
-		m := ts.Type.(*ast.MapType)
-		_ = m
-		var err error
 		node.typ = typeMap
-		node.mapk, err = c.parseAstExpr(m.Key)
-		node.mapv, err = c.parseAstExpr(m.Value)
+		if id != nil {
+			node.name = strings.Replace(id.String(), c.pkgDot, "", 1)
+		}
+		m := expr.(*ast.MapType)
+		if node.mapk, err = c.parseAstExpr1(m.Key, nil); err != nil {
+			return nil, err
+		}
+		if node.mapv, err = c.parseAstExpr1(m.Value, nil); err != nil {
+			return nil, err
+		}
 		node.hasb = node.mapk.hasb || node.mapv.hasb
 		node.hasc = true
-		return node, err
+		return node, nil
 	case *ast.StructType:
-		s := ts.Type.(*ast.StructType)
-		_ = s
-		var err error
 		node.typ = typeStruct
+		s := expr.(*ast.StructType)
 		if s.Fields != nil {
 			for i := 0; i < len(s.Fields.List); i++ {
 				field := s.Fields.List[i]
-				ch, err := c.parseAstField(field)
+				var id *ast.Ident
+				if len(field.Names) > 0 {
+					id = field.Names[0]
+				}
+				ch, err := c.parseAstExpr1(field.Type, id)
 				if err != nil {
 					return nil, err
 				}
@@ -88,48 +88,33 @@ func (c *Compiler) parseAstType(ts *ast.TypeSpec) (*node, error) {
 				node.hasc = node.hasc || ch.hasc
 			}
 		}
-		_ = err
-	}
-	return node, nil
-}
-
-func (c *Compiler) parseAstExpr(expr ast.Expr) (*node, error) {
-	var pfx string
-	if arr, ok := expr.(*ast.ArrayType); ok {
-		expr = arr.Elt
-		pfx = "[]"
-	}
-	if star, ok := expr.(*ast.StarExpr); ok {
-		expr = star.X
-	}
-	if map_, ok := expr.(*ast.MapType); ok {
-		_ = map_
-		_ = map_.Key
-	}
-	id, ok := expr.(*ast.Ident)
-	if !ok {
-		return nil, nil
-	}
-	node := &node{
-		typ:  typeBasic,
-		typn: pfx + strings.Replace(id.String(), c.pkgDot, "", 1),
-		ptr:  false,
-	}
-	if id.Obj == nil {
+		return node, nil
+	case *ast.SliceExpr:
+		node.typ = typeSlice
+		s := expr.(*ast.SliceExpr)
+		_ = s
+		return node, nil
+	case *ast.ArrayType:
+		node.typ = typeSlice
+		s := expr.(*ast.ArrayType)
+		if node.slct, err = c.parseAstExpr1(s.Elt, nil); err != nil {
+			return nil, err
+		}
+		return node, nil
+	case *ast.StarExpr:
+		s := expr.(*ast.StarExpr)
+		if node, err = c.parseAstExpr1(s.X, nil); err != nil {
+			return nil, err
+		}
+		node.ptr = true
+		return node, nil
+	case *ast.Ident:
+		id := expr.(*ast.Ident)
 		node.typu = id.String()
 		node.hasb = node.typu == "string"
 		node.hasc = node.hasb
+		return node, nil
+	default:
+		return nil, ErrUnsupportedType
 	}
-	return node, nil
-}
-
-func (c *Compiler) parseAstField(field *ast.Field) (*node, error) {
-	node, err := c.parseAstExpr(field.Type)
-	if err != nil {
-		return nil, err
-	}
-	if len(field.Names) > 0 {
-		node.name = field.Names[0].String()
-	}
-	return node, nil
 }
