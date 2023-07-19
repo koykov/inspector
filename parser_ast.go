@@ -29,6 +29,7 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 		if node == nil || node.typ == typeBasic || reMap.MatchString(node.typn) || reSlc.MatchString(node.typn) {
 			return true
 		}
+		node.pkg = file.Name.String()
 		// Check and skip type if it is already parsed or blacklisted.
 		if _, ok := c.uniq[node.name]; ok {
 			return true
@@ -70,6 +71,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident) (*node, error) {
 		return node, nil
 	case *ast.StructType:
 		node.typ = typeStruct
+		node.typn = node.name
 		s := expr.(*ast.StructType)
 		if s.Fields != nil {
 			for i := 0; i < len(s.Fields.List); i++ {
