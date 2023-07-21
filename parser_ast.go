@@ -52,6 +52,14 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 	node := &node{typ: typeBasic}
 	if id != nil {
 		node.name = strings.Replace(id.String(), c.pkgDot, "", 1)
+		if id.Obj != nil {
+			node.name = id.Obj.Name
+		}
+	}
+	if depth == 0 {
+		node.typn = id.String()
+		node.pkg = c.pkgName
+		node.pkgi = c.imp_
 	}
 	switch expr.(type) {
 	case *ast.MapType:
@@ -85,6 +93,10 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 				ch, err := c.parseAstExpr1(field.Type, id, depth+1)
 				if err != nil {
 					return nil, err
+				}
+				ch.name = id.String()
+				if len(ch.typn) == 0 {
+					ch.typn = c.composeAstTypeName()
 				}
 				node.chld = append(node.chld, ch)
 				node.hasb = node.hasb || ch.hasb
@@ -126,10 +138,18 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 					return nil, err
 				}
 				node.name = ""
+				node.typn = ts.Name.String()
+				node.pkg = c.pkgName
+				node.pkgi = c.imp_
 			}
 		}
 		return node, nil
 	default:
 		return nil, ErrUnsupportedType
 	}
+}
+
+func (c *Compiler) composeAstTypeName() string {
+	// todo implement me (map type declaration)
+	return ""
 }
