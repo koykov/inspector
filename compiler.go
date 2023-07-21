@@ -130,12 +130,22 @@ func (c *Compiler) Compile() error {
 	if c.l != nil {
 		c.l.Print("Prepare destination dir " + c.dst)
 	}
-	gopath := os.Getenv("GOPATH")
-	if len(gopath) == 0 {
-		return ErrNoGOPATH
-	}
 	ps := string(os.PathSeparator)
-	c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
+	switch c.trg {
+	case TargetPackage:
+		gopath := os.Getenv("GOPATH")
+		if len(gopath) == 0 {
+			return ErrNoGOPATH
+		}
+		c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
+	default:
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		c.dstAbs = wd + ps + c.dst
+		c.pkg = c.imp_
+	}
 
 	dstExists := true
 	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
@@ -281,7 +291,8 @@ func (c *Compiler) writeFile(filename string) error {
 	source := c.wr.Bytes()
 	fmtSource, err := format.Source(source)
 	if err != nil {
-		return err
+		// return err
+		return os.WriteFile(filename, source, 0644)
 	}
 
 	return os.WriteFile(filename, fmtSource, 0644)
