@@ -275,7 +275,6 @@ func (c *Compiler) parse() error {
 		}
 		// todo implement me
 	case TargetFile:
-		// todo implement me
 		err = c.parseFile(c.pkg)
 	}
 	return err

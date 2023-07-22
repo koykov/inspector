@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/koykov/inspector"
 )
@@ -79,10 +80,10 @@ func init() {
 		if len(dst) == 0 {
 			base := filepath.Base(file)
 			path_ := file[:len(file)-len(base)]
+			path_ = strings.Trim(path_, "./")
 			name := base[:len(base)-len(filepath.Ext(base))]
-			dst = path_ + string(os.PathSeparator) + name + "_ins.go"
+			dst = path_ + string(os.PathSeparator) + name + "_ins"
 		}
-		// todo implement me
 	default:
 		log.Fatal("No pkg, dir or file option provided.")
 	}
