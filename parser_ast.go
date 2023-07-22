@@ -96,7 +96,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 				}
 				ch.name = id.String()
 				if len(ch.typn) == 0 {
-					ch.typn = c.composeAstTypeName()
+					ch.typn = c.composeAstTypeName(ch)
 				}
 				node.chld = append(node.chld, ch)
 				node.hasb = node.hasb || ch.hasb
@@ -149,7 +149,19 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 	}
 }
 
-func (c *Compiler) composeAstTypeName() string {
-	// todo implement me (map type declaration)
-	return ""
+func (c *Compiler) composeAstTypeName(node *node) string {
+	var typn string
+	switch node.typ {
+	case typeMap:
+		typn = "map["
+		if node.mapk.ptr {
+			typn += "*"
+		}
+		typn += node.mapk.typn + "]"
+		if node.mapv.ptr {
+			typn += "*"
+		}
+		typn += node.mapv.typn
+	}
+	return typn
 }
