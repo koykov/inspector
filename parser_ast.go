@@ -74,6 +74,9 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		if node.mapv, err = c.parseAstExpr(m.Value, nil, depth+1); err != nil {
 			return nil, err
 		}
+		if len(node.typn) == 0 {
+			node.typn = c.composeAstTypeName(node)
+		}
 		node.hasb = node.mapk.hasb || node.mapv.hasb
 		node.hasc = true
 		return node, nil
@@ -115,7 +118,9 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		if node.slct, err = c.parseAstExpr(s.Elt, nil, depth+1); err != nil {
 			return nil, err
 		}
-		node.typn = "[]" + node.slct.typn
+		if len(node.typn) == 0 {
+			node.typn = c.composeAstTypeName(node)
+		}
 		node.hasb = node.typn == "[]byte" || node.slct.hasb
 		node.hasc = true
 		return node, nil
@@ -162,6 +167,12 @@ func (c *Compiler) composeAstTypeName(node *node) string {
 			typn += "*"
 		}
 		typn += node.mapv.typn
+	case typeSlice:
+		typn = "[]"
+		if node.slct.ptr {
+			typn += "*"
+		}
+		typn += node.slct.typn
 	}
 	return typn
 }
