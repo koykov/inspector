@@ -23,7 +23,7 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 			return true
 		}
 		c.pkgName = file.Name.String()
-		node, err := c.parseAstExpr1(ts.Type, ts.Name, 0)
+		node, err := c.parseAstExpr(ts.Type, ts.Name, 0)
 		if err != nil {
 			return true
 		}
@@ -47,7 +47,7 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 	return nil
 }
 
-func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node, error) {
+func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node, error) {
 	var err error
 	node := &node{typ: typeBasic}
 	if id != nil {
@@ -68,10 +68,10 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 			node.name = strings.Replace(id.String(), c.pkgDot, "", 1)
 		}
 		m := expr.(*ast.MapType)
-		if node.mapk, err = c.parseAstExpr1(m.Key, nil, depth+1); err != nil {
+		if node.mapk, err = c.parseAstExpr(m.Key, nil, depth+1); err != nil {
 			return nil, err
 		}
-		if node.mapv, err = c.parseAstExpr1(m.Value, nil, depth+1); err != nil {
+		if node.mapv, err = c.parseAstExpr(m.Value, nil, depth+1); err != nil {
 			return nil, err
 		}
 		node.hasb = node.mapk.hasb || node.mapv.hasb
@@ -90,7 +90,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 				if len(field.Names) > 0 {
 					id = field.Names[0]
 				}
-				ch, err := c.parseAstExpr1(field.Type, id, depth+1)
+				ch, err := c.parseAstExpr(field.Type, id, depth+1)
 				if err != nil {
 					return nil, err
 				}
@@ -112,7 +112,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 	case *ast.ArrayType:
 		node.typ = typeSlice
 		s := expr.(*ast.ArrayType)
-		if node.slct, err = c.parseAstExpr1(s.Elt, nil, depth+1); err != nil {
+		if node.slct, err = c.parseAstExpr(s.Elt, nil, depth+1); err != nil {
 			return nil, err
 		}
 		node.typn = "[]" + node.slct.typn
@@ -121,7 +121,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 		return node, nil
 	case *ast.StarExpr:
 		s := expr.(*ast.StarExpr)
-		if node, err = c.parseAstExpr1(s.X, nil, depth+1); err != nil {
+		if node, err = c.parseAstExpr(s.X, nil, depth+1); err != nil {
 			return nil, err
 		}
 		node.ptr = true
@@ -134,7 +134,7 @@ func (c *Compiler) parseAstExpr1(expr ast.Expr, id *ast.Ident, depth int) (*node
 		node.hasc = node.hasb
 		if id.Obj != nil {
 			if ts, ok := id.Obj.Decl.(*ast.TypeSpec); ok {
-				if node, err = c.parseAstExpr1(ts.Type, ts.Name, depth+1); err != nil {
+				if node, err = c.parseAstExpr(ts.Type, ts.Name, depth+1); err != nil {
 					return nil, err
 				}
 				node.name = ""
