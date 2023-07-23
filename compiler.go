@@ -84,6 +84,7 @@ type Compiler struct {
 	l Logger
 	// Writer object
 	wr ByteStringWriter
+	nc bool
 
 	err error
 }
@@ -99,7 +100,7 @@ var (
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 )
 
-func NewCompiler(target Target, src, dst, imp string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
+func NewCompiler(target Target, src, dst, imp string, bl map[string]bool, noClean bool, w ByteStringWriter, l Logger) *Compiler {
 	c := Compiler{
 		trg:    target,
 		pkg:    src,
@@ -107,6 +108,7 @@ func NewCompiler(target Target, src, dst, imp string, bl map[string]bool, w Byte
 		dst:    dst,
 		bl:     bl,
 		uniq:   make(map[string]bool),
+		nc:     noClean,
 		wr:     w,
 		l:      l,
 		imp:    make([]string, 0),
@@ -151,7 +153,7 @@ func (c *Compiler) Compile() error {
 	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
 		dstExists = false
 	}
-	if dstExists {
+	if dstExists && !c.nc {
 		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
 			return err
 		}
@@ -159,8 +161,10 @@ func (c *Compiler) Compile() error {
 			return err
 		}
 	}
-	if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
-		return ErrDstNotExists
+	if !dstExists {
+		if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
+			return ErrDstNotExists
+		}
 	}
 
 	// Write init file of destination package.

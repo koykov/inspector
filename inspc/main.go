@@ -20,9 +20,10 @@ var (
 	fDst  = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
 	fBl   = flag.String("bl", "", "Path to blacklist file.")
 	fXML  = flag.String("xml", "", "Path to generate XML output.")
+	fNC   = flag.Bool("no-clean", false, "Deny to cleanup destination dir.")
 	// Dereferenced arguments.
 	pkg, dir, file, imp, src, dst string
-	xml                           bool
+	xml, nc                       bool
 
 	absPkg string
 	target inspector.Target
@@ -42,6 +43,7 @@ func init() {
 	file = *fFile
 	imp = *fImp
 	dst = *fDst
+	nc = *fNC
 	if xml = len(*fXML) > 0; xml {
 		dst = *fXML
 	}
@@ -108,7 +110,7 @@ func main() {
 	lg := log.New(os.Stdout, "", log.LstdFlags)
 
 	// Initiate the compiler.
-	c := inspector.NewCompiler(target, src, dst, imp, bl, buf, lg)
+	c := inspector.NewCompiler(target, src, dst, imp, bl, nc, buf, lg)
 	// Parse and write compiled output to the destination directory.
 	var (
 		err error
