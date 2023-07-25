@@ -58,33 +58,21 @@ type Logger interface {
 }
 
 type Compiler struct {
-	trg Target
-	// Path to the package relative to $GOPATH/src.
-	pkg  string
-	imp_ string
-	// The same as pkg plus dot at the end, needs for internal logic.
-	pkgDot string
-	// Only package name.
-	pkgName string
-	// Destination dir relative to $GOPATH/src.
-	dst string
-	// Absolute path to the destination dir.
-	dstAbs string
-	// List of blacklisted types (key is a type name, value is ignored).
-	bl map[string]struct{}
-	// Cache of processed types, needs to avoid duplications.
-	uniq map[string]struct{}
-	// Tree of parsed types.
-	nodes []*node
-	// List of imports that should be in final output.
-	imp []string
-	// Internal types counter.
+	trg           Target
+	pkg           string
+	pkgDot        string
+	pkgName       string
+	imp_          string
+	dst           string
+	dstAbs        string
+	bl            map[string]struct{}
+	uniq          map[string]struct{}
+	nodes         []*node
+	imp           []string
 	cntr, cntrDEQ int
-	// Logger object
-	l Logger
-	// Writer object
-	wr ByteStringWriter
-	nc bool
+	l             Logger
+	wr            ByteStringWriter
+	nc            bool
 
 	err error
 }
