@@ -39,7 +39,7 @@ func (c *Compiler) parseAstFile(file *ast.File) error {
 				return true
 			}
 		}
-		c.uniq[node.name] = true
+		c.uniq[node.name] = struct{}{}
 
 		c.nodes = append(c.nodes, node)
 		return true

@@ -11,24 +11,7 @@ import (
 	"github.com/koykov/inspector"
 )
 
-var (
-	// Command line arguments.
-	fPkg  = flag.String("pkg", "", "Package path. Should be relative to $GOPATH/src.")
-	fDir  = flag.String("dir", "", "Path to directory contains Go files.")
-	fFile = flag.String("file", "", "Path to Go file.")
-	fImp  = flag.String("import", "", "Package import path to use together with -dir/-file options.")
-	fDst  = flag.String("dst", "", `Destination dir. pkg + "_ins" by default.`)
-	fBl   = flag.String("bl", "", "Path to blacklist file.")
-	fXML  = flag.String("xml", "", "Path to generate XML output.")
-	fNC   = flag.Bool("no-clean", false, "Deny to cleanup destination dir.")
-	// Dereferenced arguments.
-	pkg, dir, file, imp, src, dst string
-	xml, nc                       bool
-
-	absPkg string
-	target inspector.Target
-	bl     = map[string]bool{}
-)
+var conf inspector.Config
 
 func init() {
 	// Check $GOPATH variable.
@@ -37,87 +20,86 @@ func init() {
 		log.Fatal("No GOPATH variable found")
 	}
 
-	flag.Parse()
-	pkg = *fPkg
-	dir = *fDir
-	file = *fFile
-	imp = *fImp
-	dst = *fDst
-	nc = *fNC
-	if xml = len(*fXML) > 0; xml {
-		dst = *fXML
-	}
+	var bl string
+	flag.StringVar(&conf.Package, "pkg", "", "Package path. Should be relative to $GOPATH/src.")
+	flag.StringVar(&conf.Directory, "dir", "", "Path to directory contains Go files.")
+	flag.StringVar(&conf.File, "file", "", "Path to single Go file.")
+	flag.StringVar(&conf.Import, "import", "", "Package import path to use together with -dir/-file options.")
+	flag.StringVar(&conf.Destination, "dst", "", "Destination directory path.")
+	flag.StringVar(&bl, "bl", "", "Path to blacklist file.")
+	flag.BoolVar(&conf.NoClean, "no-clean", false, "Deny to cleanup destination directory.")
+	flag.BoolVar(&conf.NoSplit, "no-split", false, "Deny to split output to separate files.")
+	flag.StringVar(&conf.XML, "xml", "", "Path to generate XML output.")
 
-	if (len(dir) > 0 || len(file) > 0) && len(imp) == 0 {
+	flag.Parse()
+
+	if (len(conf.Directory) > 0 || len(conf.File) > 0) && len(conf.Import) == 0 {
 		log.Fatal("Param -imp is required.")
 	}
 
 	switch {
-	case len(pkg) > 0:
-		target = inspector.TargetPackage
-		src = pkg
+	case len(conf.Package) > 0:
+		conf.Target = inspector.TargetPackage
 		ps := string(os.PathSeparator)
 		// Get absolute path to the input package and check it existence.
-		absPkg = os.Getenv("GOPATH") + ps + "src" + ps + pkg
+		absPkg := os.Getenv("GOPATH") + ps + "src" + ps + conf.Package
 		_, err := os.Stat(absPkg)
 		if os.IsNotExist(err) {
-			log.Fatal("pkg doesn't exists: ", pkg)
+			log.Fatal("pkg doesn't exists: ", conf.Package)
 		}
-		if len(dst) == 0 {
-			dst = pkg + "_ins"
+		if len(conf.Destination) == 0 {
+			conf.Destination = conf.Package + "_ins"
 		}
-	case len(dir) > 0:
-		target = inspector.TargetDirectory
-		src = dir
-		_, err := os.Stat(absPkg)
+	case len(conf.Directory) > 0:
+		conf.Target = inspector.TargetDirectory
+		_, err := os.Stat(conf.Directory)
 		if os.IsNotExist(err) {
-			log.Fatal("dir doesn't exists: ", pkg)
+			log.Fatal("dir doesn't exists: ", conf.Directory)
 		}
-		if len(dst) == 0 {
-			dst = dir + "_ins"
+		if len(conf.Destination) == 0 {
+			conf.Destination = conf.Directory + "_ins"
 		}
-	case len(file) > 0:
-		target = inspector.TargetFile
-		src = file
-		if len(dst) == 0 {
-			base := filepath.Base(file)
-			path_ := file[:len(file)-len(base)]
+	case len(conf.File) > 0:
+		conf.Target = inspector.TargetFile
+		if len(conf.Destination) == 0 {
+			base := filepath.Base(conf.File)
+			path_ := conf.File[:len(conf.File)-len(base)]
 			path_ = strings.Trim(path_, "./")
 			name := base[:len(base)-len(filepath.Ext(base))]
-			dst = path_ + string(os.PathSeparator) + name + "_ins"
+			conf.Destination = path_ + string(os.PathSeparator) + name + "_ins"
 		}
 	default:
 		log.Fatal("No pkg, dir or file option provided.")
 	}
 
 	// Check and read blacklist file.
-	if len(*fBl) > 0 {
-		contents, err := os.ReadFile(*fBl)
+	if len(bl) > 0 {
+		contents, err := os.ReadFile(bl)
 		if err != nil {
 			log.Fatal(err)
 		}
 		// Each blacklisted type should be on separate line in file.
 		lines := bytes.Split(contents, []byte("\n"))
 		for _, line := range lines {
-			bl[string(line)] = true
+			conf.BlackList[string(line)] = struct{}{}
 		}
 	}
 }
 
 func main() {
 	// Prepare output buffer and logger.
-	buf := &bytes.Buffer{}
-	lg := log.New(os.Stdout, "", log.LstdFlags)
+	conf.Buf = &bytes.Buffer{}
+	conf.Logger = log.New(os.Stdout, "", log.LstdFlags)
 
 	// Initiate the compiler.
-	c := inspector.NewCompiler(target, src, dst, imp, bl, nc, buf, lg)
+	c, err := inspector.NewCompiler(&conf)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Parse and write compiled output to the destination directory.
-	var (
-		err error
-		msg string
-	)
+	var msg string
 	switch {
-	case xml:
+	case len(conf.XML) > 0:
 		msg = "Total files generated:"
 		err = c.WriteXML()
 	default:

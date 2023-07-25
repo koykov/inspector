@@ -42,7 +42,7 @@ func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
 						continue
 					}
 				}
-				c.uniq[node.name] = true
+				c.uniq[node.name] = struct{}{}
 
 				c.nodes = append(c.nodes, node)
 			}

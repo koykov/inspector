@@ -71,9 +71,9 @@ type Compiler struct {
 	// Absolute path to the destination dir.
 	dstAbs string
 	// List of blacklisted types (key is a type name, value is ignored).
-	bl map[string]bool
+	bl map[string]struct{}
 	// Cache of processed types, needs to avoid duplications.
-	uniq map[string]bool
+	uniq map[string]struct{}
 	// Tree of parsed types.
 	nodes []*node
 	// List of imports that should be in final output.
@@ -100,24 +100,36 @@ var (
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 )
 
-func NewCompiler(target Target, src, dst, imp string, bl map[string]bool, noClean bool, w ByteStringWriter, l Logger) *Compiler {
+func NewCompiler(conf *Config) (*Compiler, error) {
+	cc := conf.Copy()
+	var source string
+	switch conf.Target {
+	case TargetPackage:
+		source = conf.Package
+	case TargetDirectory:
+		source = conf.Directory
+	case TargetFile:
+		source = conf.File
+	default:
+		return nil, ErrUnknownTarget
+	}
 	c := Compiler{
-		trg:    target,
-		pkg:    src,
-		pkgDot: src + ".",
-		dst:    dst,
-		bl:     bl,
-		uniq:   make(map[string]bool),
-		nc:     noClean,
-		wr:     w,
-		l:      l,
+		trg:    cc.Target,
+		pkg:    source,
+		pkgDot: source + ".",
+		dst:    cc.Destination,
+		bl:     cc.BlackList,
+		uniq:   make(map[string]struct{}),
+		nc:     cc.NoClean,
+		wr:     cc.Buf,
+		l:      cc.Logger,
 		imp:    make([]string, 0),
 	}
-	if len(imp) > 0 {
-		c.imp_ = imp
-		c.pkgDot = imp + "."
+	if len(cc.Import) > 0 {
+		c.imp_ = cc.Import
+		c.pkgDot = cc.Import + "."
 	}
-	return &c
+	return &c, nil
 }
 
 func (c *Compiler) String() string {

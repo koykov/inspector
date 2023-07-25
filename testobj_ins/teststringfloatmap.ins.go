@@ -10,6 +10,10 @@ import (
 	"strconv"
 )
 
+func init() {
+	inspector.RegisterInspector("TestStringFloatMap", TestStringFloatMapInspector{})
+}
+
 type TestStringFloatMapInspector struct {
 	inspector.BaseInspector
 }
