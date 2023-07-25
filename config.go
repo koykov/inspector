@@ -19,6 +19,7 @@ type Config struct {
 	// Flag denies destination directory cleaning.
 	NoClean bool
 	// Flag denies compiling inspectors to separate files.
+	// Reserved, still not works.
 	NoSplit bool
 	// Path to build debug data in XML format.
 	XML string

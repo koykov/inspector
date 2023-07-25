@@ -123,6 +123,9 @@ func NewCompiler(conf *Config) (*Compiler, error) {
 }
 
 func (c *Compiler) Compile() error {
+	if c.cnf == nil {
+		return ErrNoConfig
+	}
 	if err := c.parse(); err != nil {
 		return err
 	}
