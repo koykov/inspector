@@ -74,6 +74,7 @@ type Compiler struct {
 	wr            ByteStringWriter
 	nc            bool
 
+	cnf *Config
 	err error
 }
 
@@ -108,20 +109,17 @@ func NewCompiler(conf *Config) (*Compiler, error) {
 		dst:    cc.Destination,
 		bl:     cc.BlackList,
 		uniq:   make(map[string]struct{}),
-		nc:     cc.NoClean,
+		nc:     cc.NoClean || len(conf.XML) > 0,
 		wr:     cc.Buf,
 		l:      cc.Logger,
 		imp:    make([]string, 0),
+		cnf:    cc,
 	}
 	if len(cc.Import) > 0 {
 		c.imp_ = cc.Import
 		c.pkgDot = cc.Import + "."
 	}
 	return &c, nil
-}
-
-func (c *Compiler) String() string {
-	return ""
 }
 
 func (c *Compiler) Compile() error {
@@ -196,7 +194,7 @@ func (c *Compiler) WriteXML() error {
 		if err != nil {
 			return err
 		}
-		c.dstAbs = wd + ps + c.dst
+		c.dstAbs = wd + ps + c.cnf.XML
 	}
 	if c.l != nil {
 		c.l.Print("Prepare destination dir " + c.dst)
