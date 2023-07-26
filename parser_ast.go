@@ -4,8 +4,41 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"io/fs"
+	"sort"
 	"strings"
 )
+
+func (c *Compiler) parseDir(path string) error {
+	fset := token.NewFileSet()
+	pkgs, err := parser.ParseDir(fset, path, func(info fs.FileInfo) bool { return true }, 0)
+	if err != nil {
+		return err
+	}
+	var keys []string
+	for pkg := range pkgs {
+		keys = append(keys, pkg)
+	}
+	sort.Strings(keys)
+	for i := 0; i < len(keys); i++ {
+		pkg := pkgs[keys[i]]
+		if len(pkg.Files) == 0 {
+			continue
+		}
+		var keys1 []string
+		for file := range pkg.Files {
+			keys1 = append(keys1, file)
+		}
+		sort.Strings(keys1)
+		for j := 0; j < len(keys1); j++ {
+			file := pkg.Files[keys1[j]]
+			if err = c.parseAstFile(file); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
 
 func (c *Compiler) parseFile(path string) error {
 	fset := token.NewFileSet()

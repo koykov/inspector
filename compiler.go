@@ -263,7 +263,7 @@ func (c *Compiler) parse() error {
 		if c.l != nil {
 			c.l.Print("Parse directory " + c.pkg)
 		}
-		// todo implement me
+		err = c.parseDir(c.pkg)
 	case TargetFile:
 		err = c.parseFile(c.pkg)
 	}
