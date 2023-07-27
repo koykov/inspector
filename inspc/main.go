@@ -2,13 +2,13 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/koykov/inspector"
+	"github.com/koykov/multiflag"
 )
 
 var conf inspector.Config
@@ -21,17 +21,16 @@ func init() {
 	}
 
 	var bl string
-	flag.StringVar(&conf.Package, "pkg", "", "Package path. Should be relative to $GOPATH/src.")
-	flag.StringVar(&conf.Directory, "dir", "", "Path to directory contains Go files.")
-	flag.StringVar(&conf.File, "file", "", "Path to single Go file.")
-	flag.StringVar(&conf.Import, "import", "", "Package import path to use together with -dir/-file options.")
-	flag.StringVar(&conf.Destination, "dst", "", "Destination directory path.")
-	flag.StringVar(&bl, "bl", "", "Path to blacklist file.")
-	flag.BoolVar(&conf.NoClean, "no-clean", false, "Deny to cleanup destination directory.")
-	flag.BoolVar(&conf.NoSplit, "no-split", false, "Deny to split output to separate files.")
-	flag.StringVar(&conf.XML, "xml", "", "Path to generate XML output.")
-
-	flag.Parse()
+	multiflag.StringsVar(&conf.Package, []string{"p", "pkg", "package"}, "", "Path to Go `package`. Should be relative to $GOPATH/src.")
+	multiflag.StringsVar(&conf.Directory, []string{"d", "dir", "directory"}, "", "Path to `directory` contains Go files.")
+	multiflag.StringsVar(&conf.File, []string{"f", "file"}, "", "Path to single Go `file`.")
+	multiflag.StringsVar(&conf.Import, []string{"i", "imp", "import"}, "", "Package import `path` to use together with -directory/-file options.")
+	multiflag.StringsVar(&conf.Destination, []string{"dst", "destination"}, "", "Destination directory `path`.")
+	multiflag.StringsVar(&bl, []string{"b", "bl", "black-list"}, "", "Path to blacklist `file`.")
+	multiflag.BoolsVar(&conf.NoClean, []string{"nc", "no-clean"}, false, "Deny to cleanup destination directory.")
+	multiflag.BoolsVar(&conf.NoSplit, []string{"ns", "no-split"}, false, "Deny to split output to separate files (reserved).")
+	multiflag.StringsVar(&conf.XML, []string{"x", "xml"}, "", "Debug XML data destination `path`.")
+	multiflag.Parse()
 
 	if (len(conf.Directory) > 0 || len(conf.File) > 0) && len(conf.Import) == 0 {
 		log.Fatal("Param -imp is required.")
