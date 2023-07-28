@@ -9,6 +9,8 @@ In general `inspc` require only path to source. There are three possible sources
 * directory
 * single file
 
+Strongly recommend to check [generate.go](../generate.go) to see various examples of usage.
+
 ### Package
 
 Packages is the better source since it provide the whole information about source code. But it has a restriction: path
@@ -28,7 +30,7 @@ inspc -package github.com/koykov/inspector/testobj -destination /home/<user_name
 
 Example of usage:
 ```bash
-inspc -directory path/to/directory -import <import_path>
+inspc -directory path/to/directory -import <package_path>
 ```
 `inspc` will write output to `path/to/directory_ins` by default, but you may specify destination directory by using
 `-destination` option.
@@ -44,7 +46,7 @@ File way is similar to directory, but single Go file must be specified as a sour
 
 Example of usage:
 ```bash
-inspc -file path/to/file.go -import <import_path>
+inspc -file path/to/file.go -import <package_path>
 ```
 `inspc` will write output to directory `path/to/file_ins` or any directory you specified using `-destination` option.
 
@@ -60,3 +62,7 @@ As result in `$GOPATH/bin` will build `inspc` executable binary.
 
 If you need to skip compiling inspectors for certain types in the input packages, just list them in the text file, each
 type name in the separate line and specify the path to file in `-black-list` argument.
+
+## Miscellaneous
+
+Execute `inspc --help` to see rest of options.
