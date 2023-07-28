@@ -73,6 +73,7 @@ func init() {
 
 	// Check and read blacklist file.
 	if len(bl) > 0 {
+		conf.BlackList = make(map[string]struct{})
 		contents, err := os.ReadFile(bl)
 		if err != nil {
 			log.Fatal(err)
