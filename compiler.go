@@ -203,16 +203,19 @@ func (c *Compiler) WriteXML() error {
 	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
 		dstExists = false
 	}
-	if dstExists {
+	if dstExists && !c.nc {
 		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
 			return err
 		}
 		if err := os.RemoveAll(c.dstAbs); err != nil {
 			return err
 		}
+		dstExists = false
 	}
-	if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
-		return ErrDstNotExists
+	if !dstExists {
+		if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
+			return ErrDstNotExists
+		}
 	}
 
 	// Walk over nodes and compile each of them to separate file.
