@@ -142,11 +142,7 @@ func (c *Compiler) Compile() error {
 		}
 		c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
 	default:
-		wd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-		c.dstAbs = wd + ps + c.dst
+		c.dstAbs = c.dst
 		c.pkg = c.imp_
 	}
 
@@ -161,6 +157,7 @@ func (c *Compiler) Compile() error {
 		if err := os.RemoveAll(c.dstAbs); err != nil {
 			return err
 		}
+		dstExists = false
 	}
 	if !dstExists {
 		if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
