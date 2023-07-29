@@ -167,7 +167,7 @@ func (c *Compiler) Compile() error {
 
 	// Walk over nodes and compile each of them to separate file.
 	for _, node := range c.nodes {
-		file := strings.ToLower(node.name) + ".ins.go"
+		file := strings.ToLower(node.name) + "_ins.go"
 		if c.l != nil {
 			c.l.Print("Compiling ", node.name, "Inspector to "+file)
 		}
