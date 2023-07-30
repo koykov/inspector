@@ -32,6 +32,15 @@ func init() {
 	multiflag.StringsVar(&conf.XML, []string{"x", "xml"}, "", "Debug XML data destination `path`.")
 	multiflag.Parse()
 
+	if conf.Destination == "." || conf.Destination == "./" {
+		wd, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+		conf.Destination = wd
+		conf.NoClean = true
+	}
+
 	if (len(conf.Directory) > 0 || len(conf.File) > 0) && len(conf.Import) == 0 {
 		log.Fatal("Param -imp is required.")
 	}
