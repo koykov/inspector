@@ -305,7 +305,10 @@ func (c *Compiler) writeType(node *node) error {
 
 	c.wdl("package ", c.pkgName, sfx)
 
-	c.imp = append(c.imp[:0], `"github.com/koykov/inspector"`, `"`+c.pkg+`"`)
+	c.imp = append(c.imp[:0], `"github.com/koykov/inspector"`)
+	if !c.inp {
+		c.imp = append(c.imp, `"`+c.pkg+`"`)
+	}
 	c.wdl("import (\n!{import}\n)")
 
 	c.wl("func init() {")
