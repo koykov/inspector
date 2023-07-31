@@ -21,6 +21,8 @@ type Config struct {
 	// Flag denies compiling inspectors to separate files.
 	// Reserved, still not works.
 	NoSplit bool
+	// Flag if destination equals source.
+	InPlace bool
 	// Path to build debug data in XML format.
 	XML string
 	// Output buffer.

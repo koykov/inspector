@@ -70,6 +70,7 @@ type Compiler struct {
 	nodes         []*node
 	imp           []string
 	cntr, cntrDEQ int
+	inp           bool
 	l             Logger
 	wr            ByteStringWriter
 	nc            bool
@@ -110,6 +111,7 @@ func NewCompiler(conf *Config) (*Compiler, error) {
 		bl:     cc.BlackList,
 		uniq:   make(map[string]struct{}),
 		nc:     cc.NoClean || len(conf.XML) > 0,
+		inp:    conf.InPlace,
 		wr:     cc.Buf,
 		l:      cc.Logger,
 		imp:    make([]string, 0),

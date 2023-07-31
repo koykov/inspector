@@ -32,12 +32,23 @@ func init() {
 	multiflag.StringsVar(&conf.XML, []string{"x", "xml"}, "", "Debug XML data destination `path`.")
 	multiflag.Parse()
 
-	if conf.Destination == "." || conf.Destination == "./" {
-		wd, err := os.Getwd()
-		if err != nil {
-			log.Fatal(err)
+	rootDir := func(path string) (string, bool, error) {
+		if path == "." || path == "./" {
+			wd, err := os.Getwd()
+			if err != nil {
+				return "", false, err
+			}
+			return wd, true, nil
 		}
-		conf.Destination = wd
+		return path, false, nil
+	}
+
+	root, ok, err := rootDir(conf.Destination)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if ok {
+		conf.Destination = root
 		conf.NoClean = true
 	}
 
@@ -51,8 +62,7 @@ func init() {
 		ps := string(os.PathSeparator)
 		// Get absolute path to the input package and check it existence.
 		absPkg := os.Getenv("GOPATH") + ps + "src" + ps + conf.Package
-		_, err := os.Stat(absPkg)
-		if os.IsNotExist(err) {
+		if _, err = os.Stat(absPkg); os.IsNotExist(err) {
 			log.Fatal("pkg doesn't exists: ", conf.Package)
 		}
 		if len(conf.Destination) == 0 {
@@ -60,15 +70,30 @@ func init() {
 		}
 	case len(conf.Directory) > 0:
 		conf.Target = inspector.TargetDirectory
-		_, err := os.Stat(conf.Directory)
-		if os.IsNotExist(err) {
+		if _, err = os.Stat(conf.Directory); os.IsNotExist(err) {
 			log.Fatal("dir doesn't exists: ", conf.Directory)
 		}
+
+		dirAbs, err := filepath.Abs(conf.Directory)
+		if err != nil {
+			log.Fatal(err)
+		}
+		dir := filepath.Dir(dirAbs)
+		conf.InPlace = dir == conf.Destination
+
 		if len(conf.Destination) == 0 {
 			conf.Destination = conf.Directory + "_ins"
 		}
 	case len(conf.File) > 0:
 		conf.Target = inspector.TargetFile
+
+		fileAbs, err := filepath.Abs(conf.File)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fileDir := filepath.Dir(fileAbs)
+		conf.InPlace = fileDir == conf.Destination
+
 		if len(conf.Destination) == 0 {
 			base := filepath.Base(conf.File)
 			path_ := conf.File[:len(conf.File)-len(base)]
