@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"go/format"
 	"go/types"
+	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -287,7 +288,11 @@ func (c *Compiler) writeFile(filename string) error {
 	source := c.wr.Bytes()
 	fmtSource, err := format.Source(source)
 	if err != nil {
-		return err
+		if !c.cnf.Force {
+			return err
+		}
+		log.Println(err)
+		fmtSource = source
 	}
 
 	return os.WriteFile(filename, fmtSource, 0644)
@@ -1548,13 +1553,13 @@ func (c *Compiler) fmtT(node_ *node) string {
 			}
 		}
 		if strings.Index(node_.typn, "[]") != -1 {
-			pfx := ""
+			pfx_ := ""
 			if node_.slct.ptr {
-				pfx = "*"
+				pfx_ = "*"
 			}
-			s = "[]" + pfx + strings.TrimLeft(s, "*")
+			s = "[]" + pfx_ + strings.TrimLeft(s, "*")
 		} else {
-			s = pfx(node_.slct) + strings.Trim(node_.typn, "*")
+			s = pfx(node_) + strings.Trim(node_.typn, "*")
 		}
 		return s
 	case typeBasic:
