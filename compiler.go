@@ -346,6 +346,9 @@ func (c *Compiler) writeRootNode(node *node) (err error) {
 	inst := node.name + "Inspector"
 	recv := "i" + strconv.Itoa(c.cntr)
 	pname := c.pkgName + "." + node.typn
+	if c.inp {
+		pname = node.typn
+	}
 
 	c.wdl("type ", inst, " struct {\ninspector.BaseInspector\n}")
 
@@ -1504,56 +1507,62 @@ func (c *Compiler) fmtP(node *node, v string, depth int) string {
 }
 
 // Format type to use in new()/make() functions.
-func (c *Compiler) fmtT(node *node) string {
-	switch node.typ {
+func (c *Compiler) fmtT(node_ *node) string {
+	pfx := func(node_ *node) string {
+		if c.inp {
+			return ""
+		}
+		return node_.pkg + "."
+	}
+	switch node_.typ {
 	case typeStruct:
-		return node.pkg + "." + strings.Trim(node.typn, "*")
+		return pfx(node_) + strings.Trim(node_.typn, "*")
 	case typeMap:
-		if strings.Contains(node.typn, "map[") {
+		if strings.Contains(node_.typn, "map[") {
 			s := "map["
-			if node.mapk.ptr {
+			if node_.mapk.ptr {
 				s += "*"
 			}
-			if len(node.mapk.pkg) > 0 {
-				s += node.mapk.pkg + "."
+			if len(node_.mapk.pkg) > 0 {
+				s += node_.mapk.pkg + "."
 			}
-			s += node.mapk.typn
+			s += node_.mapk.typn
 			s += "]"
-			if node.mapv.ptr {
+			if node_.mapv.ptr {
 				s += "*"
 			}
-			if len(node.mapv.pkg) > 0 {
-				s += node.mapv.pkg + "."
+			if len(node_.mapv.pkg) > 0 && !c.inp {
+				s += node_.mapv.pkg + "."
 			}
-			s += node.mapv.typn
+			s += node_.mapv.typn
 			return s
 		} else {
-			return node.pkg + "." + strings.Trim(node.typn, "*")
+			return pfx(node_) + strings.Trim(node_.typn, "*")
 		}
 	case typeSlice:
-		s := node.slct.typn
+		s := node_.slct.typn
 		if !c.isBuiltin(s) {
-			s = node.slct.pkg + "." + strings.Trim(node.slct.typn, "*")
-			if node.slct.ptr {
+			s = pfx(node_.slct) + strings.Trim(node_.slct.typn, "*")
+			if node_.slct.ptr {
 				s = "*" + s
 			}
 		}
-		if strings.Index(node.typn, "[]") != -1 {
+		if strings.Index(node_.typn, "[]") != -1 {
 			pfx := ""
-			if node.slct.ptr {
+			if node_.slct.ptr {
 				pfx = "*"
 			}
 			s = "[]" + pfx + strings.TrimLeft(s, "*")
 		} else {
-			s = node.pkg + "." + strings.Trim(node.typn, "*")
+			s = pfx(node_.slct) + strings.Trim(node_.typn, "*")
 		}
 		return s
 	case typeBasic:
-		pfx := ""
-		if node.ptr {
-			pfx = "*"
+		pfx_ := ""
+		if node_.ptr {
+			pfx_ = "*"
 		}
-		return pfx + node.typn
+		return pfx_ + node_.typn
 	}
 	return ""
 }
