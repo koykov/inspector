@@ -29,6 +29,7 @@ func init() {
 	multiflag.StringsVar(&bl, []string{"b", "bl", "black-list"}, "", "Path to blacklist `file`.")
 	multiflag.BoolsVar(&conf.NoClean, []string{"nc", "no-clean"}, false, "Deny to cleanup destination directory.")
 	multiflag.BoolsVar(&conf.NoSplit, []string{"ns", "no-split"}, false, "Deny to split output to separate files (reserved).")
+	multiflag.BoolsVar(&conf.Force, []string{"force"}, false, "Continue even if error occurred.")
 	multiflag.StringsVar(&conf.XML, []string{"x", "xml"}, "", "Debug XML data destination `path`.")
 	multiflag.Parse()
 

@@ -23,6 +23,8 @@ type Config struct {
 	NoSplit bool
 	// Flag if destination equals source.
 	InPlace bool
+	// Continue even if error occurred.
+	Force bool
 	// Path to build debug data in XML format.
 	XML string
 	// Output buffer.
