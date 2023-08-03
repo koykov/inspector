@@ -53,10 +53,6 @@ func init() {
 		conf.NoClean = true
 	}
 
-	if (len(conf.Directory) > 0 || len(conf.File) > 0) && len(conf.Import) == 0 {
-		log.Fatal("Param -imp is required.")
-	}
-
 	switch {
 	case len(conf.Package) > 0:
 		conf.Target = inspector.TargetPackage
@@ -104,6 +100,10 @@ func init() {
 		}
 	default:
 		log.Fatal("No pkg, dir or file option provided.")
+	}
+
+	if (len(conf.Directory) > 0 || len(conf.File) > 0) && len(conf.Import) == 0 && !conf.InPlace {
+		log.Fatal("Param -imp is required.")
 	}
 
 	// Check and read blacklist file.
