@@ -125,7 +125,6 @@ func NewCompiler(conf *Config) (*Compiler, error) {
 	if c.inp {
 		c.pkgDot = ""
 		c.imp_ = ""
-		// c.pkgName = ""
 	}
 	return &c, nil
 }
@@ -273,6 +272,9 @@ func (c *Compiler) parse() error {
 		}
 		err = c.parseDir(c.pkg)
 	case TargetFile:
+		if c.l != nil {
+			c.l.Print("Parse file " + c.pkg)
+		}
 		err = c.parseFile(c.pkg)
 	}
 	return err
