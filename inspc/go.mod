@@ -1,10 +1,10 @@
 module github.com/koykov/inspector/inspc
 
-go 1.20
+go 1.18
 
 require (
 	github.com/koykov/inspector v1.4.2
-	github.com/koykov/multiflag v0.0.0-20230730201141-b3d0872bc930
+	github.com/koykov/multiflag v1.0.0
 )
 
 require (
