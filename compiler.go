@@ -1,8 +1,10 @@
 package inspector
 
 import (
+	"bytes"
 	"go/format"
 	"go/types"
+	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -12,12 +14,19 @@ import (
 	"golang.org/x/tools/go/loader"
 )
 
+type Target int
+
 // Internal node type.
 type typ int
 
 // Node compile mode.
 type mode int
 
+const (
+	TargetPackage Target = iota
+	TargetDirectory
+	TargetFile
+)
 const (
 	// Possible node's types.
 	typeStruct typ = iota
@@ -50,63 +59,25 @@ type Logger interface {
 }
 
 type Compiler struct {
-	// Path to the package relative to $GOPATH/src.
-	pkg string
-	// THe same as pkg plus dot at the end, needs for internal logic.
-	pkgDot string
-	// Only package name.
-	pkgName string
-	// Destination dir relative to $GOPATH/src.
-	dst string
-	// Absolute path to the destination dir.
-	dstAbs string
-	// List of blacklisted types (key is a type name, value is ignored).
-	bl map[string]bool
-	// Cache of processed types, needs to avoid duplications.
-	uniq map[string]bool
-	// Tree of parsed types.
-	nodes []*node
-	// List of imports that should be in final output.
-	imp []string
-	// Internal types counter.
+	trg           Target
+	pkg           string
+	pkgDot        string
+	pkgName       string
+	imp_          string
+	dst           string
+	dstAbs        string
+	bl            map[string]struct{}
+	uniq          map[string]struct{}
+	nodes         []*node
+	imp           []string
 	cntr, cntrDEQ int
-	// Logger object
-	l Logger
-	// Writer object
-	wr ByteStringWriter
+	inp           bool
+	l             Logger
+	wr            ByteStringWriter
+	nc            bool
 
+	cnf *Config
 	err error
-}
-
-// Node type.
-// It's an internal representation of Go type.
-type node struct {
-	// Type flag, see constants above.
-	typ typ
-	// Type name as string.
-	typn string
-	// Underlying type name.
-	typu string
-	// If node has a parent, eg struct or map, this field contains the name or key.
-	name string
-	// Package name, requires for import suffixes.
-	pkg string
-	// Package path, requires for imports.
-	pkgi string
-	// Is node passed as pointer in parent or not.
-	ptr bool
-	// List of child nodes.
-	chld []*node
-	// If is a map, that node contains information about key's type.
-	mapk *node
-	// If is a map, that node contains information about value's type.
-	mapv *node
-	// If is a slice, that node contains information about value's type.
-	slct *node
-	// Flag if node contains bytes or string inside.
-	hasb bool
-	// Flag if node contains string/bytes/slice/map inside.
-	hasc bool
 }
 
 var (
@@ -120,101 +91,193 @@ var (
 	reVnd = regexp.MustCompile(`.*/vendor/(.*)`)
 )
 
-func NewCompiler(pkg, dst string, bl map[string]bool, w ByteStringWriter, l Logger) *Compiler {
-	c := Compiler{
-		pkg:    pkg,
-		pkgDot: pkg + ".",
-		dst:    dst,
-		bl:     bl,
-		uniq:   make(map[string]bool),
-		wr:     w,
-		l:      l,
-		imp:    make([]string, 0),
+func NewCompiler(conf *Config) (*Compiler, error) {
+	cc := conf.Copy()
+	var source string
+	switch conf.Target {
+	case TargetPackage:
+		source = conf.Package
+	case TargetDirectory:
+		source = conf.Directory
+	case TargetFile:
+		source = conf.File
+	default:
+		return nil, ErrUnknownTarget
 	}
-	return &c
-}
-
-func (c *Compiler) String() string {
-	return ""
+	c := Compiler{
+		trg:    cc.Target,
+		pkg:    source,
+		pkgDot: source + ".",
+		dst:    cc.Destination,
+		bl:     cc.BlackList,
+		uniq:   make(map[string]struct{}),
+		nc:     cc.NoClean || len(conf.XML) > 0,
+		inp:    conf.InPlace,
+		wr:     cc.Buf,
+		l:      cc.Logger,
+		imp:    make([]string, 0),
+		cnf:    cc,
+	}
+	if len(cc.Import) > 0 {
+		c.imp_ = cc.Import
+		c.pkgDot = cc.Import + "."
+	}
+	if c.inp {
+		c.pkgDot = ""
+		c.imp_ = ""
+	}
+	return &c, nil
 }
 
 func (c *Compiler) Compile() error {
-	if c.l != nil {
-		c.l.Print("Parse package " + c.pkg)
+	if c.cnf == nil {
+		return ErrNoConfig
 	}
-	// Try import the package.
-	var conf loader.Config
-	conf.Import(c.pkg)
-	prog, err := conf.Load()
-	if err != nil {
+	if err := c.parse(); err != nil {
 		return err
 	}
-
-	// Parse the package to nodes list.
-	pkg := prog.Package(c.pkg)
-	c.pkgName = pkg.Pkg.Name()
-	err = c.parsePkg(pkg)
-	if err != nil {
-		return err
-	}
-
 	// Prepare destination.
 	if c.l != nil {
 		c.l.Print("Prepare destination dir " + c.dst)
 	}
-	gopath := os.Getenv("GOPATH")
-	if len(gopath) == 0 {
-		return ErrNoGOPATH
-	}
 	ps := string(os.PathSeparator)
-	c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
+	switch c.trg {
+	case TargetPackage:
+		gopath := os.Getenv("GOPATH")
+		if len(gopath) == 0 {
+			return ErrNoGOPATH
+		}
+		c.dstAbs = os.Getenv("GOPATH") + ps + "src" + ps + c.dst
+	default:
+		c.dstAbs = c.dst
+		c.pkg = c.imp_
+	}
 
 	dstExists := true
 	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
 		dstExists = false
 	}
-	if dstExists {
+	if dstExists && !c.nc {
 		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
 			return err
 		}
 		if err := os.RemoveAll(c.dstAbs); err != nil {
 			return err
 		}
+		dstExists = false
 	}
-	if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
-		return ErrDstNotExists
-	}
-
-	// Write init file of destination package.
-	file := "init.go"
-	if c.l != nil {
-		c.l.Print("Compiling init to " + file)
-	}
-	err = c.writeInit()
-	if err != nil {
-		return err
-	}
-	err = c.writeFile(c.dstAbs + ps + "init.go")
-	if err != nil {
-		return err
+	if !dstExists {
+		if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
+			return ErrDstNotExists
+		}
 	}
 
 	// Walk over nodes and compile each of them to separate file.
 	for _, node := range c.nodes {
-		file = strings.ToLower(node.name) + ".ins.go"
+		file := strings.ToLower(node.name) + "_ins.go"
 		if c.l != nil {
 			c.l.Print("Compiling ", node.name, "Inspector to "+file)
 		}
 		c.wr.Reset()
-		if err = c.writeType(node); err != nil {
+		if err := c.writeType(node); err != nil {
 			return err
 		}
-		if err = c.writeFile(c.dstAbs + ps + file); err != nil {
+		if err := c.writeFile(c.dstAbs + ps + file); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (c *Compiler) WriteXML() error {
+	if err := c.parse(); err != nil {
+		return err
+	}
+	// Prepare destination.
+	ps := string(os.PathSeparator)
+	if len(c.dstAbs) == 0 {
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		c.dstAbs = wd + ps + c.cnf.XML
+	}
+	if c.l != nil {
+		c.l.Print("Prepare destination dir " + c.dst)
+	}
+	dstExists := true
+	if _, err := os.Stat(c.dstAbs); os.IsNotExist(err) {
+		dstExists = false
+	}
+	if dstExists && !c.nc {
+		if err := syscall.Access(c.dstAbs, syscall.O_RDWR); err != nil {
+			return err
+		}
+		if err := os.RemoveAll(c.dstAbs); err != nil {
+			return err
+		}
+		dstExists = false
+	}
+	if !dstExists {
+		if err := os.MkdirAll(c.dstAbs, 0755); err != nil {
+			return ErrDstNotExists
+		}
+	}
+
+	// Walk over nodes and compile each of them to separate file.
+	var buf bytes.Buffer
+	for _, node := range c.nodes {
+		file := strings.ToLower(node.name) + ".xml"
+		if c.l != nil {
+			c.l.Print("Writing ", node.name, " type to ", file)
+		}
+		buf.Reset()
+		if err := node.write(&buf); err != nil {
+			return err
+		}
+		if err := os.WriteFile(c.dstAbs+ps+file, buf.Bytes(), 0644); err != nil {
+			return err
+		}
+		c.cntr++
+	}
+	return nil
+}
+
+func (c *Compiler) parse() error {
+	var err error
+	switch c.trg {
+	case TargetPackage:
+		if c.l != nil {
+			c.l.Print("Parse package " + c.pkg)
+		}
+		// Try import the package.
+		var conf loader.Config
+		conf.Import(c.pkg)
+		prog, err := conf.Load()
+		if err != nil {
+			return err
+		}
+
+		// Parse the package to nodes list.
+		pkg := prog.Package(c.pkg)
+		c.pkgName = pkg.Pkg.Name()
+		err = c.parsePkg(pkg)
+		if err != nil {
+			return err
+		}
+	case TargetDirectory:
+		if c.l != nil {
+			c.l.Print("Parse directory " + c.pkg)
+		}
+		err = c.parseDir(c.pkg)
+	case TargetFile:
+		if c.l != nil {
+			c.l.Print("Parse file " + c.pkg)
+		}
+		err = c.parseFile(c.pkg)
+	}
+	return err
 }
 
 // GetTotal returns the total number of compiled types.
@@ -222,193 +285,46 @@ func (c *Compiler) GetTotal() int {
 	return c.cntr
 }
 
-// Parse package.
-func (c *Compiler) parsePkg(pkg *loader.PackageInfo) error {
-	for _, scope := range pkg.Info.Scopes {
-		// Only scopes without parents available.
-		if parent := scope.Parent(); parent != nil {
-			for _, name := range parent.Names() {
-				// Get the object representation of scope.
-				o := parent.Lookup(name)
-				if !c.isExported(o) {
-					continue
-				}
-				// Get type of object and parse it.
-				t := o.Type()
-				node, err := c.parseType(t)
-				if err != nil {
-					return err
-				}
-				if node == nil || node.typ == typeBasic || reMap.MatchString(node.typn) || reSlc.MatchString(node.typn) {
-					continue
-				}
-				if node.typ == typeStruct {
-					// Make type name of struct node actual.
-					node.typn = o.Name()
-				}
-				node.pkg = o.Pkg().Name()
-				node.name = o.Name()
-				// Check and skip type if it is already parsed or blacklisted.
-				if _, ok := c.uniq[node.name]; ok {
-					continue
-				}
-				if len(c.bl) > 0 {
-					if _, ok := c.bl[node.name]; ok {
-						continue
-					}
-				}
-				c.uniq[node.name] = true
-
-				c.nodes = append(c.nodes, node)
-			}
-		}
-	}
-
-	return nil
-}
-
-// Main parse method.
-func (c *Compiler) parseType(t types.Type) (*node, error) {
-	// Prepare and fill up default node.
-	node := &node{
-		typ:  typeBasic,
-		typn: strings.Replace(t.String(), c.pkgDot, "", 1),
-		ptr:  false,
-	}
-	if n, ok := t.(*types.Named); ok {
-		node.typn = n.Obj().Name()
-		if n.Obj().Pkg() == nil {
-			return nil, nil
-		}
-		node.pkg = n.Obj().Pkg().Name()
-		node.pkgi = c.clearPkg(n.Obj().Pkg().Path())
-	}
-
-	// Get the underlying type.
-	u := t.Underlying()
-	// Common skips considering by underlying type.
-	if _, ok := u.(*types.Interface); ok {
-		return nil, nil
-	}
-	if _, ok := u.(*types.Signature); ok {
-		return nil, nil
-	}
-
-	if p, ok := u.(*types.Pointer); ok {
-		// Dereference pointer type and go inside to parse.
-		e := p.Elem()
-		u = e.Underlying()
-		unode, err := c.parseType(u)
-		if err != nil {
-			return node, err
-		}
-		if unode == nil {
-			return nil, nil
-		}
-		unode.ptr = true
-		if n, ok := e.(*types.Named); ok {
-			unode.typn = n.Obj().Name()
-			unode.pkg = n.Obj().Pkg().Name()
-			unode.pkgi = c.clearPkg(n.Obj().Pkg().Path())
-		}
-		return unode, err
-	}
-
-	if s, ok := u.(*types.Struct); ok {
-		// Walk over fields in struct and parse each of them as separate node.
-		node.typ = typeStruct
-		for i := 0; i < s.NumFields(); i++ {
-			f := s.Field(i)
-			if !f.Exported() {
-				continue
-			}
-			ch, err := c.parseType(f.Type())
-			if err != nil {
-				return node, err
-			}
-			if ch == nil {
-				continue
-			}
-			ch.name = f.Name()
-			if ch.ptr {
-				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
-				ch.typn = strings.Replace(ch.typn, "*", "", 1)
-			}
-			node.chld = append(node.chld, ch)
-			node.hasb = node.hasb || ch.hasb
-			node.hasc = node.hasc || ch.hasc
-		}
-		return node, nil
-	}
-
-	if m, ok := u.(*types.Map); ok {
-		// Just parse key and value types of map.
-		var err error
-		node.typ = typeMap
-		node.mapk, err = c.parseType(m.Key())
-		node.mapv, err = c.parseType(m.Elem())
-		node.hasb = node.mapk.hasb || node.mapv.hasb
-		node.hasc = true
-		return node, err
-	}
-
-	if s, ok := u.(*types.Slice); ok {
-		// Just parse value type of slice.
-		var err error
-		node.typ = typeSlice
-		node.slct, err = c.parseType(s.Elem())
-		node.hasb = node.typn == "[]byte" || node.slct.hasb
-		node.hasc = true
-		return node, err
-	}
-
-	if b, ok := u.(*types.Basic); ok {
-		// Fill up the underlying type of basic node.
-		node.typu = b.Name()
-		node.hasb = node.typu == "string"
-		node.hasc = node.hasb
-	}
-
-	return node, nil
-}
-
 // Format compiled inspector code using format package and write it to the given file.
 func (c *Compiler) writeFile(filename string) error {
 	source := c.wr.Bytes()
 	fmtSource, err := format.Source(source)
 	if err != nil {
-		return err
+		if !c.cnf.Force {
+			return err
+		}
+		log.Println(err)
+		fmtSource = source
 	}
 
 	return os.WriteFile(filename, fmtSource, 0644)
 }
 
-// Build and write init() func of the generated package.
-func (c *Compiler) writeInit() error {
-	c.wl("// Code generated by inspc. DO NOT EDIT.")
-	c.wdl("// source: ", c.pkg)
-
-	c.wdl("package ", c.pkgName, "_ins")
-	c.wdl("import (\n\"github.com/koykov/inspector\"\n)")
-
-	c.wl("func init() {")
-	for _, node := range c.nodes {
-		c.wl(`inspector.RegisterInspector("`, node.name, `", `, node.name, `Inspector{})`)
-	}
-	c.wdl("}")
-
-	return nil
-}
-
 // Write given type including headers and imports.
 func (c *Compiler) writeType(node *node) error {
+	sfx := "_ins"
+	if c.inp {
+		sfx = ""
+	}
+	pkg := c.pkg
+	if len(pkg) == 0 && len(c.cnf.File) > 0 {
+		pkg = c.cnf.File
+	}
+
 	c.wl("// Code generated by inspc. DO NOT EDIT.")
-	c.wdl("// source: ", c.pkg)
+	c.wdl("// source: ", pkg)
 
-	c.wdl("package ", c.pkgName, "_ins")
+	c.wdl("package ", c.pkgName, sfx)
 
-	c.imp = append(c.imp[:0], `"github.com/koykov/inspector"`, `"`+c.pkg+`"`)
+	c.imp = append(c.imp[:0], `"github.com/koykov/inspector"`)
+	if !c.inp {
+		c.imp = append(c.imp, `"`+c.pkg+`"`)
+	}
 	c.wdl("import (\n!{import}\n)")
+
+	c.wl("func init() {")
+	c.wl(`inspector.RegisterInspector("`, node.name, `", `, node.name, `Inspector{})`)
+	c.wdl("}")
 
 	err := c.writeRootNode(node)
 	if err != nil {
@@ -441,6 +357,9 @@ func (c *Compiler) writeRootNode(node *node) (err error) {
 	inst := node.name + "Inspector"
 	recv := "i" + strconv.Itoa(c.cntr)
 	pname := c.pkgName + "." + node.typn
+	if c.inp {
+		pname = node.typn
+	}
 
 	c.wdl("type ", inst, " struct {\ninspector.BaseInspector\n}")
 
@@ -1599,56 +1518,62 @@ func (c *Compiler) fmtP(node *node, v string, depth int) string {
 }
 
 // Format type to use in new()/make() functions.
-func (c *Compiler) fmtT(node *node) string {
-	switch node.typ {
+func (c *Compiler) fmtT(node_ *node) string {
+	pfx := func(node_ *node) string {
+		if c.inp {
+			return ""
+		}
+		return node_.pkg + "."
+	}
+	switch node_.typ {
 	case typeStruct:
-		return node.pkg + "." + strings.Trim(node.typn, "*")
+		return pfx(node_) + strings.Trim(node_.typn, "*")
 	case typeMap:
-		if strings.Contains(node.typn, "map[") {
+		if strings.Contains(node_.typn, "map[") {
 			s := "map["
-			if node.mapk.ptr {
+			if node_.mapk.ptr {
 				s += "*"
 			}
-			if len(node.mapk.pkg) > 0 {
-				s += node.mapk.pkg + "."
+			if len(node_.mapk.pkg) > 0 {
+				s += node_.mapk.pkg + "."
 			}
-			s += node.mapk.typn
+			s += node_.mapk.typn
 			s += "]"
-			if node.mapv.ptr {
+			if node_.mapv.ptr {
 				s += "*"
 			}
-			if len(node.mapv.pkg) > 0 {
-				s += node.mapv.pkg + "."
+			if len(node_.mapv.pkg) > 0 && !c.inp {
+				s += node_.mapv.pkg + "."
 			}
-			s += node.mapv.typn
+			s += node_.mapv.typn
 			return s
 		} else {
-			return node.pkg + "." + strings.Trim(node.typn, "*")
+			return pfx(node_) + strings.Trim(node_.typn, "*")
 		}
 	case typeSlice:
-		s := node.slct.typn
+		s := node_.slct.typn
 		if !c.isBuiltin(s) {
-			s = node.slct.pkg + "." + strings.Trim(node.slct.typn, "*")
-			if node.slct.ptr {
+			s = pfx(node_.slct) + strings.Trim(node_.slct.typn, "*")
+			if node_.slct.ptr {
 				s = "*" + s
 			}
 		}
-		if strings.Index(node.typn, "[]") != -1 {
-			pfx := ""
-			if node.slct.ptr {
-				pfx = "*"
+		if strings.Index(node_.typn, "[]") != -1 {
+			pfx_ := ""
+			if node_.slct.ptr {
+				pfx_ = "*"
 			}
-			s = "[]" + pfx + strings.TrimLeft(s, "*")
+			s = "[]" + pfx_ + strings.TrimLeft(s, "*")
 		} else {
-			s = node.pkg + "." + strings.Trim(node.typn, "*")
+			s = pfx(node_) + strings.Trim(node_.typn, "*")
 		}
 		return s
 	case typeBasic:
-		pfx := ""
-		if node.ptr {
-			pfx = "*"
+		pfx_ := ""
+		if node_.ptr {
+			pfx_ = "*"
 		}
-		return pfx + node.typn
+		return pfx_ + node_.typn
 	}
 	return ""
 }
@@ -1687,4 +1612,19 @@ func (c *Compiler) r(old, new string) {
 	s = strings.Replace(s, old, new, -1)
 	c.wr.Reset()
 	_, _ = c.wr.WriteString(s)
+}
+
+func (t typ) String() string {
+	switch t {
+	case typeBasic:
+		return "basic"
+	case typeStruct:
+		return "struct"
+	case typeMap:
+		return "map"
+	case typeSlice:
+		return "slice"
+	default:
+		return "unknown"
+	}
 }

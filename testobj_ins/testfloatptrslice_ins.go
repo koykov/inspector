@@ -10,6 +10,10 @@ import (
 	"strconv"
 )
 
+func init() {
+	inspector.RegisterInspector("TestFloatPtrSlice", TestFloatPtrSliceInspector{})
+}
+
 type TestFloatPtrSliceInspector struct {
 	inspector.BaseInspector
 }

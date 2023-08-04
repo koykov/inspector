@@ -10,6 +10,10 @@ import (
 	"strconv"
 )
 
+func init() {
+	inspector.RegisterInspector("TestPermission", TestPermissionInspector{})
+}
+
 type TestPermissionInspector struct {
 	inspector.BaseInspector
 }

@@ -12,6 +12,10 @@ import (
 	"strconv"
 )
 
+func init() {
+	inspector.RegisterInspector("TestHistory", TestHistoryInspector{})
+}
+
 type TestHistoryInspector struct {
 	inspector.BaseInspector
 }

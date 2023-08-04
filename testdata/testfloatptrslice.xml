@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="slice" name="TestFloatPtrSlice" typeName="TestFloatPtrSlice" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasLC="true">
+	<slice type="basic" typeName="float32" underlyingName="float32" pointer="true"/>
+</node>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="struct" name="TestFinance" typeName="TestFinance" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<nodes>
+		<node type="basic" name="MoneyIn" typeName="float64" underlyingName="float64"/>
+		<node type="basic" name="MoneyOut" typeName="float64" underlyingName="float64"/>
+		<node type="basic" name="Balance" typeName="float64" underlyingName="float64"/>
+		<node type="basic" name="AllowBuy" typeName="bool" underlyingName="bool"/>
+		<node type="slice" name="History" typeName="[]TestHistory" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestHistory" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="DateUnix" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="Cost" typeName="float64" underlyingName="float64"/>
+					<node type="slice" name="Comment" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+				</nodes>
+			</slice>
+		</node>
+	</nodes>
+</node>

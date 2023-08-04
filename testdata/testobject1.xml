@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="struct" name="TestObject1" typeName="TestObject1" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<nodes>
+		<node type="slice" name="IntSlice" typeName="[]int32" hasLC="true">
+			<slice type="basic" typeName="int32" underlyingName="int32"/>
+		</node>
+		<node type="slice" name="IntPtrSlice" typeName="[]*int32" hasLC="true">
+			<slice type="basic" typeName="int32" underlyingName="int32" pointer="true"/>
+		</node>
+		<node type="slice" name="IntSlicePtr" typeName="[]int32" pointer="true" hasLC="true">
+			<slice type="basic" typeName="int32" underlyingName="int32"/>
+		</node>
+		<node type="slice" name="IntPtrSlicePtr" typeName="[]*int32" pointer="true" hasLC="true">
+			<slice type="basic" typeName="int32" underlyingName="int32" pointer="true"/>
+		</node>
+		<node type="slice" name="ByteSlice" typeName="[]byte" hasBytes="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte"/>
+		</node>
+		<node type="slice" name="BytePtrSlice" typeName="[]*byte" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte" pointer="true"/>
+		</node>
+		<node type="slice" name="ByteSlicePtr" typeName="[]byte" pointer="true" hasBytes="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte"/>
+		</node>
+		<node type="slice" name="BytePtrSlicePtr" typeName="[]*byte" pointer="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte" pointer="true"/>
+		</node>
+		<node type="slice" name="FloatSlice" typeName="TestFloatSlice" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasLC="true">
+			<slice type="basic" typeName="float32" underlyingName="float32"/>
+		</node>
+		<node type="slice" name="FloatPtrSlice" typeName="TestFloatPtrSlice" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasLC="true">
+			<slice type="basic" typeName="float32" underlyingName="float32" pointer="true"/>
+		</node>
+		<node type="slice" name="FloatSlicePtr" typeName="TestFloatSlice" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasLC="true">
+			<slice type="basic" typeName="float32" underlyingName="float32"/>
+		</node>
+		<node type="slice" name="FloatPtrSlicePtr" typeName="TestFloatPtrSlice" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasLC="true">
+			<slice type="basic" typeName="float32" underlyingName="float32" pointer="true"/>
+		</node>
+		<node type="slice" name="StructSlice" typeName="[]TestStruct" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</slice>
+		</node>
+		<node type="slice" name="StructPtrSlice" typeName="[]*TestStruct" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</slice>
+		</node>
+		<node type="slice" name="StructSlicePtr" typeName="[]TestStruct" pointer="true" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</slice>
+		</node>
+		<node type="slice" name="StructPtrSlicePtr" typeName="[]*TestStruct" pointer="true" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</slice>
+		</node>
+		<node type="slice" name="StructSliceLiteral" typeName="TestStructSliceLiteral" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+			<slice type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</slice>
+		</node>
+		<node type="map" name="IntStringMap" typeName="map[int]string" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="int" underlyingName="int"/>
+			<mapValue type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+		</node>
+		<node type="map" name="IntStringPtrMap" typeName="map[int]*string" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="int" underlyingName="int"/>
+			<mapValue type="basic" typeName="string" underlyingName="string" pointer="true" hasBytes="true" hasLC="true"/>
+		</node>
+		<node type="map" name="IntStringMapPtr" typeName="map[int]string" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="int" underlyingName="int"/>
+			<mapValue type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+		</node>
+		<node type="map" name="IntStringPtrMapPtr" typeName="map[int]*string" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="int" underlyingName="int"/>
+			<mapValue type="basic" typeName="string" underlyingName="string" pointer="true" hasBytes="true" hasLC="true"/>
+		</node>
+		<node type="map" name="IntPtrStringPtrMapPtr" typeName="map[*int]*string" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="int" underlyingName="int" pointer="true"/>
+			<mapValue type="basic" typeName="string" underlyingName="string" pointer="true" hasBytes="true" hasLC="true"/>
+		</node>
+		<node type="map" name="IntIntMapMap" typeName="map[int32]map[int32]int32" hasLC="true">
+			<mapKey type="basic" typeName="int32" underlyingName="int32"/>
+			<mapValue type="map" typeName="map[int32]int32" hasLC="true">
+				<mapKey type="basic" typeName="int32" underlyingName="int32"/>
+				<mapValue type="basic" typeName="int32" underlyingName="int32"/>
+			</mapValue>
+		</node>
+		<node type="map" name="StringFloatMap" typeName="TestStringFloatMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="float64" underlyingName="float64"/>
+		</node>
+		<node type="map" name="StringFloatPtrMap" typeName="TestStringFloatPtrMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+		</node>
+		<node type="map" name="StringFloatMapPtr" typeName="TestStringFloatMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="float64" underlyingName="float64"/>
+		</node>
+		<node type="map" name="StringFloatPtrMapPtr" typeName="TestStringFloatPtrMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+		</node>
+		<node type="map" name="StringPtrFloatPtrMapPtr" typeName="TestStringPtrFloatPtrMap" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" pointer="true" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+		</node>
+		<node type="map" name="FloatStructMap" typeName="map[float64]TestStruct" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="float64" underlyingName="float64"/>
+			<mapValue type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="map" name="FloatStructPtrMap" typeName="map[float64]*TestStruct" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="float64" underlyingName="float64"/>
+			<mapValue type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="map" name="FloatPtrStructMap" typeName="map[*float64]TestStruct" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+			<mapValue type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="map" name="FloatPtrStructPtrMap" typeName="map[*float64]*TestStruct" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+			<mapValue type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="map" name="FloatPtrStructPtrMapPtr" typeName="map[*float64]*TestStruct" pointer="true" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="float64" underlyingName="float64" pointer="true"/>
+			<mapValue type="struct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+					<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+					<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+					<node type="basic" name="I" typeName="int" underlyingName="int"/>
+					<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+					<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+					<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+					<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+					<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+					<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+					<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+					<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+					<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+					<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="struct" name="NestedStruct" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+			<nodes>
+				<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+				<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+				<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+					<slice type="basic" typeName="byte" underlyingName="byte"/>
+				</node>
+				<node type="basic" name="I" typeName="int" underlyingName="int"/>
+				<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+				<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+				<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+				<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+				<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+				<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+				<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+				<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+				<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+				<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+				<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+			</nodes>
+		</node>
+		<node type="struct" name="NestedStructPtr" typeName="TestStruct" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+			<nodes>
+				<node type="basic" name="A" typeName="byte" underlyingName="byte"/>
+				<node type="basic" name="S" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+				<node type="slice" name="B" typeName="[]byte" hasBytes="true" hasLC="true">
+					<slice type="basic" typeName="byte" underlyingName="byte"/>
+				</node>
+				<node type="basic" name="I" typeName="int" underlyingName="int"/>
+				<node type="basic" name="I8" typeName="int8" underlyingName="int8"/>
+				<node type="basic" name="I16" typeName="int16" underlyingName="int16"/>
+				<node type="basic" name="I32" typeName="int32" underlyingName="int32"/>
+				<node type="basic" name="I64" typeName="int64" underlyingName="int64"/>
+				<node type="basic" name="U" typeName="uint" underlyingName="uint"/>
+				<node type="basic" name="U8" typeName="uint8" underlyingName="uint8"/>
+				<node type="basic" name="U16" typeName="uint16" underlyingName="uint16"/>
+				<node type="basic" name="U32" typeName="uint32" underlyingName="uint32"/>
+				<node type="basic" name="U64" typeName="uint64" underlyingName="uint64"/>
+				<node type="basic" name="F" typeName="float32" underlyingName="float32"/>
+				<node type="basic" name="D" typeName="float64" underlyingName="float64"/>
+			</nodes>
+		</node>
+	</nodes>
+</node>

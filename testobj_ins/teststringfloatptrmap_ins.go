@@ -9,6 +9,10 @@ import (
 	"github.com/koykov/inspector/testobj"
 )
 
+func init() {
+	inspector.RegisterInspector("TestStringFloatPtrMap", TestStringFloatPtrMapInspector{})
+}
+
 type TestStringFloatPtrMapInspector struct {
 	inspector.BaseInspector
 }

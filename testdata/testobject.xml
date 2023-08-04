@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node type="struct" name="TestObject" typeName="TestObject" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+	<nodes>
+		<node type="basic" name="Id" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+		<node type="slice" name="Name" typeName="[]byte" hasBytes="true" hasLC="true">
+			<slice type="basic" typeName="byte" underlyingName="byte"/>
+		</node>
+		<node type="basic" name="Status" typeName="int32" underlyingName="int32"/>
+		<node type="basic" name="Ustate" typeName="uint64" underlyingName="uint64"/>
+		<node type="basic" name="Cost" typeName="float64" underlyingName="float64"/>
+		<node type="map" name="Permission" typeName="TestPermission" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasLC="true">
+			<mapKey type="basic" typeName="int32" underlyingName="int32"/>
+			<mapValue type="basic" typeName="bool" underlyingName="bool"/>
+		</node>
+		<node type="map" name="HistoryTree" typeName="map[string]*TestHistory" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="struct" typeName="TestHistory" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+				<nodes>
+					<node type="basic" name="DateUnix" typeName="int64" underlyingName="int64"/>
+					<node type="basic" name="Cost" typeName="float64" underlyingName="float64"/>
+					<node type="slice" name="Comment" typeName="[]byte" hasBytes="true" hasLC="true">
+						<slice type="basic" typeName="byte" underlyingName="byte"/>
+					</node>
+				</nodes>
+			</mapValue>
+		</node>
+		<node type="map" name="Flags" typeName="TestFlag" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+			<mapKey type="basic" typeName="string" underlyingName="string" hasBytes="true" hasLC="true"/>
+			<mapValue type="basic" typeName="int32" underlyingName="int32"/>
+		</node>
+		<node type="struct" name="Finance" typeName="TestFinance" package="testobj" packageImport="github.com/koykov/inspector/testobj" pointer="true" hasBytes="true" hasLC="true">
+			<nodes>
+				<node type="basic" name="MoneyIn" typeName="float64" underlyingName="float64"/>
+				<node type="basic" name="MoneyOut" typeName="float64" underlyingName="float64"/>
+				<node type="basic" name="Balance" typeName="float64" underlyingName="float64"/>
+				<node type="basic" name="AllowBuy" typeName="bool" underlyingName="bool"/>
+				<node type="slice" name="History" typeName="[]TestHistory" hasBytes="true" hasLC="true">
+					<slice type="struct" typeName="TestHistory" package="testobj" packageImport="github.com/koykov/inspector/testobj" hasBytes="true" hasLC="true">
+						<nodes>
+							<node type="basic" name="DateUnix" typeName="int64" underlyingName="int64"/>
+							<node type="basic" name="Cost" typeName="float64" underlyingName="float64"/>
+							<node type="slice" name="Comment" typeName="[]byte" hasBytes="true" hasLC="true">
+								<slice type="basic" typeName="byte" underlyingName="byte"/>
+							</node>
+						</nodes>
+					</slice>
+				</node>
+			</nodes>
+		</node>
+	</nodes>
+</node>
