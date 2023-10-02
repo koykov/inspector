@@ -35,8 +35,40 @@ func (i StringAnyMapInspector) GetTo(src any, buf *any, path ...string) error {
 }
 
 func (i StringAnyMapInspector) Set(dst, value any, path ...string) error {
-	_, _, _ = dst, value, path
-	return nil
+	var buf ByteBuffer
+	return i.SetWithBuffer(dst, value, &buf, path...)
+}
+
+func (i StringAnyMapInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	var buf_ map[string]any
+	if err = i.indir1(&buf_, dst); err != nil || buf_ == nil {
+		return err
+	}
+	if len(path) > 1 {
+		x, ok := buf_[path[0]]
+		if !ok {
+			x = make(map[string]any)
+		}
+		err = i.SetWithBuffer(x, value, buf, path[1:]...)
+		buf_[path[0]] = x
+	} else {
+		switch x := value.(type) {
+		case string:
+			buf_[path[0]] = buf.BufferizeString(x)
+		case *string:
+			buf_[path[0]] = buf.BufferizeString(*x)
+		case []byte:
+			buf_[path[0]] = buf.Bufferize(x)
+		case *[]byte:
+			buf_[path[0]] = buf.Bufferize(*x)
+		default:
+			buf_[path[0]] = value
+		}
+	}
+	return
 }
 
 func (i StringAnyMapInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error {
