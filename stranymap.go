@@ -170,13 +170,54 @@ func (i StringAnyMapInspector) CopyTo(src, dst any, buf AccumulativeBuffer) (err
 }
 
 func (i StringAnyMapInspector) Length(x any, result *int, path ...string) error {
-	_, _, _ = x, result, path
-	return nil
+	if len(path) == 0 {
+		m, err := i.indir(x)
+		if err == nil {
+			*result = len(m)
+			return nil
+		}
+		switch x1 := x.(type) {
+		case string:
+			*result = len(x1)
+		case *string:
+			*result = len(*x1)
+		case []byte:
+			*result = len(x1)
+		case *[]byte:
+			*result = len(*x1)
+		}
+		return nil
+	}
+	m, err := i.indir(x)
+	if err != nil {
+		return err
+	}
+	x1, ok := m[path[0]]
+	if !ok {
+		return nil
+	}
+	return i.Length(x1, result, path[1:]...)
 }
 
 func (i StringAnyMapInspector) Capacity(x any, result *int, path ...string) error {
-	_, _, _ = x, result, path
-	return nil
+	if len(path) == 0 {
+		switch x1 := x.(type) {
+		case []byte:
+			*result = cap(x1)
+		case *[]byte:
+			*result = cap(*x1)
+		}
+		return nil
+	}
+	m, err := i.indir(x)
+	if err != nil {
+		return err
+	}
+	x1, ok := m[path[0]]
+	if !ok {
+		return nil
+	}
+	return i.Length(x1, result, path[1:]...)
 }
 
 func (i StringAnyMapInspector) Reset(x any) error {
