@@ -131,11 +131,12 @@ func (i StringAnyMapInspector) DeepEqual(l, r any) bool {
 
 func (i StringAnyMapInspector) DeepEqualWithOptions(l, r any, opts *DEQOptions) bool {
 	_, _, _ = l, r, opts
+	// todo implement me
 	return false
 }
 
 func (i StringAnyMapInspector) Unmarshal(p []byte, typ Encoding) (any, error) {
-	var x any
+	var x map[string]any
 	switch typ {
 	case EncodingJSON:
 		err := json.Unmarshal(p, &x)
@@ -146,13 +147,26 @@ func (i StringAnyMapInspector) Unmarshal(p []byte, typ Encoding) (any, error) {
 }
 
 func (i StringAnyMapInspector) Copy(x any) (dst any, err error) {
-	_ = x
+	var buf ByteBuffer
+	x_ := make(map[string]any)
+	err = i.CopyTo(x, &x_, &buf)
+	dst = x_
 	return
 }
 
-func (i StringAnyMapInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
-	_, _, _ = src, dst, buf
-	return nil
+func (i StringAnyMapInspector) CopyTo(src, dst any, buf AccumulativeBuffer) (err error) {
+	var msrc, mdst map[string]any
+	if err = i.indir1(&msrc, src); err != nil || msrc == nil {
+		return
+	}
+	if err = i.indir2(&mdst, dst); err != nil || mdst == nil {
+		return
+	}
+	for k := range mdst {
+		delete(mdst, k)
+	}
+
+	return i.cpy(&mdst, msrc, buf)
 }
 
 func (i StringAnyMapInspector) Length(x any, result *int, path ...string) error {
@@ -199,6 +213,43 @@ func (i StringAnyMapInspector) indir2(dst *map[string]any, val any) error {
 		*dst = *(*x)
 	default:
 		return ErrUnsupportedType
+	}
+	return nil
+}
+
+func (i StringAnyMapInspector) cpy(dst *map[string]any, src map[string]any, buf AccumulativeBuffer) error {
+	for k := range src {
+		x := src[k]
+		m, err := i.indir(x)
+		if err == nil {
+			m1 := make(map[string]any, len(m))
+			if err = i.cpy(&m1, m, buf); err != nil {
+				return err
+			}
+			switch x.(type) {
+			case map[string]any:
+				(*dst)[k] = m1
+			case *map[string]any:
+				(*dst)[k] = &m1
+			case **map[string]any:
+				m2 := &m1
+				(*dst)[k] = &m2
+			}
+		} else {
+			switch x1 := x.(type) {
+			case string:
+				(*dst)[k] = buf.BufferizeString(x1)
+			case *string:
+				(*dst)[k] = buf.BufferizeString(*x1)
+			case []byte:
+				(*dst)[k] = buf.Bufferize(x1)
+			case *[]byte:
+				(*dst)[k] = buf.Bufferize(*x1)
+			default:
+				// todo check possible pointer type of x?
+				(*dst)[k] = x
+			}
+		}
 	}
 	return nil
 }
