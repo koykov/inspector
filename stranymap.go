@@ -71,9 +71,25 @@ func (i StringAnyMapInspector) SetWithBuffer(dst, value any, buf AccumulativeBuf
 	return
 }
 
-func (i StringAnyMapInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error {
-	_, _, _, _ = dst, value, buf, path
-	return nil
+func (i StringAnyMapInspector) Compare(src any, cond Op, right string, result *bool, path ...string) (err error) {
+	if len(path) == 0 {
+		return
+	}
+	var buf_ map[string]any
+	if err = i.indir1(&buf_, src); err != nil || buf_ == nil {
+		return err
+	}
+	x, ok := buf_[path[0]]
+	if !ok {
+		return
+	}
+	if len(path) > 1 {
+		err = i.Compare(x, cond, right, result, path[1:]...)
+	} else {
+		si := StaticInspector{}
+		err = si.Compare(x, cond, right, result)
+	}
+	return
 }
 
 func (i StringAnyMapInspector) Compare(src any, cond Op, right string, result *bool, path ...string) error {
