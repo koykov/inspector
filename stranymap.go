@@ -13,13 +13,25 @@ func (i StringAnyMapInspector) TypeName() string {
 }
 
 func (i StringAnyMapInspector) Get(src any, path ...string) (any, error) {
-	_, _ = src, path
-	return nil, nil
+	var buf any
+	err := i.GetTo(src, &buf, path...)
+	return buf, err
 }
 
 func (i StringAnyMapInspector) GetTo(src any, buf *any, path ...string) error {
-	_, _, _ = src, buf, path
-	return nil
+	if len(path) == 0 {
+		*buf = src
+		return nil
+	}
+	m, err := i.indir(src)
+	if err != nil {
+		return err
+	}
+	x, ok := m[path[0]]
+	if !ok {
+		return nil
+	}
+	return i.GetTo(x, buf, path[1:]...)
 }
 
 func (i StringAnyMapInspector) Set(dst, value any, path ...string) error {
@@ -84,5 +96,38 @@ func (i StringAnyMapInspector) Capacity(x any, result *int, path ...string) erro
 
 func (i StringAnyMapInspector) Reset(x any) error {
 	_ = x
+	return nil
+}
+
+func (i StringAnyMapInspector) indir(val any) (buf map[string]any, err error) {
+	err = i.indir1(&buf, val)
+	return
+}
+
+func (i StringAnyMapInspector) indir1(dst *map[string]any, val any) error {
+	switch x := val.(type) {
+	case map[string]any:
+		*dst = x
+	case *map[string]any:
+		*dst = *x
+	case **map[string]any:
+		*dst = *(*x)
+	default:
+		return ErrUnsupportedType
+	}
+	return nil
+}
+
+func (i StringAnyMapInspector) indir2(dst *map[string]any, val any) error {
+	switch x := val.(type) {
+	case map[string]any:
+		return ErrMustPointerType
+	case *map[string]any:
+		*dst = *x
+	case **map[string]any:
+		*dst = *(*x)
+	default:
+		return ErrUnsupportedType
+	}
 	return nil
 }
