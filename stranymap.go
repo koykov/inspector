@@ -92,14 +92,37 @@ func (i StringAnyMapInspector) Compare(src any, cond Op, right string, result *b
 	return
 }
 
-func (i StringAnyMapInspector) Compare(src any, cond Op, right string, result *bool, path ...string) error {
-	_, _, _, _, _ = src, cond, right, result, path
-	return nil
-}
+func (i StringAnyMapInspector) Loop(src any, it Iterator, buf *[]byte, path ...string) error {
+	if len(path) == 0 {
+		m, err := i.indir(src)
+		if err != nil {
+			return err
+		}
+		for k := range m {
+			if it.RequireKey() {
+				it.SetKey(&k, StaticInspector{})
+			}
+			it.SetVal(m[k], StaticInspector{})
+			ctl := it.Iterate()
+			if ctl == LoopCtlBrk {
+				break
+			}
+			if ctl == LoopCtlCnt {
+				continue
+			}
+		}
+		return nil
+	}
 
-func (i StringAnyMapInspector) Loop(src any, l Iterator, buf *[]byte, path ...string) error {
-	_, _, _, _ = src, l, buf, path
-	return nil
+	m, err := i.indir(src)
+	if err != nil {
+		return err
+	}
+	x, ok := m[path[0]]
+	if !ok {
+		return nil
+	}
+	return i.Loop(x, it, buf, path[1:]...)
 }
 
 func (i StringAnyMapInspector) DeepEqual(l, r any) bool {
