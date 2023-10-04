@@ -38,6 +38,12 @@ type Inspector interface {
 func init() {
 	// Register inspectors known by default.
 	RegisterInspector("static", StaticInspector{})
+	RegisterInspector("[]string", StringsInspector{})
+	RegisterInspector("strings", StringsInspector{})
+	RegisterInspector("[][]byte", StringsInspector{})
+	RegisterInspector("bytes", StringsInspector{})
+	RegisterInspector("stringAnyMap", StringAnyMapInspector{})
+	RegisterInspector("map[string]any", StringAnyMapInspector{})
 	RegisterInspector("reflect", ReflectInspector{})
 
 	// Register snippets to convert string to built-in types.
