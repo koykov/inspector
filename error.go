@@ -11,4 +11,5 @@ var (
 	ErrUnknownEncodingType = errors.New("unknown encoding type")
 	ErrUnsupportedType     = errors.New("unsupported type")
 	ErrMustPointerType     = errors.New("variable must have pointer type")
+	ErrNotImplement        = errors.New("not implemented")
 )
