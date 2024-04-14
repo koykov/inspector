@@ -6,7 +6,7 @@ package testobj_ins
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -166,7 +166,7 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "A" {
 					var rightExact byte
-					t373 := fastconv.S2B(right)
+					t373 := byteconv.S2B(right)
 					if len(t373) > 0 {
 						rightExact = t373[0]
 					}
@@ -209,7 +209,7 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "B" {
 					var rightExact []byte
-					rightExact = fastconv.S2B(right)
+					rightExact = byteconv.S2B(right)
 
 					if cond == inspector.OpEq {
 						*result = bytes.Equal(x0.B, rightExact)

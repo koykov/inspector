@@ -6,7 +6,7 @@ package testobj_ins
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -135,7 +135,7 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Comment" {
 			var rightExact []byte
-			rightExact = fastconv.S2B(right)
+			rightExact = byteconv.S2B(right)
 
 			if cond == inspector.OpEq {
 				*result = bytes.Equal(x.Comment, rightExact)

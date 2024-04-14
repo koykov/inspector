@@ -1,7 +1,7 @@
-github.com/koykov/fastconv v1.0.2 h1:csOWpctD9OcpkfI07LEtqtolc4TT8Y6QG3zQvkTmhrQ=
-github.com/koykov/fastconv v1.0.2/go.mod h1:9jOx5KRGe4UKHxGiDw5Yrp/qrqn2cRwH3xvFjqqCE3c=
-github.com/koykov/x2bytes v1.0.1 h1:kfo9Pqmip+6s6zbQYgeNSgOA3UbyQNVmaCzkMrJdTME=
-github.com/koykov/x2bytes v1.0.1/go.mod h1:5VHo/Vc0NsGBvzwg5wMrCNrI+fL+DbSUgFW4FVRzlzs=
+github.com/koykov/byteconv v1.0.0 h1:C8NThxj3Vcmv7f1h384Ti7F9zjVDnOy9AZj9KxTaYqM=
+github.com/koykov/byteconv v1.0.0/go.mod h1:viZknv/akQJrXOQS3bZu2U7TE+gjA03LFQpSsRExZR4=
+github.com/koykov/x2bytes v1.0.2 h1:AISrs+8qfGLb/0RntRdbg1F/ahha3KrFcNledLBbLgA=
+github.com/koykov/x2bytes v1.0.2/go.mod h1:0fbvyQAm3RAiTOE/NT0Dg3ZXL9EQiYpyrp5wZyoz11Q=
 golang.org/x/mod v0.12.0 h1:rmsUpXtvNzj340zd98LZ4KntptpfRHwpFOHG188oHXc=
 golang.org/x/sys v0.10.0 h1:SqMFp9UcQJZa+pmYuAKjd9xq1f0j5rLcDIk0mj4qAsA=
 golang.org/x/sys v0.10.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

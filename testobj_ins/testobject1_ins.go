@@ -6,7 +6,7 @@ package testobj_ins
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -1656,7 +1656,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "ByteSlice" {
 			var rightExact []byte
-			rightExact = fastconv.S2B(right)
+			rightExact = byteconv.S2B(right)
 
 			if cond == inspector.OpEq {
 				*result = bytes.Equal(x.ByteSlice, rightExact)
@@ -1911,7 +1911,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					if len(path) > 2 {
 						if path[2] == "A" {
 							var rightExact byte
-							t91 := fastconv.S2B(right)
+							t91 := byteconv.S2B(right)
 							if len(t91) > 0 {
 								rightExact = t91[0]
 							}
@@ -1954,7 +1954,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "B" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.B, rightExact)
@@ -2262,7 +2262,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "A" {
 							var rightExact byte
-							t107 := fastconv.S2B(right)
+							t107 := byteconv.S2B(right)
 							if len(t107) > 0 {
 								rightExact = t107[0]
 							}
@@ -2305,7 +2305,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "B" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.B, rightExact)
@@ -2621,7 +2621,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					if len(path) > 2 {
 						if path[2] == "A" {
 							var rightExact byte
-							t123 := fastconv.S2B(right)
+							t123 := byteconv.S2B(right)
 							if len(t123) > 0 {
 								rightExact = t123[0]
 							}
@@ -2664,7 +2664,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "B" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.B, rightExact)
@@ -2983,7 +2983,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "A" {
 							var rightExact byte
-							t139 := fastconv.S2B(right)
+							t139 := byteconv.S2B(right)
 							if len(t139) > 0 {
 								rightExact = t139[0]
 							}
@@ -3026,7 +3026,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "B" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.B, rightExact)
@@ -3334,7 +3334,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "A" {
 							var rightExact byte
-							t155 := fastconv.S2B(right)
+							t155 := byteconv.S2B(right)
 							if len(t155) > 0 {
 								rightExact = t155[0]
 							}
@@ -3377,7 +3377,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "B" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.B, rightExact)
@@ -4057,7 +4057,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				if len(path) > 2 {
 					if path[2] == "A" {
 						var rightExact byte
-						t183 := fastconv.S2B(right)
+						t183 := byteconv.S2B(right)
 						if len(t183) > 0 {
 							rightExact = t183[0]
 						}
@@ -4100,7 +4100,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "B" {
 						var rightExact []byte
-						rightExact = fastconv.S2B(right)
+						rightExact = byteconv.S2B(right)
 
 						if cond == inspector.OpEq {
 							*result = bytes.Equal(x1.B, rightExact)
@@ -4406,7 +4406,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "A" {
 						var rightExact byte
-						t199 := fastconv.S2B(right)
+						t199 := byteconv.S2B(right)
 						if len(t199) > 0 {
 							rightExact = t199[0]
 						}
@@ -4449,7 +4449,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "B" {
 						var rightExact []byte
-						rightExact = fastconv.S2B(right)
+						rightExact = byteconv.S2B(right)
 
 						if cond == inspector.OpEq {
 							*result = bytes.Equal(x1.B, rightExact)
@@ -4752,7 +4752,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				if len(path) > 2 {
 					if path[2] == "A" {
 						var rightExact byte
-						t215 := fastconv.S2B(right)
+						t215 := byteconv.S2B(right)
 						if len(t215) > 0 {
 							rightExact = t215[0]
 						}
@@ -4795,7 +4795,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "B" {
 						var rightExact []byte
-						rightExact = fastconv.S2B(right)
+						rightExact = byteconv.S2B(right)
 
 						if cond == inspector.OpEq {
 							*result = bytes.Equal(x1.B, rightExact)
@@ -5101,7 +5101,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "A" {
 						var rightExact byte
-						t231 := fastconv.S2B(right)
+						t231 := byteconv.S2B(right)
 						if len(t231) > 0 {
 							rightExact = t231[0]
 						}
@@ -5144,7 +5144,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "B" {
 						var rightExact []byte
-						rightExact = fastconv.S2B(right)
+						rightExact = byteconv.S2B(right)
 
 						if cond == inspector.OpEq {
 							*result = bytes.Equal(x1.B, rightExact)
@@ -5461,7 +5461,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "A" {
 						var rightExact byte
-						t247 := fastconv.S2B(right)
+						t247 := byteconv.S2B(right)
 						if len(t247) > 0 {
 							rightExact = t247[0]
 						}
@@ -5504,7 +5504,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "B" {
 						var rightExact []byte
-						rightExact = fastconv.S2B(right)
+						rightExact = byteconv.S2B(right)
 
 						if cond == inspector.OpEq {
 							*result = bytes.Equal(x1.B, rightExact)
@@ -5798,7 +5798,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 			if len(path) > 1 {
 				if path[1] == "A" {
 					var rightExact byte
-					t262 := fastconv.S2B(right)
+					t262 := byteconv.S2B(right)
 					if len(t262) > 0 {
 						rightExact = t262[0]
 					}
@@ -5841,7 +5841,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				}
 				if path[1] == "B" {
 					var rightExact []byte
-					rightExact = fastconv.S2B(right)
+					rightExact = byteconv.S2B(right)
 
 					if cond == inspector.OpEq {
 						*result = bytes.Equal(x0.B, rightExact)
@@ -6145,7 +6145,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				}
 				if path[1] == "A" {
 					var rightExact byte
-					t277 := fastconv.S2B(right)
+					t277 := byteconv.S2B(right)
 					if len(t277) > 0 {
 						rightExact = t277[0]
 					}
@@ -6188,7 +6188,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				}
 				if path[1] == "B" {
 					var rightExact []byte
-					rightExact = fastconv.S2B(right)
+					rightExact = byteconv.S2B(right)
 
 					if cond == inspector.OpEq {
 						*result = bytes.Equal(x0.B, rightExact)

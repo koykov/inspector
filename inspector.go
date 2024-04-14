@@ -65,10 +65,10 @@ func init() {
 	RegisterStrToXFn("float32", strToFloatSnippet("float32"), imp)
 	RegisterStrToXFn("float64", strToFloatSnippet("float64"), imp)
 
-	imp = []string{`"bytes"`, `"github.com/koykov/fastconv"`}
+	imp = []string{`"bytes"`, `"github.com/koykov/byteconv"`}
 	RegisterStrToXFn("[]byte", strToBytesSnippet("[]byte"), imp)
 	RegisterStrToXFn("string", strToStrSnippet("string"), nil)
-	RegisterStrToXFn("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/fastconv"`})
+	RegisterStrToXFn("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/byteconv"`})
 
 	// Register functions to typecast to built-in types.
 	RegisterAssignFn(AssignToBytes)

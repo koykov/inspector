@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/x2bytes"
 )
 
@@ -27,10 +27,10 @@ func AssignToBytes(dst, src any, buf AccumulativeBuffer) (ok bool) {
 			*dst.(*[]byte) = src.([]byte)
 			ok = true
 		case *string:
-			*dst.(*[]byte) = fastconv.S2B(*src.(*string))
+			*dst.(*[]byte) = byteconv.S2B(*src.(*string))
 			ok = true
 		case string:
-			*dst.(*[]byte) = fastconv.S2B(src.(string))
+			*dst.(*[]byte) = byteconv.S2B(src.(string))
 			ok = true
 		default:
 			var (
@@ -63,10 +63,10 @@ func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 	case *string:
 		switch src.(type) {
 		case *[]byte:
-			*dst.(*string) = fastconv.B2S(*src.(*[]byte))
+			*dst.(*string) = byteconv.B2S(*src.(*[]byte))
 			ok = true
 		case []byte:
-			*dst.(*string) = fastconv.B2S(src.([]byte))
+			*dst.(*string) = byteconv.B2S(src.([]byte))
 			ok = true
 		case *string:
 			*dst.(*string) = *src.(*string)
@@ -81,17 +81,17 @@ func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 			)
 			// Worst case, try to convert source to bytes.
 			if buf == nil {
-				p = fastconv.S2B(*dst.(*string))
+				p = byteconv.S2B(*dst.(*string))
 				p, err = x2bytes.ToBytes(p, src)
 				if ok = err == nil; ok {
-					*dst.(*string) = fastconv.B2S(p)
+					*dst.(*string) = byteconv.B2S(p)
 				}
 			} else {
 				bb := buf.AcquireBytes()
 				offset := len(bb)
 				bb, err = x2bytes.ToBytes(bb, src)
 				if ok = err == nil; ok {
-					*dst.(*string) = fastconv.B2S(bb[offset:])
+					*dst.(*string) = byteconv.B2S(bb[offset:])
 				}
 				buf.ReleaseBytes(bb)
 			}
@@ -112,10 +112,10 @@ func AssignToBool(dst, src any, _ AccumulativeBuffer) (ok bool) {
 			*dst.(*bool) = src.(bool)
 			ok = true
 		case *[]byte:
-			*dst.(*bool) = fastconv.B2S(*src.(*[]byte)) == "true"
+			*dst.(*bool) = byteconv.B2S(*src.(*[]byte)) == "true"
 			ok = true
 		case []byte:
-			*dst.(*bool) = fastconv.B2S(src.([]byte)) == "true"
+			*dst.(*bool) = byteconv.B2S(src.([]byte)) == "true"
 			ok = true
 		case *string:
 			*dst.(*bool) = *src.(*string) == "true"
@@ -235,9 +235,9 @@ func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 		i = *src.(*int64)
 		ok = true
 	case []byte:
-		i, ok = atoi(fastconv.B2S(src.([]byte)))
+		i, ok = atoi(byteconv.B2S(src.([]byte)))
 	case *[]byte:
-		i, ok = atoi(fastconv.B2S(*src.(*[]byte)))
+		i, ok = atoi(byteconv.B2S(*src.(*[]byte)))
 	case string:
 		i, ok = atoi(src.(string))
 	case *string:
@@ -297,9 +297,9 @@ func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 		u = *src.(*uint64)
 		ok = true
 	case []byte:
-		u, ok = atou(fastconv.B2S(src.([]byte)))
+		u, ok = atou(byteconv.B2S(src.([]byte)))
 	case *[]byte:
-		u, ok = atou(fastconv.B2S(*src.(*[]byte)))
+		u, ok = atou(byteconv.B2S(*src.(*[]byte)))
 	case string:
 		u, ok = atou(src.(string))
 	case *string:
@@ -341,9 +341,9 @@ func AssignToFloat(dst, src any, _ AccumulativeBuffer) (ok bool) {
 		f = *src.(*float64)
 		ok = true
 	case []byte:
-		f, ok = atof(fastconv.B2S(src.([]byte)))
+		f, ok = atof(byteconv.B2S(src.([]byte)))
 	case *[]byte:
-		f, ok = atof(fastconv.B2S(*src.(*[]byte)))
+		f, ok = atof(byteconv.B2S(*src.(*[]byte)))
 	case string:
 		f, ok = atof(src.(string))
 	case *string:
