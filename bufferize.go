@@ -1,6 +1,6 @@
 package inspector
 
-import "github.com/koykov/fastconv"
+import "github.com/koykov/byteconv"
 
 // Bufferize appends p to the buffer and returns both pointers to buffer and buffered data.
 func Bufferize(buf, p []byte) ([]byte, []byte) {
@@ -13,5 +13,5 @@ func Bufferize(buf, p []byte) ([]byte, []byte) {
 func BufferizeString(buf []byte, s string) ([]byte, string) {
 	off := len(buf)
 	buf = append(buf, s...)
-	return buf, fastconv.B2S(buf[off:])
+	return buf, byteconv.B2S(buf[off:])
 }

@@ -8,7 +8,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 )
 
 type StaticInspector struct {
@@ -143,9 +143,9 @@ func (i StaticInspector) Compare(src any, cond Op, right string, result *bool, _
 			*result = i.cmpBool(*src.(*bool), cond, r)
 		}
 	case []byte:
-		*result = i.cmpBytes(src.([]byte), cond, fastconv.S2B(right))
+		*result = i.cmpBytes(src.([]byte), cond, byteconv.S2B(right))
 	case *[]byte:
-		*result = i.cmpBytes(*src.(*[]byte), cond, fastconv.S2B(right))
+		*result = i.cmpBytes(*src.(*[]byte), cond, byteconv.S2B(right))
 	case string:
 		*result = i.cmpStr(src.(string), cond, right)
 	case *string:
@@ -458,11 +458,11 @@ func (i StaticInspector) Copy(x any) (dst any, err error) {
 	case string:
 		origin := x.(string)
 		cpy := append([]byte(nil), origin...)
-		dst = fastconv.B2S(cpy)
+		dst = byteconv.B2S(cpy)
 	case *string:
 		origin := *x.(*string)
 		cpy := append([]byte(nil), origin...)
-		dst = fastconv.B2S(cpy)
+		dst = byteconv.B2S(cpy)
 	default:
 		return nil, ErrUnsupportedType
 	}
@@ -856,7 +856,7 @@ func (i StaticInspector) indString(x any) (string, bool) {
 		return *x.(*string), true
 	}
 	if b, ok := i.indBytes(x); ok {
-		return fastconv.B2S(b), true
+		return byteconv.B2S(b), true
 	}
 	return "", false
 }
@@ -869,7 +869,7 @@ func (i StaticInspector) indBytes(x any) ([]byte, bool) {
 		return *x.(*[]byte), true
 	}
 	if s, ok := i.indString(x); ok {
-		return fastconv.S2B(s), true
+		return byteconv.S2B(s), true
 	}
 	return nil, false
 }

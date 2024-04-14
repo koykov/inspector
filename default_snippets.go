@@ -8,7 +8,7 @@ func strToBoolSnippet(typ string) string {
 }
 
 func strToByteSnippet(_ string) string {
-	snippet := "t!{tmp} := fastconv.S2B(!{arg})\n"
+	snippet := "t!{tmp} := byteconv.S2B(!{arg})\n"
 	snippet += "if len(t!{tmp}) > 0{ !{var} = t!{tmp}[0] }\n"
 	return snippet
 }
@@ -35,7 +35,7 @@ func strToFloatSnippet(typ string) string {
 }
 
 func strToBytesSnippet(_ string) string {
-	snippet := "!{var} = fastconv.S2B(!{arg})\n"
+	snippet := "!{var} = byteconv.S2B(!{arg})\n"
 	return snippet
 }
 

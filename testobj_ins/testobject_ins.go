@@ -6,7 +6,7 @@ package testobj_ins
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"strconv"
@@ -240,7 +240,7 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 		}
 		if path[0] == "Name" {
 			var rightExact []byte
-			rightExact = fastconv.S2B(right)
+			rightExact = byteconv.S2B(right)
 
 			if cond == inspector.OpEq {
 				*result = bytes.Equal(x.Name, rightExact)
@@ -413,7 +413,7 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 						}
 						if path[2] == "Comment" {
 							var rightExact []byte
-							rightExact = fastconv.S2B(right)
+							rightExact = byteconv.S2B(right)
 
 							if cond == inspector.OpEq {
 								*result = bytes.Equal(x1.Comment, rightExact)
@@ -616,7 +616,7 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 								}
 								if path[3] == "Comment" {
 									var rightExact []byte
-									rightExact = fastconv.S2B(right)
+									rightExact = byteconv.S2B(right)
 
 									if cond == inspector.OpEq {
 										*result = bytes.Equal(x2.Comment, rightExact)

@@ -1,6 +1,6 @@
 package inspector
 
-import "github.com/koykov/fastconv"
+import "github.com/koykov/byteconv"
 
 // AccumulativeBuffer describes buffer that accumulates bytes data.
 // Collects data during inspector functions work.
@@ -49,7 +49,7 @@ func (b *ByteBuffer) Bufferize(p []byte) []byte {
 func (b *ByteBuffer) BufferizeString(s string) string {
 	off := len(b.b)
 	b.b = append(b.b, s...)
-	return fastconv.B2S(b.b[off:])
+	return byteconv.B2S(b.b[off:])
 }
 
 func (b *ByteBuffer) Reset() {

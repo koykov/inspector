@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 )
 
 // StringsInspector is a built-in inspector for []string/[][]byte types.
@@ -70,12 +70,12 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 	case len(ss) > 0 && idx < len(ss):
 		switch value.(type) {
 		case string:
-			p = fastconv.S2B(value.(string))
+			p = byteconv.S2B(value.(string))
 		case *string:
-			p = fastconv.S2B(*value.(*string))
+			p = byteconv.S2B(*value.(*string))
 		}
 		if len(p) > 0 {
-			ss[idx] = fastconv.B2S(buf.Bufferize(p))
+			ss[idx] = byteconv.B2S(buf.Bufferize(p))
 		}
 	case len(pp) > 0 && idx < len(pp):
 		switch value.(type) {
@@ -111,7 +111,7 @@ func (i StringsInspector) Compare(src any, cond Op, right string, result *bool, 
 	case len(ss) > 0 && idx < len(ss):
 		s = ss[idx]
 	case len(pp) > 0 && idx < len(pp):
-		s = fastconv.B2S(pp[idx])
+		s = byteconv.B2S(pp[idx])
 	}
 	switch cond {
 	case OpNq:
@@ -198,14 +198,14 @@ func (i StringsInspector) DeepEqualWithOptions(l, r any, _ *DEQOptions) bool {
 		return true
 	case ssLn > 0 && ppRn > 0 && ssLn == ppRn:
 		for j := 0; j < ssLn; j++ {
-			if ssL[j] != fastconv.B2S(ppR[j]) {
+			if ssL[j] != byteconv.B2S(ppR[j]) {
 				return false
 			}
 		}
 		return true
 	case ppLn > 0 && ssRn > 0 && ppLn == ssRn:
 		for j := 0; j < ppLn; j++ {
-			if fastconv.B2S(ppL[j]) != ssR[j] {
+			if byteconv.B2S(ppL[j]) != ssR[j] {
 				return false
 			}
 		}
@@ -263,7 +263,7 @@ func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 		case len(ppR) > 0:
 			for j := 0; j < len(ppR); j++ {
 				cpy := buf.Bufferize(ppR[j])
-				*ss = append(*ss, fastconv.B2S(cpy))
+				*ss = append(*ss, byteconv.B2S(cpy))
 			}
 		}
 	case [][]byte:
@@ -274,7 +274,7 @@ func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 		case len(ssR) > 0:
 			for j := 0; j < len(ssR); j++ {
 				cpy := buf.BufferizeString(ssR[j])
-				*pp = append(*pp, fastconv.S2B(cpy))
+				*pp = append(*pp, byteconv.S2B(cpy))
 			}
 		case len(ppR) > 0:
 			for j := 0; j < len(ppR); j++ {
