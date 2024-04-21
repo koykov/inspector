@@ -15,8 +15,8 @@ type Inspector interface {
 	// Compare applies condition cond to value in src by path and right.
 	// Result will set to result buffer.
 	Compare(src any, cond Op, right string, result *bool, path ...string) error
-	// Loop iterates in src value taking by path using l looper.
-	Loop(src any, l Iterator, buf *[]byte, path ...string) error
+	// Loop iterates in src value taking by path using iterator iter.
+	Loop(src any, iter Iterator, buf *[]byte, path ...string) error
 	// DeepEqual compares l and r.
 	DeepEqual(l, r any) bool
 	// DeepEqualWithOptions compares l and r corresponding options.
