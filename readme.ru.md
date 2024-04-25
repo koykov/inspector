@@ -96,6 +96,24 @@ BenchmarkInspector/obj.L1.L2.L3.S-8         	159301698	         7.596 ns/op	    
 Эти методы также используют комбинацию `type assertion` с хардкодом и [работают быстрее](https://github.com/koykov/inspector/blob/master/test/inspector_test.go)
 рефлексии в любом виде.
 
+## Инспекторы базовых типов
+
+### static
+
+Для работы базовых типов (int, uint, float64, ...) был разработан специальный инспектор [static](https://github.com/koykov/inspector/blob/master/static.go).
+Он широко применяется в библиотеках [dyntpl](https://github.com/koykov/dyntpl) и [decoder](https://github.com/koykov/decoder)
+при работе с примитивными типами.
+
+### strings
+
+Для работы с типами `string` и `[][]byte` разработан инспектор [strings](https://github.com/koykov/inspector/blob/master/strings.go).
+См. [тестовые сценарии](https://github.com/koykov/inspector/blob/master/test/strings_test.go).
+
+### map[string]any
+
+Специально для классических сценариев работы с `encoding/json` был разработан инспектор для типа [map\[string\]any](https://github.com/koykov/inspector/blob/master/stranymap.go).
+См. [тестовые сценарии](https://github.com/koykov/inspector/blob/master/test/stranymap_test.go).
+
 ## Примечания 
 
 <sup>1</sup> На самом деле "произвольный" это лукавство, правильнее будет сформулировать "произвольный тип или структура
