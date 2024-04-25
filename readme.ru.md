@@ -86,12 +86,15 @@ BenchmarkInspector/obj.L1.L2.L3.S-8         	159301698	         7.596 ns/op	    
 ## Дополнительные возможности
 
 Кроме рассмотренной уже возможности получать значения полей в сложных структурах, типы-инспекторы также позволяют:
-* записывать значения в поля
-* сравнивать значения полей
-* итерировать поля в структурах по заданному пути
-* сравнивать структуры (или подструктуры/отдельные поля) по заданному пути
-* копировать структуры
-* очищать структуры
+* [записывать значения в поля](https://github.com/koykov/inspector/blob/master/inspector.go#L12)
+* [сравнивать значения полей](https://github.com/koykov/inspector/blob/master/inspector.go#L17)
+* [итерировать поля в структурах](https://github.com/koykov/inspector/blob/master/inspector.go#L19) по заданному пути
+* [сравнивать структуры (или подструктуры/отдельные поля)](https://github.com/koykov/inspector/blob/master/inspector.go#L21) по заданному пути
+* [копировать структуры](https://github.com/koykov/inspector/blob/master/inspector.go#L27)
+* [очищать структуры](https://github.com/koykov/inspector/blob/master/inspector.go#L35)
+
+Эти методы также используют комбинацию `type assertion` с хардкодом и [работают быстрее](https://github.com/koykov/inspector/blob/master/test/inspector_test.go)
+рефлексии в любом виде.
 
 ## Примечания 
 
