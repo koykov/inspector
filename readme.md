@@ -1,9 +1,19 @@
 # Inspector
 
-Inspector is a framework that allows build special code for inspecting values of arbitrary types with minimum or zero
-allocations and using of reflect package.
+Inspector is a code-generation framework of special wrappers of arbitrary types and data structures that allows to
+read/write/iterate fields without using reflection and produce minimum or zero allocations. 
 
-It takes a path to the package as input argument and produces special struct with the suffix "Inspector". You may use
-this struct for your issues.
+Each type-wrapper (next "inspector" or "type-inspector") has name of original type with suffix `Inspector` and implements
+[Inspector](https://github.com/koykov/inspector/blob/master/inspector.go#L4) interface.
 
-No need to make it manually, there is a tool `inspc`. Just [use it](https://github.com/koykov/inspector/tree/master/inspc) to build inspectors.
+## Intro
+
+The main idea: you may read/write/iterate (inspect) structure of arbitrary type in common way. The historical reason of
+development that framework was [dyntpl](https://github.com/koykov/dyntpl) package and many others. Usually this problem
+solves using reflection, but that way is extremely slow in general and produces huge amount of allocs on every use of
+`reflect.Value` type. There is good library [reflect2](https://github.com/modern-go/reflect2) that solves 'reflect.Value'
+problem, but it is also slow. The perfect way if to use `type assertion` together with hardcoded combinations of all
+possible paths to type fields. Unfortunately this way isn't a pure "dynamic solution". Let's consider that problem using
+example:
+
+...
