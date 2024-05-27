@@ -16,4 +16,28 @@ problem, but it is also slow. The perfect way if to use `type assertion` togethe
 possible paths to type fields. Unfortunately this way isn't a pure "dynamic solution". Let's consider that problem using
 example:
 
-...
+Let we have type [`T`](https://github.com/koykov/versus/blob/master/inspector2/types/types.go#L3):
+```go
+type T struct {
+	L1 *L1
+}
+
+type L1 struct {
+	L2 *L2
+}
+
+type L2 struct {
+	L3 *L3
+}
+
+type L3 struct {
+	S string
+	I int64
+	F float64
+}
+```
+with many nested subtypes. And we need to read data of fields for arbitrary path, eg:
+* `obj.L1.L2.L3.S`
+* `obj.L1.L2.L3.F`
+* ...
+
