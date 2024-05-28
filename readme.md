@@ -19,21 +19,21 @@ example:
 Let we have type [`T`](https://github.com/koykov/versus/blob/master/inspector2/types/types.go#L3):
 ```go
 type T struct {
-L1 *L1
+    L1 *L1
 }
 
 type L1 struct {
-L2 *L2
+    L2 *L2
 }
 
 type L2 struct {
-L3 *L3
+    L3 *L3
 }
 
 type L3 struct {
-S string
-I int64
-F float64
+    S string
+    I int64
+    F float64
 }
 ```
 with many nested subtypes. And we need to read data of fields for arbitrary path, eg:
