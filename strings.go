@@ -68,21 +68,21 @@ func (i StringsInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, 
 	var p []byte
 	switch {
 	case len(ss) > 0 && idx < len(ss):
-		switch value.(type) {
+		switch x := value.(type) {
 		case string:
-			p = byteconv.S2B(value.(string))
+			p = byteconv.S2B(x)
 		case *string:
-			p = byteconv.S2B(*value.(*string))
+			p = byteconv.S2B(*x)
 		}
 		if len(p) > 0 {
 			ss[idx] = byteconv.B2S(buf.Bufferize(p))
 		}
 	case len(pp) > 0 && idx < len(pp):
-		switch value.(type) {
+		switch x := value.(type) {
 		case []byte:
-			p = value.([]byte)
+			p = x
 		case *[]byte:
-			p = *value.(*[]byte)
+			p = *x
 		}
 		if len(p) > 0 {
 			pp[idx] = buf.Bufferize(p)
@@ -249,11 +249,11 @@ func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 		ss *[]string
 		pp *[][]byte
 	)
-	switch dst.(type) {
+	switch x := dst.(type) {
 	case []string:
 		return ErrMustPointerType
 	case *[]string:
-		ss = dst.(*[]string)
+		ss = x
 		switch {
 		case len(ssR) > 0:
 			for j := 0; j < len(ssR); j++ {
@@ -269,7 +269,7 @@ func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 	case [][]byte:
 		return ErrMustPointerType
 	case *[][]byte:
-		pp = dst.(*[][]byte)
+		pp = x
 		switch {
 		case len(ssR) > 0:
 			for j := 0; j < len(ssR); j++ {
@@ -338,33 +338,33 @@ func (i StringsInspector) Capacity(src any, result *int, path ...string) error {
 	return nil
 }
 
-func (i StringsInspector) Reset(x any) error {
-	switch x.(type) {
+func (i StringsInspector) Reset(val any) error {
+	switch x := val.(type) {
 	case []string:
 		return ErrMustPointerType
 	case *[]string:
-		ss := x.(*[]string)
+		ss := x
 		*ss = (*ss)[:0]
 	case [][]byte:
 		return ErrMustPointerType
 	case *[][]byte:
-		pp := x.(*[][]byte)
+		pp := x
 		*pp = (*pp)[:0]
 	}
 	return nil
 }
 
-func (i StringsInspector) sp(x any) (ss []string, pp [][]byte, ok bool) {
+func (i StringsInspector) sp(val any) (ss []string, pp [][]byte, ok bool) {
 	ok = true
-	switch x.(type) {
+	switch x := val.(type) {
 	case []string:
-		ss = x.([]string)
+		ss = x
 	case *[]string:
-		ss = *(x.(*[]string))
+		ss = *x
 	case [][]byte:
-		pp = x.([][]byte)
+		pp = x
 	case *[][]byte:
-		pp = *(x.(*[][]byte))
+		pp = *x
 	default:
 		ok = false
 	}

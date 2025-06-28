@@ -17,38 +17,38 @@ var (
 
 // AssignToBytes assigns(converts) source to bytes destination.
 func AssignToBytes(dst, src any, buf AccumulativeBuffer) (ok bool) {
-	switch dst.(type) {
+	switch lx := dst.(type) {
 	case *[]byte:
-		switch src.(type) {
+		switch rx := src.(type) {
 		case *[]byte:
-			*dst.(*[]byte) = *src.(*[]byte)
+			*lx = *rx
 			ok = true
 		case []byte:
-			*dst.(*[]byte) = src.([]byte)
+			*lx = rx
 			ok = true
 		case *string:
-			*dst.(*[]byte) = byteconv.S2B(*src.(*string))
+			*lx = byteconv.S2B(*rx)
 			ok = true
 		case string:
-			*dst.(*[]byte) = byteconv.S2B(src.(string))
+			*lx = byteconv.S2B(rx)
 			ok = true
 		default:
 			var (
-				p   = *dst.(*[]byte)
+				p   = *lx
 				err error
 			)
 			// Worst case, try to convert source to bytes.
 			if buf == nil {
 				p, err = x2bytes.ToBytes(p[:0], src)
 				if ok = err == nil; ok {
-					*dst.(*[]byte) = p
+					*lx = p
 				}
 			} else {
 				bb := buf.AcquireBytes()
 				offset := len(bb)
 				bb, err = x2bytes.ToBytes(bb, src)
 				if ok = err == nil; ok {
-					*dst.(*[]byte) = bb[offset:]
+					*lx = bb[offset:]
 				}
 				buf.ReleaseBytes(bb)
 			}
@@ -59,20 +59,20 @@ func AssignToBytes(dst, src any, buf AccumulativeBuffer) (ok bool) {
 
 // AssignToStr assigns(converts) source to string destination.
 func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
-	switch dst.(type) {
+	switch lx := dst.(type) {
 	case *string:
-		switch src.(type) {
+		switch rx := src.(type) {
 		case *[]byte:
-			*dst.(*string) = byteconv.B2S(*src.(*[]byte))
+			*lx = byteconv.B2S(*rx)
 			ok = true
 		case []byte:
-			*dst.(*string) = byteconv.B2S(src.([]byte))
+			*lx = byteconv.B2S(rx)
 			ok = true
 		case *string:
-			*dst.(*string) = *src.(*string)
+			*lx = *rx
 			ok = true
 		case string:
-			*dst.(*string) = src.(string)
+			*lx = rx
 			ok = true
 		default:
 			var (
@@ -81,17 +81,17 @@ func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 			)
 			// Worst case, try to convert source to bytes.
 			if buf == nil {
-				p = byteconv.S2B(*dst.(*string))
+				p = byteconv.S2B(*lx)
 				p, err = x2bytes.ToBytes(p, src)
 				if ok = err == nil; ok {
-					*dst.(*string) = byteconv.B2S(p)
+					*lx = byteconv.B2S(p)
 				}
 			} else {
 				bb := buf.AcquireBytes()
 				offset := len(bb)
 				bb, err = x2bytes.ToBytes(bb, src)
 				if ok = err == nil; ok {
-					*dst.(*string) = byteconv.B2S(bb[offset:])
+					*lx = byteconv.B2S(bb[offset:])
 				}
 				buf.ReleaseBytes(bb)
 			}
@@ -102,98 +102,98 @@ func AssignToStr(dst, src any, buf AccumulativeBuffer) (ok bool) {
 
 // AssignToBool assign(converts) source to bool destination.
 func AssignToBool(dst, src any, _ AccumulativeBuffer) (ok bool) {
-	switch dst.(type) {
+	switch lx := dst.(type) {
 	case *bool:
-		switch src.(type) {
+		switch rx := src.(type) {
 		case *bool:
-			*dst.(*bool) = *src.(*bool)
+			*lx = *rx
 			ok = true
 		case bool:
-			*dst.(*bool) = src.(bool)
+			*lx = rx
 			ok = true
 		case *[]byte:
-			*dst.(*bool) = byteconv.B2S(*src.(*[]byte)) == "true"
+			*lx = byteconv.B2S(*rx) == "true"
 			ok = true
 		case []byte:
-			*dst.(*bool) = byteconv.B2S(src.([]byte)) == "true"
+			*lx = byteconv.B2S(rx) == "true"
 			ok = true
 		case *string:
-			*dst.(*bool) = *src.(*string) == "true"
+			*lx = *rx == "true"
 			ok = true
 		case string:
-			*dst.(*bool) = src.(string) == "true"
+			*lx = rx == "true"
 			ok = true
 		case int:
-			*dst.(*bool) = src.(int) != 0
+			*lx = rx != 0
 			ok = true
 		case *int:
-			*dst.(*bool) = *src.(*int) != 0
+			*lx = *rx != 0
 			ok = true
 		case int8:
-			*dst.(*bool) = src.(int8) != 0
+			*lx = rx != 0
 			ok = true
 		case *int8:
-			*dst.(*bool) = *src.(*int8) != 0
+			*lx = *rx != 0
 			ok = true
 		case int16:
-			*dst.(*bool) = src.(int16) != 0
+			*lx = rx != 0
 			ok = true
 		case *int16:
-			*dst.(*bool) = *src.(*int16) != 0
+			*lx = *rx != 0
 			ok = true
 		case int32:
-			*dst.(*bool) = src.(int32) != 0
+			*lx = rx != 0
 			ok = true
 		case *int32:
-			*dst.(*bool) = *src.(*int32) != 0
+			*lx = *rx != 0
 			ok = true
 		case int64:
-			*dst.(*bool) = src.(int64) != 0
+			*lx = rx != 0
 			ok = true
 		case *int64:
-			*dst.(*bool) = *src.(*int64) != 0
+			*lx = *rx != 0
 			ok = true
 		case uint:
-			*dst.(*bool) = src.(uint) != 0
+			*lx = rx != 0
 			ok = true
 		case *uint:
-			*dst.(*bool) = *src.(*uint) != 0
+			*lx = *rx != 0
 			ok = true
 		case uint8:
-			*dst.(*bool) = src.(uint8) != 0
+			*lx = rx != 0
 			ok = true
 		case *uint8:
-			*dst.(*bool) = *src.(*uint8) != 0
+			*lx = *rx != 0
 			ok = true
 		case uint16:
-			*dst.(*bool) = src.(uint16) != 0
+			*lx = rx != 0
 			ok = true
 		case *uint16:
-			*dst.(*bool) = *src.(*uint16) != 0
+			*lx = *rx != 0
 			ok = true
 		case uint32:
-			*dst.(*bool) = src.(uint32) != 0
+			*lx = rx != 0
 			ok = true
 		case *uint32:
-			*dst.(*bool) = *src.(*uint32) != 0
+			*lx = *rx != 0
 			ok = true
 		case uint64:
-			*dst.(*bool) = src.(uint64) != 0
+			*lx = rx != 0
 			ok = true
 		case *uint64:
-			*dst.(*bool) = *src.(*uint64) != 0
+			*lx = *rx != 0
 			ok = true
 		case float32:
-			*dst.(*bool) = src.(float32) != 0
+			*lx = rx != 0
 			ok = true
 		case *float32:
-			*dst.(*bool) = *src.(*float32) != 0
+			*lx = *rx != 0
 			ok = true
 		case float64:
-			*dst.(*bool) = src.(float64) != 0
+			*lx = rx != 0
 			ok = true
 		case *float64:
-			*dst.(*bool) = *src.(*float64) != 0
+			*lx = *rx != 0
 			ok = true
 		}
 	}
@@ -203,58 +203,58 @@ func AssignToBool(dst, src any, _ AccumulativeBuffer) (ok bool) {
 // AssignToInt assigns(converts) source to int destination.
 func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var i int64
-	switch src.(type) {
+	switch x := src.(type) {
 	case int:
-		i = int64(src.(int))
+		i = int64(x)
 		ok = true
 	case *int:
-		i = int64(*src.(*int))
+		i = int64(*x)
 		ok = true
 	case int8:
-		i = int64(src.(int8))
+		i = int64(x)
 		ok = true
 	case *int8:
-		i = int64(*src.(*int8))
+		i = int64(*x)
 		ok = true
 	case int16:
-		i = int64(src.(int16))
+		i = int64(x)
 		ok = true
 	case *int16:
-		i = int64(*src.(*int16))
+		i = int64(*x)
 		ok = true
 	case int32:
-		i = int64(src.(int32))
+		i = int64(x)
 		ok = true
 	case *int32:
-		i = int64(*src.(*int32))
+		i = int64(*x)
 		ok = true
 	case int64:
-		i = src.(int64)
+		i = x
 		ok = true
 	case *int64:
-		i = *src.(*int64)
+		i = *x
 		ok = true
 	case []byte:
-		i, ok = atoi(byteconv.B2S(src.([]byte)))
+		i, ok = atoi(byteconv.B2S(x))
 	case *[]byte:
-		i, ok = atoi(byteconv.B2S(*src.(*[]byte)))
+		i, ok = atoi(byteconv.B2S(*x))
 	case string:
-		i, ok = atoi(src.(string))
+		i, ok = atoi(x)
 	case *string:
-		i, ok = atoi(*src.(*string))
+		i, ok = atoi(*x)
 	}
 	if ok {
-		switch dst.(type) {
+		switch x := dst.(type) {
 		case *int:
-			*dst.(*int) = int(i)
+			*x = int(i)
 		case *int8:
-			*dst.(*int8) = int8(i)
+			*x = int8(i)
 		case *int16:
-			*dst.(*int16) = int16(i)
+			*x = int16(i)
 		case *int32:
-			*dst.(*int32) = int32(i)
+			*x = int32(i)
 		case *int64:
-			*dst.(*int64) = i
+			*x = i
 		default:
 			ok = false
 		}
@@ -265,58 +265,58 @@ func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 // AssignToUint assigns(converts) source to unsigned int destination.
 func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var u uint64
-	switch src.(type) {
+	switch x := src.(type) {
 	case uint:
-		u = uint64(src.(uint))
+		u = uint64(x)
 		ok = true
 	case *uint:
-		u = uint64(*src.(*uint))
+		u = uint64(*x)
 		ok = true
 	case uint8:
-		u = uint64(src.(uint8))
+		u = uint64(x)
 		ok = true
 	case *uint8:
-		u = uint64(*src.(*uint8))
+		u = uint64(*x)
 		ok = true
 	case uint16:
-		u = uint64(src.(uint16))
+		u = uint64(x)
 		ok = true
 	case *uint16:
-		u = uint64(*src.(*uint16))
+		u = uint64(*x)
 		ok = true
 	case uint32:
-		u = uint64(src.(uint32))
+		u = uint64(x)
 		ok = true
 	case *uint32:
-		u = uint64(*src.(*uint32))
+		u = uint64(*x)
 		ok = true
 	case uint64:
-		u = src.(uint64)
+		u = x
 		ok = true
 	case *uint64:
-		u = *src.(*uint64)
+		u = *x
 		ok = true
 	case []byte:
-		u, ok = atou(byteconv.B2S(src.([]byte)))
+		u, ok = atou(byteconv.B2S(x))
 	case *[]byte:
-		u, ok = atou(byteconv.B2S(*src.(*[]byte)))
+		u, ok = atou(byteconv.B2S(*x))
 	case string:
-		u, ok = atou(src.(string))
+		u, ok = atou(x)
 	case *string:
-		u, ok = atou(*src.(*string))
+		u, ok = atou(*x)
 	}
 	if ok {
-		switch dst.(type) {
+		switch x := dst.(type) {
 		case *uint:
-			*dst.(*uint) = uint(u)
+			*x = uint(u)
 		case *uint8:
-			*dst.(*uint8) = uint8(u)
+			*x = uint8(u)
 		case *uint16:
-			*dst.(*uint16) = uint16(u)
+			*x = uint16(u)
 		case *uint32:
-			*dst.(*uint32) = uint32(u)
+			*x = uint32(u)
 		case *uint64:
-			*dst.(*uint64) = u
+			*x = u
 		default:
 			ok = false
 		}
@@ -327,34 +327,34 @@ func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 // AssignToFloat assigns(converts) source to float destination.
 func AssignToFloat(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var f float64
-	switch src.(type) {
+	switch x := src.(type) {
 	case float32:
-		f = float64(src.(float32))
+		f = float64(x)
 		ok = true
 	case *float32:
-		f = float64(*src.(*float32))
+		f = float64(*x)
 		ok = true
 	case float64:
-		f = src.(float64)
+		f = x
 		ok = true
 	case *float64:
-		f = *src.(*float64)
+		f = *x
 		ok = true
 	case []byte:
-		f, ok = atof(byteconv.B2S(src.([]byte)))
+		f, ok = atof(byteconv.B2S(x))
 	case *[]byte:
-		f, ok = atof(byteconv.B2S(*src.(*[]byte)))
+		f, ok = atof(byteconv.B2S(*x))
 	case string:
-		f, ok = atof(src.(string))
+		f, ok = atof(x)
 	case *string:
-		f, ok = atof(*src.(*string))
+		f, ok = atof(*x)
 	}
 	if ok {
-		switch dst.(type) {
+		switch x := dst.(type) {
 		case *float32:
-			*dst.(*float32) = float32(f)
+			*x = float32(f)
 		case *float64:
-			*dst.(*float64) = f
+			*x = f
 		default:
 			ok = false
 		}
