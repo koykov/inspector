@@ -28,11 +28,91 @@ func (i StaticInspector) GetTo(src any, buf *any, _ ...string) error {
 	return nil
 }
 
-func (i StaticInspector) Set(_, _ any, _ ...string) error {
-	return nil
+func (i StaticInspector) Set(dst, value any, path ...string) error {
+	var buf ByteBuffer
+	return i.SetWithBuffer(dst, value, &buf, path...)
 }
 
-func (i StaticInspector) SetWithBuffer(_, _ any, _ AccumulativeBuffer, _ ...string) error {
+func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error {
+	switch lx := dst.(type) {
+	case bool, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, string, []byte:
+		return ErrMustPointerType
+	case *bool:
+		if rx, ok := i.indBool(value); ok {
+			*lx = rx
+			return nil
+		}
+	case *int:
+		if rx, ok := i.indInt(value); ok {
+			*lx = int(rx)
+			return nil
+		}
+	case *int8:
+		if rx, ok := i.indInt(value); ok {
+			*lx = int8(rx)
+			return nil
+		}
+	case *int16:
+		if rx, ok := i.indInt(value); ok {
+			*lx = int16(rx)
+			return nil
+		}
+	case *int32:
+		if rx, ok := i.indInt(value); ok {
+			*lx = int32(rx)
+			return nil
+		}
+	case *int64:
+		if rx, ok := i.indInt(value); ok {
+			*lx = rx
+			return nil
+		}
+	case *uint:
+		if rx, ok := i.indUint(value); ok {
+			*lx = uint(rx)
+			return nil
+		}
+	case *uint8:
+		if rx, ok := i.indUint(value); ok {
+			*lx = uint8(rx)
+			return nil
+		}
+	case *uint16:
+		if rx, ok := i.indUint(value); ok {
+			*lx = uint16(rx)
+			return nil
+		}
+	case *uint32:
+		if rx, ok := i.indUint(value); ok {
+			*lx = uint32(rx)
+			return nil
+		}
+	case *uint64:
+		if rx, ok := i.indUint(value); ok {
+			*lx = rx
+			return nil
+		}
+	case *float32:
+		if rx, ok := i.indFloat(value); ok {
+			*lx = float32(rx)
+			return nil
+		}
+	case *float64:
+		if rx, ok := i.indFloat(value); ok {
+			*lx = float64(rx)
+			return nil
+		}
+	case *[]byte:
+		if rx, ok := i.indBytes(value); ok {
+			*lx = buf.Bufferize(rx)
+			return nil
+		}
+	case *string:
+		if rx, ok := i.indString(value); ok {
+			*lx = buf.BufferizeString(rx)
+			return nil
+		}
+	}
 	return nil
 }
 
