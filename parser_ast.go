@@ -94,13 +94,13 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		node.pkg = c.pkgName
 		node.pkgi = c.imp_
 	}
-	switch expr.(type) {
+	switch x := expr.(type) {
 	case *ast.MapType:
 		node.typ = typeMap
 		if id != nil {
 			node.name = strings.Replace(id.String(), c.pkgDot, "", 1)
 		}
-		m := expr.(*ast.MapType)
+		m := x
 		if node.mapk, err = c.parseAstExpr(m.Key, nil, depth+1); err != nil {
 			return nil, err
 		}
@@ -118,7 +118,7 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		node.typn = node.name
 		node.pkg = c.pkgName
 		node.pkgi = c.imp_
-		s := expr.(*ast.StructType)
+		s := x
 		if s.Fields != nil {
 			for i := 0; i < len(s.Fields.List); i++ {
 				field := s.Fields.List[i]
@@ -142,12 +142,12 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		return node, nil
 	case *ast.SliceExpr:
 		node.typ = typeSlice
-		s := expr.(*ast.SliceExpr)
+		s := x
 		_ = s
 		return node, nil
 	case *ast.ArrayType:
 		node.typ = typeSlice
-		s := expr.(*ast.ArrayType)
+		s := x
 		if node.slct, err = c.parseAstExpr(s.Elt, nil, depth+1); err != nil {
 			return nil, err
 		}
@@ -158,14 +158,14 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		node.hasc = true
 		return node, nil
 	case *ast.StarExpr:
-		s := expr.(*ast.StarExpr)
+		s := x
 		if node, err = c.parseAstExpr(s.X, nil, depth+1); err != nil {
 			return nil, err
 		}
 		node.ptr = true
 		return node, nil
 	case *ast.Ident:
-		id := expr.(*ast.Ident)
+		id := x
 		node.typn = id.String()
 		node.typu = id.String()
 		node.hasb = node.typu == "string"
@@ -206,6 +206,8 @@ func (c *Compiler) composeAstTypeName(node *node) string {
 			typn += "*"
 		}
 		typn += node.slct.typn
+	default:
+		return typn
 	}
 	return typn
 }
