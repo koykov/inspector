@@ -1,18 +1,10 @@
 package inspector
 
 import (
-	"regexp"
 	"strconv"
 
 	"github.com/koykov/byteconv"
 	"github.com/koykov/x2bytes"
-)
-
-var (
-	// todo optimise string check
-	reIsDecInt   = regexp.MustCompile(`^[-+]?[\d]+$`)
-	reIsDecUint  = regexp.MustCompile(`^[+]?[\d]+$`)
-	reIsDecFloat = regexp.MustCompile(`^[-+]?[\d]*\.?[\d]+([eE][-+]?[\d]+)?$`)
 )
 
 // AssignToBytes assigns(converts) source to bytes destination.
@@ -364,30 +356,24 @@ func AssignToFloat(dst, src any, _ AccumulativeBuffer) (ok bool) {
 
 // Check if string contains integer and parse it.
 func atoi(s string) (int64, bool) {
-	if reIsDecInt.MatchString(s) {
-		if i, err := strconv.ParseInt(s, 10, 64); err == nil {
-			return i, true
-		}
+	if i, err := strconv.ParseInt(s, 10, 64); err == nil {
+		return i, true
 	}
 	return 0, false
 }
 
 // Check if string contains unsigned integer and parse it.
 func atou(s string) (uint64, bool) {
-	if reIsDecUint.MatchString(s) {
-		if u, err := strconv.ParseUint(s, 10, 64); err == nil {
-			return u, true
-		}
+	if u, err := strconv.ParseUint(s, 10, 64); err == nil {
+		return u, true
 	}
 	return 0, false
 }
 
 // Check if string contains float and parse it.
 func atof(s string) (float64, bool) {
-	if reIsDecFloat.MatchString(s) {
-		if f, err := strconv.ParseFloat(s, 64); err == nil {
-			return f, true
-		}
+	if f, err := strconv.ParseFloat(s, 64); err == nil {
+		return f, true
 	}
 	return 0, false
 }
