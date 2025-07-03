@@ -5,6 +5,7 @@ package inspector
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"math"
 	"strconv"
 
@@ -937,22 +938,23 @@ func (i StaticInspector) indString(val any) (string, bool) {
 		return x, true
 	case *string:
 		return *x, true
-	}
-	if b, ok := i.indBytes(val); ok {
-		return byteconv.B2S(b), true
+	case fmt.Stringer:
+		return x.String(), true
 	}
 	return "", false
 }
 
 func (i StaticInspector) indBytes(val any) ([]byte, bool) {
+	type byter interface {
+		Bytes() []byte
+	}
 	switch x := val.(type) {
 	case []byte:
 		return x, true
 	case *[]byte:
 		return *x, true
-	}
-	if s, ok := i.indString(val); ok {
-		return byteconv.S2B(s), true
+	case byter:
+		return x.Bytes(), true
 	}
 	return nil, false
 }
