@@ -108,7 +108,7 @@ func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, _
 		bb := buf.AcquireBytes()
 		defer buf.ReleaseBytes(bb)
 		var err error
-		bb, err = x2bytes.BytesToBytes(bb, value)
+		bb, err = x2bytes.ToBytes(bb, value)
 		if err != nil {
 			return err
 		}
@@ -117,7 +117,7 @@ func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, _
 		bb := buf.AcquireBytes()
 		defer buf.ReleaseBytes(bb)
 		var err error
-		bb, err = x2bytes.BytesToBytes(bb, value)
+		bb, err = x2bytes.ToBytes(bb, value)
 		if err != nil {
 			return err
 		}
