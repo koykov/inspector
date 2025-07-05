@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/koykov/byteconv"
+	"github.com/koykov/x2bytes"
 )
 
 type StaticInspector struct {
@@ -34,7 +35,7 @@ func (i StaticInspector) Set(dst, value any, path ...string) error {
 	return i.SetWithBuffer(dst, value, &buf, path...)
 }
 
-func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, path ...string) error {
+func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, _ ...string) error {
 	switch lx := dst.(type) {
 	case bool, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, string, []byte:
 		return ErrMustPointerType
@@ -100,19 +101,27 @@ func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, p
 		}
 	case *float64:
 		if rx, ok := i.indFloat(value); ok {
-			*lx = float64(rx)
+			*lx = rx
 			return nil
 		}
 	case *[]byte:
-		if rx, ok := i.indBytes(value); ok {
-			*lx = buf.Bufferize(rx)
-			return nil
+		bb := buf.AcquireBytes()
+		defer buf.ReleaseBytes(bb)
+		var err error
+		bb, err = x2bytes.BytesToBytes(bb, value)
+		if err != nil {
+			return err
 		}
+		*lx = bb
 	case *string:
-		if rx, ok := i.indString(value); ok {
-			*lx = buf.BufferizeString(rx)
-			return nil
+		bb := buf.AcquireBytes()
+		defer buf.ReleaseBytes(bb)
+		var err error
+		bb, err = x2bytes.BytesToBytes(bb, value)
+		if err != nil {
+			return err
 		}
+		*lx = byteconv.B2S(bb)
 	}
 	return nil
 }
@@ -933,6 +942,9 @@ func (i StaticInspector) indFloat(val any) (float64, bool) {
 }
 
 func (i StaticInspector) indString(val any) (string, bool) {
+	type byter interface {
+		Bytes() []byte
+	}
 	switch x := val.(type) {
 	case string:
 		return x, true
@@ -940,6 +952,8 @@ func (i StaticInspector) indString(val any) (string, bool) {
 		return *x, true
 	case fmt.Stringer:
 		return x.String(), true
+	case byter:
+		return byteconv.B2S(x.Bytes()), true
 	}
 	return "", false
 }
@@ -953,6 +967,8 @@ func (i StaticInspector) indBytes(val any) ([]byte, bool) {
 		return x, true
 	case *[]byte:
 		return *x, true
+	case fmt.Stringer:
+		return byteconv.S2B(x.String()), true
 	case byter:
 		return x.Bytes(), true
 	}
