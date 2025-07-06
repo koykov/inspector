@@ -106,22 +106,24 @@ func (i StaticInspector) SetWithBuffer(dst, value any, buf AccumulativeBuffer, _
 		}
 	case *[]byte:
 		bb := buf.AcquireBytes()
-		defer buf.ReleaseBytes(bb)
+		off := len(bb)
 		var err error
 		bb, err = x2bytes.ToBytes(bb, value)
 		if err != nil {
 			return err
 		}
-		*lx = bb
+		*lx = bb[off:]
+		buf.ReleaseBytes(bb)
 	case *string:
 		bb := buf.AcquireBytes()
-		defer buf.ReleaseBytes(bb)
+		off := len(bb)
 		var err error
 		bb, err = x2bytes.ToBytes(bb, value)
 		if err != nil {
 			return err
 		}
-		*lx = byteconv.B2S(bb)
+		*lx = byteconv.B2S(bb[off:])
+		buf.ReleaseBytes(bb)
 	}
 	return nil
 }
