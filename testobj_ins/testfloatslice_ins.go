@@ -22,6 +22,10 @@ func (i3 TestFloatSliceInspector) TypeName() string {
 	return "TestFloatSlice"
 }
 
+func (i3 TestFloatSliceInspector) Instance() any {
+	return testobj.TestFloatSlice{}
+}
+
 func (i3 TestFloatSliceInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i3.GetTo(src, &buf, path...)

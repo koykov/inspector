@@ -21,6 +21,10 @@ func (i9 TestStringFloatPtrMapInspector) TypeName() string {
 	return "TestStringFloatPtrMap"
 }
 
+func (i9 TestStringFloatPtrMapInspector) Instance() any {
+	return testobj.TestStringFloatPtrMap{}
+}
+
 func (i9 TestStringFloatPtrMapInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i9.GetTo(src, &buf, path...)

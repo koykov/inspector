@@ -24,6 +24,10 @@ func (i12 TestStructSliceLiteralInspector) TypeName() string {
 	return "TestStructSliceLiteral"
 }
 
+func (i12 TestStructSliceLiteralInspector) Instance() any {
+	return testobj.TestStructSliceLiteral{}
+}
+
 func (i12 TestStructSliceLiteralInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i12.GetTo(src, &buf, path...)

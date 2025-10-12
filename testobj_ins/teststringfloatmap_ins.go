@@ -22,6 +22,10 @@ func (i8 TestStringFloatMapInspector) TypeName() string {
 	return "TestStringFloatMap"
 }
 
+func (i8 TestStringFloatMapInspector) Instance() any {
+	return testobj.TestStringFloatMap{}
+}
+
 func (i8 TestStringFloatMapInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i8.GetTo(src, &buf, path...)

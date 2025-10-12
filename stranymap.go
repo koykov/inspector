@@ -12,6 +12,10 @@ func (i StringAnyMapInspector) TypeName() string {
 	return "map[string]any"
 }
 
+func (i StringAnyMapInspector) Instance() any {
+	return map[string]any{}
+}
+
 func (i StringAnyMapInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i.GetTo(src, &buf, path...)

@@ -22,6 +22,10 @@ func (i1 TestFlagInspector) TypeName() string {
 	return "TestFlag"
 }
 
+func (i1 TestFlagInspector) Instance() any {
+	return testobj.TestFlag{}
+}
+
 func (i1 TestFlagInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i1.GetTo(src, &buf, path...)

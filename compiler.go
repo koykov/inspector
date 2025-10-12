@@ -417,6 +417,10 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("return \"", node.typn, "\"")
 	c.wdl("}")
 
+	c.wl("func (", recv, " ", inst, ") Instance() any {")
+	c.wl("return ", pname, "{}")
+	c.wdl("}")
+
 	c.wl("func (", recv, " ", inst, ") Get(src any, path ...string) (any, error) {")
 	c.wl("var buf any\nerr := " + recv + ".GetTo(src, &buf, path...)\nreturn buf, err")
 	c.wdl("}")

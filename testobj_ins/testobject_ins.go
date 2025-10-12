@@ -24,6 +24,10 @@ func (i5 TestObjectInspector) TypeName() string {
 	return "TestObject"
 }
 
+func (i5 TestObjectInspector) Instance() any {
+	return testobj.TestObject{}
+}
+
 func (i5 TestObjectInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i5.GetTo(src, &buf, path...)

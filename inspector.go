@@ -4,6 +4,8 @@ package inspector
 type Inspector interface {
 	// TypeName returns name of underlying type.
 	TypeName() string
+	// Instance creates new instance of underlying type.
+	Instance() any
 	// Get returns value from src according path.
 	Get(src any, path ...string) (any, error)
 	// GetTo writes value from src to buf according path.
