@@ -126,6 +126,8 @@ func (i StringsInspector) Compare(src any, cond Op, right string, result *bool, 
 		*result = s < right
 	case OpLtq:
 		*result = s <= right
+	default:
+		// noop
 	}
 	return nil
 }

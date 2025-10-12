@@ -113,6 +113,8 @@ func (i ReflectInspector) inspect(node any, key string) any {
 		if sv.IsValid() && sv.CanInterface() {
 			return sv.Interface()
 		}
+	default:
+		// noop
 	}
 	return nil
 }
