@@ -22,6 +22,10 @@ func (i7 TestPermissionInspector) TypeName() string {
 	return "TestPermission"
 }
 
+func (i7 TestPermissionInspector) Instance() any {
+	return testobj.TestPermission{}
+}
+
 func (i7 TestPermissionInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i7.GetTo(src, &buf, path...)

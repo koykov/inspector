@@ -24,6 +24,10 @@ func (i0 TestFinanceInspector) TypeName() string {
 	return "TestFinance"
 }
 
+func (i0 TestFinanceInspector) Instance() any {
+	return testobj.TestFinance{}
+}
+
 func (i0 TestFinanceInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i0.GetTo(src, &buf, path...)

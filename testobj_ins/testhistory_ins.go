@@ -24,6 +24,10 @@ func (i4 TestHistoryInspector) TypeName() string {
 	return "TestHistory"
 }
 
+func (i4 TestHistoryInspector) Instance() any {
+	return testobj.TestHistory{}
+}
+
 func (i4 TestHistoryInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i4.GetTo(src, &buf, path...)

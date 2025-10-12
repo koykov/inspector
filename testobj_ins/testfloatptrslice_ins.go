@@ -22,6 +22,10 @@ func (i2 TestFloatPtrSliceInspector) TypeName() string {
 	return "TestFloatPtrSlice"
 }
 
+func (i2 TestFloatPtrSliceInspector) Instance() any {
+	return testobj.TestFloatPtrSlice{}
+}
+
 func (i2 TestFloatPtrSliceInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i2.GetTo(src, &buf, path...)

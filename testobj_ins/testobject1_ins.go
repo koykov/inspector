@@ -24,6 +24,10 @@ func (i6 TestObject1Inspector) TypeName() string {
 	return "TestObject1"
 }
 
+func (i6 TestObject1Inspector) Instance() any {
+	return testobj.TestObject1{}
+}
+
 func (i6 TestObject1Inspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i6.GetTo(src, &buf, path...)

@@ -15,6 +15,10 @@ func (i StringsInspector) TypeName() string {
 	return "strings"
 }
 
+func (i StringsInspector) Instance() any {
+	return []string{}
+}
+
 func (i StringsInspector) Get(src any, path ...string) (any, error) {
 	var x any
 	err := i.GetTo(src, &x, path...)

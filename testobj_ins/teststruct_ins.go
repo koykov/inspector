@@ -24,6 +24,10 @@ func (i11 TestStructInspector) TypeName() string {
 	return "TestStruct"
 }
 
+func (i11 TestStructInspector) Instance() any {
+	return testobj.TestStruct{}
+}
+
 func (i11 TestStructInspector) Get(src any, path ...string) (any, error) {
 	var buf any
 	err := i11.GetTo(src, &buf, path...)
