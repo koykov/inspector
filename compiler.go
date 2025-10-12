@@ -261,6 +261,9 @@ func (c *Compiler) parse() error {
 
 		// Parse the package to nodes list.
 		pkg := prog.Package(c.pkg)
+		if pkg == nil {
+			return nil
+		}
 		c.pkgName = pkg.Pkg.Name()
 		err = c.parsePkg(pkg)
 		if err != nil {
@@ -704,10 +707,10 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if !ch.ptr {
 						pfx = "&" + pfx
 					}
-					if mode == modeSet {
-						c.wl("inspector.AssignBuf(", pfx, v, ".", ch.name, ", value, buf)")
-					}
+					c.wl("inspector.AssignBuf(", pfx, v, ".", ch.name, ", value, buf)")
 					c.wl("return nil")
+				default:
+					// noop
 				}
 			} else {
 				nv := "x" + strconv.Itoa(depth)
@@ -745,6 +748,8 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 						case typeSlice:
 							c.wl("z := make(", typ, ", 0)")
 							c.wl(nv, " = ", pfx, "z")
+						default:
+							// noop
 						}
 						c.wl(v+"."+ch.name, " = ", nv)
 						c.wl("}")
@@ -874,10 +879,10 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				if !node.ptr {
 					pfx = "&"
 				}
-				if mode == modeSet {
-					c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
-				}
+				c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
 				c.wl("return nil")
+			default:
+				// noop
 			}
 		}
 		switch mode {
@@ -950,12 +955,12 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if !node.ptr {
 				pfx = "&" + pfx
 			}
-			if mode == modeSet {
-				c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
-			}
-			if parent.typ != typeMap {
+			c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
+			if parent != nil && parent.typ != typeMap {
 				c.wl("return nil")
 			}
+		default:
+			// noop
 		}
 	}
 	if requireLenCheck {
@@ -1628,3 +1633,5 @@ func (t typ) String() string {
 		return "unknown"
 	}
 }
+
+var _ = NewCompiler
