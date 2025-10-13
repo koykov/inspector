@@ -4,7 +4,7 @@ var (
 	// Global registry of all inspectors.
 	inspectorRegistry = map[string]Inspector{}
 
-	_ = GetInspector
+	_, _ = GetInspector, EachInspector
 )
 
 // RegisterInspector saves inspector to the registry.
@@ -18,4 +18,11 @@ func GetInspector(name string) (Inspector, error) {
 		return ins, nil
 	}
 	return nil, ErrUnknownInspector
+}
+
+// EachInspector visits all registered inspectors.
+func EachInspector(fn func(name string, ins Inspector)) {
+	for name, ins := range inspectorRegistry {
+		fn(name, ins)
+	}
 }
