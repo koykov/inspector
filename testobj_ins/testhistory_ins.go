@@ -24,7 +24,10 @@ func (i4 TestHistoryInspector) TypeName() string {
 	return "TestHistory"
 }
 
-func (i4 TestHistoryInspector) Instance() any {
+func (i4 TestHistoryInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestHistory{}
+	}
 	return testobj.TestHistory{}
 }
 

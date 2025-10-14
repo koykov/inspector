@@ -7,7 +7,7 @@ func (i BaseInspector) TypeName() string {
 	return "not implement!"
 }
 
-func (i BaseInspector) Instance() any { return nil }
+func (i BaseInspector) Instance(_ bool) any { return nil }
 
 func (i BaseInspector) Get(_ any, _ ...string) (any, error) {
 	return nil, ErrNotImplement

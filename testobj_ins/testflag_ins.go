@@ -22,7 +22,10 @@ func (i1 TestFlagInspector) TypeName() string {
 	return "TestFlag"
 }
 
-func (i1 TestFlagInspector) Instance() any {
+func (i1 TestFlagInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestFlag{}
+	}
 	return testobj.TestFlag{}
 }
 

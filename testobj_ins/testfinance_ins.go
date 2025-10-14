@@ -24,7 +24,10 @@ func (i0 TestFinanceInspector) TypeName() string {
 	return "TestFinance"
 }
 
-func (i0 TestFinanceInspector) Instance() any {
+func (i0 TestFinanceInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestFinance{}
+	}
 	return testobj.TestFinance{}
 }
 

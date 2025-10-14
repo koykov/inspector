@@ -21,7 +21,10 @@ func (i10 TestStringPtrFloatPtrMapInspector) TypeName() string {
 	return "TestStringPtrFloatPtrMap"
 }
 
-func (i10 TestStringPtrFloatPtrMapInspector) Instance() any {
+func (i10 TestStringPtrFloatPtrMapInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestStringPtrFloatPtrMap{}
+	}
 	return testobj.TestStringPtrFloatPtrMap{}
 }
 

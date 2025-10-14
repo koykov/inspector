@@ -417,7 +417,8 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("return \"", node.typn, "\"")
 	c.wdl("}")
 
-	c.wl("func (", recv, " ", inst, ") Instance() any {")
+	c.wl("func (", recv, " ", inst, ") Instance(ptr bool) any {")
+	c.wl("if ptr {return &", pname, "{}}")
 	c.wl("return ", pname, "{}")
 	c.wdl("}")
 
