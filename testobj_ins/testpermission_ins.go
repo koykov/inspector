@@ -22,7 +22,10 @@ func (i7 TestPermissionInspector) TypeName() string {
 	return "TestPermission"
 }
 
-func (i7 TestPermissionInspector) Instance() any {
+func (i7 TestPermissionInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestPermission{}
+	}
 	return testobj.TestPermission{}
 }
 

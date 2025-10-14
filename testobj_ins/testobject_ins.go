@@ -24,7 +24,10 @@ func (i5 TestObjectInspector) TypeName() string {
 	return "TestObject"
 }
 
-func (i5 TestObjectInspector) Instance() any {
+func (i5 TestObjectInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestObject{}
+	}
 	return testobj.TestObject{}
 }
 

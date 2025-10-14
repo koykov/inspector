@@ -22,7 +22,10 @@ func (i8 TestStringFloatMapInspector) TypeName() string {
 	return "TestStringFloatMap"
 }
 
-func (i8 TestStringFloatMapInspector) Instance() any {
+func (i8 TestStringFloatMapInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestStringFloatMap{}
+	}
 	return testobj.TestStringFloatMap{}
 }
 

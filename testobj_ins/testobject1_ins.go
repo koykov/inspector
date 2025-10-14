@@ -24,7 +24,10 @@ func (i6 TestObject1Inspector) TypeName() string {
 	return "TestObject1"
 }
 
-func (i6 TestObject1Inspector) Instance() any {
+func (i6 TestObject1Inspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestObject1{}
+	}
 	return testobj.TestObject1{}
 }
 

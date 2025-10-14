@@ -15,7 +15,10 @@ func (i StringsInspector) TypeName() string {
 	return "strings"
 }
 
-func (i StringsInspector) Instance() any {
+func (i StringsInspector) Instance(ptr bool) any {
+	if ptr {
+		return &[]string{}
+	}
 	return []string{}
 }
 

@@ -24,7 +24,10 @@ func (i11 TestStructInspector) TypeName() string {
 	return "TestStruct"
 }
 
-func (i11 TestStructInspector) Instance() any {
+func (i11 TestStructInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestStruct{}
+	}
 	return testobj.TestStruct{}
 }
 

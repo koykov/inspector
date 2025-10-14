@@ -12,7 +12,10 @@ func (i StringAnyMapInspector) TypeName() string {
 	return "map[string]any"
 }
 
-func (i StringAnyMapInspector) Instance() any {
+func (i StringAnyMapInspector) Instance(ptr bool) any {
+	if ptr {
+		return &map[string]any{}
+	}
 	return map[string]any{}
 }
 

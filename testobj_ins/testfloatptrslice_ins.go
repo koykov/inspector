@@ -22,7 +22,10 @@ func (i2 TestFloatPtrSliceInspector) TypeName() string {
 	return "TestFloatPtrSlice"
 }
 
-func (i2 TestFloatPtrSliceInspector) Instance() any {
+func (i2 TestFloatPtrSliceInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestFloatPtrSlice{}
+	}
 	return testobj.TestFloatPtrSlice{}
 }
 

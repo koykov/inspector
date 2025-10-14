@@ -24,7 +24,10 @@ func (i12 TestStructSliceLiteralInspector) TypeName() string {
 	return "TestStructSliceLiteral"
 }
 
-func (i12 TestStructSliceLiteralInspector) Instance() any {
+func (i12 TestStructSliceLiteralInspector) Instance(ptr bool) any {
+	if ptr {
+		return &testobj.TestStructSliceLiteral{}
+	}
 	return testobj.TestStructSliceLiteral{}
 }
 
