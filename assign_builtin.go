@@ -226,6 +226,48 @@ func AssignToInt(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	case *int64:
 		i = *x
 		ok = true
+	case uint:
+		i = int64(x)
+		ok = true
+	case *uint:
+		i = int64(*x)
+		ok = true
+	case uint8:
+		i = int64(x)
+		ok = true
+	case *uint8:
+		i = int64(*x)
+		ok = true
+	case uint16:
+		i = int64(x)
+		ok = true
+	case *uint16:
+		i = int64(*x)
+		ok = true
+	case uint32:
+		i = int64(x)
+		ok = true
+	case *uint32:
+		i = int64(*x)
+		ok = true
+	case uint64:
+		i = int64(x)
+		ok = true
+	case *uint64:
+		i = int64(*x)
+		ok = true
+	case float32:
+		i = int64(x)
+		ok = true
+	case *float32:
+		i = int64(*x)
+		ok = true
+	case float64:
+		i = int64(x)
+		ok = true
+	case *float64:
+		i = int64(*x)
+		ok = true
 	case []byte:
 		i, ok = atoi(byteconv.B2S(x))
 	case *[]byte:
@@ -288,6 +330,48 @@ func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	case *uint64:
 		u = *x
 		ok = true
+	case int:
+		u = uint64(x)
+		ok = true
+	case *int:
+		u = uint64(*x)
+		ok = true
+	case int8:
+		u = uint64(x)
+		ok = true
+	case *int8:
+		u = uint64(*x)
+		ok = true
+	case int16:
+		u = uint64(x)
+		ok = true
+	case *int16:
+		u = uint64(*x)
+		ok = true
+	case int32:
+		u = uint64(x)
+		ok = true
+	case *int32:
+		u = uint64(*x)
+		ok = true
+	case int64:
+		u = uint64(x)
+		ok = true
+	case *int64:
+		u = uint64(*x)
+		ok = true
+	case float32:
+		u = uint64(x)
+		ok = true
+	case *float32:
+		u = uint64(*x)
+		ok = true
+	case float64:
+		u = uint64(x)
+		ok = true
+	case *float64:
+		u = uint64(*x)
+		ok = true
 	case []byte:
 		u, ok = atou(byteconv.B2S(x))
 	case *[]byte:
@@ -320,6 +404,66 @@ func AssignToUint(dst, src any, _ AccumulativeBuffer) (ok bool) {
 func AssignToFloat(dst, src any, _ AccumulativeBuffer) (ok bool) {
 	var f float64
 	switch x := src.(type) {
+	case uint:
+		f = float64(x)
+		ok = true
+	case *uint:
+		f = float64(*x)
+		ok = true
+	case uint8:
+		f = float64(x)
+		ok = true
+	case *uint8:
+		f = float64(*x)
+		ok = true
+	case uint16:
+		f = float64(x)
+		ok = true
+	case *uint16:
+		f = float64(*x)
+		ok = true
+	case uint32:
+		f = float64(x)
+		ok = true
+	case *uint32:
+		f = float64(*x)
+		ok = true
+	case uint64:
+		f = float64(x)
+		ok = true
+	case *uint64:
+		f = float64(*x)
+		ok = true
+	case int:
+		f = float64(x)
+		ok = true
+	case *int:
+		f = float64(*x)
+		ok = true
+	case int8:
+		f = float64(x)
+		ok = true
+	case *int8:
+		f = float64(*x)
+		ok = true
+	case int16:
+		f = float64(x)
+		ok = true
+	case *int16:
+		f = float64(*x)
+		ok = true
+	case int32:
+		f = float64(x)
+		ok = true
+	case *int32:
+		f = float64(*x)
+		ok = true
+	case int64:
+		f = float64(x)
+		ok = true
+	case *int64:
+		f = float64(*x)
+		ok = true
 	case float32:
 		f = float64(x)
 		ok = true
