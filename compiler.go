@@ -412,6 +412,12 @@ var x *` + pname + `
 _ = x
 if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return inspector.ErrUnsupportedType }`
 
+	// Common checks and type cast.
+	funcHeaderAppend := `if src == nil { return src, nil }
+var x *` + pname + `
+_ = x
+if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return src, nil }`
+
 	// Getter methods.
 	c.wl("func (", recv, " ", inst, ") TypeName() string {")
 	c.wl("return \"", node.typn, "\"")
@@ -526,6 +532,15 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 		return err
 	}
 	c.wdl("return nil}")
+
+	c.wl("func (", recv, " ", inst, ") Append(src, value any, path ...string) (any, error) {")
+	c.wl("_, _, _ = src, value, path")
+	if node.hasc {
+		c.wdl(funcHeaderAppend)
+		// ...
+	}
+	c.wl("return src, nil")
+	c.wdl("}")
 
 	// Reset methods.
 	c.wl("func (", recv, " ", inst, ") Reset(x any) error {")

@@ -297,6 +297,35 @@ func (i StringsInspector) CopyTo(src, dst any, buf AccumulativeBuffer) error {
 	return nil
 }
 
+func (i StringsInspector) Append(src, value any, _ ...string) (any, error) {
+	var raw []byte
+	switch x := value.(type) {
+	case []byte:
+		raw = x
+	case *[]byte:
+		raw = *x
+	case string:
+		raw = byteconv.S2B(x)
+	case *string:
+		raw = byteconv.S2B(*x)
+	default:
+		return src, nil
+	}
+	switch x := src.(type) {
+	case [][]byte:
+		return append(x, raw), nil
+	case *[][]byte:
+		*x = append(*x, raw)
+		return x, nil
+	case []string:
+		return append(x, byteconv.B2S(raw)), nil
+	case *[]string:
+		*x = append(*x, byteconv.B2S(raw))
+		return x, nil
+	}
+	return src, nil
+}
+
 func (i StringsInspector) Length(src any, result *int, path ...string) error {
 	ss, pp, ok := i.sp(src)
 	if !ok {

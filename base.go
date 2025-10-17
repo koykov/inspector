@@ -53,6 +53,8 @@ func (i BaseInspector) CopyTo(_, _ any, _ AccumulativeBuffer) error {
 	return ErrNotImplement
 }
 
+func (i BaseInspector) Append(src, _ any, _ ...string) (any, error) { return src, ErrNotImplement }
+
 func (i BaseInspector) Length(_ any, _ *int, _ ...string) error {
 	return ErrNotImplement
 }
