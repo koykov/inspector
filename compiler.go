@@ -1412,7 +1412,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 
 	if node_.ptr && node_.typ != typeSlice {
 		// Value may be nil on pointer types.
-		c.wl("if ", v, " == nil { return nil }")
+		c.wl("if ", v, " == nil { return src, nil }")
 	}
 
 	if node_.typ == typeSlice {
@@ -1449,7 +1449,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 			return nil
 		}
 		nv := "x" + strconv.Itoa(depth)
-		c.wl("if len(path) < ", strconv.Itoa(depth+1), " { return nil }")
+		c.wl("if len(path) < ", strconv.Itoa(depth+1), " { return src, nil }")
 		if node_.mapk.typn == "string" {
 			// Key is string, simple case.
 			key := c.fmtP(node_.mapk, "path["+depths+"]", depth+1)
@@ -1481,7 +1481,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 		if !node_.slct.hasa {
 			return nil
 		}
-		c.wl("if len(path) < ", strconv.Itoa(depth+1), " { return nil }")
+		c.wl("if len(path) < ", strconv.Itoa(depth+1), " { return src, nil }")
 
 		nv := "x" + strconv.Itoa(depth)
 		c.wl("var i int")
