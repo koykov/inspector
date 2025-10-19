@@ -1475,6 +1475,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 			// Convert path value to the key type and try to find it in the map.
 			c.wl("var k ", node_.mapk.typn)
 			snippet, imports, err := StrConvSnippet("path["+depths+"]", node_.mapk.typn, node_.mapk.typu, "k")
+			snippet = strings.ReplaceAll(snippet, "return err", "return src, err") // dirty way(((
 			c.regImport(imports)
 			if err != nil {
 				return err
@@ -1497,6 +1498,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 		nv := "x" + strconv.Itoa(depth)
 		c.wl("var i int")
 		snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", "i")
+		snippet = strings.ReplaceAll(snippet, "return err", "return src, err") // dirty way(((
 		c.regImport(imports)
 		if err != nil {
 			return err
