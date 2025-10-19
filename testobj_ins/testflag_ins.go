@@ -88,11 +88,11 @@ func (i1 TestFlagInspector) Compare(src any, cond inspector.Op, right string, re
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact int32
-			t12, err12 := strconv.ParseInt(right, 0, 0)
-			if err12 != nil {
-				return err12
+			t13, err13 := strconv.ParseInt(right, 0, 0)
+			if err13 != nil {
+				return err13
 			}
-			rightExact = int32(t12)
+			rightExact = int32(t13)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -372,6 +372,26 @@ func (i1 TestFlagInspector) Capacity(src any, result *int, path ...string) error
 		return nil
 	}
 	return nil
+}
+
+func (i1 TestFlagInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestFlag
+	_ = x
+	if p, ok := src.(**testobj.TestFlag); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFlag); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFlag); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	return src, nil
 }
 
 func (i1 TestFlagInspector) Reset(x any) error {

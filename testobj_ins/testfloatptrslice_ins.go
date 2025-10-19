@@ -57,11 +57,11 @@ func (i2 TestFloatPtrSliceInspector) GetTo(src any, buf *any, path ...string) (e
 
 	if len(path) > 0 {
 		var i int
-		t13, err13 := strconv.ParseInt(path[0], 0, 0)
-		if err13 != nil {
-			return err13
+		t14, err14 := strconv.ParseInt(path[0], 0, 0)
+		if err14 != nil {
+			return err14
 		}
-		i = int(t13)
+		i = int(t14)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -96,11 +96,11 @@ func (i2 TestFloatPtrSliceInspector) Compare(src any, cond inspector.Op, right s
 
 	if len(path) > 0 {
 		var i int
-		t14, err14 := strconv.ParseInt(path[0], 0, 0)
-		if err14 != nil {
-			return err14
+		t15, err15 := strconv.ParseInt(path[0], 0, 0)
+		if err15 != nil {
+			return err15
 		}
-		i = int(t14)
+		i = int(t15)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -176,11 +176,11 @@ func (i2 TestFloatPtrSliceInspector) SetWithBuffer(dst, value any, buf inspector
 
 	if len(path) > 0 {
 		var i int
-		t15, err15 := strconv.ParseInt(path[0], 0, 0)
-		if err15 != nil {
-			return err15
+		t16, err16 := strconv.ParseInt(path[0], 0, 0)
+		if err16 != nil {
+			return err16
 		}
-		i = int(t15)
+		i = int(t16)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -379,6 +379,42 @@ func (i2 TestFloatPtrSliceInspector) Capacity(src any, result *int, path ...stri
 		return nil
 	}
 	return nil
+}
+
+func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestFloatPtrSlice
+	_ = x
+	if p, ok := src.(**testobj.TestFloatPtrSlice); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFloatPtrSlice); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFloatPtrSlice); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	if len(path) == 0 {
+		var raw *float32
+		var ok bool
+		switch y := value.(type) {
+		case *float32:
+			raw = y
+			ok = true
+		case **float32:
+			raw = *y
+			ok = true
+		}
+		if ok {
+			*x = append(*x, raw)
+			return x, nil
+		}
+	}
+	return src, nil
 }
 
 func (i2 TestFloatPtrSliceInspector) Reset(x any) error {

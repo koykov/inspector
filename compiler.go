@@ -1416,18 +1416,24 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 	}
 
 	if node_.typ == typeSlice {
-		c.wl("if len(path)==", depths, "{")
-		c.wl("var raw *", c.fmtT(node_.slct))
-		c.wl("var ok bool")
-		c.wl("switch y:=value.(type){")
-		c.wl("case ", c.fmtT(node_.slct), ": raw=&y; ok=true")
-		c.wl("case *", c.fmtT(node_.slct), ": raw=y; ok=true")
-		c.wl("}")
-		c.wl("if ok {")
+		t := c.fmtTfs(node_.slct, true)
 		var pfx string
 		if !node_.slct.ptr {
 			pfx = "*"
 		}
+		c.wl("if len(path)==", depths, "{")
+		c.wl("var raw ", pfx, t)
+		c.wl("var ok bool")
+		c.wl("switch y:=value.(type){")
+		if node_.slct.ptr {
+			c.wl("case ", t, ": raw=y; ok=true")
+			c.wl("case *", t, ": raw=*y; ok=true")
+		} else {
+			c.wl("case ", t, ": raw=&y; ok=true")
+			c.wl("case *", t, ": raw=y; ok=true")
+		}
+		c.wl("}")
+		c.wl("if ok {")
 		c.wl(c.fmtVnb(node_, v, depth), "=append(", c.fmtVnb(node_, v, depth), ",", pfx, "raw)")
 		c.wl("return ", v, ", nil")
 		c.wl("}}")
@@ -1663,6 +1669,10 @@ func (c *Compiler) fmtP(node *node, v string, depth int) string {
 
 // Format type to use in new()/make() functions.
 func (c *Compiler) fmtT(node_ *node) string {
+	return c.fmtTfs(node_, false)
+}
+
+func (c *Compiler) fmtTfs(node_ *node, forceStructPtr bool) string {
 	pfx := func(node_ *node) string {
 		if c.inp {
 			return ""
@@ -1671,6 +1681,13 @@ func (c *Compiler) fmtT(node_ *node) string {
 	}
 	switch node_.typ {
 	case typeStruct:
+		var pfx_ string
+		if node_.ptr {
+			pfx_ = "*"
+		}
+		if forceStructPtr {
+			return pfx_ + pfx(node_) + node_.typn
+		}
 		return pfx(node_) + strings.Trim(node_.typn, "*")
 	case typeMap:
 		if strings.Contains(node_.typn, "map[") {

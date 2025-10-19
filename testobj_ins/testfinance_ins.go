@@ -682,6 +682,75 @@ func (i0 TestFinanceInspector) Capacity(src any, result *int, path ...string) er
 	return nil
 }
 
+func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	if path[0] == "History" {
+		if len(path) == 1 {
+			var raw *testobj.TestHistory
+			var ok bool
+			switch y := value.(type) {
+			case testobj.TestHistory:
+				raw = &y
+				ok = true
+			case *testobj.TestHistory:
+				raw = y
+				ok = true
+			}
+			if ok {
+				x.History = append(x.History, *raw)
+				return x.History, nil
+			}
+		}
+		if len(path) < 2 {
+			return src, nil
+		}
+		var i int
+		t12, err12 := strconv.ParseInt(path[1], 0, 0)
+		if err12 != nil {
+			return src, err12
+		}
+		i = int(t12)
+		if len(x.History) > i {
+			x1 := &(x.History)[i]
+			_ = x1
+			if path[2] == "Comment" {
+				if len(path) == 3 {
+					var raw *byte
+					var ok bool
+					switch y := value.(type) {
+					case byte:
+						raw = &y
+						ok = true
+					case *byte:
+						raw = y
+						ok = true
+					}
+					if ok {
+						x1.Comment = append(x1.Comment, *raw)
+						return x1.Comment, nil
+					}
+				}
+			}
+		}
+	}
+	return src, nil
+}
+
 func (i0 TestFinanceInspector) Reset(x any) error {
 	var origin *testobj.TestFinance
 	_ = origin

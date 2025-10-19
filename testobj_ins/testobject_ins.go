@@ -86,11 +86,11 @@ func (i5 TestObjectInspector) GetTo(src any, buf *any, path ...string) (err erro
 					return
 				}
 				var k int32
-				t23, err23 := strconv.ParseInt(path[1], 0, 0)
-				if err23 != nil {
-					return err23
+				t24, err24 := strconv.ParseInt(path[1], 0, 0)
+				if err24 != nil {
+					return err24
 				}
-				k = int32(t23)
+				k = int32(t24)
 				x1 := (*x0)[k]
 				_ = x1
 				*buf = &x1
@@ -169,11 +169,11 @@ func (i5 TestObjectInspector) GetTo(src any, buf *any, path ...string) (err erro
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t24, err24 := strconv.ParseInt(path[2], 0, 0)
-						if err24 != nil {
-							return err24
+						t25, err25 := strconv.ParseInt(path[2], 0, 0)
+						if err25 != nil {
+							return err25
 						}
-						i = int(t24)
+						i = int(t25)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
@@ -258,11 +258,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 		}
 		if path[0] == "Status" {
 			var rightExact int32
-			t27, err27 := strconv.ParseInt(right, 0, 0)
-			if err27 != nil {
-				return err27
+			t28, err28 := strconv.ParseInt(right, 0, 0)
+			if err28 != nil {
+				return err28
 			}
-			rightExact = int32(t27)
+			rightExact = int32(t28)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Status == rightExact
@@ -281,11 +281,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 		}
 		if path[0] == "Ustate" {
 			var rightExact uint64
-			t28, err28 := strconv.ParseUint(right, 0, 0)
-			if err28 != nil {
-				return err28
+			t29, err29 := strconv.ParseUint(right, 0, 0)
+			if err29 != nil {
+				return err29
 			}
-			rightExact = uint64(t28)
+			rightExact = uint64(t29)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Ustate == rightExact
@@ -304,11 +304,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t29, err29 := strconv.ParseFloat(right, 0)
-			if err29 != nil {
-				return err29
+			t30, err30 := strconv.ParseFloat(right, 0)
+			if err30 != nil {
+				return err30
 			}
-			rightExact = float64(t29)
+			rightExact = float64(t30)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -341,19 +341,19 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 					return
 				}
 				var k int32
-				t30, err30 := strconv.ParseInt(path[1], 0, 0)
-				if err30 != nil {
-					return err30
-				}
-				k = int32(t30)
-				x1 := (*x0)[k]
-				_ = x1
-				var rightExact bool
-				t31, err31 := strconv.ParseBool(right)
+				t31, err31 := strconv.ParseInt(path[1], 0, 0)
 				if err31 != nil {
 					return err31
 				}
-				rightExact = bool(t31)
+				k = int32(t31)
+				x1 := (*x0)[k]
+				_ = x1
+				var rightExact bool
+				t32, err32 := strconv.ParseBool(right)
+				if err32 != nil {
+					return err32
+				}
+				rightExact = bool(t32)
 				if cond == inspector.OpEq {
 					*result = x1 == rightExact
 				} else {
@@ -374,11 +374,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 						}
 						if path[2] == "DateUnix" {
 							var rightExact int64
-							t32, err32 := strconv.ParseInt(right, 0, 0)
-							if err32 != nil {
-								return err32
+							t33, err33 := strconv.ParseInt(right, 0, 0)
+							if err33 != nil {
+								return err33
 							}
-							rightExact = int64(t32)
+							rightExact = int64(t33)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.DateUnix == rightExact
@@ -397,11 +397,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 						}
 						if path[2] == "Cost" {
 							var rightExact float64
-							t33, err33 := strconv.ParseFloat(right, 0)
-							if err33 != nil {
-								return err33
+							t34, err34 := strconv.ParseFloat(right, 0)
+							if err34 != nil {
+								return err34
 							}
-							rightExact = float64(t33)
+							rightExact = float64(t34)
 							switch cond {
 							case inspector.OpEq:
 								*result = x1.Cost == rightExact
@@ -440,11 +440,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 				if x1, ok := (x0)[path[1]]; ok {
 					_ = x1
 					var rightExact int32
-					t35, err35 := strconv.ParseInt(right, 0, 0)
-					if err35 != nil {
-						return err35
+					t36, err36 := strconv.ParseInt(right, 0, 0)
+					if err36 != nil {
+						return err36
 					}
-					rightExact = int32(t35)
+					rightExact = int32(t36)
 					switch cond {
 					case inspector.OpEq:
 						*result = x1 == rightExact
@@ -480,11 +480,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 				}
 				if path[1] == "MoneyIn" {
 					var rightExact float64
-					t36, err36 := strconv.ParseFloat(right, 0)
-					if err36 != nil {
-						return err36
+					t37, err37 := strconv.ParseFloat(right, 0)
+					if err37 != nil {
+						return err37
 					}
-					rightExact = float64(t36)
+					rightExact = float64(t37)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyIn == rightExact
@@ -503,11 +503,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 				}
 				if path[1] == "MoneyOut" {
 					var rightExact float64
-					t37, err37 := strconv.ParseFloat(right, 0)
-					if err37 != nil {
-						return err37
+					t38, err38 := strconv.ParseFloat(right, 0)
+					if err38 != nil {
+						return err38
 					}
-					rightExact = float64(t37)
+					rightExact = float64(t38)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.MoneyOut == rightExact
@@ -526,11 +526,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 				}
 				if path[1] == "Balance" {
 					var rightExact float64
-					t38, err38 := strconv.ParseFloat(right, 0)
-					if err38 != nil {
-						return err38
+					t39, err39 := strconv.ParseFloat(right, 0)
+					if err39 != nil {
+						return err39
 					}
-					rightExact = float64(t38)
+					rightExact = float64(t39)
 					switch cond {
 					case inspector.OpEq:
 						*result = x0.Balance == rightExact
@@ -549,11 +549,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 				}
 				if path[1] == "AllowBuy" {
 					var rightExact bool
-					t39, err39 := strconv.ParseBool(right)
-					if err39 != nil {
-						return err39
+					t40, err40 := strconv.ParseBool(right)
+					if err40 != nil {
+						return err40
 					}
-					rightExact = bool(t39)
+					rightExact = bool(t40)
 					if cond == inspector.OpEq {
 						*result = x0.AllowBuy == rightExact
 					} else {
@@ -566,22 +566,22 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t40, err40 := strconv.ParseInt(path[2], 0, 0)
-						if err40 != nil {
-							return err40
+						t41, err41 := strconv.ParseInt(path[2], 0, 0)
+						if err41 != nil {
+							return err41
 						}
-						i = int(t40)
+						i = int(t41)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
 							if len(path) > 3 {
 								if path[3] == "DateUnix" {
 									var rightExact int64
-									t41, err41 := strconv.ParseInt(right, 0, 0)
-									if err41 != nil {
-										return err41
+									t42, err42 := strconv.ParseInt(right, 0, 0)
+									if err42 != nil {
+										return err42
 									}
-									rightExact = int64(t41)
+									rightExact = int64(t42)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.DateUnix == rightExact
@@ -600,11 +600,11 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 								}
 								if path[3] == "Cost" {
 									var rightExact float64
-									t42, err42 := strconv.ParseFloat(right, 0)
-									if err42 != nil {
-										return err42
+									t43, err43 := strconv.ParseFloat(right, 0)
+									if err43 != nil {
+										return err43
 									}
-									rightExact = float64(t42)
+									rightExact = float64(t43)
 									switch cond {
 									case inspector.OpEq:
 										*result = x2.Cost == rightExact
@@ -810,11 +810,11 @@ func (i5 TestObjectInspector) SetWithBuffer(dst, value any, buf inspector.Accumu
 					return nil
 				}
 				var k int32
-				t44, err44 := strconv.ParseInt(path[1], 0, 0)
-				if err44 != nil {
-					return err44
+				t45, err45 := strconv.ParseInt(path[1], 0, 0)
+				if err45 != nil {
+					return err45
 				}
-				k = int32(t44)
+				k = int32(t45)
 				x1 := (*x0)[k]
 				_ = x1
 				inspector.AssignBuf(&x1, value, buf)
@@ -922,11 +922,11 @@ func (i5 TestObjectInspector) SetWithBuffer(dst, value any, buf inspector.Accumu
 					_ = x1
 					if len(path) > 2 {
 						var i int
-						t45, err45 := strconv.ParseInt(path[2], 0, 0)
-						if err45 != nil {
-							return err45
+						t46, err46 := strconv.ParseInt(path[2], 0, 0)
+						if err46 != nil {
+							return err46
 						}
-						i = int(t45)
+						i = int(t46)
 						if len(x1) > i {
 							x2 := &(x1)[i]
 							_ = x2
@@ -1372,11 +1372,11 @@ func (i5 TestObjectInspector) Length(src any, result *int, path ...string) error
 					return nil
 				}
 				var i int
-				t46, err46 := strconv.ParseInt(path[2], 0, 0)
-				if err46 != nil {
-					return err46
+				t47, err47 := strconv.ParseInt(path[2], 0, 0)
+				if err47 != nil {
+					return err47
 				}
-				i = int(t46)
+				i = int(t47)
 				if len(x.Finance.History) > i {
 					x2 := &(x.Finance.History)[i]
 					_ = x2
@@ -1461,11 +1461,11 @@ func (i5 TestObjectInspector) Capacity(src any, result *int, path ...string) err
 					return nil
 				}
 				var i int
-				t47, err47 := strconv.ParseInt(path[2], 0, 0)
-				if err47 != nil {
-					return err47
+				t48, err48 := strconv.ParseInt(path[2], 0, 0)
+				if err48 != nil {
+					return err48
 				}
-				i = int(t47)
+				i = int(t48)
 				if len(x.Finance.History) > i {
 					x2 := &(x.Finance.History)[i]
 					_ = x2
@@ -1481,6 +1481,129 @@ func (i5 TestObjectInspector) Capacity(src any, result *int, path ...string) err
 		}
 	}
 	return nil
+}
+
+func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestObject
+	_ = x
+	if p, ok := src.(**testobj.TestObject); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestObject); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestObject); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	if path[0] == "Name" {
+		if len(path) == 1 {
+			var raw *byte
+			var ok bool
+			switch y := value.(type) {
+			case byte:
+				raw = &y
+				ok = true
+			case *byte:
+				raw = y
+				ok = true
+			}
+			if ok {
+				x.Name = append(x.Name, *raw)
+				return x.Name, nil
+			}
+		}
+	}
+	if path[0] == "HistoryTree" {
+		if len(path) < 2 {
+			return src, nil
+		}
+		if x1, ok := (x.HistoryTree)[path[1]]; ok {
+			_ = x1
+			if x1 == nil {
+				return src, nil
+			}
+			if path[2] == "Comment" {
+				if len(path) == 3 {
+					var raw *byte
+					var ok bool
+					switch y := value.(type) {
+					case byte:
+						raw = &y
+						ok = true
+					case *byte:
+						raw = y
+						ok = true
+					}
+					if ok {
+						x1.Comment = append(x1.Comment, *raw)
+						return x1.Comment, nil
+					}
+				}
+			}
+		}
+	}
+	if path[0] == "Finance" {
+		if x.Finance != nil {
+			if x.Finance == nil {
+				return src, nil
+			}
+			if path[1] == "History" {
+				if len(path) == 2 {
+					var raw *testobj.TestHistory
+					var ok bool
+					switch y := value.(type) {
+					case testobj.TestHistory:
+						raw = &y
+						ok = true
+					case *testobj.TestHistory:
+						raw = y
+						ok = true
+					}
+					if ok {
+						x.Finance.History = append(x.Finance.History, *raw)
+						return x.Finance.History, nil
+					}
+				}
+				if len(path) < 3 {
+					return src, nil
+				}
+				var i int
+				t49, err49 := strconv.ParseInt(path[2], 0, 0)
+				if err49 != nil {
+					return src, err49
+				}
+				i = int(t49)
+				if len(x.Finance.History) > i {
+					x2 := &(x.Finance.History)[i]
+					_ = x2
+					if path[3] == "Comment" {
+						if len(path) == 4 {
+							var raw *byte
+							var ok bool
+							switch y := value.(type) {
+							case byte:
+								raw = &y
+								ok = true
+							case *byte:
+								raw = y
+								ok = true
+							}
+							if ok {
+								x2.Comment = append(x2.Comment, *raw)
+								return x2.Comment, nil
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return src, nil
 }
 
 func (i5 TestObjectInspector) Reset(x any) error {

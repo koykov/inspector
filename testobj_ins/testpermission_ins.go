@@ -57,11 +57,11 @@ func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var k int32
-		t351, err351 := strconv.ParseInt(path[0], 0, 0)
-		if err351 != nil {
-			return err351
+		t363, err363 := strconv.ParseInt(path[0], 0, 0)
+		if err363 != nil {
+			return err363
 		}
-		k = int32(t351)
+		k = int32(t363)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -91,19 +91,19 @@ func (i7 TestPermissionInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var k int32
-		t352, err352 := strconv.ParseInt(path[0], 0, 0)
-		if err352 != nil {
-			return err352
+		t364, err364 := strconv.ParseInt(path[0], 0, 0)
+		if err364 != nil {
+			return err364
 		}
-		k = int32(t352)
+		k = int32(t364)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t353, err353 := strconv.ParseBool(right)
-		if err353 != nil {
-			return err353
+		t365, err365 := strconv.ParseBool(right)
+		if err365 != nil {
+			return err365
 		}
-		rightExact = bool(t353)
+		rightExact = bool(t365)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -172,11 +172,11 @@ func (i7 TestPermissionInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t354, err354 := strconv.ParseInt(path[0], 0, 0)
-		if err354 != nil {
-			return err354
+		t366, err366 := strconv.ParseInt(path[0], 0, 0)
+		if err366 != nil {
+			return err366
 		}
-		k = int32(t354)
+		k = int32(t366)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
@@ -375,6 +375,26 @@ func (i7 TestPermissionInspector) Capacity(src any, result *int, path ...string)
 		return nil
 	}
 	return nil
+}
+
+func (i7 TestPermissionInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestPermission
+	_ = x
+	if p, ok := src.(**testobj.TestPermission); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestPermission); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestPermission); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	return src, nil
 }
 
 func (i7 TestPermissionInspector) Reset(x any) error {
