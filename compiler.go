@@ -1417,9 +1417,20 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 
 	if node_.typ == typeSlice {
 		c.wl("if len(path)==", depths, "{")
-		c.wl(c.fmtVnb(node_, v, depth), "=append(", c.fmtVnb(node_, v, depth), ",value)")
-		c.wl("return ", v, ", nil")
+		c.wl("var raw *", c.fmtT(node_.slct))
+		c.wl("var ok bool")
+		c.wl("switch y:=value.(type){")
+		c.wl("case ", c.fmtT(node_.slct), ": raw=&y; ok=true")
+		c.wl("case *", c.fmtT(node_.slct), ": raw=y; ok=true")
 		c.wl("}")
+		c.wl("if ok {")
+		var pfx string
+		if !node_.slct.ptr {
+			pfx = "*"
+		}
+		c.wl(c.fmtVnb(node_, v, depth), "=append(", c.fmtVnb(node_, v, depth), ",", pfx, "raw)")
+		c.wl("return ", v, ", nil")
+		c.wl("}}")
 	}
 
 	switch node_.typ {
