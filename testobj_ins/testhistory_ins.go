@@ -96,11 +96,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t20, err20 := strconv.ParseInt(right, 0, 0)
-			if err20 != nil {
-				return err20
+			t21, err21 := strconv.ParseInt(right, 0, 0)
+			if err21 != nil {
+				return err21
 			}
-			rightExact = int64(t20)
+			rightExact = int64(t21)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -119,11 +119,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t21, err21 := strconv.ParseFloat(right, 0)
-			if err21 != nil {
-				return err21
+			t22, err22 := strconv.ParseFloat(right, 0)
+			if err22 != nil {
+				return err22
 			}
-			rightExact = float64(t21)
+			rightExact = float64(t22)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -390,6 +390,44 @@ func (i4 TestHistoryInspector) Capacity(src any, result *int, path ...string) er
 		return nil
 	}
 	return nil
+}
+
+func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	if path[0] == "Comment" {
+		if len(path) == 1 {
+			var raw *byte
+			var ok bool
+			switch y := value.(type) {
+			case byte:
+				raw = &y
+				ok = true
+			case *byte:
+				raw = y
+				ok = true
+			}
+			if ok {
+				x.Comment = append(x.Comment, *raw)
+				return &x.Comment, nil
+			}
+		}
+	}
+	return src, nil
 }
 
 func (i4 TestHistoryInspector) Reset(x any) error {

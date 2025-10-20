@@ -122,6 +122,7 @@ func (c *Compiler) parsePkgType(t types.Type) (*node, error) {
 			node.chld = append(node.chld, ch)
 			node.hasb = node.hasb || ch.hasb
 			node.hasc = node.hasc || ch.hasc
+			node.hasa = node.hasa || ch.hasa
 		}
 		return node, nil
 	}
@@ -133,6 +134,7 @@ func (c *Compiler) parsePkgType(t types.Type) (*node, error) {
 		node.mapk, err = c.parsePkgType(m.Key())
 		node.mapv, err = c.parsePkgType(m.Elem())
 		node.hasb = node.mapk.hasb || node.mapv.hasb
+		node.hasa = node.mapk.hasa || node.mapv.hasa
 		node.hasc = true
 		return node, err
 	}
@@ -143,6 +145,7 @@ func (c *Compiler) parsePkgType(t types.Type) (*node, error) {
 		node.typ = typeSlice
 		node.slct, err = c.parsePkgType(s.Elem())
 		node.hasb = node.typn == "[]byte" || node.slct.hasb
+		node.hasa = true
 		node.hasc = true
 		return node, err
 	}

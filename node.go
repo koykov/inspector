@@ -29,6 +29,8 @@ type node struct {
 	hasb bool
 	// Flag if node contains string/bytes/slice/map inside.
 	hasc bool
+	// Flag if node contains slice inside.
+	hasa bool
 }
 
 func (n node) write(w ByteStringWriter) error {

@@ -57,11 +57,11 @@ func (i3 TestFloatSliceInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var i int
-		t16, err16 := strconv.ParseInt(path[0], 0, 0)
-		if err16 != nil {
-			return err16
+		t17, err17 := strconv.ParseInt(path[0], 0, 0)
+		if err17 != nil {
+			return err17
 		}
-		i = int(t16)
+		i = int(t17)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -93,20 +93,20 @@ func (i3 TestFloatSliceInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var i int
-		t17, err17 := strconv.ParseInt(path[0], 0, 0)
-		if err17 != nil {
-			return err17
+		t18, err18 := strconv.ParseInt(path[0], 0, 0)
+		if err18 != nil {
+			return err18
 		}
-		i = int(t17)
+		i = int(t18)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
 			var rightExact float32
-			t18, err18 := strconv.ParseFloat(right, 0)
-			if err18 != nil {
-				return err18
+			t19, err19 := strconv.ParseFloat(right, 0)
+			if err19 != nil {
+				return err19
 			}
-			rightExact = float32(t18)
+			rightExact = float32(t19)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -182,11 +182,11 @@ func (i3 TestFloatSliceInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var i int
-		t19, err19 := strconv.ParseInt(path[0], 0, 0)
-		if err19 != nil {
-			return err19
+		t20, err20 := strconv.ParseInt(path[0], 0, 0)
+		if err20 != nil {
+			return err20
 		}
-		i = int(t19)
+		i = int(t20)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -377,6 +377,42 @@ func (i3 TestFloatSliceInspector) Capacity(src any, result *int, path ...string)
 		return nil
 	}
 	return nil
+}
+
+func (i3 TestFloatSliceInspector) Append(src, value any, path ...string) (any, error) {
+	_, _, _ = src, value, path
+	if src == nil {
+		return src, nil
+	}
+	var x *testobj.TestFloatSlice
+	_ = x
+	if p, ok := src.(**testobj.TestFloatSlice); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFloatSlice); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFloatSlice); ok {
+		x = &v
+	} else {
+		return src, nil
+	}
+
+	if len(path) == 0 {
+		var raw *float32
+		var ok bool
+		switch y := value.(type) {
+		case float32:
+			raw = &y
+			ok = true
+		case *float32:
+			raw = y
+			ok = true
+		}
+		if ok {
+			*x = append(*x, *raw)
+			return &x, nil
+		}
+	}
+	return src, nil
 }
 
 func (i3 TestFloatSliceInspector) Reset(x any) error {

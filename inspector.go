@@ -29,6 +29,8 @@ type Inspector interface {
 	Copy(x any) (any, error)
 	// CopyTo makes a copy of src to dst using buffer.
 	CopyTo(src, dst any, buf AccumulativeBuffer) error
+	// Append adds value to the end of dst (dst must be a slice).
+	Append(src, value any, path ...string) (any, error)
 	// Length puts length of field value by path in src to the buffer.
 	Length(src any, result *int, path ...string) error
 	// Capacity puts capacity of field value by path in src to the buffer.

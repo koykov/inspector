@@ -137,6 +137,7 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 				node.chld = append(node.chld, ch)
 				node.hasb = node.hasb || ch.hasb
 				node.hasc = node.hasc || ch.hasc
+				node.hasa = node.hasa || ch.hasa
 			}
 		}
 		return node, nil
@@ -156,6 +157,7 @@ func (c *Compiler) parseAstExpr(expr ast.Expr, id *ast.Ident, depth int) (*node,
 		}
 		node.hasb = node.typn == "[]byte" || node.slct.hasb
 		node.hasc = true
+		node.hasa = true
 		return node, nil
 	case *ast.StarExpr:
 		s := x

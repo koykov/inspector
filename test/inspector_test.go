@@ -231,7 +231,7 @@ func testComparePtr(t testing.TB, i inspector.Inspector, buf *bool) {
 }
 
 func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.AccumulativeBuffer) {
-	cins := testobj_ins.TestObjectInspector{}
+	var cins testobj_ins.TestObjectInspector
 	obj1, _ := cins.Copy(testO)
 	obj := obj1.(*testobj.TestObject)
 	obj.Id = ""
@@ -273,27 +273,27 @@ func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.Accumulativ
 
 func TestInspector(t *testing.T) {
 	t.Run("reflect/get", func(t *testing.T) {
-		testGetter(t, &inspector.ReflectInspector{})
+		testGetter(t, inspector.ReflectInspector{})
 	})
 	t.Run("cg/get", func(t *testing.T) {
 		var buf any
-		testGetterPtr(t, &testobj_ins.TestObjectInspector{}, buf)
+		testGetterPtr(t, testobj_ins.TestObjectInspector{}, buf)
 	})
 	t.Run("cg/cmp", func(t *testing.T) {
 		var buf bool
-		testComparePtr(t, &testobj_ins.TestObjectInspector{}, &buf)
+		testComparePtr(t, testobj_ins.TestObjectInspector{}, &buf)
 	})
 	t.Run("cg/set", func(t *testing.T) {
-		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, nil)
+		testSetterPtr(t, testobj_ins.TestObjectInspector{}, nil)
 	})
 	t.Run("cg/setBuf", func(t *testing.T) {
 		ab := inspector.ByteBuffer{}
-		testSetterPtr(t, &testobj_ins.TestObjectInspector{}, &ab)
+		testSetterPtr(t, testobj_ins.TestObjectInspector{}, &ab)
 	})
 }
 
 func TestInspectorDeepEqual(t *testing.T) {
-	ins := &testobj_ins.TestObjectInspector{}
+	var ins testobj_ins.TestObjectInspector
 	for i := range deqStages {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			stage := &deqStages[i]
@@ -305,7 +305,7 @@ func TestInspectorDeepEqual(t *testing.T) {
 }
 
 func TestInspectorCopy(t *testing.T) {
-	ins := &testobj_ins.TestObjectInspector{}
+	var ins testobj_ins.TestObjectInspector
 	obj := *testO
 	obj.Name = []byte("foobar")
 	cpy, _ := ins.Copy(obj)
@@ -315,8 +315,51 @@ func TestInspectorCopy(t *testing.T) {
 	}
 }
 
+func TestInspectorAppend(t *testing.T) {
+	t.Run("strings", func(t *testing.T) {
+		var ins inspector.StringsInspector
+		ss := []string{"foo", "bar"}
+		raw, err := ins.Append(&ss, "qwe")
+		if err != nil {
+			t.Error(err)
+		}
+		ss1, ok := raw.(*[]string)
+		if !ok {
+			t.FailNow()
+		}
+		if len(*ss1) != 3 {
+			t.FailNow()
+		}
+		if (*ss1)[2] != "qwe" {
+			t.FailNow()
+		}
+	})
+	t.Run("object", func(t *testing.T) {
+		var ins testobj_ins.TestObjectInspector
+		cpy, _ := ins.Copy(testO)
+		raw, err := ins.Append(cpy, testobj.TestHistory{
+			DateUnix: 111111,
+			Cost:     3.1415,
+			Comment:  nil,
+		}, "Finance", "History")
+		if err != nil {
+			t.Error(err)
+		}
+		hist, ok := raw.(*[]testobj.TestHistory)
+		if !ok {
+			t.FailNow()
+		}
+		if len(*hist) != 4 {
+			t.FailNow()
+		}
+		if (*hist)[3].DateUnix != 111111 {
+			t.FailNow()
+		}
+	})
+}
+
 func TestInspectorLenCap(t *testing.T) {
-	ins := testobj_ins.TestObjectInspector{}
+	var ins testobj_ins.TestObjectInspector
 	obj := *testO
 	var l, c int
 
@@ -355,7 +398,7 @@ func TestInspectorLenCap(t *testing.T) {
 }
 
 func BenchmarkInspectorDeepEqual(b *testing.B) {
-	ins := &testobj_ins.TestObjectInspector{}
+	var ins testobj_ins.TestObjectInspector
 	for i := range deqStages {
 		b.Run(strconv.Itoa(i), func(b *testing.B) {
 			b.ReportAllocs()
@@ -371,14 +414,14 @@ func BenchmarkInspectorDeepEqual(b *testing.B) {
 
 func BenchmarkInspector(b *testing.B) {
 	b.Run("reflect/get", func(b *testing.B) {
-		ins := &inspector.ReflectInspector{}
+		var ins inspector.ReflectInspector
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
 			testGetter(b, ins)
 		}
 	})
 	b.Run("cg/get", func(b *testing.B) {
-		ins := &testobj_ins.TestObjectInspector{}
+		var ins testobj_ins.TestObjectInspector
 		var buf any
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
@@ -386,7 +429,7 @@ func BenchmarkInspector(b *testing.B) {
 		}
 	})
 	b.Run("cg/cmp", func(b *testing.B) {
-		ins := &testobj_ins.TestObjectInspector{}
+		var ins testobj_ins.TestObjectInspector
 		var buf bool
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
@@ -394,14 +437,14 @@ func BenchmarkInspector(b *testing.B) {
 		}
 	})
 	b.Run("cg/set", func(b *testing.B) {
-		ins := &testobj_ins.TestObjectInspector{}
+		var ins testobj_ins.TestObjectInspector
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
 			testSetterPtr(b, ins, nil)
 		}
 	})
 	b.Run("cg/setBuf", func(b *testing.B) {
-		ins := &testobj_ins.TestObjectInspector{}
+		var ins testobj_ins.TestObjectInspector
 		ab := inspector.ByteBuffer{}
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
@@ -497,6 +540,35 @@ func BenchmarkInspectorCopy(b *testing.B) {
 			FloatStructPtrMap: map[float64]*testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
 		}
 		fn1(b, &origin)
+	})
+}
+
+func BenchmarkInspectorAppend(b *testing.B) {
+	b.Run("strings", func(b *testing.B) {
+		var ins inspector.StringsInspector
+		ss := []string{"foo", "bar"}
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			ss = ss[:2]
+			_, err := ins.Append(&ss, "qwe")
+			if err != nil {
+				b.Fatal(err)
+			}
+		}
+	})
+	b.Run("object", func(b *testing.B) {
+		var ins testobj_ins.TestObjectInspector
+		raw, _ := ins.Copy(testO)
+		cpy := raw.(*testobj.TestObject)
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			cpy.Finance.History = cpy.Finance.History[:3]
+			_, _ = ins.Append(cpy, testobj.TestHistory{
+				DateUnix: 111111,
+				Cost:     3.1415,
+				Comment:  nil,
+			}, "Finance", "History")
+		}
 	})
 }
 
