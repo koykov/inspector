@@ -1435,7 +1435,11 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 		c.wl("}")
 		c.wl("if ok {")
 		c.wl(c.fmtVnb(node_, v, depth), "=append(", c.fmtVnb(node_, v, depth), ",", pfx, "raw)")
-		c.wl("return ", v, ", nil")
+		pfx = ""
+		if !node_.ptr {
+			pfx = "&"
+		}
+		c.wl("return ", pfx, v, ", nil")
 		c.wl("}}")
 	}
 

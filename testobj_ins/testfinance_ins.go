@@ -713,7 +713,7 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.History = append(x.History, *raw)
-				return x.History, nil
+				return &x.History, nil
 			}
 		}
 		if len(path) < 2 {
@@ -742,7 +742,7 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x1.Comment = append(x1.Comment, *raw)
-						return x1.Comment, nil
+						return &x1.Comment, nil
 					}
 				}
 			}

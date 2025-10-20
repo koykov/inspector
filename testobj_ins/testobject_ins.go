@@ -1514,7 +1514,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 			}
 			if ok {
 				x.Name = append(x.Name, *raw)
-				return x.Name, nil
+				return &x.Name, nil
 			}
 		}
 	}
@@ -1541,7 +1541,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 					}
 					if ok {
 						x1.Comment = append(x1.Comment, *raw)
-						return x1.Comment, nil
+						return &x1.Comment, nil
 					}
 				}
 			}
@@ -1566,7 +1566,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 					}
 					if ok {
 						x.Finance.History = append(x.Finance.History, *raw)
-						return x.Finance.History, nil
+						return &x.Finance.History, nil
 					}
 				}
 				if len(path) < 3 {
@@ -1595,7 +1595,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 							}
 							if ok {
 								x2.Comment = append(x2.Comment, *raw)
-								return x2.Comment, nil
+								return &x2.Comment, nil
 							}
 						}
 					}

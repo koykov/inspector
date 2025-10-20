@@ -978,7 +978,7 @@ func (i12 TestStructSliceLiteralInspector) Append(src, value any, path ...string
 		}
 		if ok {
 			*x = append(*x, raw)
-			return x, nil
+			return &x, nil
 		}
 	}
 	if len(path) < 1 {
@@ -1010,7 +1010,7 @@ func (i12 TestStructSliceLiteralInspector) Append(src, value any, path ...string
 				}
 				if ok {
 					x0.B = append(x0.B, *raw)
-					return x0.B, nil
+					return &x0.B, nil
 				}
 			}
 		}

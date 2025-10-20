@@ -12150,7 +12150,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.IntSlice = append(x.IntSlice, *raw)
-				return x.IntSlice, nil
+				return &x.IntSlice, nil
 			}
 		}
 	}
@@ -12168,7 +12168,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.IntPtrSlice = append(x.IntPtrSlice, raw)
-				return x.IntPtrSlice, nil
+				return &x.IntPtrSlice, nil
 			}
 		}
 	}
@@ -12226,7 +12226,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.ByteSlice = append(x.ByteSlice, *raw)
-				return x.ByteSlice, nil
+				return &x.ByteSlice, nil
 			}
 		}
 	}
@@ -12244,7 +12244,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.BytePtrSlice = append(x.BytePtrSlice, raw)
-				return x.BytePtrSlice, nil
+				return &x.BytePtrSlice, nil
 			}
 		}
 	}
@@ -12302,7 +12302,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.FloatSlice = append(x.FloatSlice, *raw)
-				return x.FloatSlice, nil
+				return &x.FloatSlice, nil
 			}
 		}
 	}
@@ -12320,7 +12320,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.FloatPtrSlice = append(x.FloatPtrSlice, raw)
-				return x.FloatPtrSlice, nil
+				return &x.FloatPtrSlice, nil
 			}
 		}
 	}
@@ -12378,7 +12378,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.StructSlice = append(x.StructSlice, *raw)
-				return x.StructSlice, nil
+				return &x.StructSlice, nil
 			}
 		}
 		if len(path) < 2 {
@@ -12407,7 +12407,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x1.B = append(x1.B, *raw)
-						return x1.B, nil
+						return &x1.B, nil
 					}
 				}
 			}
@@ -12427,7 +12427,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.StructPtrSlice = append(x.StructPtrSlice, raw)
-				return x.StructPtrSlice, nil
+				return &x.StructPtrSlice, nil
 			}
 		}
 		if len(path) < 2 {
@@ -12459,7 +12459,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x1.B = append(x1.B, *raw)
-						return x1.B, nil
+						return &x1.B, nil
 					}
 				}
 			}
@@ -12509,7 +12509,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 						}
 						if ok {
 							x1.B = append(x1.B, *raw)
-							return x1.B, nil
+							return &x1.B, nil
 						}
 					}
 				}
@@ -12563,7 +12563,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 						}
 						if ok {
 							x1.B = append(x1.B, *raw)
-							return x1.B, nil
+							return &x1.B, nil
 						}
 					}
 				}
@@ -12584,7 +12584,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.StructSliceLiteral = append(x.StructSliceLiteral, raw)
-				return x.StructSliceLiteral, nil
+				return &x.StructSliceLiteral, nil
 			}
 		}
 		if len(path) < 2 {
@@ -12616,7 +12616,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x1.B = append(x1.B, *raw)
-						return x1.B, nil
+						return &x1.B, nil
 					}
 				}
 			}
@@ -12648,7 +12648,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 				}
 				if ok {
 					x1.B = append(x1.B, *raw)
-					return x1.B, nil
+					return &x1.B, nil
 				}
 			}
 		}
@@ -12682,7 +12682,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 				}
 				if ok {
 					x1.B = append(x1.B, *raw)
-					return x1.B, nil
+					return &x1.B, nil
 				}
 			}
 		}
@@ -12713,7 +12713,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 				}
 				if ok {
 					x1.B = append(x1.B, *raw)
-					return x1.B, nil
+					return &x1.B, nil
 				}
 			}
 		}
@@ -12747,7 +12747,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 				}
 				if ok {
 					x1.B = append(x1.B, *raw)
-					return x1.B, nil
+					return &x1.B, nil
 				}
 			}
 		}
@@ -12785,7 +12785,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x1.B = append(x1.B, *raw)
-						return x1.B, nil
+						return &x1.B, nil
 					}
 				}
 			}
@@ -12806,7 +12806,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 				}
 				if ok {
 					x.NestedStruct.B = append(x.NestedStruct.B, *raw)
-					return x.NestedStruct.B, nil
+					return &x.NestedStruct.B, nil
 				}
 			}
 		}
@@ -12830,7 +12830,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 					}
 					if ok {
 						x.NestedStructPtr.B = append(x.NestedStructPtr.B, *raw)
-						return x.NestedStructPtr.B, nil
+						return &x.NestedStructPtr.B, nil
 					}
 				}
 			}

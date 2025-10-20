@@ -847,7 +847,7 @@ func (i11 TestStructInspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.B = append(x.B, *raw)
-				return x.B, nil
+				return &x.B, nil
 			}
 		}
 	}

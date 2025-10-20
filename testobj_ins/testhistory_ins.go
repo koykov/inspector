@@ -423,7 +423,7 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 			}
 			if ok {
 				x.Comment = append(x.Comment, *raw)
-				return x.Comment, nil
+				return &x.Comment, nil
 			}
 		}
 	}

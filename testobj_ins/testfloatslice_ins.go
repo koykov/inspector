@@ -409,7 +409,7 @@ func (i3 TestFloatSliceInspector) Append(src, value any, path ...string) (any, e
 		}
 		if ok {
 			*x = append(*x, *raw)
-			return x, nil
+			return &x, nil
 		}
 	}
 	return src, nil
