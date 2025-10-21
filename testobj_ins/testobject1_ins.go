@@ -12173,42 +12173,38 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "IntSlicePtr" {
-		if x.IntSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *int32
-				var ok bool
-				switch y := value.(type) {
-				case int32:
-					raw = &y
-					ok = true
-				case *int32:
-					raw = y
-					ok = true
-				}
-				if ok {
-					*x.IntSlicePtr = append(*x.IntSlicePtr, *raw)
-					return x.IntSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *int32
+			var ok bool
+			switch y := value.(type) {
+			case int32:
+				raw = &y
+				ok = true
+			case *int32:
+				raw = y
+				ok = true
+			}
+			if ok {
+				*x.IntSlicePtr = append(*x.IntSlicePtr, *raw)
+				return x.IntSlicePtr, nil
 			}
 		}
 	}
 	if path[0] == "IntPtrSlicePtr" {
-		if x.IntPtrSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *int32
-				var ok bool
-				switch y := value.(type) {
-				case *int32:
-					raw = y
-					ok = true
-				case **int32:
-					raw = *y
-					ok = true
-				}
-				if ok {
-					*x.IntPtrSlicePtr = append(*x.IntPtrSlicePtr, raw)
-					return x.IntPtrSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *int32
+			var ok bool
+			switch y := value.(type) {
+			case *int32:
+				raw = y
+				ok = true
+			case **int32:
+				raw = *y
+				ok = true
+			}
+			if ok {
+				*x.IntPtrSlicePtr = append(*x.IntPtrSlicePtr, raw)
+				return x.IntPtrSlicePtr, nil
 			}
 		}
 	}
@@ -12249,42 +12245,38 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "ByteSlicePtr" {
-		if x.ByteSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *byte
-				var ok bool
-				switch y := value.(type) {
-				case byte:
-					raw = &y
-					ok = true
-				case *byte:
-					raw = y
-					ok = true
-				}
-				if ok {
-					*x.ByteSlicePtr = append(*x.ByteSlicePtr, *raw)
-					return x.ByteSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *byte
+			var ok bool
+			switch y := value.(type) {
+			case byte:
+				raw = &y
+				ok = true
+			case *byte:
+				raw = y
+				ok = true
+			}
+			if ok {
+				*x.ByteSlicePtr = append(*x.ByteSlicePtr, *raw)
+				return x.ByteSlicePtr, nil
 			}
 		}
 	}
 	if path[0] == "BytePtrSlicePtr" {
-		if x.BytePtrSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *byte
-				var ok bool
-				switch y := value.(type) {
-				case *byte:
-					raw = y
-					ok = true
-				case **byte:
-					raw = *y
-					ok = true
-				}
-				if ok {
-					*x.BytePtrSlicePtr = append(*x.BytePtrSlicePtr, raw)
-					return x.BytePtrSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *byte
+			var ok bool
+			switch y := value.(type) {
+			case *byte:
+				raw = y
+				ok = true
+			case **byte:
+				raw = *y
+				ok = true
+			}
+			if ok {
+				*x.BytePtrSlicePtr = append(*x.BytePtrSlicePtr, raw)
+				return x.BytePtrSlicePtr, nil
 			}
 		}
 	}
@@ -12325,42 +12317,38 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "FloatSlicePtr" {
-		if x.FloatSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *float32
-				var ok bool
-				switch y := value.(type) {
-				case float32:
-					raw = &y
-					ok = true
-				case *float32:
-					raw = y
-					ok = true
-				}
-				if ok {
-					*x.FloatSlicePtr = append(*x.FloatSlicePtr, *raw)
-					return x.FloatSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *float32
+			var ok bool
+			switch y := value.(type) {
+			case float32:
+				raw = &y
+				ok = true
+			case *float32:
+				raw = y
+				ok = true
+			}
+			if ok {
+				*x.FloatSlicePtr = append(*x.FloatSlicePtr, *raw)
+				return x.FloatSlicePtr, nil
 			}
 		}
 	}
 	if path[0] == "FloatPtrSlicePtr" {
-		if x.FloatPtrSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *float32
-				var ok bool
-				switch y := value.(type) {
-				case *float32:
-					raw = y
-					ok = true
-				case **float32:
-					raw = *y
-					ok = true
-				}
-				if ok {
-					*x.FloatPtrSlicePtr = append(*x.FloatPtrSlicePtr, raw)
-					return x.FloatPtrSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *float32
+			var ok bool
+			switch y := value.(type) {
+			case *float32:
+				raw = y
+				ok = true
+			case **float32:
+				raw = *y
+				ok = true
+			}
+			if ok {
+				*x.FloatPtrSlicePtr = append(*x.FloatPtrSlicePtr, raw)
+				return x.FloatPtrSlicePtr, nil
 			}
 		}
 	}
@@ -12443,7 +12431,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			x1 := (x.StructPtrSlice)[i]
 			_ = x1
 			if x1 == nil {
-				return src, nil
+				x1 = new(testobj.TestStruct)
 			}
 			if path[2] == "B" {
 				if len(path) == 3 {
@@ -12466,105 +12454,101 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "StructSlicePtr" {
-		if x.StructSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *testobj.TestStruct
-				var ok bool
-				switch y := value.(type) {
-				case testobj.TestStruct:
-					raw = &y
-					ok = true
-				case *testobj.TestStruct:
-					raw = y
-					ok = true
-				}
-				if ok {
-					*x.StructSlicePtr = append(*x.StructSlicePtr, *raw)
-					return x.StructSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *testobj.TestStruct
+			var ok bool
+			switch y := value.(type) {
+			case testobj.TestStruct:
+				raw = &y
+				ok = true
+			case *testobj.TestStruct:
+				raw = y
+				ok = true
 			}
-			if len(path) < 2 {
-				return src, nil
+			if ok {
+				*x.StructSlicePtr = append(*x.StructSlicePtr, *raw)
+				return x.StructSlicePtr, nil
 			}
-			var i int
-			t355, err355 := strconv.ParseInt(path[1], 0, 0)
-			if err355 != nil {
-				return src, err355
-			}
-			i = int(t355)
-			if len(*x.StructSlicePtr) > i {
-				x1 := &(*x.StructSlicePtr)[i]
-				_ = x1
-				if path[2] == "B" {
-					if len(path) == 3 {
-						var raw *byte
-						var ok bool
-						switch y := value.(type) {
-						case byte:
-							raw = &y
-							ok = true
-						case *byte:
-							raw = y
-							ok = true
-						}
-						if ok {
-							x1.B = append(x1.B, *raw)
-							return &x1.B, nil
-						}
+		}
+		if len(path) < 2 {
+			return src, nil
+		}
+		var i int
+		t355, err355 := strconv.ParseInt(path[1], 0, 0)
+		if err355 != nil {
+			return src, err355
+		}
+		i = int(t355)
+		if len(*x.StructSlicePtr) > i {
+			x1 := &(*x.StructSlicePtr)[i]
+			_ = x1
+			if path[2] == "B" {
+				if len(path) == 3 {
+					var raw *byte
+					var ok bool
+					switch y := value.(type) {
+					case byte:
+						raw = &y
+						ok = true
+					case *byte:
+						raw = y
+						ok = true
+					}
+					if ok {
+						x1.B = append(x1.B, *raw)
+						return &x1.B, nil
 					}
 				}
 			}
 		}
 	}
 	if path[0] == "StructPtrSlicePtr" {
-		if x.StructPtrSlicePtr != nil {
-			if len(path) == 1 {
-				var raw *testobj.TestStruct
-				var ok bool
-				switch y := value.(type) {
-				case *testobj.TestStruct:
-					raw = y
-					ok = true
-				case **testobj.TestStruct:
-					raw = *y
-					ok = true
-				}
-				if ok {
-					*x.StructPtrSlicePtr = append(*x.StructPtrSlicePtr, raw)
-					return x.StructPtrSlicePtr, nil
-				}
+		if len(path) == 1 {
+			var raw *testobj.TestStruct
+			var ok bool
+			switch y := value.(type) {
+			case *testobj.TestStruct:
+				raw = y
+				ok = true
+			case **testobj.TestStruct:
+				raw = *y
+				ok = true
 			}
-			if len(path) < 2 {
-				return src, nil
+			if ok {
+				*x.StructPtrSlicePtr = append(*x.StructPtrSlicePtr, raw)
+				return x.StructPtrSlicePtr, nil
 			}
-			var i int
-			t356, err356 := strconv.ParseInt(path[1], 0, 0)
-			if err356 != nil {
-				return src, err356
+		}
+		if len(path) < 2 {
+			return src, nil
+		}
+		var i int
+		t356, err356 := strconv.ParseInt(path[1], 0, 0)
+		if err356 != nil {
+			return src, err356
+		}
+		i = int(t356)
+		if len(*x.StructPtrSlicePtr) > i {
+			x1 := (*x.StructPtrSlicePtr)[i]
+			_ = x1
+			if x1 == nil {
+				x1 = new(testobj.TestStruct)
 			}
-			i = int(t356)
-			if len(*x.StructPtrSlicePtr) > i {
-				x1 := (*x.StructPtrSlicePtr)[i]
-				_ = x1
-				if x1 == nil {
-					return src, nil
-				}
-				if path[2] == "B" {
-					if len(path) == 3 {
-						var raw *byte
-						var ok bool
-						switch y := value.(type) {
-						case byte:
-							raw = &y
-							ok = true
-						case *byte:
-							raw = y
-							ok = true
-						}
-						if ok {
-							x1.B = append(x1.B, *raw)
-							return &x1.B, nil
-						}
+			if path[2] == "B" {
+				if len(path) == 3 {
+					var raw *byte
+					var ok bool
+					switch y := value.(type) {
+					case byte:
+						raw = &y
+						ok = true
+					case *byte:
+						raw = y
+						ok = true
+					}
+					if ok {
+						x1.B = append(x1.B, *raw)
+						return &x1.B, nil
 					}
 				}
 			}
@@ -12600,7 +12584,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 			x1 := (x.StructSliceLiteral)[i]
 			_ = x1
 			if x1 == nil {
-				return src, nil
+				x1 = new(testobj.TestStruct)
 			}
 			if path[2] == "B" {
 				if len(path) == 3 {
@@ -12666,7 +12650,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		x1 := (x.FloatStructPtrMap)[k]
 		_ = x1
 		if x1 == nil {
-			return src, nil
+			x1 = new(testobj.TestStruct)
 		}
 		if path[2] == "B" {
 			if len(path) == 3 {
@@ -12731,7 +12715,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		x1 := (x.FloatPtrStructPtrMap)[&k]
 		_ = x1
 		if x1 == nil {
-			return src, nil
+			x1 = new(testobj.TestStruct)
 		}
 		if path[2] == "B" {
 			if len(path) == 3 {
@@ -12753,40 +12737,38 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "FloatPtrStructPtrMapPtr" {
-		if x.FloatPtrStructPtrMapPtr != nil {
-			if x.FloatPtrStructPtrMapPtr == nil {
-				return src, nil
-			}
-			if len(path) < 2 {
-				return src, nil
-			}
-			var k float64
-			t362, err362 := strconv.ParseFloat(path[1], 0)
-			if err362 != nil {
-				return src, err362
-			}
-			k = float64(t362)
-			x1 := (*x.FloatPtrStructPtrMapPtr)[&k]
-			_ = x1
-			if x1 == nil {
-				return src, nil
-			}
-			if path[2] == "B" {
-				if len(path) == 3 {
-					var raw *byte
-					var ok bool
-					switch y := value.(type) {
-					case byte:
-						raw = &y
-						ok = true
-					case *byte:
-						raw = y
-						ok = true
-					}
-					if ok {
-						x1.B = append(x1.B, *raw)
-						return &x1.B, nil
-					}
+		if x.FloatPtrStructPtrMapPtr == nil {
+			x.FloatPtrStructPtrMapPtr = new(map[*float64]*testobj.TestStruct)
+		}
+		if len(path) < 2 {
+			return src, nil
+		}
+		var k float64
+		t362, err362 := strconv.ParseFloat(path[1], 0)
+		if err362 != nil {
+			return src, err362
+		}
+		k = float64(t362)
+		x1 := (*x.FloatPtrStructPtrMapPtr)[&k]
+		_ = x1
+		if x1 == nil {
+			x1 = new(testobj.TestStruct)
+		}
+		if path[2] == "B" {
+			if len(path) == 3 {
+				var raw *byte
+				var ok bool
+				switch y := value.(type) {
+				case byte:
+					raw = &y
+					ok = true
+				case *byte:
+					raw = y
+					ok = true
+				}
+				if ok {
+					x1.B = append(x1.B, *raw)
+					return &x1.B, nil
 				}
 			}
 		}
@@ -12812,26 +12794,24 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 		}
 	}
 	if path[0] == "NestedStructPtr" {
-		if x.NestedStructPtr != nil {
-			if x.NestedStructPtr == nil {
-				return src, nil
-			}
-			if path[1] == "B" {
-				if len(path) == 2 {
-					var raw *byte
-					var ok bool
-					switch y := value.(type) {
-					case byte:
-						raw = &y
-						ok = true
-					case *byte:
-						raw = y
-						ok = true
-					}
-					if ok {
-						x.NestedStructPtr.B = append(x.NestedStructPtr.B, *raw)
-						return &x.NestedStructPtr.B, nil
-					}
+		if x.NestedStructPtr == nil {
+			x.NestedStructPtr = new(testobj.TestStruct)
+		}
+		if path[1] == "B" {
+			if len(path) == 2 {
+				var raw *byte
+				var ok bool
+				switch y := value.(type) {
+				case byte:
+					raw = &y
+					ok = true
+				case *byte:
+					raw = y
+					ok = true
+				}
+				if ok {
+					x.NestedStructPtr.B = append(x.NestedStructPtr.B, *raw)
+					return &x.NestedStructPtr.B, nil
 				}
 			}
 		}

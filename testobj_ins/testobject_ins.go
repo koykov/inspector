@@ -1525,7 +1525,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 		if x1, ok := (x.HistoryTree)[path[1]]; ok {
 			_ = x1
 			if x1 == nil {
-				return src, nil
+				x1 = new(testobj.TestHistory)
 			}
 			if path[2] == "Comment" {
 				if len(path) == 3 {
@@ -1545,58 +1545,57 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 					}
 				}
 			}
+			(x.HistoryTree)[path[1]] = x1
 		}
 	}
 	if path[0] == "Finance" {
-		if x.Finance != nil {
-			if x.Finance == nil {
+		if x.Finance == nil {
+			x.Finance = new(testobj.TestFinance)
+		}
+		if path[1] == "History" {
+			if len(path) == 2 {
+				var raw *testobj.TestHistory
+				var ok bool
+				switch y := value.(type) {
+				case testobj.TestHistory:
+					raw = &y
+					ok = true
+				case *testobj.TestHistory:
+					raw = y
+					ok = true
+				}
+				if ok {
+					x.Finance.History = append(x.Finance.History, *raw)
+					return &x.Finance.History, nil
+				}
+			}
+			if len(path) < 3 {
 				return src, nil
 			}
-			if path[1] == "History" {
-				if len(path) == 2 {
-					var raw *testobj.TestHistory
-					var ok bool
-					switch y := value.(type) {
-					case testobj.TestHistory:
-						raw = &y
-						ok = true
-					case *testobj.TestHistory:
-						raw = y
-						ok = true
-					}
-					if ok {
-						x.Finance.History = append(x.Finance.History, *raw)
-						return &x.Finance.History, nil
-					}
-				}
-				if len(path) < 3 {
-					return src, nil
-				}
-				var i int
-				t49, err49 := strconv.ParseInt(path[2], 0, 0)
-				if err49 != nil {
-					return src, err49
-				}
-				i = int(t49)
-				if len(x.Finance.History) > i {
-					x2 := &(x.Finance.History)[i]
-					_ = x2
-					if path[3] == "Comment" {
-						if len(path) == 4 {
-							var raw *byte
-							var ok bool
-							switch y := value.(type) {
-							case byte:
-								raw = &y
-								ok = true
-							case *byte:
-								raw = y
-								ok = true
-							}
-							if ok {
-								x2.Comment = append(x2.Comment, *raw)
-								return &x2.Comment, nil
-							}
+			var i int
+			t49, err49 := strconv.ParseInt(path[2], 0, 0)
+			if err49 != nil {
+				return src, err49
+			}
+			i = int(t49)
+			if len(x.Finance.History) > i {
+				x2 := &(x.Finance.History)[i]
+				_ = x2
+				if path[3] == "Comment" {
+					if len(path) == 4 {
+						var raw *byte
+						var ok bool
+						switch y := value.(type) {
+						case byte:
+							raw = &y
+							ok = true
+						case *byte:
+							raw = y
+							ok = true
+						}
+						if ok {
+							x2.Comment = append(x2.Comment, *raw)
+							return &x2.Comment, nil
 						}
 					}
 				}
