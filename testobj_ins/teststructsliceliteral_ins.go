@@ -994,7 +994,7 @@ func (i12 TestStructSliceLiteralInspector) Append(src, value any, path ...string
 		x0 := (*x)[i]
 		_ = x0
 		if x0 == nil {
-			return src, nil
+			x0 = new(testobj.TestStruct)
 		}
 		if path[1] == "B" {
 			if len(path) == 2 {

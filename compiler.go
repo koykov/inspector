@@ -1412,7 +1412,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 
 	if node_.ptr && node_.typ != typeSlice {
 		// Value may be nil on pointer types.
-		c.wl("if ", v, " == nil { return src, nil }")
+		c.wl("if ", v, " == nil { ", v, "=new(", c.fmtT(node_), ") }")
 	}
 
 	if node_.typ == typeSlice {
@@ -1451,14 +1451,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 			}
 			c.wl("if path[", depths, "] == ", `"`, ch.name, `" {`)
 			nv := v + "." + ch.name
-			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
-			if chPtr {
-				c.wl("if ", nv, "!=nil{")
-			}
 			_ = c.writeNodeAppend(ch, nv, depth+1)
-			if chPtr {
-				c.wl("}")
-			}
 			c.wl("}")
 		}
 	case typeMap:
@@ -1480,6 +1473,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 			if err != nil {
 				return err
 			}
+			c.wl(c.fmtV(node_, v), "[", key, "]=", nv)
 			c.wl("}")
 		} else {
 			// Convert path value to the key type and try to find it in the map.
