@@ -88,11 +88,11 @@ func (i1 TestFlagInspector) Compare(src any, cond inspector.Op, right string, re
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact int32
-			t13, err13 := strconv.ParseInt(right, 0, 0)
-			if err13 != nil {
-				return err13
+			t14, err14 := strconv.ParseInt(right, 0, 0)
+			if err14 != nil {
+				return err14
 			}
-			rightExact = int32(t13)
+			rightExact = int32(t14)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -408,8 +408,15 @@ func (i1 TestFlagInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
+		var k0 string
+		_ = k0
+		if len(path) > 0 {
+			k0 = path[0]
+		}
 		for k, _ := range *origin {
-			delete((*origin), k)
+			if len(path) == 0 || k0 == (k) {
+				delete((*origin), k)
+			}
 		}
 	}
 	return nil

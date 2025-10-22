@@ -57,11 +57,11 @@ func (i7 TestPermissionInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var k int32
-		t363, err363 := strconv.ParseInt(path[0], 0, 0)
-		if err363 != nil {
-			return err363
+		t382, err382 := strconv.ParseInt(path[0], 0, 0)
+		if err382 != nil {
+			return err382
 		}
-		k = int32(t363)
+		k = int32(t382)
 		x0 := (*x)[k]
 		_ = x0
 		*buf = &x0
@@ -91,19 +91,19 @@ func (i7 TestPermissionInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var k int32
-		t364, err364 := strconv.ParseInt(path[0], 0, 0)
-		if err364 != nil {
-			return err364
+		t383, err383 := strconv.ParseInt(path[0], 0, 0)
+		if err383 != nil {
+			return err383
 		}
-		k = int32(t364)
+		k = int32(t383)
 		x0 := (*x)[k]
 		_ = x0
 		var rightExact bool
-		t365, err365 := strconv.ParseBool(right)
-		if err365 != nil {
-			return err365
+		t384, err384 := strconv.ParseBool(right)
+		if err384 != nil {
+			return err384
 		}
-		rightExact = bool(t365)
+		rightExact = bool(t384)
 		if cond == inspector.OpEq {
 			*result = x0 == rightExact
 		} else {
@@ -172,11 +172,11 @@ func (i7 TestPermissionInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var k int32
-		t366, err366 := strconv.ParseInt(path[0], 0, 0)
-		if err366 != nil {
-			return err366
+		t385, err385 := strconv.ParseInt(path[0], 0, 0)
+		if err385 != nil {
+			return err385
 		}
-		k = int32(t366)
+		k = int32(t385)
 		x0 := (*x)[k]
 		_ = x0
 		inspector.AssignBuf(&x0, value, buf)
@@ -411,8 +411,19 @@ func (i7 TestPermissionInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
+		var k0 int32
+		_ = k0
+		if len(path) > 0 {
+			t386, err386 := strconv.ParseInt(path[0], 0, 0)
+			if err386 != nil {
+				return err386
+			}
+			k0 = int32(t386)
+		}
 		for k, _ := range *origin {
-			delete((*origin), k)
+			if len(path) == 0 || k0 == (k) {
+				delete((*origin), k)
+			}
 		}
 	}
 	return nil

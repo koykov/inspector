@@ -1528,6 +1528,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 }
 
 func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
+	depths := strconv.Itoa(depth)
 	switch node.typ {
 	case typeStruct:
 		for _, ch := range node.chld {
@@ -1536,15 +1537,38 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			if chPtr {
 				c.wl("if ", nv, "!=nil{")
 			}
+			c.wl("if len(path)==", depths, "||(len(path)>", depths, " && path[", depths, "]==\"", ch.name, "\"){")
 			_ = c.writeNodeReset(ch, nv, depth+1)
+			c.wl("}")
 			if chPtr {
 				c.wl("}")
 			}
 		}
 	case typeMap:
 		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
+
+		kv := "k" + depths
+		c.wl("var ", kv, " ", node.mapk.typn)
+		c.wl("_=", kv)
+		c.wl("if len(path)>", depths, "{")
+		if node.mapk.typn == "string" {
+			// Key is string, simple case.
+			c.wl(kv, "=path["+depths+"]")
+		} else {
+			// Convert path value to the key type and try to find it in the map.
+			snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, node.mapk.typu, kv)
+			c.regImport(imports)
+			if err != nil {
+				return err
+			}
+			c.wl(snippet)
+		}
+		c.wl("}")
+
 		c.wl("for k,_:=range ", c.fmtVd(node, v, depth), "{")
+		c.wl("if len(path)==", depths, "||", kv, "==", c.fmtV(node.mapk, "k"), "{")
 		c.wl("delete(", c.fmtVd(node, v, depth), ",k)")
+		c.wl("}")
 		c.wl("}")
 		c.wl("}")
 	case typeSlice:
@@ -1555,7 +1579,20 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			if node.slct.typ != typeBasic {
 				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
 				nv := "x" + strconv.Itoa(depth)
+
+				iv := "i" + depths
+				c.wl("var ", iv, " int")
+				c.wl("if len(path)>", depths, "{")
+				snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", iv)
+				c.regImport(imports)
+				if err != nil {
+					return err
+				}
+				c.wl(snippet)
+				c.wl("}")
+				c.wl("_ = ", iv)
 				c.wl("for i:=0;i<l;i++{")
+				c.wl("if len(path)>", depths, "&&", iv, "!=i{continue}")
 				pfx := "&"
 				if node.slct.ptr {
 					pfx = ""
@@ -1564,7 +1601,9 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
 				c.wl("}")
 			}
+			c.wl("if len(path)==", depths, "{")
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+			c.wl("}")
 		}
 		c.wl("}")
 	case typeBasic:

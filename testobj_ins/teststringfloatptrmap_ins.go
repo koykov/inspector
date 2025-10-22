@@ -409,8 +409,15 @@ func (i9 TestStringFloatPtrMapInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
+		var k0 string
+		_ = k0
+		if len(path) > 0 {
+			k0 = path[0]
+		}
 		for k, _ := range *origin {
-			delete((*origin), k)
+			if len(path) == 0 || k0 == (k) {
+				delete((*origin), k)
+			}
 		}
 	}
 	return nil

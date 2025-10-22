@@ -57,11 +57,11 @@ func (i2 TestFloatPtrSliceInspector) GetTo(src any, buf *any, path ...string) (e
 
 	if len(path) > 0 {
 		var i int
-		t14, err14 := strconv.ParseInt(path[0], 0, 0)
-		if err14 != nil {
-			return err14
+		t15, err15 := strconv.ParseInt(path[0], 0, 0)
+		if err15 != nil {
+			return err15
 		}
-		i = int(t14)
+		i = int(t15)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -96,11 +96,11 @@ func (i2 TestFloatPtrSliceInspector) Compare(src any, cond inspector.Op, right s
 
 	if len(path) > 0 {
 		var i int
-		t15, err15 := strconv.ParseInt(path[0], 0, 0)
-		if err15 != nil {
-			return err15
+		t16, err16 := strconv.ParseInt(path[0], 0, 0)
+		if err16 != nil {
+			return err16
 		}
-		i = int(t15)
+		i = int(t16)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -176,11 +176,11 @@ func (i2 TestFloatPtrSliceInspector) SetWithBuffer(dst, value any, buf inspector
 
 	if len(path) > 0 {
 		var i int
-		t16, err16 := strconv.ParseInt(path[0], 0, 0)
-		if err16 != nil {
-			return err16
+		t17, err17 := strconv.ParseInt(path[0], 0, 0)
+		if err17 != nil {
+			return err17
 		}
-		i = int(t16)
+		i = int(t17)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -431,7 +431,9 @@ func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		(*origin) = (*origin)[:0]
+		if len(path) == 0 {
+			(*origin) = (*origin)[:0]
+		}
 	}
 	return nil
 }

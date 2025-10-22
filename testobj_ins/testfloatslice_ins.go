@@ -57,11 +57,11 @@ func (i3 TestFloatSliceInspector) GetTo(src any, buf *any, path ...string) (err 
 
 	if len(path) > 0 {
 		var i int
-		t17, err17 := strconv.ParseInt(path[0], 0, 0)
-		if err17 != nil {
-			return err17
+		t18, err18 := strconv.ParseInt(path[0], 0, 0)
+		if err18 != nil {
+			return err18
 		}
-		i = int(t17)
+		i = int(t18)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -93,20 +93,20 @@ func (i3 TestFloatSliceInspector) Compare(src any, cond inspector.Op, right stri
 
 	if len(path) > 0 {
 		var i int
-		t18, err18 := strconv.ParseInt(path[0], 0, 0)
-		if err18 != nil {
-			return err18
+		t19, err19 := strconv.ParseInt(path[0], 0, 0)
+		if err19 != nil {
+			return err19
 		}
-		i = int(t18)
+		i = int(t19)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
 			var rightExact float32
-			t19, err19 := strconv.ParseFloat(right, 0)
-			if err19 != nil {
-				return err19
+			t20, err20 := strconv.ParseFloat(right, 0)
+			if err20 != nil {
+				return err20
 			}
-			rightExact = float32(t19)
+			rightExact = float32(t20)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -182,11 +182,11 @@ func (i3 TestFloatSliceInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 
 	if len(path) > 0 {
 		var i int
-		t20, err20 := strconv.ParseInt(path[0], 0, 0)
-		if err20 != nil {
-			return err20
+		t21, err21 := strconv.ParseInt(path[0], 0, 0)
+		if err21 != nil {
+			return err21
 		}
-		i = int(t20)
+		i = int(t21)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -429,7 +429,9 @@ func (i3 TestFloatSliceInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		(*origin) = (*origin)[:0]
+		if len(path) == 0 {
+			(*origin) = (*origin)[:0]
+		}
 	}
 	return nil
 }

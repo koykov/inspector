@@ -96,11 +96,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t21, err21 := strconv.ParseInt(right, 0, 0)
-			if err21 != nil {
-				return err21
+			t22, err22 := strconv.ParseInt(right, 0, 0)
+			if err22 != nil {
+				return err22
 			}
-			rightExact = int64(t21)
+			rightExact = int64(t22)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -119,11 +119,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t22, err22 := strconv.ParseFloat(right, 0)
-			if err22 != nil {
-				return err22
+			t23, err23 := strconv.ParseFloat(right, 0)
+			if err23 != nil {
+				return err23
 			}
-			rightExact = float64(t22)
+			rightExact = float64(t23)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -443,10 +443,16 @@ func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	origin.DateUnix = 0
-	origin.Cost = 0
-	if l := len((origin.Comment)); l > 0 {
-		(origin.Comment) = (origin.Comment)[:0]
+	if len(path) == 0 || (len(path) > 0 && path[0] == "DateUnix") {
+		origin.DateUnix = 0
+	}
+	if len(path) == 0 || (len(path) > 0 && path[0] == "Cost") {
+		origin.Cost = 0
+	}
+	if len(path) == 0 || (len(path) > 0 && path[0] == "Comment") {
+		if l := len((origin.Comment)); l > 0 {
+			(origin.Comment) = (origin.Comment)[:0]
+		}
 	}
 	return nil
 }
