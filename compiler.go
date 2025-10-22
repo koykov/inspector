@@ -543,7 +543,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wdl("}")
 
 	// Reset methods.
-	c.wl("func (", recv, " ", inst, ") Reset(x any) error {")
+	c.wl("func (", recv, " ", inst, ") Reset(x any, path ...string) error {")
 	c.wl("var origin *", pname)
 	c.wl("_=origin")
 	c.wl("switch x.(type) {")

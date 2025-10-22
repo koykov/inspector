@@ -415,7 +415,7 @@ func (i3 TestFloatSliceInspector) Append(src, value any, path ...string) (any, e
 	return src, nil
 }
 
-func (i3 TestFloatSliceInspector) Reset(x any) error {
+func (i3 TestFloatSliceInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestFloatSlice
 	_ = origin
 	switch x.(type) {

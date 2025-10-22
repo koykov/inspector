@@ -36,7 +36,7 @@ type Inspector interface {
 	// Capacity puts capacity of field value by path in src to the buffer.
 	Capacity(src any, result *int, path ...string) error
 	// Reset resets x.
-	Reset(x any) error
+	Reset(x any, path ...string) error
 }
 
 func init() {

@@ -394,7 +394,7 @@ func (i1 TestFlagInspector) Append(src, value any, path ...string) (any, error) 
 	return src, nil
 }
 
-func (i1 TestFlagInspector) Reset(x any) error {
+func (i1 TestFlagInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestFlag
 	_ = origin
 	switch x.(type) {

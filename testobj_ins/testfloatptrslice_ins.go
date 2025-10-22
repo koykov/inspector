@@ -417,7 +417,7 @@ func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any
 	return src, nil
 }
 
-func (i2 TestFloatPtrSliceInspector) Reset(x any) error {
+func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {

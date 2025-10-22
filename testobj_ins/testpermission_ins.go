@@ -397,7 +397,7 @@ func (i7 TestPermissionInspector) Append(src, value any, path ...string) (any, e
 	return src, nil
 }
 
-func (i7 TestPermissionInspector) Reset(x any) error {
+func (i7 TestPermissionInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestPermission
 	_ = origin
 	switch x.(type) {

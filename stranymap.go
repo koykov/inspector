@@ -227,13 +227,22 @@ func (i StringAnyMapInspector) Capacity(x any, result *int, path ...string) erro
 	return i.Length(x1, result, path[1:]...)
 }
 
-func (i StringAnyMapInspector) Reset(x any) error {
+func (i StringAnyMapInspector) Reset(x any, path ...string) error {
 	var m map[string]any
 	if err := i.indir2(&m, x); err != nil || x == nil {
 		return nil
 	}
-	for k := range m {
-		delete(m, k)
+	if len(path) == 0 {
+		for k := range m {
+			delete(m, k)
+		}
+		return nil
+	}
+	if v, ok := m[path[0]]; ok {
+		if err := i.Reset(v, path[1:]...); err != nil {
+			return err
+		}
+		m[path[0]] = v
 	}
 	return nil
 }

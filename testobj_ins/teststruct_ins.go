@@ -854,7 +854,7 @@ func (i11 TestStructInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i11 TestStructInspector) Reset(x any) error {
+func (i11 TestStructInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestStruct
 	_ = origin
 	switch x.(type) {

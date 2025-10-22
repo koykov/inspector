@@ -395,7 +395,7 @@ func (i9 TestStringFloatPtrMapInspector) Append(src, value any, path ...string) 
 	return src, nil
 }
 
-func (i9 TestStringFloatPtrMapInspector) Reset(x any) error {
+func (i9 TestStringFloatPtrMapInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestStringFloatPtrMap
 	_ = origin
 	switch x.(type) {

@@ -1605,7 +1605,7 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 	return src, nil
 }
 
-func (i5 TestObjectInspector) Reset(x any) error {
+func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestObject
 	_ = origin
 	switch x.(type) {

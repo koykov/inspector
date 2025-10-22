@@ -12819,7 +12819,7 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i6 TestObject1Inspector) Reset(x any) error {
+func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestObject1
 	_ = origin
 	switch x.(type) {

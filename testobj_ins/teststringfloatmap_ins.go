@@ -394,7 +394,7 @@ func (i8 TestStringFloatMapInspector) Append(src, value any, path ...string) (an
 	return src, nil
 }
 
-func (i8 TestStringFloatMapInspector) Reset(x any) error {
+func (i8 TestStringFloatMapInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestStringFloatMap
 	_ = origin
 	switch x.(type) {

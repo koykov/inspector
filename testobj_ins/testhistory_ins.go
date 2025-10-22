@@ -430,7 +430,7 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i4 TestHistoryInspector) Reset(x any) error {
+func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestHistory
 	_ = origin
 	switch x.(type) {

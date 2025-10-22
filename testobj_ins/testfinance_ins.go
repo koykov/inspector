@@ -751,7 +751,7 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i0 TestFinanceInspector) Reset(x any) error {
+func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestFinance
 	_ = origin
 	switch x.(type) {

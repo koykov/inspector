@@ -1018,7 +1018,7 @@ func (i12 TestStructSliceLiteralInspector) Append(src, value any, path ...string
 	return src, nil
 }
 
-func (i12 TestStructSliceLiteralInspector) Reset(x any) error {
+func (i12 TestStructSliceLiteralInspector) Reset(x any, path ...string) error {
 	var origin *testobj.TestStructSliceLiteral
 	_ = origin
 	switch x.(type) {
