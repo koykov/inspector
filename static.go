@@ -745,7 +745,7 @@ func (i StaticInspector) Capacity(x any, result *int, _ ...string) error {
 	return nil
 }
 
-func (i StaticInspector) Reset(val any) error {
+func (i StaticInspector) Reset(val any, _ ...string) error {
 	switch x := val.(type) {
 	case bool:
 		x = false

@@ -376,7 +376,7 @@ func (i StringsInspector) Capacity(src any, result *int, path ...string) error {
 	return nil
 }
 
-func (i StringsInspector) Reset(val any) error {
+func (i StringsInspector) Reset(val any, _ ...string) error {
 	switch x := val.(type) {
 	case []string:
 		return ErrMustPointerType
