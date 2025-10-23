@@ -229,7 +229,7 @@ func (i StringAnyMapInspector) Capacity(x any, result *int, path ...string) erro
 
 func (i StringAnyMapInspector) Reset(x any, path ...string) error {
 	var m map[string]any
-	if err := i.indir2(&m, x); err != nil || x == nil {
+	if err := i.indir1(&m, x); err != nil || x == nil {
 		return nil
 	}
 	if len(path) == 0 {
@@ -239,6 +239,17 @@ func (i StringAnyMapInspector) Reset(x any, path ...string) error {
 		return nil
 	}
 	if v, ok := m[path[0]]; ok {
+		if len(path) == 1 {
+			var m1 map[string]any
+			if err := i.indir1(&m1, v); err == nil {
+				for k := range m1 {
+					delete(m1, k)
+				}
+				return nil
+			}
+			delete(m, path[0])
+			return nil
+		}
 		if err := i.Reset(v, path[1:]...); err != nil {
 			return err
 		}

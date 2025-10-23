@@ -131,13 +131,39 @@ func TestStringAnyMap(t *testing.T) {
 		}
 	})
 	t.Run("reset", func(t *testing.T) {
-		var ins inspector.StringAnyMapInspector
-		if err := ins.Reset(&testReset); err != nil {
-			t.Error(err)
-		}
-		if !reflect.DeepEqual(testReset, map[string]any{}) {
-			t.FailNow()
-		}
+		t.Run("stranymap", func(t *testing.T) {
+			t.Run("full", func(t *testing.T) {
+				var ins inspector.StringAnyMapInspector
+				if err := ins.Reset(&testReset); err != nil {
+					t.Error(err)
+				}
+				if !reflect.DeepEqual(testReset, map[string]any{}) {
+					t.FailNow()
+				}
+			})
+			t.Run("nested single", func(t *testing.T) {
+				var ins inspector.StringAnyMapInspector
+				var m = map[string]any{"a": map[string]any{"b": map[string]any{"c": "d"}}}
+				var e = map[string]any{"a": map[string]any{"b": map[string]any{}}}
+				if err := ins.Reset(&m, "a", "b", "c"); err != nil {
+					t.Error(err)
+				}
+				if !reflect.DeepEqual(m, e) {
+					t.FailNow()
+				}
+			})
+			t.Run("nested multi", func(t *testing.T) {
+				var ins inspector.StringAnyMapInspector
+				var m = map[string]any{"a": map[string]any{"b": map[string]any{"c": "d", "e": "f"}}}
+				var e = map[string]any{"a": map[string]any{"b": map[string]any{}}}
+				if err := ins.Reset(&m, "a", "b"); err != nil {
+					t.Error(err)
+				}
+				if !reflect.DeepEqual(m, e) {
+					t.FailNow()
+				}
+			})
+		})
 	})
 }
 
