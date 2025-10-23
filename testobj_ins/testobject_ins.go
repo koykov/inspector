@@ -1699,8 +1699,9 @@ func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 			}
 			if len(path) == 1 || (len(path) > 1 && path[1] == "History") {
 				if l := len((origin.Finance.History)); l > 0 {
+					var i2 int = -1
+					_ = i2
 					_ = (origin.Finance.History)[l-1]
-					var i2 int
 					if len(path) > 2 {
 						t52, err52 := strconv.ParseInt(path[2], 0, 0)
 						if err52 != nil {
@@ -1710,7 +1711,7 @@ func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 					}
 					_ = i2
 					for i := 0; i < l; i++ {
-						if len(path) > 2 && i2 != i {
+						if len(path) == 2 && i2 != i {
 							continue
 						}
 						x2 := &(origin.Finance.History)[i]
@@ -1726,7 +1727,7 @@ func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 							}
 						}
 					}
-					if len(path) == 2 {
+					if len(path) == 2 && i2 == -1 {
 						(origin.Finance.History) = (origin.Finance.History)[:0]
 					}
 				}

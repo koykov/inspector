@@ -429,7 +429,9 @@ func (i3 TestFloatSliceInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		if len(path) == 0 {
+		var i0 int = -1
+		_ = i0
+		if len(path) == 0 && i0 == -1 {
 			(*origin) = (*origin)[:0]
 		}
 	}

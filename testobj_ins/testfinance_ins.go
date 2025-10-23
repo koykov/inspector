@@ -778,8 +778,9 @@ func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "History") {
 		if l := len((origin.History)); l > 0 {
+			var i1 int = -1
+			_ = i1
 			_ = (origin.History)[l-1]
-			var i1 int
 			if len(path) > 1 {
 				t13, err13 := strconv.ParseInt(path[1], 0, 0)
 				if err13 != nil {
@@ -789,7 +790,7 @@ func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 			}
 			_ = i1
 			for i := 0; i < l; i++ {
-				if len(path) > 1 && i1 != i {
+				if len(path) == 1 && i1 != i {
 					continue
 				}
 				x1 := &(origin.History)[i]
@@ -805,7 +806,7 @@ func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 					}
 				}
 			}
-			if len(path) == 1 {
+			if len(path) == 1 && i1 == -1 {
 				(origin.History) = (origin.History)[:0]
 			}
 		}

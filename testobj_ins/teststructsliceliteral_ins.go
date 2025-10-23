@@ -1032,8 +1032,9 @@ func (i12 TestStructSliceLiteralInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
+		var i0 int = -1
+		_ = i0
 		_ = (*origin)[l-1]
-		var i0 int
 		if len(path) > 0 {
 			t424, err424 := strconv.ParseInt(path[0], 0, 0)
 			if err424 != nil {
@@ -1043,7 +1044,7 @@ func (i12 TestStructSliceLiteralInspector) Reset(x any, path ...string) error {
 		}
 		_ = i0
 		for i := 0; i < l; i++ {
-			if len(path) > 0 && i0 != i {
+			if len(path) == 0 && i0 != i {
 				continue
 			}
 			x0 := (*origin)[i]
@@ -1095,7 +1096,7 @@ func (i12 TestStructSliceLiteralInspector) Reset(x any, path ...string) error {
 				x0.D = 0
 			}
 		}
-		if len(path) == 0 {
+		if len(path) == 0 && i0 == -1 {
 			(*origin) = (*origin)[:0]
 		}
 	}

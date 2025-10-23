@@ -1576,12 +1576,13 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 		if node.typn == "[]byte" {
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 		} else {
+			iv := "i" + depths
+			c.wl("var ", iv, " int=-1")
+			c.wl("_= ", iv)
 			if node.slct.typ != typeBasic {
 				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
 				nv := "x" + strconv.Itoa(depth)
 
-				iv := "i" + depths
-				c.wl("var ", iv, " int")
 				c.wl("if len(path)>", depths, "{")
 				snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", iv)
 				c.regImport(imports)
@@ -1592,7 +1593,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				c.wl("}")
 				c.wl("_ = ", iv)
 				c.wl("for i:=0;i<l;i++{")
-				c.wl("if len(path)>", depths, "&&", iv, "!=i{continue}")
+				c.wl("if len(path)==", depths, "&&", iv, "!=i{continue}")
 				pfx := "&"
 				if node.slct.ptr {
 					pfx = ""
@@ -1601,7 +1602,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
 				c.wl("}")
 			}
-			c.wl("if len(path)==", depths, "{")
+			c.wl("if len(path)==", depths, "&&", iv, "==-1{")
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
 			c.wl("}")
 		}

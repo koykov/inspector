@@ -12834,14 +12834,18 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "IntSlice") {
 		if l := len((origin.IntSlice)); l > 0 {
-			if len(path) == 1 {
+			var i1 int = -1
+			_ = i1
+			if len(path) == 1 && i1 == -1 {
 				(origin.IntSlice) = (origin.IntSlice)[:0]
 			}
 		}
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "IntPtrSlice") {
 		if l := len((origin.IntPtrSlice)); l > 0 {
-			if len(path) == 1 {
+			var i1 int = -1
+			_ = i1
+			if len(path) == 1 && i1 == -1 {
 				(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
 			}
 		}
@@ -12849,7 +12853,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.IntSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "IntSlicePtr") {
 			if l := len((*origin.IntSlicePtr)); l > 0 {
-				if len(path) == 1 {
+				var i1 int = -1
+				_ = i1
+				if len(path) == 1 && i1 == -1 {
 					(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
 				}
 			}
@@ -12858,7 +12864,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.IntPtrSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "IntPtrSlicePtr") {
 			if l := len((*origin.IntPtrSlicePtr)); l > 0 {
-				if len(path) == 1 {
+				var i1 int = -1
+				_ = i1
+				if len(path) == 1 && i1 == -1 {
 					(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
 				}
 			}
@@ -12871,7 +12879,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "BytePtrSlice") {
 		if l := len((origin.BytePtrSlice)); l > 0 {
-			if len(path) == 1 {
+			var i1 int = -1
+			_ = i1
+			if len(path) == 1 && i1 == -1 {
 				(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
 			}
 		}
@@ -12886,7 +12896,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.BytePtrSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "BytePtrSlicePtr") {
 			if l := len((*origin.BytePtrSlicePtr)); l > 0 {
-				if len(path) == 1 {
+				var i1 int = -1
+				_ = i1
+				if len(path) == 1 && i1 == -1 {
 					(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
 				}
 			}
@@ -12894,14 +12906,18 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatSlice") {
 		if l := len((origin.FloatSlice)); l > 0 {
-			if len(path) == 1 {
+			var i1 int = -1
+			_ = i1
+			if len(path) == 1 && i1 == -1 {
 				(origin.FloatSlice) = (origin.FloatSlice)[:0]
 			}
 		}
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrSlice") {
 		if l := len((origin.FloatPtrSlice)); l > 0 {
-			if len(path) == 1 {
+			var i1 int = -1
+			_ = i1
+			if len(path) == 1 && i1 == -1 {
 				(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
 			}
 		}
@@ -12909,7 +12925,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.FloatSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "FloatSlicePtr") {
 			if l := len((*origin.FloatSlicePtr)); l > 0 {
-				if len(path) == 1 {
+				var i1 int = -1
+				_ = i1
+				if len(path) == 1 && i1 == -1 {
 					(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
 				}
 			}
@@ -12918,7 +12936,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.FloatPtrSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrSlicePtr") {
 			if l := len((*origin.FloatPtrSlicePtr)); l > 0 {
-				if len(path) == 1 {
+				var i1 int = -1
+				_ = i1
+				if len(path) == 1 && i1 == -1 {
 					(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
 				}
 			}
@@ -12926,8 +12946,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "StructSlice") {
 		if l := len((origin.StructSlice)); l > 0 {
+			var i1 int = -1
+			_ = i1
 			_ = (origin.StructSlice)[l-1]
-			var i1 int
 			if len(path) > 1 {
 				t366, err366 := strconv.ParseInt(path[1], 0, 0)
 				if err366 != nil {
@@ -12937,7 +12958,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 			}
 			_ = i1
 			for i := 0; i < l; i++ {
-				if len(path) > 1 && i1 != i {
+				if len(path) == 1 && i1 != i {
 					continue
 				}
 				x1 := &(origin.StructSlice)[i]
@@ -12989,15 +13010,16 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 					x1.D = 0
 				}
 			}
-			if len(path) == 1 {
+			if len(path) == 1 && i1 == -1 {
 				(origin.StructSlice) = (origin.StructSlice)[:0]
 			}
 		}
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "StructPtrSlice") {
 		if l := len((origin.StructPtrSlice)); l > 0 {
+			var i1 int = -1
+			_ = i1
 			_ = (origin.StructPtrSlice)[l-1]
-			var i1 int
 			if len(path) > 1 {
 				t367, err367 := strconv.ParseInt(path[1], 0, 0)
 				if err367 != nil {
@@ -13007,7 +13029,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 			}
 			_ = i1
 			for i := 0; i < l; i++ {
-				if len(path) > 1 && i1 != i {
+				if len(path) == 1 && i1 != i {
 					continue
 				}
 				x1 := (origin.StructPtrSlice)[i]
@@ -13059,7 +13081,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 					x1.D = 0
 				}
 			}
-			if len(path) == 1 {
+			if len(path) == 1 && i1 == -1 {
 				(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
 			}
 		}
@@ -13067,8 +13089,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.StructSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "StructSlicePtr") {
 			if l := len((*origin.StructSlicePtr)); l > 0 {
+				var i1 int = -1
+				_ = i1
 				_ = (*origin.StructSlicePtr)[l-1]
-				var i1 int
 				if len(path) > 1 {
 					t368, err368 := strconv.ParseInt(path[1], 0, 0)
 					if err368 != nil {
@@ -13078,7 +13101,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 				}
 				_ = i1
 				for i := 0; i < l; i++ {
-					if len(path) > 1 && i1 != i {
+					if len(path) == 1 && i1 != i {
 						continue
 					}
 					x1 := &(*origin.StructSlicePtr)[i]
@@ -13130,7 +13153,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 						x1.D = 0
 					}
 				}
-				if len(path) == 1 {
+				if len(path) == 1 && i1 == -1 {
 					(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
 				}
 			}
@@ -13139,8 +13162,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if origin.StructPtrSlicePtr != nil {
 		if len(path) == 0 || (len(path) > 0 && path[0] == "StructPtrSlicePtr") {
 			if l := len((*origin.StructPtrSlicePtr)); l > 0 {
+				var i1 int = -1
+				_ = i1
 				_ = (*origin.StructPtrSlicePtr)[l-1]
-				var i1 int
 				if len(path) > 1 {
 					t369, err369 := strconv.ParseInt(path[1], 0, 0)
 					if err369 != nil {
@@ -13150,7 +13174,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 				}
 				_ = i1
 				for i := 0; i < l; i++ {
-					if len(path) > 1 && i1 != i {
+					if len(path) == 1 && i1 != i {
 						continue
 					}
 					x1 := (*origin.StructPtrSlicePtr)[i]
@@ -13202,7 +13226,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 						x1.D = 0
 					}
 				}
-				if len(path) == 1 {
+				if len(path) == 1 && i1 == -1 {
 					(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
 				}
 			}
@@ -13210,8 +13234,9 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	}
 	if len(path) == 0 || (len(path) > 0 && path[0] == "StructSliceLiteral") {
 		if l := len((origin.StructSliceLiteral)); l > 0 {
+			var i1 int = -1
+			_ = i1
 			_ = (origin.StructSliceLiteral)[l-1]
-			var i1 int
 			if len(path) > 1 {
 				t370, err370 := strconv.ParseInt(path[1], 0, 0)
 				if err370 != nil {
@@ -13221,7 +13246,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 			}
 			_ = i1
 			for i := 0; i < l; i++ {
-				if len(path) > 1 && i1 != i {
+				if len(path) == 1 && i1 != i {
 					continue
 				}
 				x1 := (origin.StructSliceLiteral)[i]
@@ -13273,7 +13298,7 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 					x1.D = 0
 				}
 			}
-			if len(path) == 1 {
+			if len(path) == 1 && i1 == -1 {
 				(origin.StructSliceLiteral) = (origin.StructSliceLiteral)[:0]
 			}
 		}
