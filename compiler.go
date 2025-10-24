@@ -1594,7 +1594,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			}
 			c.wl(snippet)
 		}
-		_ = c.writeNodeReset(node.mapv, c.fmtVd(node, v, depth)+"["+kv+"]", depth+1)
+		_ = c.writeNodeReset(node.mapv, c.fmtVd(node, v, depth)+"["+c.fmtP(node.mapk, kv, depth)+"]", depth+1)
 		c.wl("}}")
 		c.wl("return nil")
 	case typeSlice:
