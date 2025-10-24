@@ -1609,24 +1609,18 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
 				nv := "x" + strconv.Itoa(depth)
 
-				c.wl("if len(path)>", depths, "{")
 				snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", iv)
 				c.regImport(imports)
 				if err != nil {
 					return err
 				}
 				c.wl(snippet)
-				c.wl("}")
-				c.wl("_ = ", iv)
-				c.wl("for i:=0;i<l;i++{")
-				c.wl("if len(path)==", depths, "&&", iv, "!=i{continue}")
 				pfx := "&"
 				if node.slct.ptr {
 					pfx = ""
 				}
-				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
+				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[", iv, "]")
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
-				c.wl("}")
 			}
 			c.wl("if ", iv, "==-1{")
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
