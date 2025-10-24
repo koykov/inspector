@@ -1567,6 +1567,9 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			if ch.typ == typeMap {
 				c.wl("for k:=range", c.fmtVd(ch, nv, depth+1), "{delete(", c.fmtVd(ch, nv, depth+1), ",k)}")
 			}
+			if ch.typ == typeSlice {
+				c.wl(c.fmtVd(ch, nv, depth+1), "=", c.fmtVd(ch, nv, depth+1), "[:0]")
+			}
 			if chPtr {
 				c.wl("}")
 			}
@@ -1630,6 +1633,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			c.wl("}")
 		}
 		c.wl("}")
+		c.wl("return nil")
 	case typeBasic:
 		typ := node.typu
 		if len(typ) == 0 {
