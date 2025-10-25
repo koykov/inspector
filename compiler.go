@@ -1550,6 +1550,7 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 
 func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 	depths := strconv.Itoa(depth)
+	depths1 := strconv.Itoa(depth + 1)
 	mustLenCheck := node.typ != typeBasic
 	if mustLenCheck {
 		c.wl("if len(path)>", depths, "{")
@@ -1624,6 +1625,13 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				}
 				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[", iv, "]")
 				_ = c.writeNodeReset(node.slct, nv, depth+1)
+				c.wl("if len(path)==", depths1, "{")
+				pfx = ""
+				if node.slct.ptr {
+					pfx = "&"
+				}
+				c.wl(c.fmtVd(node, v, depth), "[", iv, "]", "=", pfx, c.fmtT(node.slct), "{}")
+				c.wl("}")
 			}
 			c.wl("if ", iv, "==-1{")
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
