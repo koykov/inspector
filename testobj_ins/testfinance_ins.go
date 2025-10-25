@@ -752,6 +752,14 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 }
 
 func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i0.reset1(x, path...)
+	} else {
+		return i0.reset2(x, path...)
+	}
+}
+
+func (i0 TestFinanceInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestFinance
 	_ = origin
 	switch x.(type) {
@@ -764,51 +772,90 @@ func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "MoneyIn") {
-		origin.MoneyIn = 0
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "MoneyOut") {
-		origin.MoneyOut = 0
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Balance") {
-		origin.Balance = 0
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "AllowBuy") {
-		origin.AllowBuy = false
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "History") {
-		if l := len((origin.History)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			_ = (origin.History)[l-1]
-			if len(path) > 1 {
-				t13, err13 := strconv.ParseInt(path[1], 0, 0)
-				if err13 != nil {
-					return err13
-				}
-				i1 = int(t13)
+	origin.MoneyIn = 0
+	origin.MoneyOut = 0
+	origin.Balance = 0
+	origin.AllowBuy = false
+	if l := len((origin.History)); l > 0 {
+		_ = (origin.History)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := &(origin.History)[i]
+			x1.DateUnix = 0
+			x1.Cost = 0
+			if l := len((x1.Comment)); l > 0 {
+				(x1.Comment) = (x1.Comment)[:0]
 			}
-			_ = i1
-			for i := 0; i < l; i++ {
-				if len(path) == 1 && i1 != i {
-					continue
-				}
-				x1 := &(origin.History)[i]
-				if len(path) == 2 || (len(path) > 2 && path[2] == "DateUnix") {
-					x1.DateUnix = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "Cost") {
-					x1.Cost = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "Comment") {
-					if l := len((x1.Comment)); l > 0 {
-						(x1.Comment) = (x1.Comment)[:0]
+		}
+		(origin.History) = (origin.History)[:0]
+	}
+	return nil
+}
+
+func (i0 TestFinanceInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestFinance
+	_ = origin
+	switch x.(type) {
+	case testobj.TestFinance:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFinance:
+		origin = x.(*testobj.TestFinance)
+	case **testobj.TestFinance:
+		origin = *x.(**testobj.TestFinance)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if path[0] == "MoneyIn" {
+			origin.MoneyIn = 0
+		}
+		if path[0] == "MoneyOut" {
+			origin.MoneyOut = 0
+		}
+		if path[0] == "Balance" {
+			origin.Balance = 0
+		}
+		if path[0] == "AllowBuy" {
+			origin.AllowBuy = false
+		}
+		if path[0] == "History" {
+			if len(path) > 1 {
+				if l := len((origin.History)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					_ = (origin.History)[l-1]
+					t13, err13 := strconv.ParseInt(path[1], 0, 0)
+					if err13 != nil {
+						return err13
+					}
+					i1 = int(t13)
+					x1 := &(origin.History)[i1]
+					if len(path) > 2 {
+						if path[2] == "DateUnix" {
+							x1.DateUnix = 0
+						}
+						if path[2] == "Cost" {
+							x1.Cost = 0
+						}
+						if path[2] == "Comment" {
+							if len(path) > 3 {
+								if l := len((x1.Comment)); l > 0 {
+									(x1.Comment) = (x1.Comment)[:0]
+								}
+								return nil
+							}
+							(x1.Comment) = (x1.Comment)[:0]
+						}
+					}
+					if len(path) == 2 {
+						(origin.History)[i1] = testobj.TestHistory{}
+					}
+					if i1 == -1 {
+						(origin.History) = (origin.History)[:0]
 					}
 				}
+				return nil
 			}
-			if len(path) == 1 && i1 == -1 {
-				(origin.History) = (origin.History)[:0]
-			}
+			(origin.History) = (origin.History)[:0]
 		}
 	}
 	return nil

@@ -88,11 +88,11 @@ func (i8 TestStringFloatMapInspector) Compare(src any, cond inspector.Op, right 
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact float64
-			t387, err387 := strconv.ParseFloat(right, 0)
-			if err387 != nil {
-				return err387
+			t388, err388 := strconv.ParseFloat(right, 0)
+			if err388 != nil {
+				return err388
 			}
-			rightExact = float64(t387)
+			rightExact = float64(t388)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -395,6 +395,14 @@ func (i8 TestStringFloatMapInspector) Append(src, value any, path ...string) (an
 }
 
 func (i8 TestStringFloatMapInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i8.reset1(x, path...)
+	} else {
+		return i8.reset2(x, path...)
+	}
+}
+
+func (i8 TestStringFloatMapInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestStringFloatMap
 	_ = origin
 	switch x.(type) {
@@ -408,16 +416,37 @@ func (i8 TestStringFloatMapInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		var k0 string
-		_ = k0
-		if len(path) > 0 {
-			k0 = path[0]
-		}
 		for k, _ := range *origin {
-			if len(path) == 0 || k0 == (k) {
-				delete((*origin), k)
-			}
+			delete((*origin), k)
 		}
+	}
+	return nil
+}
+
+func (i8 TestStringFloatMapInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestStringFloatMap
+	_ = origin
+	switch x.(type) {
+	case testobj.TestStringFloatMap:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStringFloatMap:
+		origin = x.(*testobj.TestStringFloatMap)
+	case **testobj.TestStringFloatMap:
+		origin = *x.(**testobj.TestStringFloatMap)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if l := len((*origin)); l > 0 {
+			var k0 string
+			_ = k0
+			k0 = path[0]
+			x0 := (*origin)[k0]
+			_ = x0
+			x0 = 0
+			(*origin)[k0] = x0
+		}
+		return nil
 	}
 	return nil
 }

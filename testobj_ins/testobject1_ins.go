@@ -12820,6 +12820,14 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 }
 
 func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i6.reset1(x, path...)
+	} else {
+		return i6.reset2(x, path...)
+	}
+}
+
+func (i6 TestObject1Inspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestObject1
 	_ = origin
 	switch x.(type) {
@@ -12832,856 +12840,1584 @@ func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "IntSlice") {
-		if l := len((origin.IntSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			if len(path) == 1 && i1 == -1 {
-				(origin.IntSlice) = (origin.IntSlice)[:0]
-			}
-		}
+	if l := len((origin.IntSlice)); l > 0 {
+		(origin.IntSlice) = (origin.IntSlice)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "IntPtrSlice") {
-		if l := len((origin.IntPtrSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			if len(path) == 1 && i1 == -1 {
-				(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
-			}
-		}
+	if l := len((origin.IntPtrSlice)); l > 0 {
+		(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
 	}
 	if origin.IntSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "IntSlicePtr") {
-			if l := len((*origin.IntSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				if len(path) == 1 && i1 == -1 {
-					(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
-				}
-			}
+		if l := len((*origin.IntSlicePtr)); l > 0 {
+			(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
 		}
 	}
 	if origin.IntPtrSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "IntPtrSlicePtr") {
-			if l := len((*origin.IntPtrSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				if len(path) == 1 && i1 == -1 {
-					(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
-				}
-			}
+		if l := len((*origin.IntPtrSlicePtr)); l > 0 {
+			(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "ByteSlice") {
-		if l := len((origin.ByteSlice)); l > 0 {
-			(origin.ByteSlice) = (origin.ByteSlice)[:0]
-		}
+	if l := len((origin.ByteSlice)); l > 0 {
+		(origin.ByteSlice) = (origin.ByteSlice)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "BytePtrSlice") {
-		if l := len((origin.BytePtrSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			if len(path) == 1 && i1 == -1 {
-				(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
-			}
-		}
+	if l := len((origin.BytePtrSlice)); l > 0 {
+		(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
 	}
 	if origin.ByteSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "ByteSlicePtr") {
-			if l := len((*origin.ByteSlicePtr)); l > 0 {
-				(*origin.ByteSlicePtr) = (*origin.ByteSlicePtr)[:0]
-			}
+		if l := len((*origin.ByteSlicePtr)); l > 0 {
+			(*origin.ByteSlicePtr) = (*origin.ByteSlicePtr)[:0]
 		}
 	}
 	if origin.BytePtrSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "BytePtrSlicePtr") {
-			if l := len((*origin.BytePtrSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				if len(path) == 1 && i1 == -1 {
-					(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
-				}
-			}
+		if l := len((*origin.BytePtrSlicePtr)); l > 0 {
+			(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatSlice") {
-		if l := len((origin.FloatSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			if len(path) == 1 && i1 == -1 {
-				(origin.FloatSlice) = (origin.FloatSlice)[:0]
-			}
-		}
+	if l := len((origin.FloatSlice)); l > 0 {
+		(origin.FloatSlice) = (origin.FloatSlice)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrSlice") {
-		if l := len((origin.FloatPtrSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			if len(path) == 1 && i1 == -1 {
-				(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
-			}
-		}
+	if l := len((origin.FloatPtrSlice)); l > 0 {
+		(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
 	}
 	if origin.FloatSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "FloatSlicePtr") {
-			if l := len((*origin.FloatSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				if len(path) == 1 && i1 == -1 {
-					(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
-				}
-			}
+		if l := len((*origin.FloatSlicePtr)); l > 0 {
+			(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
 		}
 	}
 	if origin.FloatPtrSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrSlicePtr") {
-			if l := len((*origin.FloatPtrSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				if len(path) == 1 && i1 == -1 {
-					(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
-				}
-			}
+		if l := len((*origin.FloatPtrSlicePtr)); l > 0 {
+			(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "StructSlice") {
-		if l := len((origin.StructSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			_ = (origin.StructSlice)[l-1]
-			if len(path) > 1 {
-				t366, err366 := strconv.ParseInt(path[1], 0, 0)
-				if err366 != nil {
-					return err366
-				}
-				i1 = int(t366)
+	if l := len((origin.StructSlice)); l > 0 {
+		_ = (origin.StructSlice)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := &(origin.StructSlice)[i]
+			x1.A = 0
+			x1.S = ""
+			if l := len((x1.B)); l > 0 {
+				(x1.B) = (x1.B)[:0]
 			}
-			_ = i1
-			for i := 0; i < l; i++ {
-				if len(path) == 1 && i1 != i {
-					continue
-				}
-				x1 := &(origin.StructSlice)[i]
-				if len(path) == 2 || (len(path) > 2 && path[2] == "A") {
-					x1.A = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "S") {
-					x1.S = ""
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "B") {
-					if l := len((x1.B)); l > 0 {
-						(x1.B) = (x1.B)[:0]
-					}
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I") {
-					x1.I = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I8") {
-					x1.I8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I16") {
-					x1.I16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I32") {
-					x1.I32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I64") {
-					x1.I64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U") {
-					x1.U = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U8") {
-					x1.U8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U16") {
-					x1.U16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U32") {
-					x1.U32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U64") {
-					x1.U64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "F") {
-					x1.F = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "D") {
-					x1.D = 0
-				}
-			}
-			if len(path) == 1 && i1 == -1 {
-				(origin.StructSlice) = (origin.StructSlice)[:0]
-			}
+			x1.I = 0
+			x1.I8 = 0
+			x1.I16 = 0
+			x1.I32 = 0
+			x1.I64 = 0
+			x1.U = 0
+			x1.U8 = 0
+			x1.U16 = 0
+			x1.U32 = 0
+			x1.U64 = 0
+			x1.F = 0
+			x1.D = 0
 		}
+		(origin.StructSlice) = (origin.StructSlice)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "StructPtrSlice") {
-		if l := len((origin.StructPtrSlice)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			_ = (origin.StructPtrSlice)[l-1]
-			if len(path) > 1 {
-				t367, err367 := strconv.ParseInt(path[1], 0, 0)
-				if err367 != nil {
-					return err367
-				}
-				i1 = int(t367)
+	if l := len((origin.StructPtrSlice)); l > 0 {
+		_ = (origin.StructPtrSlice)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := (origin.StructPtrSlice)[i]
+			x1.A = 0
+			x1.S = ""
+			if l := len((x1.B)); l > 0 {
+				(x1.B) = (x1.B)[:0]
 			}
-			_ = i1
-			for i := 0; i < l; i++ {
-				if len(path) == 1 && i1 != i {
-					continue
-				}
-				x1 := (origin.StructPtrSlice)[i]
-				if len(path) == 2 || (len(path) > 2 && path[2] == "A") {
-					x1.A = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "S") {
-					x1.S = ""
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "B") {
-					if l := len((x1.B)); l > 0 {
-						(x1.B) = (x1.B)[:0]
-					}
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I") {
-					x1.I = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I8") {
-					x1.I8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I16") {
-					x1.I16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I32") {
-					x1.I32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I64") {
-					x1.I64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U") {
-					x1.U = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U8") {
-					x1.U8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U16") {
-					x1.U16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U32") {
-					x1.U32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U64") {
-					x1.U64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "F") {
-					x1.F = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "D") {
-					x1.D = 0
-				}
-			}
-			if len(path) == 1 && i1 == -1 {
-				(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
-			}
+			x1.I = 0
+			x1.I8 = 0
+			x1.I16 = 0
+			x1.I32 = 0
+			x1.I64 = 0
+			x1.U = 0
+			x1.U8 = 0
+			x1.U16 = 0
+			x1.U32 = 0
+			x1.U64 = 0
+			x1.F = 0
+			x1.D = 0
 		}
+		(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
 	}
 	if origin.StructSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "StructSlicePtr") {
-			if l := len((*origin.StructSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				_ = (*origin.StructSlicePtr)[l-1]
-				if len(path) > 1 {
-					t368, err368 := strconv.ParseInt(path[1], 0, 0)
-					if err368 != nil {
-						return err368
-					}
-					i1 = int(t368)
+		if l := len((*origin.StructSlicePtr)); l > 0 {
+			_ = (*origin.StructSlicePtr)[l-1]
+			for i := 0; i < l; i++ {
+				x1 := &(*origin.StructSlicePtr)[i]
+				x1.A = 0
+				x1.S = ""
+				if l := len((x1.B)); l > 0 {
+					(x1.B) = (x1.B)[:0]
 				}
-				_ = i1
-				for i := 0; i < l; i++ {
-					if len(path) == 1 && i1 != i {
-						continue
-					}
-					x1 := &(*origin.StructSlicePtr)[i]
-					if len(path) == 2 || (len(path) > 2 && path[2] == "A") {
-						x1.A = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "S") {
-						x1.S = ""
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "B") {
-						if l := len((x1.B)); l > 0 {
-							(x1.B) = (x1.B)[:0]
-						}
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I") {
-						x1.I = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I8") {
-						x1.I8 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I16") {
-						x1.I16 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I32") {
-						x1.I32 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I64") {
-						x1.I64 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U") {
-						x1.U = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U8") {
-						x1.U8 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U16") {
-						x1.U16 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U32") {
-						x1.U32 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U64") {
-						x1.U64 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "F") {
-						x1.F = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "D") {
-						x1.D = 0
-					}
-				}
-				if len(path) == 1 && i1 == -1 {
-					(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
-				}
+				x1.I = 0
+				x1.I8 = 0
+				x1.I16 = 0
+				x1.I32 = 0
+				x1.I64 = 0
+				x1.U = 0
+				x1.U8 = 0
+				x1.U16 = 0
+				x1.U32 = 0
+				x1.U64 = 0
+				x1.F = 0
+				x1.D = 0
 			}
+			(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
 		}
 	}
 	if origin.StructPtrSlicePtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "StructPtrSlicePtr") {
-			if l := len((*origin.StructPtrSlicePtr)); l > 0 {
-				var i1 int = -1
-				_ = i1
-				_ = (*origin.StructPtrSlicePtr)[l-1]
-				if len(path) > 1 {
-					t369, err369 := strconv.ParseInt(path[1], 0, 0)
-					if err369 != nil {
-						return err369
-					}
-					i1 = int(t369)
-				}
-				_ = i1
-				for i := 0; i < l; i++ {
-					if len(path) == 1 && i1 != i {
-						continue
-					}
-					x1 := (*origin.StructPtrSlicePtr)[i]
-					if len(path) == 2 || (len(path) > 2 && path[2] == "A") {
-						x1.A = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "S") {
-						x1.S = ""
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "B") {
-						if l := len((x1.B)); l > 0 {
-							(x1.B) = (x1.B)[:0]
-						}
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I") {
-						x1.I = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I8") {
-						x1.I8 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I16") {
-						x1.I16 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I32") {
-						x1.I32 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "I64") {
-						x1.I64 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U") {
-						x1.U = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U8") {
-						x1.U8 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U16") {
-						x1.U16 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U32") {
-						x1.U32 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "U64") {
-						x1.U64 = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "F") {
-						x1.F = 0
-					}
-					if len(path) == 2 || (len(path) > 2 && path[2] == "D") {
-						x1.D = 0
-					}
-				}
-				if len(path) == 1 && i1 == -1 {
-					(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
-				}
-			}
-		}
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "StructSliceLiteral") {
-		if l := len((origin.StructSliceLiteral)); l > 0 {
-			var i1 int = -1
-			_ = i1
-			_ = (origin.StructSliceLiteral)[l-1]
-			if len(path) > 1 {
-				t370, err370 := strconv.ParseInt(path[1], 0, 0)
-				if err370 != nil {
-					return err370
-				}
-				i1 = int(t370)
-			}
-			_ = i1
+		if l := len((*origin.StructPtrSlicePtr)); l > 0 {
+			_ = (*origin.StructPtrSlicePtr)[l-1]
 			for i := 0; i < l; i++ {
-				if len(path) == 1 && i1 != i {
-					continue
+				x1 := (*origin.StructPtrSlicePtr)[i]
+				x1.A = 0
+				x1.S = ""
+				if l := len((x1.B)); l > 0 {
+					(x1.B) = (x1.B)[:0]
 				}
-				x1 := (origin.StructSliceLiteral)[i]
-				if len(path) == 2 || (len(path) > 2 && path[2] == "A") {
-					x1.A = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "S") {
-					x1.S = ""
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "B") {
-					if l := len((x1.B)); l > 0 {
-						(x1.B) = (x1.B)[:0]
-					}
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I") {
-					x1.I = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I8") {
-					x1.I8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I16") {
-					x1.I16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I32") {
-					x1.I32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "I64") {
-					x1.I64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U") {
-					x1.U = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U8") {
-					x1.U8 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U16") {
-					x1.U16 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U32") {
-					x1.U32 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "U64") {
-					x1.U64 = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "F") {
-					x1.F = 0
-				}
-				if len(path) == 2 || (len(path) > 2 && path[2] == "D") {
-					x1.D = 0
-				}
+				x1.I = 0
+				x1.I8 = 0
+				x1.I16 = 0
+				x1.I32 = 0
+				x1.I64 = 0
+				x1.U = 0
+				x1.U8 = 0
+				x1.U16 = 0
+				x1.U32 = 0
+				x1.U64 = 0
+				x1.F = 0
+				x1.D = 0
 			}
-			if len(path) == 1 && i1 == -1 {
-				(origin.StructSliceLiteral) = (origin.StructSliceLiteral)[:0]
-			}
+			(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "IntStringMap") {
-		if l := len((origin.IntStringMap)); l > 0 {
-			var k1 int
-			_ = k1
-			if len(path) > 1 {
-				t371, err371 := strconv.ParseInt(path[1], 0, 0)
-				if err371 != nil {
-					return err371
-				}
-				k1 = int(t371)
+	if l := len((origin.StructSliceLiteral)); l > 0 {
+		_ = (origin.StructSliceLiteral)[l-1]
+		for i := 0; i < l; i++ {
+			x1 := (origin.StructSliceLiteral)[i]
+			x1.A = 0
+			x1.S = ""
+			if l := len((x1.B)); l > 0 {
+				(x1.B) = (x1.B)[:0]
 			}
-			for k, _ := range origin.IntStringMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.IntStringMap), k)
-				}
-			}
+			x1.I = 0
+			x1.I8 = 0
+			x1.I16 = 0
+			x1.I32 = 0
+			x1.I64 = 0
+			x1.U = 0
+			x1.U8 = 0
+			x1.U16 = 0
+			x1.U32 = 0
+			x1.U64 = 0
+			x1.F = 0
+			x1.D = 0
+		}
+		(origin.StructSliceLiteral) = (origin.StructSliceLiteral)[:0]
+	}
+	if l := len((origin.IntStringMap)); l > 0 {
+		for k, _ := range origin.IntStringMap {
+			delete((origin.IntStringMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "IntStringPtrMap") {
-		if l := len((origin.IntStringPtrMap)); l > 0 {
-			var k1 int
-			_ = k1
-			if len(path) > 1 {
-				t372, err372 := strconv.ParseInt(path[1], 0, 0)
-				if err372 != nil {
-					return err372
-				}
-				k1 = int(t372)
-			}
-			for k, _ := range origin.IntStringPtrMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.IntStringPtrMap), k)
-				}
-			}
+	if l := len((origin.IntStringPtrMap)); l > 0 {
+		for k, _ := range origin.IntStringPtrMap {
+			delete((origin.IntStringPtrMap), k)
 		}
 	}
 	if origin.IntStringMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "IntStringMapPtr") {
-			if l := len((*origin.IntStringMapPtr)); l > 0 {
-				var k1 int
-				_ = k1
-				if len(path) > 1 {
-					t373, err373 := strconv.ParseInt(path[1], 0, 0)
-					if err373 != nil {
-						return err373
-					}
-					k1 = int(t373)
-				}
-				for k, _ := range *origin.IntStringMapPtr {
-					if len(path) == 1 || k1 == (k) {
-						delete((*origin.IntStringMapPtr), k)
-					}
-				}
+		if l := len((*origin.IntStringMapPtr)); l > 0 {
+			for k, _ := range *origin.IntStringMapPtr {
+				delete((*origin.IntStringMapPtr), k)
 			}
 		}
 	}
 	if origin.IntStringPtrMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "IntStringPtrMapPtr") {
-			if l := len((*origin.IntStringPtrMapPtr)); l > 0 {
-				var k1 int
-				_ = k1
-				if len(path) > 1 {
-					t374, err374 := strconv.ParseInt(path[1], 0, 0)
-					if err374 != nil {
-						return err374
-					}
-					k1 = int(t374)
-				}
-				for k, _ := range *origin.IntStringPtrMapPtr {
-					if len(path) == 1 || k1 == (k) {
-						delete((*origin.IntStringPtrMapPtr), k)
-					}
-				}
+		if l := len((*origin.IntStringPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.IntStringPtrMapPtr {
+				delete((*origin.IntStringPtrMapPtr), k)
 			}
 		}
 	}
 	if origin.IntPtrStringPtrMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "IntPtrStringPtrMapPtr") {
-			if l := len((*origin.IntPtrStringPtrMapPtr)); l > 0 {
-				var k1 int
-				_ = k1
-				if len(path) > 1 {
-					t375, err375 := strconv.ParseInt(path[1], 0, 0)
-					if err375 != nil {
-						return err375
-					}
-					k1 = int(t375)
-				}
-				for k, _ := range *origin.IntPtrStringPtrMapPtr {
-					if len(path) == 1 || k1 == (*k) {
-						delete((*origin.IntPtrStringPtrMapPtr), k)
-					}
-				}
+		if l := len((*origin.IntPtrStringPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.IntPtrStringPtrMapPtr {
+				delete((*origin.IntPtrStringPtrMapPtr), k)
 			}
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "IntIntMapMap") {
-		if l := len((origin.IntIntMapMap)); l > 0 {
-			var k1 int32
-			_ = k1
-			if len(path) > 1 {
-				t376, err376 := strconv.ParseInt(path[1], 0, 0)
-				if err376 != nil {
-					return err376
-				}
-				k1 = int32(t376)
-			}
-			for k, _ := range origin.IntIntMapMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.IntIntMapMap), k)
-				}
-			}
+	if l := len((origin.IntIntMapMap)); l > 0 {
+		for k, _ := range origin.IntIntMapMap {
+			delete((origin.IntIntMapMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "StringFloatMap") {
-		if l := len((origin.StringFloatMap)); l > 0 {
-			var k1 string
-			_ = k1
-			if len(path) > 1 {
-				k1 = path[1]
-			}
-			for k, _ := range origin.StringFloatMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.StringFloatMap), k)
-				}
-			}
+	if l := len((origin.StringFloatMap)); l > 0 {
+		for k, _ := range origin.StringFloatMap {
+			delete((origin.StringFloatMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "StringFloatPtrMap") {
-		if l := len((origin.StringFloatPtrMap)); l > 0 {
-			var k1 string
-			_ = k1
-			if len(path) > 1 {
-				k1 = path[1]
-			}
-			for k, _ := range origin.StringFloatPtrMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.StringFloatPtrMap), k)
-				}
-			}
+	if l := len((origin.StringFloatPtrMap)); l > 0 {
+		for k, _ := range origin.StringFloatPtrMap {
+			delete((origin.StringFloatPtrMap), k)
 		}
 	}
 	if origin.StringFloatMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "StringFloatMapPtr") {
-			if l := len((*origin.StringFloatMapPtr)); l > 0 {
-				var k1 string
-				_ = k1
-				if len(path) > 1 {
-					k1 = path[1]
-				}
-				for k, _ := range *origin.StringFloatMapPtr {
-					if len(path) == 1 || k1 == (k) {
-						delete((*origin.StringFloatMapPtr), k)
-					}
-				}
+		if l := len((*origin.StringFloatMapPtr)); l > 0 {
+			for k, _ := range *origin.StringFloatMapPtr {
+				delete((*origin.StringFloatMapPtr), k)
 			}
 		}
 	}
 	if origin.StringFloatPtrMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "StringFloatPtrMapPtr") {
-			if l := len((*origin.StringFloatPtrMapPtr)); l > 0 {
-				var k1 string
-				_ = k1
-				if len(path) > 1 {
-					k1 = path[1]
-				}
-				for k, _ := range *origin.StringFloatPtrMapPtr {
-					if len(path) == 1 || k1 == (k) {
-						delete((*origin.StringFloatPtrMapPtr), k)
-					}
-				}
+		if l := len((*origin.StringFloatPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.StringFloatPtrMapPtr {
+				delete((*origin.StringFloatPtrMapPtr), k)
 			}
 		}
 	}
 	if origin.StringPtrFloatPtrMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "StringPtrFloatPtrMapPtr") {
-			if l := len((*origin.StringPtrFloatPtrMapPtr)); l > 0 {
-				var k1 string
-				_ = k1
-				if len(path) > 1 {
-					k1 = path[1]
-				}
-				for k, _ := range *origin.StringPtrFloatPtrMapPtr {
-					if len(path) == 1 || k1 == (*k) {
-						delete((*origin.StringPtrFloatPtrMapPtr), k)
-					}
-				}
+		if l := len((*origin.StringPtrFloatPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.StringPtrFloatPtrMapPtr {
+				delete((*origin.StringPtrFloatPtrMapPtr), k)
 			}
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatStructMap") {
-		if l := len((origin.FloatStructMap)); l > 0 {
-			var k1 float64
-			_ = k1
-			if len(path) > 1 {
-				t377, err377 := strconv.ParseFloat(path[1], 0)
-				if err377 != nil {
-					return err377
-				}
-				k1 = float64(t377)
-			}
-			for k, _ := range origin.FloatStructMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.FloatStructMap), k)
-				}
-			}
+	if l := len((origin.FloatStructMap)); l > 0 {
+		for k, _ := range origin.FloatStructMap {
+			delete((origin.FloatStructMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatStructPtrMap") {
-		if l := len((origin.FloatStructPtrMap)); l > 0 {
-			var k1 float64
-			_ = k1
-			if len(path) > 1 {
-				t378, err378 := strconv.ParseFloat(path[1], 0)
-				if err378 != nil {
-					return err378
-				}
-				k1 = float64(t378)
-			}
-			for k, _ := range origin.FloatStructPtrMap {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.FloatStructPtrMap), k)
-				}
-			}
+	if l := len((origin.FloatStructPtrMap)); l > 0 {
+		for k, _ := range origin.FloatStructPtrMap {
+			delete((origin.FloatStructPtrMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrStructMap") {
-		if l := len((origin.FloatPtrStructMap)); l > 0 {
-			var k1 float64
-			_ = k1
-			if len(path) > 1 {
-				t379, err379 := strconv.ParseFloat(path[1], 0)
-				if err379 != nil {
-					return err379
-				}
-				k1 = float64(t379)
-			}
-			for k, _ := range origin.FloatPtrStructMap {
-				if len(path) == 1 || k1 == (*k) {
-					delete((origin.FloatPtrStructMap), k)
-				}
-			}
+	if l := len((origin.FloatPtrStructMap)); l > 0 {
+		for k, _ := range origin.FloatPtrStructMap {
+			delete((origin.FloatPtrStructMap), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrStructPtrMap") {
-		if l := len((origin.FloatPtrStructPtrMap)); l > 0 {
-			var k1 float64
-			_ = k1
-			if len(path) > 1 {
-				t380, err380 := strconv.ParseFloat(path[1], 0)
-				if err380 != nil {
-					return err380
-				}
-				k1 = float64(t380)
-			}
-			for k, _ := range origin.FloatPtrStructPtrMap {
-				if len(path) == 1 || k1 == (*k) {
-					delete((origin.FloatPtrStructPtrMap), k)
-				}
-			}
+	if l := len((origin.FloatPtrStructPtrMap)); l > 0 {
+		for k, _ := range origin.FloatPtrStructPtrMap {
+			delete((origin.FloatPtrStructPtrMap), k)
 		}
 	}
 	if origin.FloatPtrStructPtrMapPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "FloatPtrStructPtrMapPtr") {
-			if l := len((*origin.FloatPtrStructPtrMapPtr)); l > 0 {
-				var k1 float64
-				_ = k1
+		if l := len((*origin.FloatPtrStructPtrMapPtr)); l > 0 {
+			for k, _ := range *origin.FloatPtrStructPtrMapPtr {
+				delete((*origin.FloatPtrStructPtrMapPtr), k)
+			}
+		}
+	}
+	origin.NestedStruct.A = 0
+	origin.NestedStruct.S = ""
+	if l := len((origin.NestedStruct.B)); l > 0 {
+		(origin.NestedStruct.B) = (origin.NestedStruct.B)[:0]
+	}
+	origin.NestedStruct.I = 0
+	origin.NestedStruct.I8 = 0
+	origin.NestedStruct.I16 = 0
+	origin.NestedStruct.I32 = 0
+	origin.NestedStruct.I64 = 0
+	origin.NestedStruct.U = 0
+	origin.NestedStruct.U8 = 0
+	origin.NestedStruct.U16 = 0
+	origin.NestedStruct.U32 = 0
+	origin.NestedStruct.U64 = 0
+	origin.NestedStruct.F = 0
+	origin.NestedStruct.D = 0
+	if origin.NestedStructPtr != nil {
+		origin.NestedStructPtr.A = 0
+		origin.NestedStructPtr.S = ""
+		if l := len((origin.NestedStructPtr.B)); l > 0 {
+			(origin.NestedStructPtr.B) = (origin.NestedStructPtr.B)[:0]
+		}
+		origin.NestedStructPtr.I = 0
+		origin.NestedStructPtr.I8 = 0
+		origin.NestedStructPtr.I16 = 0
+		origin.NestedStructPtr.I32 = 0
+		origin.NestedStructPtr.I64 = 0
+		origin.NestedStructPtr.U = 0
+		origin.NestedStructPtr.U8 = 0
+		origin.NestedStructPtr.U16 = 0
+		origin.NestedStructPtr.U32 = 0
+		origin.NestedStructPtr.U64 = 0
+		origin.NestedStructPtr.F = 0
+		origin.NestedStructPtr.D = 0
+	}
+	return nil
+}
+
+func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestObject1
+	_ = origin
+	switch x.(type) {
+	case testobj.TestObject1:
+		return inspector.ErrMustPointerType
+	case *testobj.TestObject1:
+		origin = x.(*testobj.TestObject1)
+	case **testobj.TestObject1:
+		origin = *x.(**testobj.TestObject1)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if path[0] == "IntSlice" {
+			if len(path) > 1 {
+				if l := len((origin.IntSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					if i1 == -1 {
+						(origin.IntSlice) = (origin.IntSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.IntSlice) = (origin.IntSlice)[:0]
+		}
+		if path[0] == "IntPtrSlice" {
+			if len(path) > 1 {
+				if l := len((origin.IntPtrSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					if i1 == -1 {
+						(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.IntPtrSlice) = (origin.IntPtrSlice)[:0]
+		}
+		if path[0] == "IntSlicePtr" {
+			if origin.IntSlicePtr != nil {
 				if len(path) > 1 {
+					if l := len((*origin.IntSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						if i1 == -1 {
+							(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.IntSlicePtr) = (*origin.IntSlicePtr)[:0]
+			}
+		}
+		if path[0] == "IntPtrSlicePtr" {
+			if origin.IntPtrSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.IntPtrSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						if i1 == -1 {
+							(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.IntPtrSlicePtr) = (*origin.IntPtrSlicePtr)[:0]
+			}
+		}
+		if path[0] == "ByteSlice" {
+			if len(path) > 1 {
+				if l := len((origin.ByteSlice)); l > 0 {
+					(origin.ByteSlice) = (origin.ByteSlice)[:0]
+				}
+				return nil
+			}
+			(origin.ByteSlice) = (origin.ByteSlice)[:0]
+		}
+		if path[0] == "BytePtrSlice" {
+			if len(path) > 1 {
+				if l := len((origin.BytePtrSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					if i1 == -1 {
+						(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.BytePtrSlice) = (origin.BytePtrSlice)[:0]
+		}
+		if path[0] == "ByteSlicePtr" {
+			if origin.ByteSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.ByteSlicePtr)); l > 0 {
+						(*origin.ByteSlicePtr) = (*origin.ByteSlicePtr)[:0]
+					}
+					return nil
+				}
+				(*origin.ByteSlicePtr) = (*origin.ByteSlicePtr)[:0]
+			}
+		}
+		if path[0] == "BytePtrSlicePtr" {
+			if origin.BytePtrSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.BytePtrSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						if i1 == -1 {
+							(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.BytePtrSlicePtr) = (*origin.BytePtrSlicePtr)[:0]
+			}
+		}
+		if path[0] == "FloatSlice" {
+			if len(path) > 1 {
+				if l := len((origin.FloatSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					if i1 == -1 {
+						(origin.FloatSlice) = (origin.FloatSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.FloatSlice) = (origin.FloatSlice)[:0]
+		}
+		if path[0] == "FloatPtrSlice" {
+			if len(path) > 1 {
+				if l := len((origin.FloatPtrSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					if i1 == -1 {
+						(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.FloatPtrSlice) = (origin.FloatPtrSlice)[:0]
+		}
+		if path[0] == "FloatSlicePtr" {
+			if origin.FloatSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.FloatSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						if i1 == -1 {
+							(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.FloatSlicePtr) = (*origin.FloatSlicePtr)[:0]
+			}
+		}
+		if path[0] == "FloatPtrSlicePtr" {
+			if origin.FloatPtrSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.FloatPtrSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						if i1 == -1 {
+							(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.FloatPtrSlicePtr) = (*origin.FloatPtrSlicePtr)[:0]
+			}
+		}
+		if path[0] == "StructSlice" {
+			if len(path) > 1 {
+				if l := len((origin.StructSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					_ = (origin.StructSlice)[l-1]
+					t366, err366 := strconv.ParseInt(path[1], 0, 0)
+					if err366 != nil {
+						return err366
+					}
+					i1 = int(t366)
+					x1 := &(origin.StructSlice)[i1]
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					if len(path) == 2 {
+						(origin.StructSlice)[i1] = testobj.TestStruct{}
+					}
+					if i1 == -1 {
+						(origin.StructSlice) = (origin.StructSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.StructSlice) = (origin.StructSlice)[:0]
+		}
+		if path[0] == "StructPtrSlice" {
+			if len(path) > 1 {
+				if l := len((origin.StructPtrSlice)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					_ = (origin.StructPtrSlice)[l-1]
+					t367, err367 := strconv.ParseInt(path[1], 0, 0)
+					if err367 != nil {
+						return err367
+					}
+					i1 = int(t367)
+					x1 := (origin.StructPtrSlice)[i1]
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					if len(path) == 2 {
+						(origin.StructPtrSlice)[i1] = &testobj.TestStruct{}
+					}
+					if i1 == -1 {
+						(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.StructPtrSlice) = (origin.StructPtrSlice)[:0]
+		}
+		if path[0] == "StructSlicePtr" {
+			if origin.StructSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.StructSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						_ = (*origin.StructSlicePtr)[l-1]
+						t368, err368 := strconv.ParseInt(path[1], 0, 0)
+						if err368 != nil {
+							return err368
+						}
+						i1 = int(t368)
+						x1 := &(*origin.StructSlicePtr)[i1]
+						if len(path) > 2 {
+							if path[2] == "A" {
+								x1.A = 0
+							}
+							if path[2] == "S" {
+								x1.S = ""
+							}
+							if path[2] == "B" {
+								if len(path) > 3 {
+									if l := len((x1.B)); l > 0 {
+										(x1.B) = (x1.B)[:0]
+									}
+									return nil
+								}
+								(x1.B) = (x1.B)[:0]
+							}
+							if path[2] == "I" {
+								x1.I = 0
+							}
+							if path[2] == "I8" {
+								x1.I8 = 0
+							}
+							if path[2] == "I16" {
+								x1.I16 = 0
+							}
+							if path[2] == "I32" {
+								x1.I32 = 0
+							}
+							if path[2] == "I64" {
+								x1.I64 = 0
+							}
+							if path[2] == "U" {
+								x1.U = 0
+							}
+							if path[2] == "U8" {
+								x1.U8 = 0
+							}
+							if path[2] == "U16" {
+								x1.U16 = 0
+							}
+							if path[2] == "U32" {
+								x1.U32 = 0
+							}
+							if path[2] == "U64" {
+								x1.U64 = 0
+							}
+							if path[2] == "F" {
+								x1.F = 0
+							}
+							if path[2] == "D" {
+								x1.D = 0
+							}
+						}
+						if len(path) == 2 {
+							(*origin.StructSlicePtr)[i1] = testobj.TestStruct{}
+						}
+						if i1 == -1 {
+							(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.StructSlicePtr) = (*origin.StructSlicePtr)[:0]
+			}
+		}
+		if path[0] == "StructPtrSlicePtr" {
+			if origin.StructPtrSlicePtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.StructPtrSlicePtr)); l > 0 {
+						var i1 int = -1
+						_ = i1
+						_ = (*origin.StructPtrSlicePtr)[l-1]
+						t369, err369 := strconv.ParseInt(path[1], 0, 0)
+						if err369 != nil {
+							return err369
+						}
+						i1 = int(t369)
+						x1 := (*origin.StructPtrSlicePtr)[i1]
+						if len(path) > 2 {
+							if path[2] == "A" {
+								x1.A = 0
+							}
+							if path[2] == "S" {
+								x1.S = ""
+							}
+							if path[2] == "B" {
+								if len(path) > 3 {
+									if l := len((x1.B)); l > 0 {
+										(x1.B) = (x1.B)[:0]
+									}
+									return nil
+								}
+								(x1.B) = (x1.B)[:0]
+							}
+							if path[2] == "I" {
+								x1.I = 0
+							}
+							if path[2] == "I8" {
+								x1.I8 = 0
+							}
+							if path[2] == "I16" {
+								x1.I16 = 0
+							}
+							if path[2] == "I32" {
+								x1.I32 = 0
+							}
+							if path[2] == "I64" {
+								x1.I64 = 0
+							}
+							if path[2] == "U" {
+								x1.U = 0
+							}
+							if path[2] == "U8" {
+								x1.U8 = 0
+							}
+							if path[2] == "U16" {
+								x1.U16 = 0
+							}
+							if path[2] == "U32" {
+								x1.U32 = 0
+							}
+							if path[2] == "U64" {
+								x1.U64 = 0
+							}
+							if path[2] == "F" {
+								x1.F = 0
+							}
+							if path[2] == "D" {
+								x1.D = 0
+							}
+						}
+						if len(path) == 2 {
+							(*origin.StructPtrSlicePtr)[i1] = &testobj.TestStruct{}
+						}
+						if i1 == -1 {
+							(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
+						}
+					}
+					return nil
+				}
+				(*origin.StructPtrSlicePtr) = (*origin.StructPtrSlicePtr)[:0]
+			}
+		}
+		if path[0] == "StructSliceLiteral" {
+			if len(path) > 1 {
+				if l := len((origin.StructSliceLiteral)); l > 0 {
+					var i1 int = -1
+					_ = i1
+					_ = (origin.StructSliceLiteral)[l-1]
+					t370, err370 := strconv.ParseInt(path[1], 0, 0)
+					if err370 != nil {
+						return err370
+					}
+					i1 = int(t370)
+					x1 := (origin.StructSliceLiteral)[i1]
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					if len(path) == 2 {
+						(origin.StructSliceLiteral)[i1] = &testobj.TestStruct{}
+					}
+					if i1 == -1 {
+						(origin.StructSliceLiteral) = (origin.StructSliceLiteral)[:0]
+					}
+				}
+				return nil
+			}
+			(origin.StructSliceLiteral) = (origin.StructSliceLiteral)[:0]
+		}
+		if path[0] == "IntStringMap" {
+			if len(path) > 1 {
+				if l := len((origin.IntStringMap)); l > 0 {
+					var k1 int
+					_ = k1
+					t371, err371 := strconv.ParseInt(path[1], 0, 0)
+					if err371 != nil {
+						return err371
+					}
+					k1 = int(t371)
+					x1 := (origin.IntStringMap)[k1]
+					_ = x1
+					x1 = ""
+					(origin.IntStringMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.IntStringMap {
+				delete((origin.IntStringMap), k)
+			}
+		}
+		if path[0] == "IntStringPtrMap" {
+			if len(path) > 1 {
+				if l := len((origin.IntStringPtrMap)); l > 0 {
+					var k1 int
+					_ = k1
+					t372, err372 := strconv.ParseInt(path[1], 0, 0)
+					if err372 != nil {
+						return err372
+					}
+					k1 = int(t372)
+					x1 := (origin.IntStringPtrMap)[k1]
+					_ = x1
+					*x1 = ""
+					(origin.IntStringPtrMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.IntStringPtrMap {
+				delete((origin.IntStringPtrMap), k)
+			}
+		}
+		if path[0] == "IntStringMapPtr" {
+			if origin.IntStringMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.IntStringMapPtr)); l > 0 {
+						var k1 int
+						_ = k1
+						t373, err373 := strconv.ParseInt(path[1], 0, 0)
+						if err373 != nil {
+							return err373
+						}
+						k1 = int(t373)
+						x1 := (*origin.IntStringMapPtr)[k1]
+						_ = x1
+						x1 = ""
+						(*origin.IntStringMapPtr)[k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.IntStringMapPtr {
+					delete((*origin.IntStringMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "IntStringPtrMapPtr" {
+			if origin.IntStringPtrMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.IntStringPtrMapPtr)); l > 0 {
+						var k1 int
+						_ = k1
+						t374, err374 := strconv.ParseInt(path[1], 0, 0)
+						if err374 != nil {
+							return err374
+						}
+						k1 = int(t374)
+						x1 := (*origin.IntStringPtrMapPtr)[k1]
+						_ = x1
+						*x1 = ""
+						(*origin.IntStringPtrMapPtr)[k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.IntStringPtrMapPtr {
+					delete((*origin.IntStringPtrMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "IntPtrStringPtrMapPtr" {
+			if origin.IntPtrStringPtrMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.IntPtrStringPtrMapPtr)); l > 0 {
+						var k1 int
+						_ = k1
+						t375, err375 := strconv.ParseInt(path[1], 0, 0)
+						if err375 != nil {
+							return err375
+						}
+						k1 = int(t375)
+						x1 := (*origin.IntPtrStringPtrMapPtr)[&k1]
+						_ = x1
+						*x1 = ""
+						(*origin.IntPtrStringPtrMapPtr)[&k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.IntPtrStringPtrMapPtr {
+					delete((*origin.IntPtrStringPtrMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "IntIntMapMap" {
+			if len(path) > 1 {
+				if l := len((origin.IntIntMapMap)); l > 0 {
+					var k1 int32
+					_ = k1
+					t376, err376 := strconv.ParseInt(path[1], 0, 0)
+					if err376 != nil {
+						return err376
+					}
+					k1 = int32(t376)
+					x1 := (origin.IntIntMapMap)[k1]
+					_ = x1
+					if len(path) > 2 {
+						if l := len((x1)); l > 0 {
+							var k2 int32
+							_ = k2
+							t377, err377 := strconv.ParseInt(path[2], 0, 0)
+							if err377 != nil {
+								return err377
+							}
+							k2 = int32(t377)
+							x2 := (x1)[k2]
+							_ = x2
+							x2 = 0
+							(x1)[k2] = x2
+						}
+						return nil
+					}
+					(origin.IntIntMapMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.IntIntMapMap {
+				delete((origin.IntIntMapMap), k)
+			}
+		}
+		if path[0] == "StringFloatMap" {
+			if len(path) > 1 {
+				if l := len((origin.StringFloatMap)); l > 0 {
+					var k1 string
+					_ = k1
+					k1 = path[1]
+					x1 := (origin.StringFloatMap)[k1]
+					_ = x1
+					x1 = 0
+					(origin.StringFloatMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.StringFloatMap {
+				delete((origin.StringFloatMap), k)
+			}
+		}
+		if path[0] == "StringFloatPtrMap" {
+			if len(path) > 1 {
+				if l := len((origin.StringFloatPtrMap)); l > 0 {
+					var k1 string
+					_ = k1
+					k1 = path[1]
+					x1 := (origin.StringFloatPtrMap)[k1]
+					_ = x1
+					*x1 = 0
+					(origin.StringFloatPtrMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.StringFloatPtrMap {
+				delete((origin.StringFloatPtrMap), k)
+			}
+		}
+		if path[0] == "StringFloatMapPtr" {
+			if origin.StringFloatMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.StringFloatMapPtr)); l > 0 {
+						var k1 string
+						_ = k1
+						k1 = path[1]
+						x1 := (*origin.StringFloatMapPtr)[k1]
+						_ = x1
+						x1 = 0
+						(*origin.StringFloatMapPtr)[k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.StringFloatMapPtr {
+					delete((*origin.StringFloatMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "StringFloatPtrMapPtr" {
+			if origin.StringFloatPtrMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.StringFloatPtrMapPtr)); l > 0 {
+						var k1 string
+						_ = k1
+						k1 = path[1]
+						x1 := (*origin.StringFloatPtrMapPtr)[k1]
+						_ = x1
+						*x1 = 0
+						(*origin.StringFloatPtrMapPtr)[k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.StringFloatPtrMapPtr {
+					delete((*origin.StringFloatPtrMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "StringPtrFloatPtrMapPtr" {
+			if origin.StringPtrFloatPtrMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.StringPtrFloatPtrMapPtr)); l > 0 {
+						var k1 string
+						_ = k1
+						k1 = path[1]
+						x1 := (*origin.StringPtrFloatPtrMapPtr)[&k1]
+						_ = x1
+						*x1 = 0
+						(*origin.StringPtrFloatPtrMapPtr)[&k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.StringPtrFloatPtrMapPtr {
+					delete((*origin.StringPtrFloatPtrMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "FloatStructMap" {
+			if len(path) > 1 {
+				if l := len((origin.FloatStructMap)); l > 0 {
+					var k1 float64
+					_ = k1
+					t378, err378 := strconv.ParseFloat(path[1], 0)
+					if err378 != nil {
+						return err378
+					}
+					k1 = float64(t378)
+					x1 := (origin.FloatStructMap)[k1]
+					_ = x1
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					(origin.FloatStructMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.FloatStructMap {
+				delete((origin.FloatStructMap), k)
+			}
+		}
+		if path[0] == "FloatStructPtrMap" {
+			if len(path) > 1 {
+				if l := len((origin.FloatStructPtrMap)); l > 0 {
+					var k1 float64
+					_ = k1
+					t379, err379 := strconv.ParseFloat(path[1], 0)
+					if err379 != nil {
+						return err379
+					}
+					k1 = float64(t379)
+					x1 := (origin.FloatStructPtrMap)[k1]
+					_ = x1
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					(origin.FloatStructPtrMap)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.FloatStructPtrMap {
+				delete((origin.FloatStructPtrMap), k)
+			}
+		}
+		if path[0] == "FloatPtrStructMap" {
+			if len(path) > 1 {
+				if l := len((origin.FloatPtrStructMap)); l > 0 {
+					var k1 float64
+					_ = k1
+					t380, err380 := strconv.ParseFloat(path[1], 0)
+					if err380 != nil {
+						return err380
+					}
+					k1 = float64(t380)
+					x1 := (origin.FloatPtrStructMap)[&k1]
+					_ = x1
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					(origin.FloatPtrStructMap)[&k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.FloatPtrStructMap {
+				delete((origin.FloatPtrStructMap), k)
+			}
+		}
+		if path[0] == "FloatPtrStructPtrMap" {
+			if len(path) > 1 {
+				if l := len((origin.FloatPtrStructPtrMap)); l > 0 {
+					var k1 float64
+					_ = k1
 					t381, err381 := strconv.ParseFloat(path[1], 0)
 					if err381 != nil {
 						return err381
 					}
 					k1 = float64(t381)
+					x1 := (origin.FloatPtrStructPtrMap)[&k1]
+					_ = x1
+					if len(path) > 2 {
+						if path[2] == "A" {
+							x1.A = 0
+						}
+						if path[2] == "S" {
+							x1.S = ""
+						}
+						if path[2] == "B" {
+							if len(path) > 3 {
+								if l := len((x1.B)); l > 0 {
+									(x1.B) = (x1.B)[:0]
+								}
+								return nil
+							}
+							(x1.B) = (x1.B)[:0]
+						}
+						if path[2] == "I" {
+							x1.I = 0
+						}
+						if path[2] == "I8" {
+							x1.I8 = 0
+						}
+						if path[2] == "I16" {
+							x1.I16 = 0
+						}
+						if path[2] == "I32" {
+							x1.I32 = 0
+						}
+						if path[2] == "I64" {
+							x1.I64 = 0
+						}
+						if path[2] == "U" {
+							x1.U = 0
+						}
+						if path[2] == "U8" {
+							x1.U8 = 0
+						}
+						if path[2] == "U16" {
+							x1.U16 = 0
+						}
+						if path[2] == "U32" {
+							x1.U32 = 0
+						}
+						if path[2] == "U64" {
+							x1.U64 = 0
+						}
+						if path[2] == "F" {
+							x1.F = 0
+						}
+						if path[2] == "D" {
+							x1.D = 0
+						}
+					}
+					(origin.FloatPtrStructPtrMap)[&k1] = x1
 				}
-				for k, _ := range *origin.FloatPtrStructPtrMapPtr {
-					if len(path) == 1 || k1 == (*k) {
-						delete((*origin.FloatPtrStructPtrMapPtr), k)
+				return nil
+			}
+			for k := range origin.FloatPtrStructPtrMap {
+				delete((origin.FloatPtrStructPtrMap), k)
+			}
+		}
+		if path[0] == "FloatPtrStructPtrMapPtr" {
+			if origin.FloatPtrStructPtrMapPtr != nil {
+				if len(path) > 1 {
+					if l := len((*origin.FloatPtrStructPtrMapPtr)); l > 0 {
+						var k1 float64
+						_ = k1
+						t382, err382 := strconv.ParseFloat(path[1], 0)
+						if err382 != nil {
+							return err382
+						}
+						k1 = float64(t382)
+						x1 := (*origin.FloatPtrStructPtrMapPtr)[&k1]
+						_ = x1
+						if len(path) > 2 {
+							if path[2] == "A" {
+								x1.A = 0
+							}
+							if path[2] == "S" {
+								x1.S = ""
+							}
+							if path[2] == "B" {
+								if len(path) > 3 {
+									if l := len((x1.B)); l > 0 {
+										(x1.B) = (x1.B)[:0]
+									}
+									return nil
+								}
+								(x1.B) = (x1.B)[:0]
+							}
+							if path[2] == "I" {
+								x1.I = 0
+							}
+							if path[2] == "I8" {
+								x1.I8 = 0
+							}
+							if path[2] == "I16" {
+								x1.I16 = 0
+							}
+							if path[2] == "I32" {
+								x1.I32 = 0
+							}
+							if path[2] == "I64" {
+								x1.I64 = 0
+							}
+							if path[2] == "U" {
+								x1.U = 0
+							}
+							if path[2] == "U8" {
+								x1.U8 = 0
+							}
+							if path[2] == "U16" {
+								x1.U16 = 0
+							}
+							if path[2] == "U32" {
+								x1.U32 = 0
+							}
+							if path[2] == "U64" {
+								x1.U64 = 0
+							}
+							if path[2] == "F" {
+								x1.F = 0
+							}
+							if path[2] == "D" {
+								x1.D = 0
+							}
+						}
+						(*origin.FloatPtrStructPtrMapPtr)[&k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.FloatPtrStructPtrMapPtr {
+					delete((*origin.FloatPtrStructPtrMapPtr), k)
+				}
+			}
+		}
+		if path[0] == "NestedStruct" {
+			if len(path) > 1 {
+				if path[1] == "A" {
+					origin.NestedStruct.A = 0
+				}
+				if path[1] == "S" {
+					origin.NestedStruct.S = ""
+				}
+				if path[1] == "B" {
+					if len(path) > 2 {
+						if l := len((origin.NestedStruct.B)); l > 0 {
+							(origin.NestedStruct.B) = (origin.NestedStruct.B)[:0]
+						}
+						return nil
+					}
+					(origin.NestedStruct.B) = (origin.NestedStruct.B)[:0]
+				}
+				if path[1] == "I" {
+					origin.NestedStruct.I = 0
+				}
+				if path[1] == "I8" {
+					origin.NestedStruct.I8 = 0
+				}
+				if path[1] == "I16" {
+					origin.NestedStruct.I16 = 0
+				}
+				if path[1] == "I32" {
+					origin.NestedStruct.I32 = 0
+				}
+				if path[1] == "I64" {
+					origin.NestedStruct.I64 = 0
+				}
+				if path[1] == "U" {
+					origin.NestedStruct.U = 0
+				}
+				if path[1] == "U8" {
+					origin.NestedStruct.U8 = 0
+				}
+				if path[1] == "U16" {
+					origin.NestedStruct.U16 = 0
+				}
+				if path[1] == "U32" {
+					origin.NestedStruct.U32 = 0
+				}
+				if path[1] == "U64" {
+					origin.NestedStruct.U64 = 0
+				}
+				if path[1] == "F" {
+					origin.NestedStruct.F = 0
+				}
+				if path[1] == "D" {
+					origin.NestedStruct.D = 0
+				}
+			}
+		}
+		if path[0] == "NestedStructPtr" {
+			if origin.NestedStructPtr != nil {
+				if len(path) > 1 {
+					if path[1] == "A" {
+						origin.NestedStructPtr.A = 0
+					}
+					if path[1] == "S" {
+						origin.NestedStructPtr.S = ""
+					}
+					if path[1] == "B" {
+						if len(path) > 2 {
+							if l := len((origin.NestedStructPtr.B)); l > 0 {
+								(origin.NestedStructPtr.B) = (origin.NestedStructPtr.B)[:0]
+							}
+							return nil
+						}
+						(origin.NestedStructPtr.B) = (origin.NestedStructPtr.B)[:0]
+					}
+					if path[1] == "I" {
+						origin.NestedStructPtr.I = 0
+					}
+					if path[1] == "I8" {
+						origin.NestedStructPtr.I8 = 0
+					}
+					if path[1] == "I16" {
+						origin.NestedStructPtr.I16 = 0
+					}
+					if path[1] == "I32" {
+						origin.NestedStructPtr.I32 = 0
+					}
+					if path[1] == "I64" {
+						origin.NestedStructPtr.I64 = 0
+					}
+					if path[1] == "U" {
+						origin.NestedStructPtr.U = 0
+					}
+					if path[1] == "U8" {
+						origin.NestedStructPtr.U8 = 0
+					}
+					if path[1] == "U16" {
+						origin.NestedStructPtr.U16 = 0
+					}
+					if path[1] == "U32" {
+						origin.NestedStructPtr.U32 = 0
+					}
+					if path[1] == "U64" {
+						origin.NestedStructPtr.U64 = 0
+					}
+					if path[1] == "F" {
+						origin.NestedStructPtr.F = 0
+					}
+					if path[1] == "D" {
+						origin.NestedStructPtr.D = 0
 					}
 				}
-			}
-		}
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "NestedStruct") {
-		if len(path) == 1 || (len(path) > 1 && path[1] == "A") {
-			origin.NestedStruct.A = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "S") {
-			origin.NestedStruct.S = ""
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "B") {
-			if l := len((origin.NestedStruct.B)); l > 0 {
-				(origin.NestedStruct.B) = (origin.NestedStruct.B)[:0]
-			}
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "I") {
-			origin.NestedStruct.I = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "I8") {
-			origin.NestedStruct.I8 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "I16") {
-			origin.NestedStruct.I16 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "I32") {
-			origin.NestedStruct.I32 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "I64") {
-			origin.NestedStruct.I64 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "U") {
-			origin.NestedStruct.U = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "U8") {
-			origin.NestedStruct.U8 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "U16") {
-			origin.NestedStruct.U16 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "U32") {
-			origin.NestedStruct.U32 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "U64") {
-			origin.NestedStruct.U64 = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "F") {
-			origin.NestedStruct.F = 0
-		}
-		if len(path) == 1 || (len(path) > 1 && path[1] == "D") {
-			origin.NestedStruct.D = 0
-		}
-	}
-	if origin.NestedStructPtr != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "NestedStructPtr") {
-			if len(path) == 1 || (len(path) > 1 && path[1] == "A") {
-				origin.NestedStructPtr.A = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "S") {
-				origin.NestedStructPtr.S = ""
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "B") {
-				if l := len((origin.NestedStructPtr.B)); l > 0 {
-					(origin.NestedStructPtr.B) = (origin.NestedStructPtr.B)[:0]
-				}
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "I") {
-				origin.NestedStructPtr.I = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "I8") {
-				origin.NestedStructPtr.I8 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "I16") {
-				origin.NestedStructPtr.I16 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "I32") {
-				origin.NestedStructPtr.I32 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "I64") {
-				origin.NestedStructPtr.I64 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "U") {
-				origin.NestedStructPtr.U = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "U8") {
-				origin.NestedStructPtr.U8 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "U16") {
-				origin.NestedStructPtr.U16 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "U32") {
-				origin.NestedStructPtr.U32 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "U64") {
-				origin.NestedStructPtr.U64 = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "F") {
-				origin.NestedStructPtr.F = 0
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "D") {
-				origin.NestedStructPtr.D = 0
 			}
 		}
 	}

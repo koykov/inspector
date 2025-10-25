@@ -396,6 +396,14 @@ func (i10 TestStringPtrFloatPtrMapInspector) Append(src, value any, path ...stri
 }
 
 func (i10 TestStringPtrFloatPtrMapInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i10.reset1(x, path...)
+	} else {
+		return i10.reset2(x, path...)
+	}
+}
+
+func (i10 TestStringPtrFloatPtrMapInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestStringPtrFloatPtrMap
 	_ = origin
 	switch x.(type) {
@@ -409,16 +417,37 @@ func (i10 TestStringPtrFloatPtrMapInspector) Reset(x any, path ...string) error 
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		var k0 string
-		_ = k0
-		if len(path) > 0 {
-			k0 = path[0]
-		}
 		for k, _ := range *origin {
-			if len(path) == 0 || k0 == (*k) {
-				delete((*origin), k)
-			}
+			delete((*origin), k)
 		}
+	}
+	return nil
+}
+
+func (i10 TestStringPtrFloatPtrMapInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestStringPtrFloatPtrMap
+	_ = origin
+	switch x.(type) {
+	case testobj.TestStringPtrFloatPtrMap:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStringPtrFloatPtrMap:
+		origin = x.(*testobj.TestStringPtrFloatPtrMap)
+	case **testobj.TestStringPtrFloatPtrMap:
+		origin = *x.(**testobj.TestStringPtrFloatPtrMap)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if l := len((*origin)); l > 0 {
+			var k0 string
+			_ = k0
+			k0 = path[0]
+			x0 := (*origin)[&k0]
+			_ = x0
+			*x0 = 0
+			(*origin)[&k0] = x0
+		}
+		return nil
 	}
 	return nil
 }

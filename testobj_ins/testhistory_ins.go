@@ -431,6 +431,14 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 }
 
 func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i4.reset1(x, path...)
+	} else {
+		return i4.reset2(x, path...)
+	}
+}
+
+func (i4 TestHistoryInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestHistory
 	_ = origin
 	switch x.(type) {
@@ -443,14 +451,41 @@ func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "DateUnix") {
-		origin.DateUnix = 0
+	origin.DateUnix = 0
+	origin.Cost = 0
+	if l := len((origin.Comment)); l > 0 {
+		(origin.Comment) = (origin.Comment)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Cost") {
-		origin.Cost = 0
+	return nil
+}
+
+func (i4 TestHistoryInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestHistory
+	_ = origin
+	switch x.(type) {
+	case testobj.TestHistory:
+		return inspector.ErrMustPointerType
+	case *testobj.TestHistory:
+		origin = x.(*testobj.TestHistory)
+	case **testobj.TestHistory:
+		origin = *x.(**testobj.TestHistory)
+	default:
+		return inspector.ErrUnsupportedType
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Comment") {
-		if l := len((origin.Comment)); l > 0 {
+	if len(path) > 0 {
+		if path[0] == "DateUnix" {
+			origin.DateUnix = 0
+		}
+		if path[0] == "Cost" {
+			origin.Cost = 0
+		}
+		if path[0] == "Comment" {
+			if len(path) > 1 {
+				if l := len((origin.Comment)); l > 0 {
+					(origin.Comment) = (origin.Comment)[:0]
+				}
+				return nil
+			}
 			(origin.Comment) = (origin.Comment)[:0]
 		}
 	}

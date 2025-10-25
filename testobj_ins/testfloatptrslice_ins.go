@@ -418,6 +418,14 @@ func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any
 }
 
 func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i2.reset1(x, path...)
+	} else {
+		return i2.reset2(x, path...)
+	}
+}
+
+func (i2 TestFloatPtrSliceInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {
@@ -431,11 +439,33 @@ func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
 		return inspector.ErrUnsupportedType
 	}
 	if l := len((*origin)); l > 0 {
-		var i0 int = -1
-		_ = i0
-		if len(path) == 0 && i0 == -1 {
-			(*origin) = (*origin)[:0]
+		(*origin) = (*origin)[:0]
+	}
+	return nil
+}
+
+func (i2 TestFloatPtrSliceInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestFloatPtrSlice
+	_ = origin
+	switch x.(type) {
+	case testobj.TestFloatPtrSlice:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFloatPtrSlice:
+		origin = x.(*testobj.TestFloatPtrSlice)
+	case **testobj.TestFloatPtrSlice:
+		origin = *x.(**testobj.TestFloatPtrSlice)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if l := len((*origin)); l > 0 {
+			var i0 int = -1
+			_ = i0
+			if i0 == -1 {
+				(*origin) = (*origin)[:0]
+			}
 		}
+		return nil
 	}
 	return nil
 }

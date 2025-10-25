@@ -1606,6 +1606,14 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 }
 
 func (i5 TestObjectInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i5.reset1(x, path...)
+	} else {
+		return i5.reset2(x, path...)
+	}
+}
+
+func (i5 TestObjectInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestObject
 	_ = origin
 	switch x.(type) {
@@ -1618,116 +1626,212 @@ func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 	default:
 		return inspector.ErrUnsupportedType
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Id") {
-		origin.Id = ""
+	origin.Id = ""
+	if l := len((origin.Name)); l > 0 {
+		(origin.Name) = (origin.Name)[:0]
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Name") {
-		if l := len((origin.Name)); l > 0 {
-			(origin.Name) = (origin.Name)[:0]
-		}
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Status") {
-		origin.Status = 0
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Ustate") {
-		origin.Ustate = 0
-	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Cost") {
-		origin.Cost = 0
-	}
+	origin.Status = 0
+	origin.Ustate = 0
+	origin.Cost = 0
 	if origin.Permission != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "Permission") {
-			if l := len((*origin.Permission)); l > 0 {
-				var k1 int32
-				_ = k1
-				if len(path) > 1 {
-					t51, err51 := strconv.ParseInt(path[1], 0, 0)
-					if err51 != nil {
-						return err51
-					}
-					k1 = int32(t51)
-				}
-				for k, _ := range *origin.Permission {
-					if len(path) == 1 || k1 == (k) {
-						delete((*origin.Permission), k)
-					}
-				}
+		if l := len((*origin.Permission)); l > 0 {
+			for k, _ := range *origin.Permission {
+				delete((*origin.Permission), k)
 			}
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "HistoryTree") {
-		if l := len((origin.HistoryTree)); l > 0 {
-			var k1 string
-			_ = k1
-			if len(path) > 1 {
-				k1 = path[1]
-			}
-			for k, _ := range origin.HistoryTree {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.HistoryTree), k)
-				}
-			}
+	if l := len((origin.HistoryTree)); l > 0 {
+		for k, _ := range origin.HistoryTree {
+			delete((origin.HistoryTree), k)
 		}
 	}
-	if len(path) == 0 || (len(path) > 0 && path[0] == "Flags") {
-		if l := len((origin.Flags)); l > 0 {
-			var k1 string
-			_ = k1
-			if len(path) > 1 {
-				k1 = path[1]
-			}
-			for k, _ := range origin.Flags {
-				if len(path) == 1 || k1 == (k) {
-					delete((origin.Flags), k)
-				}
-			}
+	if l := len((origin.Flags)); l > 0 {
+		for k, _ := range origin.Flags {
+			delete((origin.Flags), k)
 		}
 	}
 	if origin.Finance != nil {
-		if len(path) == 0 || (len(path) > 0 && path[0] == "Finance") {
-			if len(path) == 1 || (len(path) > 1 && path[1] == "MoneyIn") {
-				origin.Finance.MoneyIn = 0
+		origin.Finance.MoneyIn = 0
+		origin.Finance.MoneyOut = 0
+		origin.Finance.Balance = 0
+		origin.Finance.AllowBuy = false
+		if l := len((origin.Finance.History)); l > 0 {
+			_ = (origin.Finance.History)[l-1]
+			for i := 0; i < l; i++ {
+				x2 := &(origin.Finance.History)[i]
+				x2.DateUnix = 0
+				x2.Cost = 0
+				if l := len((x2.Comment)); l > 0 {
+					(x2.Comment) = (x2.Comment)[:0]
+				}
 			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "MoneyOut") {
-				origin.Finance.MoneyOut = 0
+			(origin.Finance.History) = (origin.Finance.History)[:0]
+		}
+	}
+	return nil
+}
+
+func (i5 TestObjectInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestObject
+	_ = origin
+	switch x.(type) {
+	case testobj.TestObject:
+		return inspector.ErrMustPointerType
+	case *testobj.TestObject:
+		origin = x.(*testobj.TestObject)
+	case **testobj.TestObject:
+		origin = *x.(**testobj.TestObject)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if path[0] == "Id" {
+			origin.Id = ""
+		}
+		if path[0] == "Name" {
+			if len(path) > 1 {
+				if l := len((origin.Name)); l > 0 {
+					(origin.Name) = (origin.Name)[:0]
+				}
+				return nil
 			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "Balance") {
-				origin.Finance.Balance = 0
+			(origin.Name) = (origin.Name)[:0]
+		}
+		if path[0] == "Status" {
+			origin.Status = 0
+		}
+		if path[0] == "Ustate" {
+			origin.Ustate = 0
+		}
+		if path[0] == "Cost" {
+			origin.Cost = 0
+		}
+		if path[0] == "Permission" {
+			if origin.Permission != nil {
+				if len(path) > 1 {
+					if l := len((*origin.Permission)); l > 0 {
+						var k1 int32
+						_ = k1
+						t51, err51 := strconv.ParseInt(path[1], 0, 0)
+						if err51 != nil {
+							return err51
+						}
+						k1 = int32(t51)
+						x1 := (*origin.Permission)[k1]
+						_ = x1
+						x1 = false
+						(*origin.Permission)[k1] = x1
+					}
+					return nil
+				}
+				for k := range *origin.Permission {
+					delete((*origin.Permission), k)
+				}
 			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "AllowBuy") {
-				origin.Finance.AllowBuy = false
-			}
-			if len(path) == 1 || (len(path) > 1 && path[1] == "History") {
-				if l := len((origin.Finance.History)); l > 0 {
-					var i2 int = -1
-					_ = i2
-					_ = (origin.Finance.History)[l-1]
+		}
+		if path[0] == "HistoryTree" {
+			if len(path) > 1 {
+				if l := len((origin.HistoryTree)); l > 0 {
+					var k1 string
+					_ = k1
+					k1 = path[1]
+					x1 := (origin.HistoryTree)[k1]
+					_ = x1
 					if len(path) > 2 {
-						t52, err52 := strconv.ParseInt(path[2], 0, 0)
-						if err52 != nil {
-							return err52
+						if path[2] == "DateUnix" {
+							x1.DateUnix = 0
 						}
-						i2 = int(t52)
-					}
-					_ = i2
-					for i := 0; i < l; i++ {
-						if len(path) == 2 && i2 != i {
-							continue
+						if path[2] == "Cost" {
+							x1.Cost = 0
 						}
-						x2 := &(origin.Finance.History)[i]
-						if len(path) == 3 || (len(path) > 3 && path[3] == "DateUnix") {
-							x2.DateUnix = 0
-						}
-						if len(path) == 3 || (len(path) > 3 && path[3] == "Cost") {
-							x2.Cost = 0
-						}
-						if len(path) == 3 || (len(path) > 3 && path[3] == "Comment") {
-							if l := len((x2.Comment)); l > 0 {
-								(x2.Comment) = (x2.Comment)[:0]
+						if path[2] == "Comment" {
+							if len(path) > 3 {
+								if l := len((x1.Comment)); l > 0 {
+									(x1.Comment) = (x1.Comment)[:0]
+								}
+								return nil
 							}
+							(x1.Comment) = (x1.Comment)[:0]
 						}
 					}
-					if len(path) == 2 && i2 == -1 {
+					(origin.HistoryTree)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.HistoryTree {
+				delete((origin.HistoryTree), k)
+			}
+		}
+		if path[0] == "Flags" {
+			if len(path) > 1 {
+				if l := len((origin.Flags)); l > 0 {
+					var k1 string
+					_ = k1
+					k1 = path[1]
+					x1 := (origin.Flags)[k1]
+					_ = x1
+					x1 = 0
+					(origin.Flags)[k1] = x1
+				}
+				return nil
+			}
+			for k := range origin.Flags {
+				delete((origin.Flags), k)
+			}
+		}
+		if path[0] == "Finance" {
+			if origin.Finance != nil {
+				if len(path) > 1 {
+					if path[1] == "MoneyIn" {
+						origin.Finance.MoneyIn = 0
+					}
+					if path[1] == "MoneyOut" {
+						origin.Finance.MoneyOut = 0
+					}
+					if path[1] == "Balance" {
+						origin.Finance.Balance = 0
+					}
+					if path[1] == "AllowBuy" {
+						origin.Finance.AllowBuy = false
+					}
+					if path[1] == "History" {
+						if len(path) > 2 {
+							if l := len((origin.Finance.History)); l > 0 {
+								var i2 int = -1
+								_ = i2
+								_ = (origin.Finance.History)[l-1]
+								t52, err52 := strconv.ParseInt(path[2], 0, 0)
+								if err52 != nil {
+									return err52
+								}
+								i2 = int(t52)
+								x2 := &(origin.Finance.History)[i2]
+								if len(path) > 3 {
+									if path[3] == "DateUnix" {
+										x2.DateUnix = 0
+									}
+									if path[3] == "Cost" {
+										x2.Cost = 0
+									}
+									if path[3] == "Comment" {
+										if len(path) > 4 {
+											if l := len((x2.Comment)); l > 0 {
+												(x2.Comment) = (x2.Comment)[:0]
+											}
+											return nil
+										}
+										(x2.Comment) = (x2.Comment)[:0]
+									}
+								}
+								if len(path) == 3 {
+									(origin.Finance.History)[i2] = testobj.TestHistory{}
+								}
+								if i2 == -1 {
+									(origin.Finance.History) = (origin.Finance.History)[:0]
+								}
+							}
+							return nil
+						}
 						(origin.Finance.History) = (origin.Finance.History)[:0]
 					}
 				}
