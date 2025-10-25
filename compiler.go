@@ -1581,7 +1581,6 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 		kv := "k" + depths
 		c.wl("var ", kv, " ", node.mapk.typn)
 		c.wl("_=", kv)
-		c.wl("if len(path)==", depths, "{")
 		if node.mapk.typn == "string" {
 			// Key is string, simple case.
 			c.wl(kv, "=path["+depths+"]")
@@ -1598,7 +1597,8 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 		c.wl(nv, ":=", c.fmtVd(node, v, depth), "[", c.fmtP(node.mapk, kv, depth+1), "]")
 		c.wl("_=", nv)
 		_ = c.writeNodeReset(node.mapv, nv, depth+1)
-		c.wl("}}")
+		c.wl(c.fmtVd(node, v, depth), "[", c.fmtP(node.mapk, kv, depth+1), "]", "=", nv)
+		c.wl("}")
 		c.wl("return nil")
 	case typeSlice:
 		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
