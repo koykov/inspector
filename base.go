@@ -63,6 +63,6 @@ func (i BaseInspector) Capacity(_ any, _ *int, _ ...string) error {
 	return ErrNotImplement
 }
 
-func (i BaseInspector) Reset(_ any) error {
+func (i BaseInspector) Reset(_ any, _ ...string) error {
 	return ErrNotImplement
 }
