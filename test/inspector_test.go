@@ -358,6 +358,77 @@ func TestInspectorAppend(t *testing.T) {
 	})
 }
 
+func TestInspectorReset(t *testing.T) {
+	var ins testobj_ins.TestObjectInspector
+	origin, _ := ins.Copy(testO)
+	t.Run("full", func(t *testing.T) {
+		cpy, _ := ins.Copy(origin)
+		err := ins.Reset(cpy)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+	t.Run("nested single", func(t *testing.T) {
+		cpy, _ := ins.Copy(origin)
+		err := ins.Reset(cpy, "Finance", "Balance")
+		if err != nil {
+			t.Error(err)
+		}
+		to := cpy.(*testobj.TestObject)
+		if to.Finance.Balance != 0 {
+			t.FailNow()
+		}
+	})
+	t.Run("nested map", func(t *testing.T) {
+		t.Run("single key", func(t *testing.T) {
+			cpy, _ := ins.Copy(origin)
+			err := ins.Reset(cpy, "Flags", "Valid")
+			if err != nil {
+				t.Error(err)
+			}
+			to := cpy.(*testobj.TestObject)
+			if to.Flags["Valid"] != 0 {
+				t.FailNow()
+			}
+		})
+		t.Run("full map", func(t *testing.T) {
+			cpy, _ := ins.Copy(origin)
+			err := ins.Reset(cpy, "Flags")
+			if err != nil {
+				t.Error(err)
+			}
+			to := cpy.(*testobj.TestObject)
+			if len(to.Flags) != 0 {
+				t.FailNow()
+			}
+		})
+	})
+	t.Run("nested slice", func(t *testing.T) {
+		t.Run("single id", func(t *testing.T) {
+			cpy, _ := ins.Copy(origin)
+			err := ins.Reset(cpy, "Finance", "History", "1")
+			if err != nil {
+				t.Error(err)
+			}
+			to := cpy.(*testobj.TestObject)
+			if x := to.Finance.History[1]; x.DateUnix != 0 || x.Cost != 0 || len(x.Comment) != 0 {
+				t.FailNow()
+			}
+		})
+		t.Run("full slice", func(t *testing.T) {
+			cpy, _ := ins.Copy(origin)
+			err := ins.Reset(cpy, "Finance", "History")
+			if err != nil {
+				t.Error(err)
+			}
+			to := cpy.(*testobj.TestObject)
+			if len(to.Finance.History) != 0 {
+				t.FailNow()
+			}
+		})
+	})
+}
+
 func TestInspectorLenCap(t *testing.T) {
 	var ins testobj_ins.TestObjectInspector
 	obj := *testO

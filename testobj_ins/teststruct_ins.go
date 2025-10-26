@@ -144,9 +144,9 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "A" {
 			var rightExact byte
-			t368 := byteconv.S2B(right)
-			if len(t368) > 0 {
-				rightExact = t368[0]
+			t389 := byteconv.S2B(right)
+			if len(t389) > 0 {
+				rightExact = t389[0]
 			}
 
 			switch cond {
@@ -198,11 +198,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "I" {
 			var rightExact int
-			t371, err371 := strconv.ParseInt(right, 0, 0)
-			if err371 != nil {
-				return err371
+			t392, err392 := strconv.ParseInt(right, 0, 0)
+			if err392 != nil {
+				return err392
 			}
-			rightExact = int(t371)
+			rightExact = int(t392)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.I == rightExact
@@ -221,11 +221,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "I8" {
 			var rightExact int8
-			t372, err372 := strconv.ParseInt(right, 0, 0)
-			if err372 != nil {
-				return err372
+			t393, err393 := strconv.ParseInt(right, 0, 0)
+			if err393 != nil {
+				return err393
 			}
-			rightExact = int8(t372)
+			rightExact = int8(t393)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.I8 == rightExact
@@ -244,11 +244,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "I16" {
 			var rightExact int16
-			t373, err373 := strconv.ParseInt(right, 0, 0)
-			if err373 != nil {
-				return err373
+			t394, err394 := strconv.ParseInt(right, 0, 0)
+			if err394 != nil {
+				return err394
 			}
-			rightExact = int16(t373)
+			rightExact = int16(t394)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.I16 == rightExact
@@ -267,11 +267,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "I32" {
 			var rightExact int32
-			t374, err374 := strconv.ParseInt(right, 0, 0)
-			if err374 != nil {
-				return err374
+			t395, err395 := strconv.ParseInt(right, 0, 0)
+			if err395 != nil {
+				return err395
 			}
-			rightExact = int32(t374)
+			rightExact = int32(t395)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.I32 == rightExact
@@ -290,11 +290,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "I64" {
 			var rightExact int64
-			t375, err375 := strconv.ParseInt(right, 0, 0)
-			if err375 != nil {
-				return err375
+			t396, err396 := strconv.ParseInt(right, 0, 0)
+			if err396 != nil {
+				return err396
 			}
-			rightExact = int64(t375)
+			rightExact = int64(t396)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.I64 == rightExact
@@ -313,11 +313,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "U" {
 			var rightExact uint
-			t376, err376 := strconv.ParseUint(right, 0, 0)
-			if err376 != nil {
-				return err376
+			t397, err397 := strconv.ParseUint(right, 0, 0)
+			if err397 != nil {
+				return err397
 			}
-			rightExact = uint(t376)
+			rightExact = uint(t397)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.U == rightExact
@@ -336,11 +336,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "U8" {
 			var rightExact uint8
-			t377, err377 := strconv.ParseUint(right, 0, 0)
-			if err377 != nil {
-				return err377
+			t398, err398 := strconv.ParseUint(right, 0, 0)
+			if err398 != nil {
+				return err398
 			}
-			rightExact = uint8(t377)
+			rightExact = uint8(t398)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.U8 == rightExact
@@ -359,11 +359,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "U16" {
 			var rightExact uint16
-			t378, err378 := strconv.ParseUint(right, 0, 0)
-			if err378 != nil {
-				return err378
+			t399, err399 := strconv.ParseUint(right, 0, 0)
+			if err399 != nil {
+				return err399
 			}
-			rightExact = uint16(t378)
+			rightExact = uint16(t399)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.U16 == rightExact
@@ -382,11 +382,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "U32" {
 			var rightExact uint32
-			t379, err379 := strconv.ParseUint(right, 0, 0)
-			if err379 != nil {
-				return err379
+			t400, err400 := strconv.ParseUint(right, 0, 0)
+			if err400 != nil {
+				return err400
 			}
-			rightExact = uint32(t379)
+			rightExact = uint32(t400)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.U32 == rightExact
@@ -405,11 +405,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "U64" {
 			var rightExact uint64
-			t380, err380 := strconv.ParseUint(right, 0, 0)
-			if err380 != nil {
-				return err380
+			t401, err401 := strconv.ParseUint(right, 0, 0)
+			if err401 != nil {
+				return err401
 			}
-			rightExact = uint64(t380)
+			rightExact = uint64(t401)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.U64 == rightExact
@@ -428,11 +428,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "F" {
 			var rightExact float32
-			t381, err381 := strconv.ParseFloat(right, 0)
-			if err381 != nil {
-				return err381
+			t402, err402 := strconv.ParseFloat(right, 0)
+			if err402 != nil {
+				return err402
 			}
-			rightExact = float32(t381)
+			rightExact = float32(t402)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.F == rightExact
@@ -451,11 +451,11 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "D" {
 			var rightExact float64
-			t382, err382 := strconv.ParseFloat(right, 0)
-			if err382 != nil {
-				return err382
+			t403, err403 := strconv.ParseFloat(right, 0)
+			if err403 != nil {
+				return err403
 			}
-			rightExact = float64(t382)
+			rightExact = float64(t403)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.D == rightExact
@@ -854,7 +854,15 @@ func (i11 TestStructInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i11 TestStructInspector) Reset(x any) error {
+func (i11 TestStructInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i11.reset1(x, path...)
+	} else {
+		return i11.reset2(x, path...)
+	}
+}
+
+func (i11 TestStructInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestStruct
 	_ = origin
 	switch x.(type) {
@@ -884,5 +892,74 @@ func (i11 TestStructInspector) Reset(x any) error {
 	origin.U64 = 0
 	origin.F = 0
 	origin.D = 0
+	return nil
+}
+
+func (i11 TestStructInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestStruct
+	_ = origin
+	switch x.(type) {
+	case testobj.TestStruct:
+		return inspector.ErrMustPointerType
+	case *testobj.TestStruct:
+		origin = x.(*testobj.TestStruct)
+	case **testobj.TestStruct:
+		origin = *x.(**testobj.TestStruct)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if path[0] == "A" {
+			origin.A = 0
+		}
+		if path[0] == "S" {
+			origin.S = ""
+		}
+		if path[0] == "B" {
+			if len(path) > 1 {
+				if l := len((origin.B)); l > 0 {
+					(origin.B) = (origin.B)[:0]
+				}
+				return nil
+			}
+			(origin.B) = (origin.B)[:0]
+		}
+		if path[0] == "I" {
+			origin.I = 0
+		}
+		if path[0] == "I8" {
+			origin.I8 = 0
+		}
+		if path[0] == "I16" {
+			origin.I16 = 0
+		}
+		if path[0] == "I32" {
+			origin.I32 = 0
+		}
+		if path[0] == "I64" {
+			origin.I64 = 0
+		}
+		if path[0] == "U" {
+			origin.U = 0
+		}
+		if path[0] == "U8" {
+			origin.U8 = 0
+		}
+		if path[0] == "U16" {
+			origin.U16 = 0
+		}
+		if path[0] == "U32" {
+			origin.U32 = 0
+		}
+		if path[0] == "U64" {
+			origin.U64 = 0
+		}
+		if path[0] == "F" {
+			origin.F = 0
+		}
+		if path[0] == "D" {
+			origin.D = 0
+		}
+	}
 	return nil
 }

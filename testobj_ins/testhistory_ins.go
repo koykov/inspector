@@ -96,11 +96,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 	if len(path) > 0 {
 		if path[0] == "DateUnix" {
 			var rightExact int64
-			t21, err21 := strconv.ParseInt(right, 0, 0)
-			if err21 != nil {
-				return err21
+			t22, err22 := strconv.ParseInt(right, 0, 0)
+			if err22 != nil {
+				return err22
 			}
-			rightExact = int64(t21)
+			rightExact = int64(t22)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.DateUnix == rightExact
@@ -119,11 +119,11 @@ func (i4 TestHistoryInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "Cost" {
 			var rightExact float64
-			t22, err22 := strconv.ParseFloat(right, 0)
-			if err22 != nil {
-				return err22
+			t23, err23 := strconv.ParseFloat(right, 0)
+			if err23 != nil {
+				return err23
 			}
-			rightExact = float64(t22)
+			rightExact = float64(t23)
 			switch cond {
 			case inspector.OpEq:
 				*result = x.Cost == rightExact
@@ -430,7 +430,15 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
-func (i4 TestHistoryInspector) Reset(x any) error {
+func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i4.reset1(x, path...)
+	} else {
+		return i4.reset2(x, path...)
+	}
+}
+
+func (i4 TestHistoryInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestHistory
 	_ = origin
 	switch x.(type) {
@@ -447,6 +455,39 @@ func (i4 TestHistoryInspector) Reset(x any) error {
 	origin.Cost = 0
 	if l := len((origin.Comment)); l > 0 {
 		(origin.Comment) = (origin.Comment)[:0]
+	}
+	return nil
+}
+
+func (i4 TestHistoryInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestHistory
+	_ = origin
+	switch x.(type) {
+	case testobj.TestHistory:
+		return inspector.ErrMustPointerType
+	case *testobj.TestHistory:
+		origin = x.(*testobj.TestHistory)
+	case **testobj.TestHistory:
+		origin = *x.(**testobj.TestHistory)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if path[0] == "DateUnix" {
+			origin.DateUnix = 0
+		}
+		if path[0] == "Cost" {
+			origin.Cost = 0
+		}
+		if path[0] == "Comment" {
+			if len(path) > 1 {
+				if l := len((origin.Comment)); l > 0 {
+					(origin.Comment) = (origin.Comment)[:0]
+				}
+				return nil
+			}
+			(origin.Comment) = (origin.Comment)[:0]
+		}
 	}
 	return nil
 }

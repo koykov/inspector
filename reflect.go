@@ -142,4 +142,4 @@ func (i ReflectInspector) Length(_ any, _ *int, _ ...string) error { return nil 
 
 func (i ReflectInspector) Capacity(_ any, _ *int, _ ...string) error { return nil }
 
-func (i ReflectInspector) Reset(_ any) error { return nil }
+func (i ReflectInspector) Reset(_ any, _ ...string) error { return nil }

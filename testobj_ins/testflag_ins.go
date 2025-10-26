@@ -88,11 +88,11 @@ func (i1 TestFlagInspector) Compare(src any, cond inspector.Op, right string, re
 		if x0, ok := (*x)[path[0]]; ok {
 			_ = x0
 			var rightExact int32
-			t13, err13 := strconv.ParseInt(right, 0, 0)
-			if err13 != nil {
-				return err13
+			t14, err14 := strconv.ParseInt(right, 0, 0)
+			if err14 != nil {
+				return err14
 			}
-			rightExact = int32(t13)
+			rightExact = int32(t14)
 			switch cond {
 			case inspector.OpEq:
 				*result = x0 == rightExact
@@ -394,7 +394,15 @@ func (i1 TestFlagInspector) Append(src, value any, path ...string) (any, error) 
 	return src, nil
 }
 
-func (i1 TestFlagInspector) Reset(x any) error {
+func (i1 TestFlagInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i1.reset1(x, path...)
+	} else {
+		return i1.reset2(x, path...)
+	}
+}
+
+func (i1 TestFlagInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestFlag
 	_ = origin
 	switch x.(type) {
@@ -411,6 +419,34 @@ func (i1 TestFlagInspector) Reset(x any) error {
 		for k, _ := range *origin {
 			delete((*origin), k)
 		}
+	}
+	return nil
+}
+
+func (i1 TestFlagInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestFlag
+	_ = origin
+	switch x.(type) {
+	case testobj.TestFlag:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFlag:
+		origin = x.(*testobj.TestFlag)
+	case **testobj.TestFlag:
+		origin = *x.(**testobj.TestFlag)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if l := len((*origin)); l > 0 {
+			var k0 string
+			_ = k0
+			k0 = path[0]
+			x0 := (*origin)[k0]
+			_ = x0
+			x0 = 0
+			(*origin)[k0] = x0
+		}
+		return nil
 	}
 	return nil
 }

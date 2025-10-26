@@ -57,11 +57,11 @@ func (i2 TestFloatPtrSliceInspector) GetTo(src any, buf *any, path ...string) (e
 
 	if len(path) > 0 {
 		var i int
-		t14, err14 := strconv.ParseInt(path[0], 0, 0)
-		if err14 != nil {
-			return err14
+		t15, err15 := strconv.ParseInt(path[0], 0, 0)
+		if err15 != nil {
+			return err15
 		}
-		i = int(t14)
+		i = int(t15)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -96,11 +96,11 @@ func (i2 TestFloatPtrSliceInspector) Compare(src any, cond inspector.Op, right s
 
 	if len(path) > 0 {
 		var i int
-		t15, err15 := strconv.ParseInt(path[0], 0, 0)
-		if err15 != nil {
-			return err15
+		t16, err16 := strconv.ParseInt(path[0], 0, 0)
+		if err16 != nil {
+			return err16
 		}
-		i = int(t15)
+		i = int(t16)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -176,11 +176,11 @@ func (i2 TestFloatPtrSliceInspector) SetWithBuffer(dst, value any, buf inspector
 
 	if len(path) > 0 {
 		var i int
-		t16, err16 := strconv.ParseInt(path[0], 0, 0)
-		if err16 != nil {
-			return err16
+		t17, err17 := strconv.ParseInt(path[0], 0, 0)
+		if err17 != nil {
+			return err17
 		}
-		i = int(t16)
+		i = int(t17)
 		if len(*x) > i {
 			x0 := (*x)[i]
 			_ = x0
@@ -417,7 +417,15 @@ func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any
 	return src, nil
 }
 
-func (i2 TestFloatPtrSliceInspector) Reset(x any) error {
+func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
+	if len(path) == 0 {
+		return i2.reset1(x, path...)
+	} else {
+		return i2.reset2(x, path...)
+	}
+}
+
+func (i2 TestFloatPtrSliceInspector) reset1(x any, path ...string) error {
 	var origin *testobj.TestFloatPtrSlice
 	_ = origin
 	switch x.(type) {
@@ -432,6 +440,32 @@ func (i2 TestFloatPtrSliceInspector) Reset(x any) error {
 	}
 	if l := len((*origin)); l > 0 {
 		(*origin) = (*origin)[:0]
+	}
+	return nil
+}
+
+func (i2 TestFloatPtrSliceInspector) reset2(x any, path ...string) error {
+	var origin *testobj.TestFloatPtrSlice
+	_ = origin
+	switch x.(type) {
+	case testobj.TestFloatPtrSlice:
+		return inspector.ErrMustPointerType
+	case *testobj.TestFloatPtrSlice:
+		origin = x.(*testobj.TestFloatPtrSlice)
+	case **testobj.TestFloatPtrSlice:
+		origin = *x.(**testobj.TestFloatPtrSlice)
+	default:
+		return inspector.ErrUnsupportedType
+	}
+	if len(path) > 0 {
+		if l := len((*origin)); l > 0 {
+			var i0 int = -1
+			_ = i0
+			if i0 == -1 {
+				(*origin) = (*origin)[:0]
+			}
+		}
+		return nil
 	}
 	return nil
 }

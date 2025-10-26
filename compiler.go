@@ -543,7 +543,28 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wdl("}")
 
 	// Reset methods.
-	c.wl("func (", recv, " ", inst, ") Reset(x any) error {")
+	c.wl("func (", recv, " ", inst, ") Reset(x any, path ...string) error {")
+	c.wl("if len(path)==0{return ", recv, ".reset1(x, path...)}else{return ", recv, ".reset2(x, path...)}")
+	c.wl("}\n")
+	c.wl("func (", recv, " ", inst, ") reset1(x any, path ...string) error {")
+	c.wl("var origin *", pname)
+	c.wl("_=origin")
+	c.wl("switch x.(type) {")
+	c.wl("case ", pname, ":")
+	c.wl("return inspector.ErrMustPointerType")
+	c.wl("case *", pname, ":")
+	c.wl("origin = x.(*", pname, ")")
+	c.wl("case **", pname, ":")
+	c.wl("origin = *x.(**", pname, ")")
+	c.wl("default:")
+	c.wl("return inspector.ErrUnsupportedType")
+	c.wl("}")
+	err = c.writeNodeResetFull(node, "origin", 0)
+	if err != nil {
+		return err
+	}
+	c.wdl("return nil}")
+	c.wl("func (", recv, " ", inst, ") reset2(x any, path ...string) error {")
 	c.wl("var origin *", pname)
 	c.wl("_=origin")
 	c.wl("switch x.(type) {")
@@ -1528,6 +1549,123 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 }
 
 func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
+	depths := strconv.Itoa(depth)
+	depths1 := strconv.Itoa(depth + 1)
+	mustLenCheck := node.typ != typeBasic
+	if mustLenCheck {
+		c.wl("if len(path)>", depths, "{")
+	}
+	switch node.typ {
+	case typeStruct:
+		for _, ch := range node.chld {
+			nv := v + "." + ch.name
+			c.wl("if path[", depths, "]==\"", ch.name, "\"{")
+			chPtr := ch.ptr && (ch.typ == typeStruct || ch.typ == typeMap || ch.typ == typeSlice)
+			if chPtr {
+				c.wl("if ", nv, "!=nil{")
+			}
+			_ = c.writeNodeReset(ch, nv, depth+1)
+			if ch.typ == typeMap {
+				c.wl("for k:=range", c.fmtVd(ch, nv, depth+1), "{delete(", c.fmtVd(ch, nv, depth+1), ",k)}")
+			}
+			if ch.typ == typeSlice {
+				c.wl(c.fmtVd(ch, nv, depth+1), "=", c.fmtVd(ch, nv, depth+1), "[:0]")
+			}
+			if chPtr {
+				c.wl("}")
+			}
+			c.wl("}")
+		}
+	case typeMap:
+		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
+
+		kv := "k" + depths
+		c.wl("var ", kv, " ", node.mapk.typn)
+		c.wl("_=", kv)
+		if node.mapk.typn == "string" {
+			// Key is string, simple case.
+			c.wl(kv, "=path["+depths+"]")
+		} else {
+			// Convert path value to the key type and try to find it in the map.
+			snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, node.mapk.typu, kv)
+			c.regImport(imports)
+			if err != nil {
+				return err
+			}
+			c.wl(snippet)
+		}
+		nv := "x" + strconv.Itoa(depth)
+		c.wl(nv, ":=", c.fmtVd(node, v, depth), "[", c.fmtP(node.mapk, kv, depth+1), "]")
+		c.wl("_=", nv)
+		_ = c.writeNodeReset(node.mapv, nv, depth+1)
+		c.wl(c.fmtVd(node, v, depth), "[", c.fmtP(node.mapk, kv, depth+1), "]", "=", nv)
+		c.wl("}")
+		c.wl("return nil")
+	case typeSlice:
+		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
+		if node.typn == "[]byte" {
+			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+		} else {
+			iv := "i" + depths
+			c.wl("var ", iv, " int=-1")
+			c.wl("_= ", iv)
+			if node.slct.typ != typeBasic {
+				c.wl("_=", c.fmtVd(node, v, depth), "[l-1]")
+				nv := "x" + strconv.Itoa(depth)
+
+				snippet, imports, err := StrConvSnippet("path["+depths+"]", "int", "", iv)
+				c.regImport(imports)
+				if err != nil {
+					return err
+				}
+				c.wl(snippet)
+				pfx := "&"
+				if node.slct.ptr {
+					pfx = ""
+				}
+				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[", iv, "]")
+				_ = c.writeNodeReset(node.slct, nv, depth+1)
+				c.wl("if len(path)==", depths1, "{")
+				pfx = ""
+				if node.slct.ptr {
+					pfx = "&"
+				}
+				c.wl(c.fmtVd(node, v, depth), "[", iv, "]", "=", pfx, c.fmtT(node.slct), "{}")
+				c.wl("}")
+			}
+			c.wl("if ", iv, "==-1{")
+			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
+			c.wl("}")
+		}
+		c.wl("}")
+		c.wl("return nil")
+	case typeBasic:
+		typ := node.typu
+		if len(typ) == 0 {
+			typ = node.typn
+		}
+		var def string
+		switch typ {
+		case "int", "int8", "int16", "int32", "int64",
+			"uint", "uint8", "uint16", "uint32", "uint64",
+			"float32", "float64", "byte", "rune":
+			def = "0"
+		case "bool":
+			def = "false"
+		case "string":
+			def = `""`
+		}
+		if len(def) > 0 {
+			c.wl(c.fmtVnb(node, v, depth), "=", def)
+		}
+	}
+	if mustLenCheck {
+		c.wl("}")
+	}
+	return nil
+}
+
+func (c *Compiler) writeNodeResetFull(node *node, v string, depth int) error {
 	switch node.typ {
 	case typeStruct:
 		for _, ch := range node.chld {
@@ -1536,7 +1674,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			if chPtr {
 				c.wl("if ", nv, "!=nil{")
 			}
-			_ = c.writeNodeReset(ch, nv, depth+1)
+			_ = c.writeNodeResetFull(ch, nv, depth+1)
 			if chPtr {
 				c.wl("}")
 			}
@@ -1561,7 +1699,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 					pfx = ""
 				}
 				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
-				_ = c.writeNodeReset(node.slct, nv, depth+1)
+				_ = c.writeNodeResetFull(node.slct, nv, depth+1)
 				c.wl("}")
 			}
 			c.wl(c.fmtVd(node, v, depth), "=", c.fmtVd(node, v, depth), "[:0]")
