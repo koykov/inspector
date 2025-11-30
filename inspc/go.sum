@@ -2,8 +2,8 @@ github.com/koykov/byteconv v1.0.1 h1:5Yb6++P+HnipDW/V9rHXR7CyS0ZFncspT4isvt65fFA
 github.com/koykov/byteconv v1.0.1/go.mod h1:viZknv/akQJrXOQS3bZu2U7TE+gjA03LFQpSsRExZR4=
 github.com/koykov/multiflag v1.0.0 h1:O78LkeTOYfm5GXO0N3ekOXJmdbaENcy3P8SQ4T5U99E=
 github.com/koykov/multiflag v1.0.0/go.mod h1:mJrlRV7QueNiWHM0XzJ1Na/14eJe7M2xfEcg/+mj3aM=
-github.com/koykov/x2bytes v1.0.3 h1:AQTQ2cwSGAXj+J/s6wJF1kzMyJeo3DRtt4MCeHS9ijg=
-github.com/koykov/x2bytes v1.0.3/go.mod h1:0fbvyQAm3RAiTOE/NT0Dg3ZXL9EQiYpyrp5wZyoz11Q=
+github.com/koykov/x2bytes v1.0.4 h1:aRTi/QHz3BbiIfW+BIKW7V8EmdIV1g3kwLjTHTJz6Xg=
+github.com/koykov/x2bytes v1.0.4/go.mod h1:0fbvyQAm3RAiTOE/NT0Dg3ZXL9EQiYpyrp5wZyoz11Q=
 golang.org/x/mod v0.20.0 h1:utOm6MM3R3dnawAiJgn0y+xvuYRsm1RKM/4giyfDgV0=
 golang.org/x/sync v0.8.0 h1:3NFvSEYkUoMifnESzZl15y791HH1qU2xm6eCJU5ZPXQ=
 golang.org/x/tools v0.24.0 h1:J1shsA93PJUEVaUSaay7UXAyE8aimq3GW0pjlolpa24=
