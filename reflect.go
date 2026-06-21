@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+
+	"github.com/koykov/byteconv"
 )
 
 type ReflectInspector struct {
@@ -135,6 +137,51 @@ func (i ReflectInspector) Copy(x any) (any, error) {
 }
 
 func (i ReflectInspector) CopyTo(_, _ any, _ AccumulativeBuffer) error {
+	return nil
+}
+
+func (i ReflectInspector) Each(src any, fn func(i int, field string, value any)) error {
+	v := reflect.ValueOf(src)
+	if v.Kind() == reflect.Ptr {
+		if elem := v.Elem(); elem.IsValid() && elem.CanInterface() {
+			return i.Each(elem.Interface(), fn)
+		}
+		return ErrUnsupportedType
+	}
+	switch v.Kind() {
+	case reflect.Map:
+		var c int
+		for _, f := range v.MapKeys() {
+			fv := f.Interface()
+			var fvs string
+			switch x := fv.(type) {
+			case string:
+				fvs = x
+			case *string:
+				fvs = *x
+			case []byte:
+				fvs = byteconv.B2S(x)
+			case *[]byte:
+				fvs = byteconv.B2S(*x)
+			default:
+				fvs = fmt.Sprintf("%v", fv)
+			}
+			mv := v.MapIndex(f)
+			if mv.IsValid() && mv.CanInterface() {
+				fn(c, fvs, mv.Interface())
+			}
+		}
+	case reflect.Struct:
+		var c int
+		for k, v1 := range v.Fields() {
+			if v1.IsValid() && v1.CanInterface() {
+				fn(c, k.Name, v1.Interface())
+				c++
+			}
+		}
+	default:
+		// noop
+	}
 	return nil
 }
 

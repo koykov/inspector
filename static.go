@@ -733,6 +733,10 @@ func (i StaticInspector) Append(src, _ any, _ ...string) (any, error) {
 	return src, nil
 }
 
+func (i StaticInspector) Each(_ any, _ func(i int, field string, value any)) error {
+	return nil
+}
+
 func (i StaticInspector) Length(x any, result *int, _ ...string) error {
 	l, _ := i.lc(x)
 	*result = l

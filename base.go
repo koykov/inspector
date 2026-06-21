@@ -63,6 +63,10 @@ func (i BaseInspector) Capacity(_ any, _ *int, _ ...string) error {
 	return ErrNotImplement
 }
 
+func (i BaseInspector) Each(_ any, _ func(i int, field string, value any)) error {
+	return ErrNotImplement
+}
+
 func (i BaseInspector) Reset(_ any, _ ...string) error {
 	return ErrNotImplement
 }
