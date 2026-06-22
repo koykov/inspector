@@ -1,6 +1,6 @@
 module github.com/koykov/inspector/inspc
 
-go 1.18
+go 1.24
 
 require (
 	github.com/koykov/inspector v1.4.11

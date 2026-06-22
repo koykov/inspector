@@ -119,6 +119,7 @@ func (c *Compiler) parsePkgType(t types.Type) (*node, error) {
 				ch.typn = strings.Replace(f.Type().String(), c.pkgDot, "", 1)
 				ch.typn = strings.Replace(ch.typn, "*", "", 1)
 			}
+			ch.tags = parseTags(s.Tag(i))
 			node.chld = append(node.chld, ch)
 			node.hasb = node.hasb || ch.hasb
 			node.hasc = node.hasc || ch.hasc

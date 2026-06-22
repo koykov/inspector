@@ -4,29 +4,29 @@ type TestPermission map[int32]bool
 type TestFlag map[string]int32
 
 type TestHistory struct {
-	DateUnix int64
-	Cost     float64
-	Comment  []byte
+	DateUnix int64   `json:"date_unix"`
+	Cost     float64 `json:"cost"`
+	Comment  []byte  `json:"comment"`
 }
 
 type TestFinance struct {
-	MoneyIn  float64
-	MoneyOut float64
-	Balance  float64
-	AllowBuy bool
-	History  []TestHistory
+	MoneyIn  float64       `json:"money_in"`
+	MoneyOut float64       `json:"money_out"`
+	Balance  float64       `json:"balance"`
+	AllowBuy bool          `json:"allow_buy"`
+	History  []TestHistory `json:"history"`
 }
 
 type TestObject struct {
-	Id          string
-	Name        []byte
-	Status      int32
-	Ustate      uint64
-	Cost        float64
-	Permission  *TestPermission
-	HistoryTree map[string]*TestHistory
-	Flags       TestFlag
-	Finance     *TestFinance
+	Id          string                  `json:"id"`
+	Name        []byte                  `json:"name"`
+	Status      int32                   `json:"status"`
+	Ustate      uint64                  `json:"ustate"`
+	Cost        float64                 `json:"cost"`
+	Permission  *TestPermission         `json:"permission,omitempty"`
+	HistoryTree map[string]*TestHistory `json:"history_tree"`
+	Flags       TestFlag                `json:"flags"`
+	Finance     *TestFinance            `json:"finance,omitempty"`
 }
 
 func (h *TestHistory) Clear() {
