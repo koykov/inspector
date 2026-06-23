@@ -1621,15 +1621,15 @@ func (i5 TestObjectInspector) Each(src any, fn func(i int, field string, value a
 		return inspector.ErrUnsupportedType
 	}
 
-	fn(0, "Id", x.Id)
-	fn(1, "Name", x.Name)
-	fn(2, "Status", x.Status)
-	fn(3, "Ustate", x.Ustate)
-	fn(4, "Cost", x.Cost)
-	fn(5, "Permission", x.Permission)
-	fn(6, "HistoryTree", x.HistoryTree)
-	fn(7, "Flags", x.Flags)
-	fn(8, "Finance", x.Finance)
+	fn(0, "id", x.Id)
+	fn(1, "name", x.Name)
+	fn(2, "status", x.Status)
+	fn(3, "ustate", x.Ustate)
+	fn(4, "cost", x.Cost)
+	fn(5, "permission", x.Permission)
+	fn(6, "history_tree", x.HistoryTree)
+	fn(7, "flags", x.Flags)
+	fn(8, "finance", x.Finance)
 	return nil
 }
 

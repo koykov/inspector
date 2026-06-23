@@ -767,11 +767,11 @@ func (i0 TestFinanceInspector) Each(src any, fn func(i int, field string, value 
 		return inspector.ErrUnsupportedType
 	}
 
-	fn(0, "MoneyIn", x.MoneyIn)
-	fn(1, "MoneyOut", x.MoneyOut)
-	fn(2, "Balance", x.Balance)
-	fn(3, "AllowBuy", x.AllowBuy)
-	fn(4, "History", x.History)
+	fn(0, "money_in", x.MoneyIn)
+	fn(1, "money_out", x.MoneyOut)
+	fn(2, "balance", x.Balance)
+	fn(3, "allow_buy", x.AllowBuy)
+	fn(4, "history", x.History)
 	return nil
 }
 

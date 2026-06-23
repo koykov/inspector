@@ -446,9 +446,9 @@ func (i4 TestHistoryInspector) Each(src any, fn func(i int, field string, value 
 		return inspector.ErrUnsupportedType
 	}
 
-	fn(0, "DateUnix", x.DateUnix)
-	fn(1, "Cost", x.Cost)
-	fn(2, "Comment", x.Comment)
+	fn(0, "date_unix", x.DateUnix)
+	fn(1, "cost", x.Cost)
+	fn(2, "comment", x.Comment)
 	return nil
 }
 
