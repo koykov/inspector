@@ -1605,6 +1605,34 @@ func (i5 TestObjectInspector) Append(src, value any, path ...string) (any, error
 	return src, nil
 }
 
+func (i5 TestObjectInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestObject
+	_ = x
+	if p, ok := src.(**testobj.TestObject); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestObject); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestObject); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	fn(0, "Id", x.Id)
+	fn(1, "Name", x.Name)
+	fn(2, "Status", x.Status)
+	fn(3, "Ustate", x.Ustate)
+	fn(4, "Cost", x.Cost)
+	fn(5, "Permission", x.Permission)
+	fn(6, "HistoryTree", x.HistoryTree)
+	fn(7, "Flags", x.Flags)
+	fn(8, "Finance", x.Finance)
+	return nil
+}
+
 func (i5 TestObjectInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i5.reset1(x, path...)

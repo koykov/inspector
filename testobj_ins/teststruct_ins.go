@@ -854,6 +854,40 @@ func (i11 TestStructInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
+func (i11 TestStructInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStruct
+	_ = x
+	if p, ok := src.(**testobj.TestStruct); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStruct); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStruct); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	fn(0, "A", x.A)
+	fn(1, "S", x.S)
+	fn(2, "B", x.B)
+	fn(3, "I", x.I)
+	fn(4, "I8", x.I8)
+	fn(5, "I16", x.I16)
+	fn(6, "I32", x.I32)
+	fn(7, "I64", x.I64)
+	fn(8, "U", x.U)
+	fn(9, "U8", x.U8)
+	fn(10, "U16", x.U16)
+	fn(11, "U32", x.U32)
+	fn(12, "U64", x.U64)
+	fn(13, "F", x.F)
+	fn(14, "D", x.D)
+	return nil
+}
+
 func (i11 TestStructInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i11.reset1(x, path...)

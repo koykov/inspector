@@ -417,6 +417,25 @@ func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any
 	return src, nil
 }
 
+func (i2 TestFloatPtrSliceInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFloatPtrSlice
+	_ = x
+	if p, ok := src.(**testobj.TestFloatPtrSlice); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFloatPtrSlice); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFloatPtrSlice); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	return nil
+}
+
 func (i2 TestFloatPtrSliceInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i2.reset1(x, path...)

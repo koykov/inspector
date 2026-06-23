@@ -1560,7 +1560,8 @@ func (c *Compiler) writeNodeEach(node_ *node, v string, depth int) error {
 		c.wl("if ", v, " == nil { return nil }")
 	}
 	for i := 0; i < len(node_.chld); i++ {
-		// todo implement me
+		ch := node_.chld[i]
+		c.wl("fn(", strconv.Itoa(i), `,"`, ch.name, `", x.`, ch.name, ")")
 	}
 
 	return nil

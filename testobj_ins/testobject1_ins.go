@@ -12819,6 +12819,60 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
+func (i6 TestObject1Inspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestObject1
+	_ = x
+	if p, ok := src.(**testobj.TestObject1); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestObject1); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestObject1); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	fn(0, "IntSlice", x.IntSlice)
+	fn(1, "IntPtrSlice", x.IntPtrSlice)
+	fn(2, "IntSlicePtr", x.IntSlicePtr)
+	fn(3, "IntPtrSlicePtr", x.IntPtrSlicePtr)
+	fn(4, "ByteSlice", x.ByteSlice)
+	fn(5, "BytePtrSlice", x.BytePtrSlice)
+	fn(6, "ByteSlicePtr", x.ByteSlicePtr)
+	fn(7, "BytePtrSlicePtr", x.BytePtrSlicePtr)
+	fn(8, "FloatSlice", x.FloatSlice)
+	fn(9, "FloatPtrSlice", x.FloatPtrSlice)
+	fn(10, "FloatSlicePtr", x.FloatSlicePtr)
+	fn(11, "FloatPtrSlicePtr", x.FloatPtrSlicePtr)
+	fn(12, "StructSlice", x.StructSlice)
+	fn(13, "StructPtrSlice", x.StructPtrSlice)
+	fn(14, "StructSlicePtr", x.StructSlicePtr)
+	fn(15, "StructPtrSlicePtr", x.StructPtrSlicePtr)
+	fn(16, "StructSliceLiteral", x.StructSliceLiteral)
+	fn(17, "IntStringMap", x.IntStringMap)
+	fn(18, "IntStringPtrMap", x.IntStringPtrMap)
+	fn(19, "IntStringMapPtr", x.IntStringMapPtr)
+	fn(20, "IntStringPtrMapPtr", x.IntStringPtrMapPtr)
+	fn(21, "IntPtrStringPtrMapPtr", x.IntPtrStringPtrMapPtr)
+	fn(22, "IntIntMapMap", x.IntIntMapMap)
+	fn(23, "StringFloatMap", x.StringFloatMap)
+	fn(24, "StringFloatPtrMap", x.StringFloatPtrMap)
+	fn(25, "StringFloatMapPtr", x.StringFloatMapPtr)
+	fn(26, "StringFloatPtrMapPtr", x.StringFloatPtrMapPtr)
+	fn(27, "StringPtrFloatPtrMapPtr", x.StringPtrFloatPtrMapPtr)
+	fn(28, "FloatStructMap", x.FloatStructMap)
+	fn(29, "FloatStructPtrMap", x.FloatStructPtrMap)
+	fn(30, "FloatPtrStructMap", x.FloatPtrStructMap)
+	fn(31, "FloatPtrStructPtrMap", x.FloatPtrStructPtrMap)
+	fn(32, "FloatPtrStructPtrMapPtr", x.FloatPtrStructPtrMapPtr)
+	fn(33, "NestedStruct", x.NestedStruct)
+	fn(34, "NestedStructPtr", x.NestedStructPtr)
+	return nil
+}
+
 func (i6 TestObject1Inspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i6.reset1(x, path...)

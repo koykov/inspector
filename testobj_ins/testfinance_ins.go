@@ -751,6 +751,30 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
+func (i0 TestFinanceInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestFinance
+	_ = x
+	if p, ok := src.(**testobj.TestFinance); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestFinance); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestFinance); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	fn(0, "MoneyIn", x.MoneyIn)
+	fn(1, "MoneyOut", x.MoneyOut)
+	fn(2, "Balance", x.Balance)
+	fn(3, "AllowBuy", x.AllowBuy)
+	fn(4, "History", x.History)
+	return nil
+}
+
 func (i0 TestFinanceInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i0.reset1(x, path...)

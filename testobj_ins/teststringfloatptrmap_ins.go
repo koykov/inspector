@@ -395,6 +395,28 @@ func (i9 TestStringFloatPtrMapInspector) Append(src, value any, path ...string) 
 	return src, nil
 }
 
+func (i9 TestStringFloatPtrMapInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringFloatPtrMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringFloatPtrMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringFloatPtrMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringFloatPtrMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	if x == nil {
+		return nil
+	}
+	return nil
+}
+
 func (i9 TestStringFloatPtrMapInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i9.reset1(x, path...)
