@@ -35,6 +35,8 @@ type Inspector interface {
 	Length(src any, result *int, path ...string) error
 	// Capacity puts capacity of field value by path in src to the buffer.
 	Capacity(src any, result *int, path ...string) error
+	// Each walks over fields of src object. Provides to fn func index of a field, name (original or tag) and value.
+	Each(src any, fn func(i int, field string, value any)) error
 	// Reset resets x.
 	Reset(x any, path ...string) error
 }
