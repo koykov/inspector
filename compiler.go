@@ -542,6 +542,12 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("return src, nil")
 	c.wdl("}")
 
+	// Each method.
+	c.wl("func (", recv, " ", inst, ") Each(src any, fn func(i int, field string, value any)) error {")
+	c.wdl(funcHeaderLC)
+	err = c.writeNodeEach(node, "x", 0)
+	c.wdl("return nil}")
+
 	// Reset methods.
 	c.wl("func (", recv, " ", inst, ") Reset(x any, path ...string) error {")
 	c.wl("if len(path)==0{return ", recv, ".reset1(x, path...)}else{return ", recv, ".reset2(x, path...)}")
@@ -1543,6 +1549,18 @@ func (c *Compiler) writeNodeAppend(node_ *node, v string, depth int) error {
 		c.wl("}")
 	case typeBasic:
 		// do nothing
+	}
+
+	return nil
+}
+
+func (c *Compiler) writeNodeEach(node_ *node, v string, depth int) error {
+	if node_.ptr {
+		// Value may be nil on pointer types.
+		c.wl("if ", v, " == nil { return nil }")
+	}
+	for i := 0; i < len(node_.chld); i++ {
+		// todo implement me
 	}
 
 	return nil
