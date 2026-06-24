@@ -719,3 +719,17 @@ func BenchmarkInspectorLenCap(b *testing.B) {
 		}
 	})
 }
+
+func BenchmarkInspectorEach(b *testing.B) {
+	ins := testobj_ins.TestObjectInspector{}
+	src := *testO
+	dst := make(map[string]any)
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		clear(dst)
+		_ = ins.Each(&src, func(_ int, field string, value any) {
+			dst[field] = value
+		})
+	}
+}
