@@ -476,11 +476,13 @@ func TestInspectorEach(t *testing.T) {
 	_ = ins.Each(&obj, func(_ int, field string, value any) {
 		dst[field] = value
 	})
+	t0, t1, t2, t3, t4 := "foo", []byte("bar"), 12.34, int32(78), uint64(0)
 	expect := map[string]any{
-		"id":         "foo",
-		"name":       []byte("bar"),
-		"cost":       12.34,
-		"status":     int32(78),
+		"id":         &t0,
+		"name":       &t1,
+		"cost":       &t2,
+		"status":     &t3,
+		"ustate":     &t4,
 		"permission": &testobj.TestPermission{15: true, 23: false},
 		"flags": testobj.TestFlag{
 			"export": 17,
@@ -512,7 +514,6 @@ func TestInspectorEach(t *testing.T) {
 				},
 			},
 		},
-		"ustate": uint64(0),
 	}
 	if !reflect.DeepEqual(dst, expect) {
 		t.Fail()

@@ -1559,7 +1559,7 @@ func (c *Compiler) writeNodeEach(node_ *node, v string, depth int) error {
 		// Value may be nil on pointer types.
 		c.wl("if ", v, " == nil { return nil }")
 	}
-	tagfb := []string{"json", "xml", "yaml"}
+	tagfb := []string{"json", "xml", "yaml", "bson"}
 	for i := 0; i < len(node_.chld); i++ {
 		ch := node_.chld[i]
 		name := ch.name
@@ -1570,7 +1570,11 @@ func (c *Compiler) writeNodeEach(node_ *node, v string, depth int) error {
 				}
 			}
 		}
-		c.wl("fn(", strconv.Itoa(i), `,"`, name, `", x.`, ch.name, ")")
+		pfx_ := ""
+		if !ch.ptr && (ch.slct == nil || ch.slct.typu == "byte") && ch.mapk == nil {
+			pfx_ = "&"
+		}
+		c.wl("fn(", strconv.Itoa(i), `,"`, name, `",`, pfx_, `x.`, ch.name, ")")
 	}
 
 	return nil

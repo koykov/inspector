@@ -1621,11 +1621,11 @@ func (i5 TestObjectInspector) Each(src any, fn func(i int, field string, value a
 		return inspector.ErrUnsupportedType
 	}
 
-	fn(0, "id", x.Id)
-	fn(1, "name", x.Name)
-	fn(2, "status", x.Status)
-	fn(3, "ustate", x.Ustate)
-	fn(4, "cost", x.Cost)
+	fn(0, "id", &x.Id)
+	fn(1, "name", &x.Name)
+	fn(2, "status", &x.Status)
+	fn(3, "ustate", &x.Ustate)
+	fn(4, "cost", &x.Cost)
 	fn(5, "permission", x.Permission)
 	fn(6, "history_tree", x.HistoryTree)
 	fn(7, "flags", x.Flags)

@@ -12839,8 +12839,8 @@ func (i6 TestObject1Inspector) Each(src any, fn func(i int, field string, value 
 	fn(1, "IntPtrSlice", x.IntPtrSlice)
 	fn(2, "IntSlicePtr", x.IntSlicePtr)
 	fn(3, "IntPtrSlicePtr", x.IntPtrSlicePtr)
-	fn(4, "ByteSlice", x.ByteSlice)
-	fn(5, "BytePtrSlice", x.BytePtrSlice)
+	fn(4, "ByteSlice", &x.ByteSlice)
+	fn(5, "BytePtrSlice", &x.BytePtrSlice)
 	fn(6, "ByteSlicePtr", x.ByteSlicePtr)
 	fn(7, "BytePtrSlicePtr", x.BytePtrSlicePtr)
 	fn(8, "FloatSlice", x.FloatSlice)
@@ -12868,7 +12868,7 @@ func (i6 TestObject1Inspector) Each(src any, fn func(i int, field string, value 
 	fn(30, "FloatPtrStructMap", x.FloatPtrStructMap)
 	fn(31, "FloatPtrStructPtrMap", x.FloatPtrStructPtrMap)
 	fn(32, "FloatPtrStructPtrMapPtr", x.FloatPtrStructPtrMapPtr)
-	fn(33, "NestedStruct", x.NestedStruct)
+	fn(33, "NestedStruct", &x.NestedStruct)
 	fn(34, "NestedStructPtr", x.NestedStructPtr)
 	return nil
 }
