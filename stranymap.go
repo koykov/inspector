@@ -176,6 +176,19 @@ func (i StringAnyMapInspector) CopyTo(src, dst any, buf AccumulativeBuffer) (err
 	return i.cpy(&mdst, msrc, buf)
 }
 
+func (i StringAnyMapInspector) Each(src any, fn func(i int, field string, value any)) error {
+	m, err := i.indir(src)
+	if err != nil {
+		return err
+	}
+	var c int
+	for k, v := range m {
+		fn(c, k, v)
+		c++
+	}
+	return nil
+}
+
 func (i StringAnyMapInspector) Length(x any, result *int, path ...string) error {
 	if len(path) == 0 {
 		m, err := i.indir(x)

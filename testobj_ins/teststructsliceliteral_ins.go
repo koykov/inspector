@@ -1018,6 +1018,25 @@ func (i12 TestStructSliceLiteralInspector) Append(src, value any, path ...string
 	return src, nil
 }
 
+func (i12 TestStructSliceLiteralInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStructSliceLiteral
+	_ = x
+	if p, ok := src.(**testobj.TestStructSliceLiteral); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStructSliceLiteral); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStructSliceLiteral); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	return nil
+}
+
 func (i12 TestStructSliceLiteralInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i12.reset1(x, path...)

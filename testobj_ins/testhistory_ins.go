@@ -430,6 +430,28 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 	return src, nil
 }
 
+func (i4 TestHistoryInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestHistory
+	_ = x
+	if p, ok := src.(**testobj.TestHistory); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestHistory); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestHistory); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	fn(0, "date_unix", &x.DateUnix)
+	fn(1, "cost", &x.Cost)
+	fn(2, "comment", &x.Comment)
+	return nil
+}
+
 func (i4 TestHistoryInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i4.reset1(x, path...)

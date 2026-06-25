@@ -1,6 +1,6 @@
 module github.com/koykov/inspector
 
-go 1.18
+go 1.24
 
 require (
 	github.com/koykov/byteconv v1.0.1

@@ -2,6 +2,7 @@ package test
 
 import (
 	"bytes"
+	"reflect"
 	"strconv"
 	"testing"
 
@@ -468,6 +469,57 @@ func TestInspectorLenCap(t *testing.T) {
 	}
 }
 
+func TestInspectorEach(t *testing.T) {
+	var ins testobj_ins.TestObjectInspector
+	obj := *testO
+	dst := make(map[string]any)
+	_ = ins.Each(&obj, func(_ int, field string, value any) {
+		dst[field] = value
+	})
+	t0, t1, t2, t3, t4 := "foo", []byte("bar"), 12.34, int32(78), uint64(0)
+	expect := map[string]any{
+		"id":         &t0,
+		"name":       &t1,
+		"cost":       &t2,
+		"status":     &t3,
+		"ustate":     &t4,
+		"permission": &testobj.TestPermission{15: true, 23: false},
+		"flags": testobj.TestFlag{
+			"export": 17,
+			"ro":     4,
+			"rw":     7,
+			"Valid":  1,
+		},
+		"history_tree": map[string]*testobj.TestHistory(nil),
+		"finance": &testobj.TestFinance{
+			MoneyIn:  3200,
+			MoneyOut: 1500.637657,
+			Balance:  9000,
+			AllowBuy: true,
+			History: []testobj.TestHistory{
+				{
+					152354345634,
+					14.345241,
+					[]byte("pay for domain"),
+				},
+				{
+					153465345246,
+					-3.0000342543,
+					[]byte("got refund"),
+				},
+				{
+					156436535640,
+					2325242534.35324523,
+					[]byte("maintenance"),
+				},
+			},
+		},
+	}
+	if !reflect.DeepEqual(dst, expect) {
+		t.Fail()
+	}
+}
+
 func BenchmarkInspectorDeepEqual(b *testing.B) {
 	var ins testobj_ins.TestObjectInspector
 	for i := range deqStages {
@@ -667,4 +719,18 @@ func BenchmarkInspectorLenCap(b *testing.B) {
 			}
 		}
 	})
+}
+
+func BenchmarkInspectorEach(b *testing.B) {
+	ins := testobj_ins.TestObjectInspector{}
+	src := *testO
+	dst := make(map[string]any)
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		clear(dst)
+		_ = ins.Each(&src, func(_ int, field string, value any) {
+			dst[field] = value
+		})
+	}
 }

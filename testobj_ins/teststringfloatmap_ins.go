@@ -394,6 +394,28 @@ func (i8 TestStringFloatMapInspector) Append(src, value any, path ...string) (an
 	return src, nil
 }
 
+func (i8 TestStringFloatMapInspector) Each(src any, fn func(i int, field string, value any)) error {
+	if src == nil {
+		return nil
+	}
+	var x *testobj.TestStringFloatMap
+	_ = x
+	if p, ok := src.(**testobj.TestStringFloatMap); ok {
+		x = *p
+	} else if p, ok := src.(*testobj.TestStringFloatMap); ok {
+		x = p
+	} else if v, ok := src.(testobj.TestStringFloatMap); ok {
+		x = &v
+	} else {
+		return inspector.ErrUnsupportedType
+	}
+
+	if x == nil {
+		return nil
+	}
+	return nil
+}
+
 func (i8 TestStringFloatMapInspector) Reset(x any, path ...string) error {
 	if len(path) == 0 {
 		return i8.reset1(x, path...)

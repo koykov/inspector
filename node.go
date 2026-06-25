@@ -31,6 +31,8 @@ type node struct {
 	hasc bool
 	// Flag if node contains slice inside.
 	hasa bool
+	// Formatted tags.
+	tags []Tag
 }
 
 func (n node) write(w ByteStringWriter) error {

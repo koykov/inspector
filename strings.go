@@ -326,6 +326,8 @@ func (i StringsInspector) Append(src, value any, _ ...string) (any, error) {
 	return src, nil
 }
 
+func (i StringsInspector) Each(_ any, _ func(i int, field string, value any)) error { return nil }
+
 func (i StringsInspector) Length(src any, result *int, path ...string) error {
 	ss, pp, ok := i.sp(src)
 	if !ok {
