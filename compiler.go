@@ -366,58 +366,6 @@ func (c *Compiler) writeRootNode(node *node) (err error) {
 
 	c.wdl("type ", inst, " struct {\ninspector.BaseInspector\n}")
 
-	// Common checks and type cast.
-	funcHeader := `if len(path) == 0 { return }
-if src == nil { return }
-var x *` + pname + `
-_ = x
-if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
-	// Custom header for Set() method.
-	funcHeaderSet := `if len(path) == 0 { return nil }
-if dst == nil { return nil }
-var x *` + pname + `
-_ = x
-if p, ok := dst.(**` + pname + `); ok { x = *p } else if p, ok := dst.(*` + pname + `); ok { x = p } else if v, ok := dst.(` + pname + `); ok { x = &v } else { return nil }`
-	// Custom header for GetTo() method.
-	funcHeaderGetTo := `if src == nil { return }
-var x *` + pname + `
-_ = x
-if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }
-if len(path) == 0 { *buf = &(*x)
-return}`
-	// Header for Loop() method.
-	funcHeaderLoop := ""
-	if node.typ != typeSlice {
-		funcHeaderLoop += "if len(path) == 0 { return }\n"
-	}
-	funcHeaderLoop += `if src == nil { return }
-var x *` + pname + `
-_ = x
-if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return }`
-	// Header for DeepEqual() method.
-	funcHeaderEqual := `var (
-lx, rx *` + pname + `
-leq, req bool
-)
-_, _, _, _ = lx, rx, leq, req
-if lp, ok := l.(**` + pname + `); ok { lx, leq = *lp, true } else if lp, ok := l.(*` + pname + `); ok { lx, leq = lp, true } else if lp, ok := l.(` + pname + `); ok { lx, leq = &lp, true }
-if rp, ok := r.(**` + pname + `); ok { rx, req = *rp, true } else if rp, ok := r.(*` + pname + `); ok { rx, req = rp, true } else if rp, ok := r.(` + pname + `); ok { rx, req = &rp, true }
-if !leq || !req { return false }
-if lx == nil && rx == nil { return true }
-if (lx == nil && rx != nil) || (lx != nil && rx == nil) { return false }
-`
-	// Header for Length()/Capacity() methods.
-	funcHeaderLC := `if src == nil { return nil }
-var x *` + pname + `
-_ = x
-if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return inspector.ErrUnsupportedType }`
-
-	// Common checks and type cast.
-	funcHeaderAppend := `if src == nil { return src, nil }
-var x *` + pname + `
-_ = x
-if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return src, nil }`
-
 	// Getter methods.
 	c.wl("func (", recv, " ", inst, ") TypeName() string {")
 	c.wl("return \"", node.typn, "\"")
@@ -433,7 +381,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wdl("}")
 
 	c.wl("func (", recv, " ", inst, ") GetTo(src any, buf *any, path ...string) (err error) {")
-	c.wdl(funcHeaderGetTo)
+	c.wdl(c.getFuncHeaderGetTo(pname))
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeGet)
 	if err != nil {
 		return err
@@ -442,7 +390,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 	// Compare method.
 	c.wl("func (", recv, " ", inst, ") Compare(src any, cond inspector.Op, right string, result *bool, path ...string) (err error) {")
-	c.wdl(funcHeader)
+	c.wdl(c.getFuncHeader(pname))
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeCmp)
 	if err != nil {
 		return err
@@ -451,7 +399,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 	// Loop method.
 	c.wl("func (", recv, " ", inst, ") Loop(src any, l inspector.Iterator, buf *[]byte, path ...string) (err error) {")
-	c.wdl(funcHeaderLoop)
+	c.wdl(c.getFuncHeaderLoop(pname, node.typ))
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeLoop)
 	if err != nil {
 		return err
@@ -460,7 +408,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 	// Setter methods.
 	c.wl("func (", recv, " ", inst, ") SetWithBuffer(dst, value any, buf inspector.AccumulativeBuffer, path ...string) error {")
-	c.wdl(funcHeaderSet)
+	c.wdl(c.getFuncHeaderSet(pname))
 	err = c.writeNode(node, nil, recv, "x", "", 0, modeSet)
 	if err != nil {
 		return err
@@ -476,7 +424,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("return ", recv, ".DeepEqualWithOptions(l, r, nil)")
 	c.wdl("}")
 	c.wl("func (", recv, " ", inst, ") DeepEqualWithOptions(l, r any, opts *inspector.DEQOptions) bool {")
-	c.wdl(funcHeaderEqual)
+	c.wdl(c.getFuncHeaderEqual(pname))
 	err = c.writeNodeDEQ(node, nil, recv, "", "lx", "rx", 0)
 	if err != nil {
 		return err
@@ -519,14 +467,14 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 	// Len/cap methods.
 	c.wl("func (", recv, " ", inst, ") Length(src any, result *int, path ...string) error {")
-	c.wdl(funcHeaderLC)
+	c.wdl(c.getFuncHeaderLC(pname))
 	err = c.writeNodeLC(node, "x", "len", 0)
 	if err != nil {
 		return err
 	}
 	c.wdl("return nil}")
 	c.wl("func (", recv, " ", inst, ") Capacity(src any, result *int, path ...string) error {")
-	c.wdl(funcHeaderLC)
+	c.wdl(c.getFuncHeaderLC(pname))
 	err = c.writeNodeLC(node, "x", "cap", 0)
 	if err != nil {
 		return err
@@ -536,7 +484,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 	c.wl("func (", recv, " ", inst, ") Append(src, value any, path ...string) (any, error) {")
 	c.wl("_, _, _ = src, value, path")
 	if node.hasc {
-		c.wdl(funcHeaderAppend)
+		c.wdl(c.getFuncHeaderAppend(pname))
 		err = c.writeNodeAppend(node, "x", 0)
 	}
 	c.wl("return src, nil")
@@ -544,7 +492,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 	// Each method.
 	c.wl("func (", recv, " ", inst, ") Each(src any, fn func(i int, field string, value any)) error {")
-	c.wdl(funcHeaderLC)
+	c.wdl(c.getFuncHeaderLC(pname))
 	err = c.writeNodeEach(node, "x", 0)
 	c.wdl("return nil}")
 
