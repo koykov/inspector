@@ -1,6 +1,9 @@
 package inspector
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 // Write body of the methods according given mode.
 func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int, mode mode) error {
@@ -315,4 +318,70 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 	}
 
 	return c.err
+}
+
+// Write comparison code of the node.
+func (c *Compiler) writeCmp(left *node, leftVar string) {
+	// Node is pointer, check nil case.
+	if left.ptr {
+		c.wl("if right==inspector.Nil {")
+		c.wl("if cond == inspector.OpEq {")
+		c.wl("*result = ", leftVar, " == nil")
+		c.wl("} else {")
+		c.wl("*result = ", leftVar, " != nil")
+		c.wl("}")
+		c.wl("return\n}")
+		return
+	}
+
+	// Get type name as a string.
+	bi := c.isBuiltin(left.typn)
+	pname := left.typn
+	if !bi {
+		pname = c.pkgName + "." + pname
+	}
+	// Get the exact value of the right variable.
+	c.wl("var rightExact ", pname)
+	snippet, imports, err := StrConvSnippet("right", left.typn, left.typu, "rightExact")
+	c.regImport(imports)
+	if err != nil {
+		c.err = err
+		return
+	}
+	if !bi {
+		snippet = strings.Replace(snippet, left.typu, pname, -1)
+	}
+	c.wl(snippet)
+
+	switch left.typn {
+	// []byte and bool types allows only equal and non-equal comparison operations.
+	case "[]byte":
+		c.wl("if cond == inspector.OpEq {")
+		c.wl("*result = bytes.Equal(", leftVar, ", rightExact)")
+		c.wl("} else {")
+		c.wl("*result = !bytes.Equal(", leftVar, ", rightExact)")
+		c.wl("}")
+	case "bool":
+		c.wl("if cond == inspector.OpEq {")
+		c.wl("*result = ", leftVar, " == rightExact")
+		c.wl("} else {")
+		c.wl("*result = ", leftVar, " != rightExact")
+		c.wl("}")
+	default:
+		// All other cases allows all type sof the comparison.
+		c.wl("switch cond {")
+		c.wl("case inspector.OpEq:")
+		c.wl("*result = ", leftVar, " == rightExact")
+		c.wl("case inspector.OpNq:")
+		c.wl("*result = ", leftVar, " != rightExact")
+		c.wl("case inspector.OpGt:")
+		c.wl("*result = ", leftVar, " > rightExact")
+		c.wl("case inspector.OpGtq:")
+		c.wl("*result = ", leftVar, " >= rightExact")
+		c.wl("case inspector.OpLt:")
+		c.wl("*result = ", leftVar, " < rightExact")
+		c.wl("case inspector.OpLtq:")
+		c.wl("*result = ", leftVar, " <= rightExact")
+		c.wl("}")
+	}
 }
