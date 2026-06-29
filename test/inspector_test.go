@@ -9,107 +9,70 @@ import (
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"github.com/koykov/inspector/testobj_ins"
+	"github.com/stretchr/testify/assert"
 )
 
 func testGetter(t testing.TB, i inspector.Inspector) {
 	id, _ := i.Get(testO, p0...)
-	if id.(string) != "foo" {
-		t.Error("object.Id: mismatch result and expectation")
-	}
+	assert.Equal(t, id, "foo")
 
 	name, _ := i.Get(testO, p1...)
-	if !bytes.Equal(name.([]byte), expectFoo) {
-		t.Error("object.Name: mismatch result and expectation")
-	}
+	assert.Equal(t, name, expectFoo)
 
 	perm, _ := i.Get(testO, p2...)
-	if perm.(bool) != false {
-		t.Error("object.Permission.23: mismatch result and expectation")
-	}
+	assert.Equal(t, perm, false)
 
 	flag, _ := i.Get(testO, p3...)
-	if flag.(int32) != 17 {
-		t.Error("object.Flags.export: mismatch result and expectation")
-	}
+	assert.Equal(t, flag, int32(17))
 
 	bal, _ := i.Get(testO, p4...)
-	if bal.(float64) != 9000 {
-		t.Error("object.Finance.Balance: mismatch result and expectation")
-	}
+	assert.Equal(t, bal, float64(9000))
 
 	date, _ := i.Get(testO, p5...)
-	if date.(int64) != 153465345246 {
-		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
-	}
+	assert.Equal(t, date, int64(153465345246))
 
 	comment, _ := i.Get(testO, p6...)
-	if !bytes.Equal(comment.([]byte), expectComment) {
-		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
-	}
+	assert.Equal(t, comment, expectComment)
 }
 
 func testGetterPtr(t testing.TB, i inspector.Inspector, buf any) {
 	_ = i.GetTo(testO, &buf, p0...)
-	if *buf.(*string) != "foo" {
-		t.Error("object.Id: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*string), "foo")
 
 	_ = i.GetTo(testO, &buf, p1...)
-	if !bytes.Equal(*buf.(*[]byte), expectFoo) {
-		t.Error("object.Name: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*[]byte), expectFoo)
 
 	_ = i.GetTo(testO, &buf, p2...)
-	if *buf.(*bool) != false {
-		t.Error("object.Permission.23: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*bool), false)
 
 	_ = i.GetTo(testO, &buf, p3...)
-	if *buf.(*int32) != 17 {
-		t.Error("object.Flags.export: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*int32), int32(17))
 
 	_ = i.GetTo(testO, &buf, p4...)
-	if *buf.(*float64) != 9000 {
-		t.Error("object.Finance.Balance: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*float64), float64(9000))
 
 	_ = i.GetTo(testO, &buf, p5...)
-	if *buf.(*int64) != 153465345246 {
-		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*int64), int64(153465345246))
 
 	_ = i.GetTo(testO, &buf, p6...)
-	if !bytes.Equal(*buf.(*[]byte), expectComment) {
-		t.Error("object.Finance.History.0.Comment: mismatch result and expectation")
-	}
+	assert.Equal(t, *buf.(*[]byte), expectComment)
 }
 
 func testComparePtr(t testing.TB, i inspector.Inspector, buf *bool) {
 	_ = i.Compare(testO, inspector.OpEq, "foo", buf, p0...)
-	if !*buf {
-		t.Error("object.Id: mismatch result and expectation")
-	}
+	assert.False(t, !*buf)
 
 	_ = i.Compare(testO, inspector.OpEq, "bar", buf, p1...)
-	if !*buf {
-		t.Error("object.Name: mismatch result and expectation")
-	}
+	assert.False(t, !*buf)
 
 	_ = i.Compare(testO, inspector.OpGtq, "60", buf, p7...)
-	if !*buf {
-		t.Error("object.Status: mismatch result and expectation")
-	}
+	assert.False(t, !*buf)
 
 	_ = i.Compare(testO, inspector.OpLtq, "5000", buf, p8...)
-	if !*buf {
-		t.Error("object.Finance.MoneyIn: mismatch result and expectation")
-	}
+	assert.False(t, !*buf)
 
 	_ = i.Compare(testO, inspector.OpEq, "true", buf, p9...)
-	if !*buf {
-		t.Error("object.Finance.AllowBuy: mismatch result and expectation")
-	}
+	assert.False(t, !*buf)
 }
 
 func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.AccumulativeBuffer) {
@@ -118,39 +81,25 @@ func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.Accumulativ
 	obj := obj1.(*testobj.TestObject)
 	obj.Id = ""
 	_ = i.SetWithBuffer(obj, 1984, ab, p0...)
-	if obj.Id != "1984" {
-		t.Error("object.Id: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Id, "1984")
 
 	_ = i.SetWithBuffer(obj, 2000, ab, p1...)
-	if !bytes.Equal(obj.Name, expectName) {
-		t.Error("object.Name: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Name, expectName)
 
 	_ = i.SetWithBuffer(obj, false, ab, p2...)
-	if (*obj.Permission)[23] != false {
-		t.Error("object.Permission.23: mismatch result and expectation")
-	}
+	assert.False(t, (*obj.Permission)[23])
 
 	_ = i.SetWithBuffer(obj, int32(23), ab, p3...)
-	if obj.Flags["export"] != 23 {
-		t.Error("object.Flags.export: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Flags["export"], int32(23))
 
 	_ = i.SetWithBuffer(obj, float64(9000), ab, p4...)
-	if obj.Finance.Balance != 9000 {
-		t.Error("object.Finance.Balance: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Finance.Balance, float64(9000))
 
 	_ = i.SetWithBuffer(obj, int64(153465345246), ab, p5...)
-	if obj.Finance.History[1].DateUnix != 153465345246 {
-		t.Error("object.Finance.History.1.DateUnix: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Finance.History[1].DateUnix, int64(153465345246))
 
 	_ = i.SetWithBuffer(obj, &expectComment1, ab, p6...)
-	if !bytes.Equal(obj.Finance.History[0].Comment, expectComment1) {
-		t.Error("object.Finance.History.0.DateUnix: mismatch result and expectation")
-	}
+	assert.Equal(t, obj.Finance.History[0].Comment, expectComment1)
 }
 
 func TestInspector(t *testing.T) {
