@@ -103,13 +103,6 @@ func testSetterPtr(t testing.TB, i inspector.Inspector, ab inspector.Accumulativ
 }
 
 func TestInspector(t *testing.T) {
-	t.Run("reflect/get", func(t *testing.T) {
-		testGetter(t, inspector.ReflectInspector{})
-	})
-	t.Run("cg/get", func(t *testing.T) {
-		var buf any
-		testGetterPtr(t, testobj_ins.TestObjectInspector{}, buf)
-	})
 	t.Run("cg/cmp", func(t *testing.T) {
 		var buf bool
 		testComparePtr(t, testobj_ins.TestObjectInspector{}, &buf)
@@ -366,21 +359,6 @@ func BenchmarkInspectorDeepEqual(b *testing.B) {
 }
 
 func BenchmarkInspector(b *testing.B) {
-	b.Run("reflect/get", func(b *testing.B) {
-		var ins inspector.ReflectInspector
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			testGetter(b, ins)
-		}
-	})
-	b.Run("cg/get", func(b *testing.B) {
-		var ins testobj_ins.TestObjectInspector
-		var buf any
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			testGetterPtr(b, ins, buf)
-		}
-	})
 	b.Run("cg/cmp", func(b *testing.B) {
 		var ins testobj_ins.TestObjectInspector
 		var buf bool
