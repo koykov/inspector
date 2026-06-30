@@ -1,7 +1,6 @@
 package test
 
 import (
-	"bytes"
 	"reflect"
 	"strconv"
 	"testing"
@@ -9,43 +8,38 @@ import (
 	"github.com/koykov/inspector"
 	"github.com/koykov/inspector/testobj"
 	"github.com/koykov/inspector/testobj_ins"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInspector(t *testing.T) {
-	t.Run("cg/cmp", func(t *testing.T) {
+	t.Run("compare", func(t *testing.T) {
 		var buf bool
 		testComparePtr(t, testobj_ins.TestObjectInspector{}, &buf)
 	})
-	t.Run("cg/set", func(t *testing.T) {
+	t.Run("set", func(t *testing.T) {
 		testSetterPtr(t, testobj_ins.TestObjectInspector{}, nil)
 	})
-	t.Run("cg/setBuf", func(t *testing.T) {
+	t.Run("set/buffer", func(t *testing.T) {
 		ab := inspector.ByteBuffer{}
 		testSetterPtr(t, testobj_ins.TestObjectInspector{}, &ab)
 	})
-}
-
-func TestInspectorDeepEqual(t *testing.T) {
-	var ins testobj_ins.TestObjectInspector
-	for i := range deqStages {
-		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			stage := &deqStages[i]
-			if ins.DeepEqualWithOptions(stage.l, stage.r, stage.opts) != stage.eq {
-				t.FailNow()
-			}
-		})
-	}
-}
-
-func TestInspectorCopy(t *testing.T) {
-	var ins testobj_ins.TestObjectInspector
-	obj := *testO
-	obj.Name = []byte("foobar")
-	cpy, _ := ins.Copy(obj)
-	obj.Name[0] = 'F'
-	if bytes.Equal(obj.Name, cpy.(*testobj.TestObject).Name) {
-		t.FailNow()
-	}
+	t.Run("deep equal", func(t *testing.T) {
+		var ins testobj_ins.TestObjectInspector
+		for i := range deqStages {
+			t.Run(strconv.Itoa(i), func(t *testing.T) {
+				stage := &deqStages[i]
+				assert.Equal(t, ins.DeepEqualWithOptions(stage.l, stage.r, stage.opts), stage.eq)
+			})
+		}
+	})
+	t.Run("copy", func(t *testing.T) {
+		var ins testobj_ins.TestObjectInspector
+		obj := *testO
+		obj.Name = []byte("foobar")
+		cpy, _ := ins.Copy(obj)
+		obj.Name[0] = 'F'
+		assert.Equal(t, obj.Name, cpy.(*testobj.TestObject).Name)
+	})
 }
 
 func TestInspectorAppend(t *testing.T) {
