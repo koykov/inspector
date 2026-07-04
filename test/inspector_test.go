@@ -266,7 +266,7 @@ func BenchmarkInspectorDeepEqual(b *testing.B) {
 }
 
 func BenchmarkInspector(b *testing.B) {
-	b.Run("cg/cmp", func(b *testing.B) {
+	b.Run("compare", func(b *testing.B) {
 		var ins testobj_ins.TestObjectInspector
 		var buf bool
 		b.ReportAllocs()
@@ -274,14 +274,16 @@ func BenchmarkInspector(b *testing.B) {
 			testComparePtr(b, ins, &buf)
 		}
 	})
-	b.Run("cg/set", func(b *testing.B) {
+
+	b.Run("set", func(b *testing.B) {
 		var ins testobj_ins.TestObjectInspector
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
 			testSetterPtr(b, ins, nil)
 		}
 	})
-	b.Run("cg/setBuf", func(b *testing.B) {
+
+	b.Run("set/buffer", func(b *testing.B) {
 		var ins testobj_ins.TestObjectInspector
 		ab := inspector.ByteBuffer{}
 		b.ReportAllocs()
@@ -290,162 +292,162 @@ func BenchmarkInspector(b *testing.B) {
 			ab.Reset()
 		}
 	})
-}
 
-func BenchmarkInspectorCopy(b *testing.B) {
-	b.Run("testobj", func(b *testing.B) {
-		var (
-			cpy testobj.TestObject
-			ins testobj_ins.TestObjectInspector
-			buf inspector.ByteBuffer
-		)
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = ins.Reset(&cpy)
-			buf.Reset()
-			if err := ins.CopyTo(testO, &cpy, &buf); err != nil {
-				b.Fatal(err)
+	b.Run("copy", func(b *testing.B) {
+		b.Run("testobj", func(b *testing.B) {
+			var (
+				cpy testobj.TestObject
+				ins testobj_ins.TestObjectInspector
+				buf inspector.ByteBuffer
+			)
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				_ = ins.Reset(&cpy)
+				buf.Reset()
+				if err := ins.CopyTo(testO, &cpy, &buf); err != nil {
+					b.Fatal(err)
+				}
 			}
-		}
-	})
-	fn1 := func(b *testing.B, origin *testobj.TestObject1) {
-		var (
-			cpy testobj.TestObject1
-			ins testobj_ins.TestObject1Inspector
-			buf inspector.ByteBuffer
-		)
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			if err := ins.Reset(&cpy); err != nil {
-				b.Fatal(err)
-			}
-			buf.Reset()
-			if err := ins.CopyTo(origin, &cpy, &buf); err != nil {
-				b.Fatal(err)
-			}
-		}
-	}
-	b.Run("testobj1+alloc-free-cases", func(b *testing.B) {
-		origin := testobj.TestObject1{
-			IntSlice:        []int32{0, 1, 2, 3, 4, 5},
-			ByteSlice:       []byte("lorem ipsum ..."),
-			FloatSlice:      testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
-			StructSlice:     []testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
-			IntStringMap:    map[int]string{0: "foo", 1: "bar", 2: "qwe"},
-			StringFloatMap:  testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
-			FloatStructMap:  map[float64]testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
-			NestedStruct:    testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
-			NestedStructPtr: &testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
-		}
-		fn1(b, &origin)
-	})
-	b.Run("testobj1+string maps", func(b *testing.B) {
-		origin := testobj.TestObject1{
-			IntSlice:       []int32{0, 1, 2, 3, 4, 5},
-			ByteSlice:      []byte("lorem ipsum ..."),
-			FloatSlice:     testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
-			IntStringMap:   map[int]string{0: "foo", 1: "bar", 2: "qwe"},
-			StringFloatMap: testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
-		}
-		fn1(b, &origin)
-	})
-	b.Run("testobj1+struct pointer slice", func(b *testing.B) {
-		origin := testobj.TestObject1{
-			IntSlice:           []int32{0, 1, 2, 3, 4, 5},
-			ByteSlice:          []byte("lorem ipsum ..."),
-			FloatSlice:         testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
-			StructPtrSlice:     []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
-			StructSliceLiteral: []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
-		}
-		fn1(b, &origin)
-	})
-	b.Run("testobj1+nested maps", func(b *testing.B) {
-		origin := testobj.TestObject1{
-			IntSlice:   []int32{0, 1, 2, 3, 4, 5},
-			ByteSlice:  []byte("lorem ipsum ..."),
-			FloatSlice: testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
-			IntIntMapMap: map[int32]map[int32]int32{
-				0: {0: 1, 1: 2, 2: 3},
-			},
-		}
-		fn1(b, &origin)
-	})
-	b.Run("testobj1+struct ptr map", func(b *testing.B) {
-		origin := testobj.TestObject1{
-			IntSlice:          []int32{0, 1, 2, 3, 4, 5},
-			ByteSlice:         []byte("lorem ipsum ..."),
-			FloatSlice:        testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
-			FloatStructPtrMap: map[float64]*testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
-		}
-		fn1(b, &origin)
-	})
-}
-
-func BenchmarkInspectorAppend(b *testing.B) {
-	b.Run("strings", func(b *testing.B) {
-		var ins inspector.StringsInspector
-		ss := []string{"foo", "bar"}
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			ss = ss[:2]
-			_, err := ins.Append(&ss, "qwe")
-			if err != nil {
-				b.Fatal(err)
-			}
-		}
-	})
-	b.Run("object", func(b *testing.B) {
-		var ins testobj_ins.TestObjectInspector
-		raw, _ := ins.Copy(testO)
-		cpy := raw.(*testobj.TestObject)
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			cpy.Finance.History = cpy.Finance.History[:3]
-			_, _ = ins.Append(cpy, testobj.TestHistory{
-				DateUnix: 111111,
-				Cost:     3.1415,
-				Comment:  nil,
-			}, "Finance", "History")
-		}
-	})
-}
-
-func BenchmarkInspectorLenCap(b *testing.B) {
-	ins := testobj_ins.TestObjectInspector{}
-	obj := *testO
-	path := []string{"Finance", "History"}
-	b.Run("len", func(b *testing.B) {
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			var l int
-			_ = ins.Length(obj, &l, path...)
-			if l != 3 {
-				b.FailNow()
-			}
-		}
-	})
-	b.Run("cap", func(b *testing.B) {
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			var c int
-			_ = ins.Capacity(obj, &c, path...)
-			if c != 3 {
-				b.FailNow()
-			}
-		}
-	})
-}
-
-func BenchmarkInspectorEach(b *testing.B) {
-	ins := testobj_ins.TestObjectInspector{}
-	src := *testO
-	dst := make(map[string]any)
-	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		clear(dst)
-		_ = ins.Each(&src, func(_ int, field string, value any) {
-			dst[field] = value
 		})
-	}
+		fn1 := func(b *testing.B, origin *testobj.TestObject1) {
+			var (
+				cpy testobj.TestObject1
+				ins testobj_ins.TestObject1Inspector
+				buf inspector.ByteBuffer
+			)
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				if err := ins.Reset(&cpy); err != nil {
+					b.Fatal(err)
+				}
+				buf.Reset()
+				if err := ins.CopyTo(origin, &cpy, &buf); err != nil {
+					b.Fatal(err)
+				}
+			}
+		}
+		b.Run("testobj1+alloc-free-cases", func(b *testing.B) {
+			origin := testobj.TestObject1{
+				IntSlice:        []int32{0, 1, 2, 3, 4, 5},
+				ByteSlice:       []byte("lorem ipsum ..."),
+				FloatSlice:      testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+				StructSlice:     []testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+				IntStringMap:    map[int]string{0: "foo", 1: "bar", 2: "qwe"},
+				StringFloatMap:  testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
+				FloatStructMap:  map[float64]testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+				NestedStruct:    testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
+				NestedStructPtr: &testobj.TestStruct{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561},
+			}
+			fn1(b, &origin)
+		})
+		b.Run("testobj1+string maps", func(b *testing.B) {
+			origin := testobj.TestObject1{
+				IntSlice:       []int32{0, 1, 2, 3, 4, 5},
+				ByteSlice:      []byte("lorem ipsum ..."),
+				FloatSlice:     testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+				IntStringMap:   map[int]string{0: "foo", 1: "bar", 2: "qwe"},
+				StringFloatMap: testobj.TestStringFloatMap{"foo": 1, "bar": 2, "qwe": 3},
+			}
+			fn1(b, &origin)
+		})
+		b.Run("testobj1+struct pointer slice", func(b *testing.B) {
+			origin := testobj.TestObject1{
+				IntSlice:           []int32{0, 1, 2, 3, 4, 5},
+				ByteSlice:          []byte("lorem ipsum ..."),
+				FloatSlice:         testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+				StructPtrSlice:     []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+				StructSliceLiteral: []*testobj.TestStruct{{A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+			}
+			fn1(b, &origin)
+		})
+		b.Run("testobj1+nested maps", func(b *testing.B) {
+			origin := testobj.TestObject1{
+				IntSlice:   []int32{0, 1, 2, 3, 4, 5},
+				ByteSlice:  []byte("lorem ipsum ..."),
+				FloatSlice: testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+				IntIntMapMap: map[int32]map[int32]int32{
+					0: {0: 1, 1: 2, 2: 3},
+				},
+			}
+			fn1(b, &origin)
+		})
+		b.Run("testobj1+struct ptr map", func(b *testing.B) {
+			origin := testobj.TestObject1{
+				IntSlice:          []int32{0, 1, 2, 3, 4, 5},
+				ByteSlice:         []byte("lorem ipsum ..."),
+				FloatSlice:        testobj.TestFloatSlice{0, 1, 2, 3, 4, 5},
+				FloatStructPtrMap: map[float64]*testobj.TestStruct{1: {A: 1, S: "foobar", B: []byte("foobar"), I: 12, I8: 8, I16: 16, I32: 32, I64: 64, U: 256, U8: 8, U16: 16, U32: 32, U64: 64, F: 3.1415, D: 3.141561}},
+			}
+			fn1(b, &origin)
+		})
+	})
+
+	b.Run("append", func(b *testing.B) {
+		b.Run("strings", func(b *testing.B) {
+			var ins inspector.StringsInspector
+			ss := []string{"foo", "bar"}
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				ss = ss[:2]
+				_, err := ins.Append(&ss, "qwe")
+				if err != nil {
+					b.Fatal(err)
+				}
+			}
+		})
+		b.Run("object", func(b *testing.B) {
+			var ins testobj_ins.TestObjectInspector
+			raw, _ := ins.Copy(testO)
+			cpy := raw.(*testobj.TestObject)
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				cpy.Finance.History = cpy.Finance.History[:3]
+				_, _ = ins.Append(cpy, testobj.TestHistory{
+					DateUnix: 111111,
+					Cost:     3.1415,
+					Comment:  nil,
+				}, "Finance", "History")
+			}
+		})
+	})
+
+	b.Run("len cap", func(b *testing.B) {
+		ins := testobj_ins.TestObjectInspector{}
+		obj := *testO
+		path := []string{"Finance", "History"}
+		b.Run("len", func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				var l int
+				_ = ins.Length(obj, &l, path...)
+				if l != 3 {
+					b.FailNow()
+				}
+			}
+		})
+		b.Run("cap", func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				var c int
+				_ = ins.Capacity(obj, &c, path...)
+				if c != 3 {
+					b.FailNow()
+				}
+			}
+		})
+	})
+
+	b.Run("each", func(b *testing.B) {
+		ins := testobj_ins.TestObjectInspector{}
+		src := *testO
+		dst := make(map[string]any)
+		b.ReportAllocs()
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			clear(dst)
+			_ = ins.Each(&src, func(_ int, field string, value any) {
+				dst[field] = value
+			})
+		}
+	})
 }
