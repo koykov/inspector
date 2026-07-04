@@ -38,7 +38,7 @@ func TestInspector(t *testing.T) {
 		obj.Name = []byte("foobar")
 		cpy, _ := ins.Copy(obj)
 		obj.Name[0] = 'F'
-		assert.Equal(t, obj.Name, cpy.(*testobj.TestObject).Name)
+		assert.NotEqual(t, obj.Name, cpy.(*testobj.TestObject).Name)
 	})
 }
 
