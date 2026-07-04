@@ -16,13 +16,16 @@ func TestInspector(t *testing.T) {
 		var buf bool
 		testComparePtr(t, testobj_ins.TestObjectInspector{}, &buf)
 	})
+
 	t.Run("set", func(t *testing.T) {
 		testSetterPtr(t, testobj_ins.TestObjectInspector{}, nil)
 	})
+
 	t.Run("set/buffer", func(t *testing.T) {
 		ab := inspector.ByteBuffer{}
 		testSetterPtr(t, testobj_ins.TestObjectInspector{}, &ab)
 	})
+
 	t.Run("deep equal", func(t *testing.T) {
 		var ins testobj_ins.TestObjectInspector
 		for i := range deqStages {
@@ -32,6 +35,7 @@ func TestInspector(t *testing.T) {
 			})
 		}
 	})
+
 	t.Run("copy", func(t *testing.T) {
 		var ins testobj_ins.TestObjectInspector
 		obj := *testO
@@ -40,210 +44,210 @@ func TestInspector(t *testing.T) {
 		obj.Name[0] = 'F'
 		assert.NotEqual(t, obj.Name, cpy.(*testobj.TestObject).Name)
 	})
-}
 
-func TestInspectorAppend(t *testing.T) {
-	t.Run("strings", func(t *testing.T) {
-		var ins inspector.StringsInspector
-		ss := []string{"foo", "bar"}
-		raw, err := ins.Append(&ss, "qwe")
-		if err != nil {
-			t.Error(err)
-		}
-		ss1, ok := raw.(*[]string)
-		if !ok {
-			t.FailNow()
-		}
-		if len(*ss1) != 3 {
-			t.FailNow()
-		}
-		if (*ss1)[2] != "qwe" {
-			t.FailNow()
-		}
+	t.Run("append", func(t *testing.T) {
+		t.Run("strings", func(t *testing.T) {
+			var ins inspector.StringsInspector
+			ss := []string{"foo", "bar"}
+			raw, err := ins.Append(&ss, "qwe")
+			if err != nil {
+				t.Error(err)
+			}
+			ss1, ok := raw.(*[]string)
+			if !ok {
+				t.FailNow()
+			}
+			if len(*ss1) != 3 {
+				t.FailNow()
+			}
+			if (*ss1)[2] != "qwe" {
+				t.FailNow()
+			}
+		})
+		t.Run("object", func(t *testing.T) {
+			var ins testobj_ins.TestObjectInspector
+			cpy, _ := ins.Copy(testO)
+			raw, err := ins.Append(cpy, testobj.TestHistory{
+				DateUnix: 111111,
+				Cost:     3.1415,
+				Comment:  nil,
+			}, "Finance", "History")
+			if err != nil {
+				t.Error(err)
+			}
+			hist, ok := raw.(*[]testobj.TestHistory)
+			if !ok {
+				t.FailNow()
+			}
+			if len(*hist) != 4 {
+				t.FailNow()
+			}
+			if (*hist)[3].DateUnix != 111111 {
+				t.FailNow()
+			}
+		})
 	})
-	t.Run("object", func(t *testing.T) {
+
+	t.Run("reset", func(t *testing.T) {
 		var ins testobj_ins.TestObjectInspector
-		cpy, _ := ins.Copy(testO)
-		raw, err := ins.Append(cpy, testobj.TestHistory{
-			DateUnix: 111111,
-			Cost:     3.1415,
-			Comment:  nil,
-		}, "Finance", "History")
-		if err != nil {
-			t.Error(err)
-		}
-		hist, ok := raw.(*[]testobj.TestHistory)
-		if !ok {
-			t.FailNow()
-		}
-		if len(*hist) != 4 {
-			t.FailNow()
-		}
-		if (*hist)[3].DateUnix != 111111 {
-			t.FailNow()
-		}
-	})
-}
-
-func TestInspectorReset(t *testing.T) {
-	var ins testobj_ins.TestObjectInspector
-	origin, _ := ins.Copy(testO)
-	t.Run("full", func(t *testing.T) {
-		cpy, _ := ins.Copy(origin)
-		err := ins.Reset(cpy)
-		if err != nil {
-			t.Error(err)
-		}
-	})
-	t.Run("nested single", func(t *testing.T) {
-		cpy, _ := ins.Copy(origin)
-		err := ins.Reset(cpy, "Finance", "Balance")
-		if err != nil {
-			t.Error(err)
-		}
-		to := cpy.(*testobj.TestObject)
-		if to.Finance.Balance != 0 {
-			t.FailNow()
-		}
-	})
-	t.Run("nested map", func(t *testing.T) {
-		t.Run("single key", func(t *testing.T) {
+		origin, _ := ins.Copy(testO)
+		t.Run("full", func(t *testing.T) {
 			cpy, _ := ins.Copy(origin)
-			err := ins.Reset(cpy, "Flags", "Valid")
+			err := ins.Reset(cpy)
+			if err != nil {
+				t.Error(err)
+			}
+		})
+		t.Run("nested single", func(t *testing.T) {
+			cpy, _ := ins.Copy(origin)
+			err := ins.Reset(cpy, "Finance", "Balance")
 			if err != nil {
 				t.Error(err)
 			}
 			to := cpy.(*testobj.TestObject)
-			if to.Flags["Valid"] != 0 {
+			if to.Finance.Balance != 0 {
 				t.FailNow()
 			}
 		})
-		t.Run("full map", func(t *testing.T) {
-			cpy, _ := ins.Copy(origin)
-			err := ins.Reset(cpy, "Flags")
-			if err != nil {
-				t.Error(err)
-			}
-			to := cpy.(*testobj.TestObject)
-			if len(to.Flags) != 0 {
-				t.FailNow()
-			}
+		t.Run("nested map", func(t *testing.T) {
+			t.Run("single key", func(t *testing.T) {
+				cpy, _ := ins.Copy(origin)
+				err := ins.Reset(cpy, "Flags", "Valid")
+				if err != nil {
+					t.Error(err)
+				}
+				to := cpy.(*testobj.TestObject)
+				if to.Flags["Valid"] != 0 {
+					t.FailNow()
+				}
+			})
+			t.Run("full map", func(t *testing.T) {
+				cpy, _ := ins.Copy(origin)
+				err := ins.Reset(cpy, "Flags")
+				if err != nil {
+					t.Error(err)
+				}
+				to := cpy.(*testobj.TestObject)
+				if len(to.Flags) != 0 {
+					t.FailNow()
+				}
+			})
+		})
+		t.Run("nested slice", func(t *testing.T) {
+			t.Run("single id", func(t *testing.T) {
+				cpy, _ := ins.Copy(origin)
+				err := ins.Reset(cpy, "Finance", "History", "1")
+				if err != nil {
+					t.Error(err)
+				}
+				to := cpy.(*testobj.TestObject)
+				if x := to.Finance.History[1]; x.DateUnix != 0 || x.Cost != 0 || len(x.Comment) != 0 {
+					t.FailNow()
+				}
+			})
+			t.Run("full slice", func(t *testing.T) {
+				cpy, _ := ins.Copy(origin)
+				err := ins.Reset(cpy, "Finance", "History")
+				if err != nil {
+					t.Error(err)
+				}
+				to := cpy.(*testobj.TestObject)
+				if len(to.Finance.History) != 0 {
+					t.FailNow()
+				}
+			})
 		})
 	})
-	t.Run("nested slice", func(t *testing.T) {
-		t.Run("single id", func(t *testing.T) {
-			cpy, _ := ins.Copy(origin)
-			err := ins.Reset(cpy, "Finance", "History", "1")
-			if err != nil {
-				t.Error(err)
-			}
-			to := cpy.(*testobj.TestObject)
-			if x := to.Finance.History[1]; x.DateUnix != 0 || x.Cost != 0 || len(x.Comment) != 0 {
-				t.FailNow()
-			}
-		})
-		t.Run("full slice", func(t *testing.T) {
-			cpy, _ := ins.Copy(origin)
-			err := ins.Reset(cpy, "Finance", "History")
-			if err != nil {
-				t.Error(err)
-			}
-			to := cpy.(*testobj.TestObject)
-			if len(to.Finance.History) != 0 {
-				t.FailNow()
-			}
-		})
+
+	t.Run("len/cap", func(t *testing.T) {
+		var ins testobj_ins.TestObjectInspector
+		obj := *testO
+		var l, c int
+
+		_ = ins.Length(obj, &l, p0...)
+		if l != 3 {
+			t.FailNow()
+		}
+
+		_ = ins.Length(obj, &l, p1...)
+		_ = ins.Capacity(obj, &c, p1...)
+		if l != 3 || c != 3 {
+			t.FailNow()
+		}
+
+		_ = ins.Length(obj, &l, "Permission")
+		if l != 2 {
+			t.FailNow()
+		}
+
+		_ = ins.Length(obj, &l, "Flags")
+		if l != 4 {
+			t.FailNow()
+		}
+
+		_ = ins.Length(obj, &l, "Finance", "History")
+		_ = ins.Capacity(obj, &c, "Finance", "History")
+		if l != 3 || c != 3 {
+			t.FailNow()
+		}
+
+		_ = ins.Length(obj, &l, p6...)
+		_ = ins.Capacity(obj, &c, p6...)
+		if l != 14 || c != 14 {
+			t.FailNow()
+		}
 	})
-}
 
-func TestInspectorLenCap(t *testing.T) {
-	var ins testobj_ins.TestObjectInspector
-	obj := *testO
-	var l, c int
-
-	_ = ins.Length(obj, &l, p0...)
-	if l != 3 {
-		t.FailNow()
-	}
-
-	_ = ins.Length(obj, &l, p1...)
-	_ = ins.Capacity(obj, &c, p1...)
-	if l != 3 || c != 3 {
-		t.FailNow()
-	}
-
-	_ = ins.Length(obj, &l, "Permission")
-	if l != 2 {
-		t.FailNow()
-	}
-
-	_ = ins.Length(obj, &l, "Flags")
-	if l != 4 {
-		t.FailNow()
-	}
-
-	_ = ins.Length(obj, &l, "Finance", "History")
-	_ = ins.Capacity(obj, &c, "Finance", "History")
-	if l != 3 || c != 3 {
-		t.FailNow()
-	}
-
-	_ = ins.Length(obj, &l, p6...)
-	_ = ins.Capacity(obj, &c, p6...)
-	if l != 14 || c != 14 {
-		t.FailNow()
-	}
-}
-
-func TestInspectorEach(t *testing.T) {
-	var ins testobj_ins.TestObjectInspector
-	obj := *testO
-	dst := make(map[string]any)
-	_ = ins.Each(&obj, func(_ int, field string, value any) {
-		dst[field] = value
-	})
-	t0, t1, t2, t3, t4 := "foo", []byte("bar"), 12.34, int32(78), uint64(0)
-	expect := map[string]any{
-		"id":         &t0,
-		"name":       &t1,
-		"cost":       &t2,
-		"status":     &t3,
-		"ustate":     &t4,
-		"permission": &testobj.TestPermission{15: true, 23: false},
-		"flags": testobj.TestFlag{
-			"export": 17,
-			"ro":     4,
-			"rw":     7,
-			"Valid":  1,
-		},
-		"history_tree": map[string]*testobj.TestHistory(nil),
-		"finance": &testobj.TestFinance{
-			MoneyIn:  3200,
-			MoneyOut: 1500.637657,
-			Balance:  9000,
-			AllowBuy: true,
-			History: []testobj.TestHistory{
-				{
-					152354345634,
-					14.345241,
-					[]byte("pay for domain"),
-				},
-				{
-					153465345246,
-					-3.0000342543,
-					[]byte("got refund"),
-				},
-				{
-					156436535640,
-					2325242534.35324523,
-					[]byte("maintenance"),
+	t.Run("each", func(t *testing.T) {
+		var ins testobj_ins.TestObjectInspector
+		obj := *testO
+		dst := make(map[string]any)
+		_ = ins.Each(&obj, func(_ int, field string, value any) {
+			dst[field] = value
+		})
+		t0, t1, t2, t3, t4 := "foo", []byte("bar"), 12.34, int32(78), uint64(0)
+		expect := map[string]any{
+			"id":         &t0,
+			"name":       &t1,
+			"cost":       &t2,
+			"status":     &t3,
+			"ustate":     &t4,
+			"permission": &testobj.TestPermission{15: true, 23: false},
+			"flags": testobj.TestFlag{
+				"export": 17,
+				"ro":     4,
+				"rw":     7,
+				"Valid":  1,
+			},
+			"history_tree": map[string]*testobj.TestHistory(nil),
+			"finance": &testobj.TestFinance{
+				MoneyIn:  3200,
+				MoneyOut: 1500.637657,
+				Balance:  9000,
+				AllowBuy: true,
+				History: []testobj.TestHistory{
+					{
+						152354345634,
+						14.345241,
+						[]byte("pay for domain"),
+					},
+					{
+						153465345246,
+						-3.0000342543,
+						[]byte("got refund"),
+					},
+					{
+						156436535640,
+						2325242534.35324523,
+						[]byte("maintenance"),
+					},
 				},
 			},
-		},
-	}
-	if !reflect.DeepEqual(dst, expect) {
-		t.Fail()
-	}
+		}
+		if !reflect.DeepEqual(dst, expect) {
+			t.Fail()
+		}
+	})
 }
 
 func BenchmarkInspectorDeepEqual(b *testing.B) {
