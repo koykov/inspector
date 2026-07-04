@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/koykov/inspector"
+	"github.com/stretchr/testify/assert"
 )
 
 type dummyIterator struct{}
@@ -46,99 +47,79 @@ var (
 func TestStringAnyMap(t *testing.T) {
 	t.Run("wrong type", func(t *testing.T) {
 		_, err := inspector.StringAnyMapInspector{}.Get("foo", "bar")
-		if err != inspector.ErrUnsupportedType {
-			t.FailNow()
-		}
+		assert.ErrorIs(t, err, inspector.ErrUnsupportedType)
 	})
+
 	t.Run("get", func(t *testing.T) {
 		var (
 			buf any
-			err error
 			ins inspector.StringAnyMapInspector
 		)
-		if err = ins.GetTo(testM, &buf, "bar", "dptr", "nested"); err != nil {
-			t.Error(err)
-		}
+		err := ins.GetTo(testM, &buf, "bar", "dptr", "nested")
+		assert.NoError(t, err)
 		p, ok := buf.([]byte)
-		if !ok {
-			t.FailNow()
-		}
-		if string(p) != "some bytes" {
-			t.FailNow()
-		}
+		assert.True(t, ok)
+		assert.Equal(t, string(p), "some bytes")
 	})
+
 	t.Run("set", func(t *testing.T) {
 		var ins inspector.StringAnyMapInspector
-		if err := ins.Set(testM, 20, "foo", "noptr", "int"); err != nil {
-			t.Error(err)
-		}
+		err := ins.Set(testM, 20, "foo", "noptr", "int")
+		assert.NoError(t, err)
 		v := testM["foo"].(map[string]any)["noptr"].(map[string]any)["int"]
-		if v != 20 {
-			t.FailNow()
-		}
+		assert.Equal(t, v, 20)
 	})
+
 	t.Run("compare", func(t *testing.T) {
 		var (
 			ins inspector.StringAnyMapInspector
 			r   bool
 		)
-		if err := ins.Compare(testM, inspector.OpLt, "100", &r, "foo", "noptr", "int"); err != nil {
-			t.Error(err)
-		}
-		if !r {
-			t.FailNow()
-		}
+		err := ins.Compare(testM, inspector.OpLt, "100", &r, "foo", "noptr", "int")
+		assert.NoError(t, err)
+		assert.True(t, r)
 	})
+
 	t.Run("loop", func(t *testing.T) {
 		ins := inspector.StringAnyMapInspector{}
 		var buf []byte
-		if err := ins.Loop(testM, dummyIterator{}, &buf, "foo", "noptr"); err != nil {
-			t.Error(err)
-		}
+		err := ins.Loop(testM, dummyIterator{}, &buf, "foo", "noptr")
+		assert.NoError(t, err)
 	})
+
 	t.Run("copy", func(t *testing.T) {
 		var ins inspector.StringAnyMapInspector
 		cpy, err := ins.Copy(&testM)
-		if err != nil {
-			t.Error(err)
-		}
-		if !reflect.DeepEqual(cpy, testM) {
-			t.FailNow()
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, cpy, testM)
 	})
+
 	t.Run("len", func(t *testing.T) {
 		var (
 			ins inspector.StringAnyMapInspector
 			r   int
 		)
-		if err := ins.Length(testM, &r, "foo", "noptr"); err != nil {
-			t.Error(err)
-		}
-		if r != 3 {
-			t.FailNow()
-		}
+		err := ins.Length(testM, &r, "foo", "noptr")
+		assert.NoError(t, err)
+		assert.Equal(t, r, 3)
 	})
+
 	t.Run("cap", func(t *testing.T) {
 		var (
 			ins inspector.StringAnyMapInspector
 			r   int
 		)
-		if err := ins.Capacity(testM, &r, "bar", "dptr", "nested"); err != nil {
-			t.Error(err)
-		}
-		if r != 10 {
-			t.FailNow()
-		}
+		err := ins.Capacity(testM, &r, "bar", "dptr", "nested")
+		assert.NoError(t, err)
+		assert.Equal(t, r, 10)
 	})
+
 	t.Run("reset", func(t *testing.T) {
 		t.Run("full", func(t *testing.T) {
 			var ins inspector.StringAnyMapInspector
-			if err := ins.Reset(&testReset); err != nil {
-				t.Error(err)
-			}
-			if !reflect.DeepEqual(testReset, map[string]any{}) {
-				t.FailNow()
-			}
+			err := ins.Reset(&testReset)
+			assert.NoError(t, err)
+			assert.Equal(t, testReset, map[string]any{})
 		})
 		t.Run("nested single", func(t *testing.T) {
 			var ins inspector.StringAnyMapInspector
@@ -155,12 +136,9 @@ func TestStringAnyMap(t *testing.T) {
 			var ins inspector.StringAnyMapInspector
 			var m = map[string]any{"a": map[string]any{"b": map[string]any{"c": "d", "e": "f"}}}
 			var e = map[string]any{"a": map[string]any{"b": map[string]any{}}}
-			if err := ins.Reset(&m, "a", "b"); err != nil {
-				t.Error(err)
-			}
-			if !reflect.DeepEqual(m, e) {
-				t.FailNow()
-			}
+			err := ins.Reset(&m, "a", "b")
+			assert.NoError(t, err)
+			assert.Equal(t, m, e)
 		})
 	})
 }
@@ -178,6 +156,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 		}
 		_ = buf
 	})
+
 	b.Run("set", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -190,6 +169,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			buf.Reset()
 		}
 	})
+
 	b.Run("set string", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -203,6 +183,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			buf.Reset()
 		}
 	})
+
 	b.Run("set bytes", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -216,6 +197,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			buf.Reset()
 		}
 	})
+
 	b.Run("compare", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -227,6 +209,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			_ = ins.Compare(testM, inspector.OpLt, "100", &r, path...)
 		}
 	})
+
 	b.Run("loop", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -239,6 +222,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			buf = buf[:0]
 		}
 	})
+
 	b.Run("copy", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -251,6 +235,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			buf.Reset()
 		}
 	})
+
 	b.Run("len", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
@@ -262,6 +247,7 @@ func BenchmarkStringAnyMap(b *testing.B) {
 			_ = ins.Length(testM, &r, path...)
 		}
 	})
+
 	b.Run("cap", func(b *testing.B) {
 		b.ReportAllocs()
 		var (
