@@ -294,7 +294,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				pfx = "&" + pfx
 			}
 			c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
-			if parent != nil && parent.typ != typeMap {
+			if parent != nil && parent.typ != typeMap && parent.typ != typeSlice {
 				c.wl("return nil")
 			}
 		default:
