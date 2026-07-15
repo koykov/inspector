@@ -67,6 +67,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if ch.ptr || nvPtr {
 						pfx = ""
 					}
+					c.ensureImports(typ)
 					c.wl("if uvalue, ok := value.(*", typ, "); ok {")
 					c.wl(nv, " = ", pfx, "uvalue")
 					c.wl("}")
@@ -138,7 +139,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float64(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
-				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
+				c.wl("*buf, err = x2bytes.ToBytes((*buf)[:0], k)")
 				c.wl("if err != nil { return }")
 			}
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
@@ -182,16 +183,15 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 			} else {
 				// Convert path value to the key type and try to find it in the map.
-				c.wl("var k ", node.mapk.typn)
-				snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, node.mapk.typu, "k")
-				c.regImport(imports)
-				if err != nil {
-					return err
+				c.wl("var k ", c.pkgName, ".", node.mapk.typn)
+				pname := ""
+				if node.mapk.typn != "string" {
+					pname = c.pkgName + "."
 				}
-				c.wl(snippet)
+				c.wl("k=", pname, node.mapk.typn, "(path[", depths, "])")
 				c.wl(nv, " := ", c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "]")
 				c.wl("_ = ", nv)
-				err = c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
 				if mode == modeSet {
 					c.wl(c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "] = ", nv)
 					c.wl("return nil")
@@ -383,5 +383,12 @@ func (c *Compiler) writeCmp(left *node, leftVar string) {
 		c.wl("case inspector.OpLtq:")
 		c.wl("*result = ", leftVar, " <= rightExact")
 		c.wl("}")
+	}
+}
+
+func (c *Compiler) ensureImports(typ string) {
+	switch typ {
+	case "time.Time":
+		c.regImport([]string{`"time"`})
 	}
 }

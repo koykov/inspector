@@ -40,6 +40,6 @@ func strToBytesSnippet(_ string) string {
 }
 
 func strToStrSnippet(_ string) string {
-	snippet := "!{var} = !{arg}\n"
+	snippet := "!{var} = string(!{arg})\n"
 	return snippet
 }
