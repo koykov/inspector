@@ -33,10 +33,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 	case typeMap:
 		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
 
-		pname := ""
-		if !c.isBuiltin(node.mapk.typn) {
-			pname = c.pkgName + "."
-		}
+		pname := c.fmtPt(node.mapk.typn)
 		kv := "k" + depths
 		c.wl("var ", kv, " ", pname, node.mapk.typn)
 		c.wl("_=", kv)

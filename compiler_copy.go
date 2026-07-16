@@ -137,10 +137,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			c.wl("var ", sname, " string")
 			c.cntrCpy++
 			c.wl("buf,", sname, "=inspector.BufferizeString(buf,string(", c.fmtVnb(node, r, depth), "))")
-			pname := ""
-			if !c.isBuiltin(node.typn) {
-				pname = c.pkgName + "."
-			}
+			pname := c.fmtPt(node.typn)
 			c.wl(c.fmtVnb(node, l, depth), "=", pname, node.typn, "(", sname, ")")
 		} else {
 			c.wl(l, "=", r)

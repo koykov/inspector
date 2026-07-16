@@ -114,6 +114,13 @@ func (c *Compiler) fmtR(mode mode, err string) string {
 	}
 }
 
+func (c *Compiler) fmtPt(typ string) string {
+	if !c.isBuiltin(typ) {
+		return c.pkgName + "."
+	}
+	return ""
+}
+
 // Shorthand write method.
 func (c *Compiler) w(s ...string) {
 	_, err := c.wr.WriteString(strings.Join(s, ""))

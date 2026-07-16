@@ -184,10 +184,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			} else {
 				// Convert path value to the key type and try to find it in the map.
 				c.wl("var k ", c.pkgName, ".", node.mapk.typn)
-				pname := ""
-				if !c.isBuiltin(node.mapk.typn) {
-					pname = c.pkgName + "."
-				}
+				pname := c.fmtPt(node.mapk.typn)
 				c.wl("k=", pname, node.mapk.typn, "(path[", depths, "])")
 				c.wl(nv, " := ", c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "]")
 				c.wl("_ = ", nv)
