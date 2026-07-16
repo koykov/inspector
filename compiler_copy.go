@@ -138,7 +138,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			c.cntrCpy++
 			c.wl("buf,", sname, "=inspector.BufferizeString(buf,string(", c.fmtVnb(node, r, depth), "))")
 			pname := ""
-			if node.typn != "string" {
+			if !c.isBuiltin(node.typn) {
 				pname = c.pkgName + "."
 			}
 			c.wl(c.fmtVnb(node, l, depth), "=", pname, node.typn, "(", sname, ")")

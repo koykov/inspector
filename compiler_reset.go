@@ -34,7 +34,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
 
 		pname := ""
-		if node.mapk.typn != "string" {
+		if !c.isBuiltin(node.mapk.typn) {
 			pname = c.pkgName + "."
 		}
 		kv := "k" + depths
