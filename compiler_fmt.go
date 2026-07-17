@@ -114,7 +114,8 @@ func (c *Compiler) fmtR(mode mode, err string) string {
 	}
 }
 
-func (c *Compiler) fmtPt(typ string) string {
+// Parent type prefix format.
+func (c *Compiler) fmtPtpfx(typ string) string {
 	if !c.isBuiltin(typ) {
 		return c.pkgName + "."
 	}
