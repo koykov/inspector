@@ -35,7 +35,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 
 		pname := c.fmtPtpfx(node.mapk.typn)
 		kv := "k" + depths
-		c.wl("var ", kv, " ", node.mapk.typn)
+		c.wl("var ", kv, " ", pname, node.mapk.typn)
 		c.wl("_=", kv)
 		if node.mapk.typn == "string" {
 			// Key is string, simple case.
