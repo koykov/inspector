@@ -312,7 +312,9 @@ func (i1 TestFlagInspector) cpy(buf []byte, l, r *testobj.TestFlag) ([]byte, err
 		for rk0, rv0 := range *r {
 			_, _ = rk0, rv0
 			var lk0 string
-			buf, lk0 = inspector.BufferizeString(buf, rk0)
+			var c0 string
+			buf, c0 = inspector.BufferizeString(buf, string(rk0))
+			lk0 = string(c0)
 			var lv0 int32
 			lv0 = rv0
 			(*l)[lk0] = lv0

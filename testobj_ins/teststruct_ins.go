@@ -167,7 +167,7 @@ func (i11 TestStructInspector) Compare(src any, cond inspector.Op, right string,
 		}
 		if path[0] == "S" {
 			var rightExact string
-			rightExact = right
+			rightExact = string(right)
 
 			switch cond {
 			case inspector.OpEq:
@@ -739,7 +739,9 @@ func (i11 TestStructInspector) countBytes(x *testobj.TestStruct) (c int) {
 
 func (i11 TestStructInspector) cpy(buf []byte, l, r *testobj.TestStruct) ([]byte, error) {
 	l.A = r.A
-	buf, l.S = inspector.BufferizeString(buf, r.S)
+	var c0 string
+	buf, c0 = inspector.BufferizeString(buf, string(r.S))
+	l.S = string(c0)
 	buf, l.B = inspector.Bufferize(buf, r.B)
 	l.I = r.I
 	l.I8 = r.I8
