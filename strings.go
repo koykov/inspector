@@ -329,6 +329,7 @@ func (i StringsInspector) Append(src, value any, _ ...string) (any, error) {
 func (i StringsInspector) Each(_ any, _ func(i int, field string, value any)) error { return nil }
 
 func (i StringsInspector) Length(src any, result *int, path ...string) error {
+	*result = 0
 	ss, pp, ok := i.sp(src)
 	if !ok {
 		return nil
@@ -357,6 +358,7 @@ func (i StringsInspector) Length(src any, result *int, path ...string) error {
 }
 
 func (i StringsInspector) Capacity(src any, result *int, path ...string) error {
+	*result = 0
 	_, pp, ok := i.sp(src)
 	if !ok {
 		return nil
