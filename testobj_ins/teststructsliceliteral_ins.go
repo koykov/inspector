@@ -196,7 +196,7 @@ func (i12 TestStructSliceLiteralInspector) Compare(src any, cond inspector.Op, r
 				}
 				if path[1] == "S" {
 					var rightExact string
-					rightExact = right
+					rightExact = string(right)
 
 					switch cond {
 					case inspector.OpEq:
@@ -821,7 +821,9 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 			var b0 testobj.TestStruct
 			x0 := (*r)[i0]
 			b0.A = x0.A
-			buf, b0.S = inspector.BufferizeString(buf, x0.S)
+			var c0 string
+			buf, c0 = inspector.BufferizeString(buf, string(x0.S))
+			b0.S = string(c0)
 			buf, b0.B = inspector.Bufferize(buf, x0.B)
 			b0.I = x0.I
 			b0.I8 = x0.I8

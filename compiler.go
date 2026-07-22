@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"go/format"
 	"go/types"
-	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -59,22 +58,22 @@ type Logger interface {
 }
 
 type Compiler struct {
-	trg           Target
-	pkg           string
-	pkgDot        string
-	pkgName       string
-	imp_          string
-	dst           string
-	dstAbs        string
-	bl            map[string]struct{}
-	uniq          map[string]struct{}
-	nodes         []*node
-	imp           []string
-	cntr, cntrDEQ int
-	inp           bool
-	l             Logger
-	wr            ByteStringWriter
-	nc            bool
+	trg                    Target
+	pkg                    string
+	pkgDot                 string
+	pkgName                string
+	imp_                   string
+	dst                    string
+	dstAbs                 string
+	bl                     map[string]struct{}
+	uniq                   map[string]struct{}
+	nodes                  []*node
+	imp                    []string
+	cntr, cntrDEQ, cntrCpy int
+	inp                    bool
+	l                      Logger
+	wr                     ByteStringWriter
+	nc                     bool
 
 	cnf *Config
 	err error
@@ -294,9 +293,9 @@ func (c *Compiler) writeFile(filename string) error {
 	fmtSource, err := format.Source(source)
 	if err != nil {
 		if !c.cnf.Force {
+			_ = os.WriteFile(filename+".err.txt", source, 0644)
 			return err
 		}
-		log.Println(err)
 		fmtSource = source
 	}
 
@@ -458,6 +457,7 @@ func (c *Compiler) writeRootNode(node *node) (err error) {
 		return err
 	}
 	c.wdl("return c}")
+	c.cntrCpy = 0
 	c.wl("func (", recv, " ", inst, ") cpy(buf []byte,l, r *", pname, ") ([]byte, error) {")
 	err = c.writeCopy(node, "l", "r", 0)
 	if err != nil {

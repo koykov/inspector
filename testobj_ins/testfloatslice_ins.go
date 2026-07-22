@@ -191,7 +191,6 @@ func (i3 TestFloatSliceInspector) SetWithBuffer(dst, value any, buf inspector.Ac
 			x0 := (*x)[i]
 			_ = x0
 			inspector.AssignBuf(&x0, value, buf)
-			return nil
 			(*x)[i] = x0
 			return nil
 		}

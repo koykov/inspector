@@ -133,7 +133,12 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		}
 	case typeBasic:
 		if node.typu == "string" {
-			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.BufferizeString(buf,", c.fmtVnb(node, r, depth), ")")
+			sname := "c" + strconv.Itoa(c.cntrCpy)
+			c.wl("var ", sname, " string")
+			c.cntrCpy++
+			c.wl("buf,", sname, "=inspector.BufferizeString(buf,string(", c.fmtVnb(node, r, depth), "))")
+			pname := c.fmtPtpfx(node.typn)
+			c.wl(c.fmtVnb(node, l, depth), "=", pname, node.typn, "(", sname, ")")
 		} else {
 			c.wl(l, "=", r)
 		}

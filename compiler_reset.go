@@ -33,12 +33,16 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 	case typeMap:
 		c.wl("if l:=len(", c.fmtVd(node, v, depth), ");l>0{")
 
+		pname := c.fmtPtpfx(node.mapk.typn)
 		kv := "k" + depths
-		c.wl("var ", kv, " ", node.mapk.typn)
+		c.wl("var ", kv, " ", pname, node.mapk.typn)
 		c.wl("_=", kv)
 		if node.mapk.typn == "string" {
 			// Key is string, simple case.
 			c.wl(kv, "=path["+depths+"]")
+		} else if node.mapk.typu == "string" {
+			// Convert path value to the key type and try to find it in the map.
+			c.wl(kv, "=", pname, node.mapk.typn, "(path[", depths, "])")
 		} else {
 			// Convert path value to the key type and try to find it in the map.
 			snippet, imports, err := StrConvSnippet("path["+depths+"]", node.mapk.typn, node.mapk.typu, kv)

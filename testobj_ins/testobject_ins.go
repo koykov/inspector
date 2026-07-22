@@ -227,7 +227,7 @@ func (i5 TestObjectInspector) Compare(src any, cond inspector.Op, right string, 
 	if len(path) > 0 {
 		if path[0] == "Id" {
 			var rightExact string
-			rightExact = right
+			rightExact = string(right)
 
 			switch cond {
 			case inspector.OpEq:
@@ -1213,7 +1213,9 @@ func (i5 TestObjectInspector) countBytes(x *testobj.TestObject) (c int) {
 }
 
 func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte, error) {
-	buf, l.Id = inspector.BufferizeString(buf, r.Id)
+	var c0 string
+	buf, c0 = inspector.BufferizeString(buf, string(r.Id))
+	l.Id = string(c0)
 	buf, l.Name = inspector.Bufferize(buf, r.Name)
 	l.Status = r.Status
 	l.Ustate = r.Ustate
@@ -1242,7 +1244,9 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 		for rk1, rv1 := range r.HistoryTree {
 			_, _ = rk1, rv1
 			var lk1 string
-			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var c1 string
+			buf, c1 = inspector.BufferizeString(buf, string(rk1))
+			lk1 = string(c1)
 			var lv1 testobj.TestHistory
 			lv1.DateUnix = rv1.DateUnix
 			lv1.Cost = rv1.Cost
@@ -1258,7 +1262,9 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 		for rk1, rv1 := range r.Flags {
 			_, _ = rk1, rv1
 			var lk1 string
-			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var c2 string
+			buf, c2 = inspector.BufferizeString(buf, string(rk1))
+			lk1 = string(c2)
 			var lv1 int32
 			lv1 = rv1
 			(l.Flags)[lk1] = lv1

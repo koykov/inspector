@@ -41,7 +41,7 @@ func (c *Compiler) fmtT(node_ *node) string {
 
 func (c *Compiler) fmtTfs(node_ *node, forceStructPtr bool) string {
 	pfx := func(node_ *node) string {
-		if c.inp {
+		if c.inp || len(node_.pkg) == 0 {
 			return ""
 		}
 		return node_.pkg + "."
@@ -101,7 +101,7 @@ func (c *Compiler) fmtTfs(node_ *node, forceStructPtr bool) string {
 		if node_.ptr {
 			pfx_ = "*"
 		}
-		return pfx_ + node_.typn
+		return pfx_ + pfx(node_) + node_.typn
 	}
 	return ""
 }
@@ -112,6 +112,14 @@ func (c *Compiler) fmtR(mode mode, err string) string {
 	} else {
 		return "return"
 	}
+}
+
+// Parent type prefix format.
+func (c *Compiler) fmtPtpfx(typ string) string {
+	if !c.isBuiltin(typ) {
+		return c.pkgName + "."
+	}
+	return ""
 }
 
 // Shorthand write method.

@@ -188,7 +188,6 @@ func (i2 TestFloatPtrSliceInspector) SetWithBuffer(dst, value any, buf inspector
 				return nil
 			}
 			inspector.AssignBuf(x0, value, buf)
-			return nil
 			(*x)[i] = x0
 			return nil
 		}

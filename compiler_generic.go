@@ -67,6 +67,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 					if ch.ptr || nvPtr {
 						pfx = ""
 					}
+					c.ensureImports(typ)
 					c.wl("if uvalue, ok := value.(*", typ, "); ok {")
 					c.wl(nv, " = ", pfx, "uvalue")
 					c.wl("}")
@@ -138,7 +139,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				c.wl("*buf = strconv.AppendFloat((*buf)[:0], float64(", c.fmtVnb(node.mapk, "k", depth+1), "), 'f', -1, 64)")
 			default:
 				c.regImport([]string{`"github.com/koykov/x2bytes"`})
-				c.wl("*buf, err = x2bytes.AnyToBytes(*buf[:0], k)")
+				c.wl("*buf, err = x2bytes.ToBytes((*buf)[:0], k)")
 				c.wl("if err != nil { return }")
 			}
 			c.wl("l.SetKey(buf, &inspector.StaticInspector{})")
@@ -179,6 +180,21 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				}
 				if mode != modeSet {
 					c.wl("}")
+				}
+			} else if node.mapk.typu == "string" {
+				// Convert path value to the key type and try to find it in the map.
+				ptpfx := c.fmtPtpfx(node.mapk.typn)
+				c.wl("var k ", ptpfx, node.mapk.typn)
+				c.wl("k=", ptpfx, node.mapk.typn, "(path[", depths, "])")
+				c.wl(nv, " := ", c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "]")
+				c.wl("_ = ", nv)
+				err := c.writeNode(node.mapv, node, recv, nv, "", depth+1, mode)
+				if mode == modeSet {
+					c.wl(c.fmtV(node, v), "[", c.fmtP(node.mapk, "k", depth+1), "] = ", nv)
+					c.wl("return nil")
+				}
+				if err != nil {
+					return err
 				}
 			} else {
 				// Convert path value to the key type and try to find it in the map.
@@ -294,7 +310,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 				pfx = "&" + pfx
 			}
 			c.wl("inspector.AssignBuf(", pfx, v, ", value, buf)")
-			if parent != nil && parent.typ != typeMap {
+			if parent != nil && parent.typ != typeMap && parent.typ != typeSlice {
 				c.wl("return nil")
 			}
 		default:
@@ -383,5 +399,12 @@ func (c *Compiler) writeCmp(left *node, leftVar string) {
 		c.wl("case inspector.OpLtq:")
 		c.wl("*result = ", leftVar, " <= rightExact")
 		c.wl("}")
+	}
+}
+
+func (c *Compiler) ensureImports(typ string) {
+	switch typ {
+	case "time.Time":
+		c.regImport([]string{`"time"`})
 	}
 }

@@ -1941,7 +1941,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "S" {
 							var rightExact string
-							rightExact = right
+							rightExact = string(right)
 
 							switch cond {
 							case inspector.OpEq:
@@ -2292,7 +2292,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "S" {
 							var rightExact string
-							rightExact = right
+							rightExact = string(right)
 
 							switch cond {
 							case inspector.OpEq:
@@ -2651,7 +2651,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "S" {
 							var rightExact string
-							rightExact = right
+							rightExact = string(right)
 
 							switch cond {
 							case inspector.OpEq:
@@ -3013,7 +3013,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "S" {
 							var rightExact string
-							rightExact = right
+							rightExact = string(right)
 
 							switch cond {
 							case inspector.OpEq:
@@ -3364,7 +3364,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 						}
 						if path[2] == "S" {
 							var rightExact string
-							rightExact = right
+							rightExact = string(right)
 
 							switch cond {
 							case inspector.OpEq:
@@ -3686,7 +3686,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				x1 := (x0)[k]
 				_ = x1
 				var rightExact string
-				rightExact = right
+				rightExact = string(right)
 
 				switch cond {
 				case inspector.OpEq:
@@ -3755,7 +3755,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				x1 := (*x0)[k]
 				_ = x1
 				var rightExact string
-				rightExact = right
+				rightExact = string(right)
 
 				switch cond {
 				case inspector.OpEq:
@@ -4087,7 +4087,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "S" {
 						var rightExact string
-						rightExact = right
+						rightExact = string(right)
 
 						switch cond {
 						case inspector.OpEq:
@@ -4436,7 +4436,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "S" {
 						var rightExact string
-						rightExact = right
+						rightExact = string(right)
 
 						switch cond {
 						case inspector.OpEq:
@@ -4782,7 +4782,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "S" {
 						var rightExact string
-						rightExact = right
+						rightExact = string(right)
 
 						switch cond {
 						case inspector.OpEq:
@@ -5131,7 +5131,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "S" {
 						var rightExact string
-						rightExact = right
+						rightExact = string(right)
 
 						switch cond {
 						case inspector.OpEq:
@@ -5491,7 +5491,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 					}
 					if path[2] == "S" {
 						var rightExact string
-						rightExact = right
+						rightExact = string(right)
 
 						switch cond {
 						case inspector.OpEq:
@@ -5828,7 +5828,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				}
 				if path[1] == "S" {
 					var rightExact string
-					rightExact = right
+					rightExact = string(right)
 
 					switch cond {
 					case inspector.OpEq:
@@ -6175,7 +6175,7 @@ func (i6 TestObject1Inspector) Compare(src any, cond inspector.Op, right string,
 				}
 				if path[1] == "S" {
 					var rightExact string
-					rightExact = right
+					rightExact = string(right)
 
 					switch cond {
 					case inspector.OpEq:
@@ -7198,7 +7198,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 					x1 := (x0)[i]
 					_ = x1
 					inspector.AssignBuf(&x1, value, buf)
-					return nil
 					(x0)[i] = x1
 					return nil
 				}
@@ -7230,7 +7229,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(x0)[i] = x1
 					return nil
 				}
@@ -7262,7 +7260,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 					x1 := (*x0)[i]
 					_ = x1
 					inspector.AssignBuf(&x1, value, buf)
-					return nil
 					(*x0)[i] = x1
 					return nil
 				}
@@ -7297,7 +7294,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(*x0)[i] = x1
 					return nil
 				}
@@ -7333,7 +7329,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(x0)[i] = x1
 					return nil
 				}
@@ -7372,7 +7367,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(*x0)[i] = x1
 					return nil
 				}
@@ -7401,7 +7395,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 					x1 := (x0)[i]
 					_ = x1
 					inspector.AssignBuf(&x1, value, buf)
-					return nil
 					(x0)[i] = x1
 					return nil
 				}
@@ -7433,7 +7426,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(x0)[i] = x1
 					return nil
 				}
@@ -7465,7 +7457,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 					x1 := (*x0)[i]
 					_ = x1
 					inspector.AssignBuf(&x1, value, buf)
-					return nil
 					(*x0)[i] = x1
 					return nil
 				}
@@ -7500,7 +7491,6 @@ func (i6 TestObject1Inspector) SetWithBuffer(dst, value any, buf inspector.Accum
 						return nil
 					}
 					inspector.AssignBuf(x1, value, buf)
-					return nil
 					(*x0)[i] = x1
 					return nil
 				}
@@ -10498,7 +10488,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			var b1 testobj.TestStruct
 			x1 := &(r.StructSlice)[i1]
 			b1.A = x1.A
-			buf, b1.S = inspector.BufferizeString(buf, x1.S)
+			var c0 string
+			buf, c0 = inspector.BufferizeString(buf, string(x1.S))
+			b1.S = string(c0)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)
 			b1.I = x1.I
 			b1.I8 = x1.I8
@@ -10525,7 +10517,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			var b1 testobj.TestStruct
 			x1 := (r.StructPtrSlice)[i1]
 			b1.A = x1.A
-			buf, b1.S = inspector.BufferizeString(buf, x1.S)
+			var c1 string
+			buf, c1 = inspector.BufferizeString(buf, string(x1.S))
+			b1.S = string(c1)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)
 			b1.I = x1.I
 			b1.I8 = x1.I8
@@ -10553,7 +10547,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				var b1 testobj.TestStruct
 				x1 := &(*r.StructSlicePtr)[i1]
 				b1.A = x1.A
-				buf, b1.S = inspector.BufferizeString(buf, x1.S)
+				var c2 string
+				buf, c2 = inspector.BufferizeString(buf, string(x1.S))
+				b1.S = string(c2)
 				buf, b1.B = inspector.Bufferize(buf, x1.B)
 				b1.I = x1.I
 				b1.I8 = x1.I8
@@ -10582,7 +10578,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				var b1 testobj.TestStruct
 				x1 := (*r.StructPtrSlicePtr)[i1]
 				b1.A = x1.A
-				buf, b1.S = inspector.BufferizeString(buf, x1.S)
+				var c3 string
+				buf, c3 = inspector.BufferizeString(buf, string(x1.S))
+				b1.S = string(c3)
 				buf, b1.B = inspector.Bufferize(buf, x1.B)
 				b1.I = x1.I
 				b1.I8 = x1.I8
@@ -10610,7 +10608,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			var b1 testobj.TestStruct
 			x1 := (r.StructSliceLiteral)[i1]
 			b1.A = x1.A
-			buf, b1.S = inspector.BufferizeString(buf, x1.S)
+			var c4 string
+			buf, c4 = inspector.BufferizeString(buf, string(x1.S))
+			b1.S = string(c4)
 			buf, b1.B = inspector.Bufferize(buf, x1.B)
 			b1.I = x1.I
 			b1.I8 = x1.I8
@@ -10638,7 +10638,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			var lk1 int
 			lk1 = rk1
 			var lv1 string
-			buf, lv1 = inspector.BufferizeString(buf, rv1)
+			var c5 string
+			buf, c5 = inspector.BufferizeString(buf, string(rv1))
+			lv1 = string(c5)
 			(l.IntStringMap)[lk1] = lv1
 		}
 	}
@@ -10652,7 +10654,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			var lk1 int
 			lk1 = rk1
 			var lv1 *string
-			buf, *lv1 = inspector.BufferizeString(buf, *rv1)
+			var c6 string
+			buf, c6 = inspector.BufferizeString(buf, string(*rv1))
+			*lv1 = string(c6)
 			(l.IntStringPtrMap)[lk1] = lv1
 		}
 	}
@@ -10667,7 +10671,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				var lk1 int
 				lk1 = rk1
 				var lv1 string
-				buf, lv1 = inspector.BufferizeString(buf, rv1)
+				var c7 string
+				buf, c7 = inspector.BufferizeString(buf, string(rv1))
+				lv1 = string(c7)
 				(*l.IntStringMapPtr)[lk1] = lv1
 			}
 		}
@@ -10683,7 +10689,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				var lk1 int
 				lk1 = rk1
 				var lv1 *string
-				buf, *lv1 = inspector.BufferizeString(buf, *rv1)
+				var c8 string
+				buf, c8 = inspector.BufferizeString(buf, string(*rv1))
+				*lv1 = string(c8)
 				(*l.IntStringPtrMapPtr)[lk1] = lv1
 			}
 		}
@@ -10699,7 +10707,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				var lk1 *int
 				lk1 = rk1
 				var lv1 *string
-				buf, *lv1 = inspector.BufferizeString(buf, *rv1)
+				var c9 string
+				buf, c9 = inspector.BufferizeString(buf, string(*rv1))
+				*lv1 = string(c9)
 				(*l.IntPtrStringPtrMapPtr)[lk1] = lv1
 			}
 		}
@@ -10739,7 +10749,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for rk1, rv1 := range r.StringFloatMap {
 			_, _ = rk1, rv1
 			var lk1 string
-			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var c10 string
+			buf, c10 = inspector.BufferizeString(buf, string(rk1))
+			lk1 = string(c10)
 			var lv1 float64
 			lv1 = rv1
 			(l.StringFloatMap)[lk1] = lv1
@@ -10753,7 +10765,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for rk1, rv1 := range r.StringFloatPtrMap {
 			_, _ = rk1, rv1
 			var lk1 string
-			buf, lk1 = inspector.BufferizeString(buf, rk1)
+			var c11 string
+			buf, c11 = inspector.BufferizeString(buf, string(rk1))
+			lk1 = string(c11)
 			var lv1 *float64
 			lv1 = rv1
 			(l.StringFloatPtrMap)[lk1] = lv1
@@ -10768,7 +10782,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for rk1, rv1 := range *r.StringFloatMapPtr {
 				_, _ = rk1, rv1
 				var lk1 string
-				buf, lk1 = inspector.BufferizeString(buf, rk1)
+				var c12 string
+				buf, c12 = inspector.BufferizeString(buf, string(rk1))
+				lk1 = string(c12)
 				var lv1 float64
 				lv1 = rv1
 				(*l.StringFloatMapPtr)[lk1] = lv1
@@ -10784,7 +10800,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for rk1, rv1 := range *r.StringFloatPtrMapPtr {
 				_, _ = rk1, rv1
 				var lk1 string
-				buf, lk1 = inspector.BufferizeString(buf, rk1)
+				var c13 string
+				buf, c13 = inspector.BufferizeString(buf, string(rk1))
+				lk1 = string(c13)
 				var lv1 *float64
 				lv1 = rv1
 				(*l.StringFloatPtrMapPtr)[lk1] = lv1
@@ -10800,7 +10818,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for rk1, rv1 := range *r.StringPtrFloatPtrMapPtr {
 				_, _ = rk1, rv1
 				var lk1 *string
-				buf, *lk1 = inspector.BufferizeString(buf, *rk1)
+				var c14 string
+				buf, c14 = inspector.BufferizeString(buf, string(*rk1))
+				*lk1 = string(c14)
 				var lv1 *float64
 				lv1 = rv1
 				(*l.StringPtrFloatPtrMapPtr)[lk1] = lv1
@@ -10818,7 +10838,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 testobj.TestStruct
 			lv1.A = rv1.A
-			buf, lv1.S = inspector.BufferizeString(buf, rv1.S)
+			var c15 string
+			buf, c15 = inspector.BufferizeString(buf, string(rv1.S))
+			lv1.S = string(c15)
 			buf, lv1.B = inspector.Bufferize(buf, rv1.B)
 			lv1.I = rv1.I
 			lv1.I8 = rv1.I8
@@ -10846,7 +10868,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 testobj.TestStruct
 			lv1.A = rv1.A
-			buf, lv1.S = inspector.BufferizeString(buf, rv1.S)
+			var c16 string
+			buf, c16 = inspector.BufferizeString(buf, string(rv1.S))
+			lv1.S = string(c16)
 			buf, lv1.B = inspector.Bufferize(buf, rv1.B)
 			lv1.I = rv1.I
 			lv1.I8 = rv1.I8
@@ -10874,7 +10898,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 testobj.TestStruct
 			lv1.A = rv1.A
-			buf, lv1.S = inspector.BufferizeString(buf, rv1.S)
+			var c17 string
+			buf, c17 = inspector.BufferizeString(buf, string(rv1.S))
+			lv1.S = string(c17)
 			buf, lv1.B = inspector.Bufferize(buf, rv1.B)
 			lv1.I = rv1.I
 			lv1.I8 = rv1.I8
@@ -10902,7 +10928,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 testobj.TestStruct
 			lv1.A = rv1.A
-			buf, lv1.S = inspector.BufferizeString(buf, rv1.S)
+			var c18 string
+			buf, c18 = inspector.BufferizeString(buf, string(rv1.S))
+			lv1.S = string(c18)
 			buf, lv1.B = inspector.Bufferize(buf, rv1.B)
 			lv1.I = rv1.I
 			lv1.I8 = rv1.I8
@@ -10931,7 +10959,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lk1 = rk1
 				var lv1 testobj.TestStruct
 				lv1.A = rv1.A
-				buf, lv1.S = inspector.BufferizeString(buf, rv1.S)
+				var c19 string
+				buf, c19 = inspector.BufferizeString(buf, string(rv1.S))
+				lv1.S = string(c19)
 				buf, lv1.B = inspector.Bufferize(buf, rv1.B)
 				lv1.I = rv1.I
 				lv1.I8 = rv1.I8
@@ -10950,7 +10980,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 	}
 	l.NestedStruct.A = r.NestedStruct.A
-	buf, l.NestedStruct.S = inspector.BufferizeString(buf, r.NestedStruct.S)
+	var c20 string
+	buf, c20 = inspector.BufferizeString(buf, string(r.NestedStruct.S))
+	l.NestedStruct.S = string(c20)
 	buf, l.NestedStruct.B = inspector.Bufferize(buf, r.NestedStruct.B)
 	l.NestedStruct.I = r.NestedStruct.I
 	l.NestedStruct.I8 = r.NestedStruct.I8
@@ -10969,7 +11001,9 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			l.NestedStructPtr = &testobj.TestStruct{}
 		}
 		l.NestedStructPtr.A = r.NestedStructPtr.A
-		buf, l.NestedStructPtr.S = inspector.BufferizeString(buf, r.NestedStructPtr.S)
+		var c21 string
+		buf, c21 = inspector.BufferizeString(buf, string(r.NestedStructPtr.S))
+		l.NestedStructPtr.S = string(c21)
 		buf, l.NestedStructPtr.B = inspector.Bufferize(buf, r.NestedStructPtr.B)
 		l.NestedStructPtr.I = r.NestedStructPtr.I
 		l.NestedStructPtr.I8 = r.NestedStructPtr.I8
