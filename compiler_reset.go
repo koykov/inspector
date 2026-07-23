@@ -114,7 +114,13 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 			def = `""`
 		}
 		if len(def) > 0 {
+			if node.ptr {
+				c.wl("if ", v, "!=nil{")
+			}
 			c.wl(c.fmtVnb(node, v, depth), "=", def)
+			if node.ptr {
+				c.wl("}")
+			}
 		}
 	}
 	if mustLenCheck {
@@ -180,7 +186,13 @@ func (c *Compiler) writeNodeResetFull(node *node, v string, depth int) error {
 			def = `""`
 		}
 		if len(def) > 0 {
+			if node.ptr {
+				c.wl("if ", v, "!=nil{")
+			}
 			c.wl(c.fmtVnb(node, v, depth), "=", def)
+			if node.ptr {
+				c.wl("}")
+			}
 		}
 	}
 	return nil

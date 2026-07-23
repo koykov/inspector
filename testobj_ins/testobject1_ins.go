@@ -13824,7 +13824,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 					k1 = int(t372)
 					x1 := (origin.IntStringPtrMap)[k1]
 					_ = x1
-					*x1 = ""
+					if x1 != nil {
+						*x1 = ""
+					}
 					(origin.IntStringPtrMap)[k1] = x1
 				}
 				return nil
@@ -13869,7 +13871,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 						k1 = int(t374)
 						x1 := (*origin.IntStringPtrMapPtr)[k1]
 						_ = x1
-						*x1 = ""
+						if x1 != nil {
+							*x1 = ""
+						}
 						(*origin.IntStringPtrMapPtr)[k1] = x1
 					}
 					return nil
@@ -13892,7 +13896,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 						k1 = int(t375)
 						x1 := (*origin.IntPtrStringPtrMapPtr)[&k1]
 						_ = x1
-						*x1 = ""
+						if x1 != nil {
+							*x1 = ""
+						}
 						(*origin.IntPtrStringPtrMapPtr)[&k1] = x1
 					}
 					return nil
@@ -13963,7 +13969,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 					k1 = path[1]
 					x1 := (origin.StringFloatPtrMap)[k1]
 					_ = x1
-					*x1 = 0
+					if x1 != nil {
+						*x1 = 0
+					}
 					(origin.StringFloatPtrMap)[k1] = x1
 				}
 				return nil
@@ -14000,7 +14008,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 						k1 = path[1]
 						x1 := (*origin.StringFloatPtrMapPtr)[k1]
 						_ = x1
-						*x1 = 0
+						if x1 != nil {
+							*x1 = 0
+						}
 						(*origin.StringFloatPtrMapPtr)[k1] = x1
 					}
 					return nil
@@ -14019,7 +14029,9 @@ func (i6 TestObject1Inspector) reset2(x any, path ...string) error {
 						k1 = path[1]
 						x1 := (*origin.StringPtrFloatPtrMapPtr)[&k1]
 						_ = x1
-						*x1 = 0
+						if x1 != nil {
+							*x1 = 0
+						}
 						(*origin.StringPtrFloatPtrMapPtr)[&k1] = x1
 					}
 					return nil
