@@ -468,7 +468,9 @@ func (i9 TestStringFloatPtrMapInspector) reset2(x any, path ...string) error {
 			k0 = path[0]
 			x0 := (*origin)[k0]
 			_ = x0
-			*x0 = 0
+			if x0 != nil {
+				*x0 = 0
+			}
 			(*origin)[k0] = x0
 		}
 		return nil
