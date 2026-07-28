@@ -73,10 +73,10 @@ func (c *Compiler) parsePkgType(t types.Type) (*node, error) {
 	u := t.Underlying()
 	// Common skips considering by underlying type.
 	if _, ok := u.(*types.Interface); ok {
-		return nil, nil
+		return node, nil
 	}
 	if _, ok := u.(*types.Signature); ok {
-		return nil, nil
+		return node, nil
 	}
 
 	if p, ok := u.(*types.Pointer); ok {
