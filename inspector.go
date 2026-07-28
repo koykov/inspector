@@ -76,6 +76,10 @@ func init() {
 	RegisterStrToXFn("string", strToStrSnippet("string"), nil)
 	RegisterStrToXFn("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/byteconv"`})
 
+	imp = []string{`"fmt"`}
+	RegisterStrToXFn("any", anyToStrSnippet("any"), imp)
+	RegisterStrToXFn("interface{}", anyToStrSnippet("interface{}"), imp)
+
 	// Register functions to typecast to built-in types.
 	RegisterAssignFn(AssignToBytes)
 	RegisterAssignFn(AssignToStr)
