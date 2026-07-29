@@ -326,6 +326,7 @@ func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrS
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 *float32
 			x0 := (*r)[i0]
+			_ = x0
 			b0 = x0
 			buf0 = append(buf0, b0)
 		}

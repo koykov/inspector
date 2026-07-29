@@ -56,6 +56,10 @@ func (c *Compiler) writeNodeCopyTo(_ *node, recv, pname string) error {
 }
 
 func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
+	if node.typn == "any" || node.typn == "interface{}" {
+		return nil
+	}
+
 	switch node.typ {
 	case typeStruct:
 		for _, ch := range node.chld {
@@ -116,11 +120,12 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			nv := "x" + strconv.Itoa(depth)
 			nb := "b" + strconv.Itoa(depth)
 			c.wl("var ", nb, " ", c.fmtT(node.slct))
-			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+			if node.slct.typ == typeSlice || node.slct.ptr || c.isBuiltin(node.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node, r, depth), "[", ni, "]")
 			} else {
 				c.wl(nv, " := &", c.fmtVd(node, r, depth), "[", ni, "]")
 			}
+			c.wl("_=", nv)
 			_ = c.writeCopy(node.slct, nb, nv, depth+1)
 			pfx := ""
 			if node.slct.ptr && !c.isBuiltin(node.slct.typn) {

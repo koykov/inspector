@@ -3,6 +3,10 @@ package inspector
 import "strconv"
 
 func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
+	if node_.typn == "any" || node_.typn == "interface{}" {
+		return nil
+	}
+
 	if depth == 0 {
 		c.wl("*result=0")
 	}
@@ -110,7 +114,7 @@ func (c *Compiler) writeNodeLC(node_ *node, v, fn string, depth int) error {
 			}
 			c.wl(snippet)
 			c.wl("if len(", c.fmtVnb(node_, v, depth), ") > i {")
-			if node_.slct.ptr || c.isBuiltin(node_.slct.typn) {
+			if node_.slct.typ == typeSlice || node_.slct.ptr || c.isBuiltin(node_.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node_, v, depth), "[i]")
 			} else {
 				c.wl(nv, " := &", c.fmtVd(node_, v, depth), "[i]")

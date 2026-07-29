@@ -820,6 +820,7 @@ func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStr
 		for i0 := 0; i0 < len(*r); i0++ {
 			var b0 testobj.TestStruct
 			x0 := (*r)[i0]
+			_ = x0
 			b0.A = x0.A
 			var c0 string
 			buf, c0 = inspector.BufferizeString(buf, string(x0.S))

@@ -3,6 +3,10 @@ package inspector
 import "strconv"
 
 func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
+	if node.typn == "any" || node.typn == "interface{}" {
+		return nil
+	}
+
 	depths := strconv.Itoa(depth)
 	depths1 := strconv.Itoa(depth + 1)
 	mustLenCheck := node.typ != typeBasic
@@ -78,7 +82,7 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 				}
 				c.wl(snippet)
 				pfx := "&"
-				if node.slct.ptr {
+				if node.slct.typ == typeSlice || node.slct.ptr {
 					pfx = ""
 				}
 				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[", iv, "]")
@@ -130,6 +134,10 @@ func (c *Compiler) writeNodeReset(node *node, v string, depth int) error {
 }
 
 func (c *Compiler) writeNodeResetFull(node *node, v string, depth int) error {
+	if node.typu == "any" || node.typu == "interface{}" {
+		return nil
+	}
+
 	switch node.typ {
 	case typeStruct:
 		for _, ch := range node.chld {
@@ -159,7 +167,7 @@ func (c *Compiler) writeNodeResetFull(node *node, v string, depth int) error {
 				nv := "x" + strconv.Itoa(depth)
 				c.wl("for i:=0;i<l;i++{")
 				pfx := "&"
-				if node.slct.ptr {
+				if node.slct.typ == typeSlice || node.slct.ptr {
 					pfx = ""
 				}
 				c.wl(nv, ":=", pfx, c.fmtVd(node, v, depth), "[i]")
