@@ -50,6 +50,8 @@ func init() {
 	RegisterInspector("bytes", StringsInspector{})
 	RegisterInspector("stringAnyMap", StringAnyMapInspector{})
 	RegisterInspector("map[string]any", StringAnyMapInspector{})
+	RegisterInspector("stringStringMap", StringStringMapInspector{})
+	RegisterInspector("map[string]string", StringStringMapInspector{})
 	RegisterInspector("reflect", ReflectInspector{})
 
 	// Register snippets to convert string to built-in types.
