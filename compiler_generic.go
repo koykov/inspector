@@ -7,6 +7,10 @@ import (
 
 // Write body of the methods according given mode.
 func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int, mode mode) error {
+	if node.typn == "any" || node.typn == "interface{}" {
+		return nil
+	}
+
 	depths := strconv.Itoa(depth)
 
 	// Flag to check length of the path array.
@@ -25,7 +29,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 		// Walk over fields.
 		for _, ch := range node.chld {
 			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
-			if isBasic && mode == modeLoop {
+			if (isBasic && mode == modeLoop) || ch.typn == "any" || ch.typn == "interface{}" {
 				continue
 			}
 			c.wl("if path[", depths, "] == ", `"`, ch.name, `" {`)
@@ -276,7 +280,11 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[i]")
 			} else {
-				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[i]")
+				if node.slct.typ == typeSlice {
+					c.wl(nv, " := ", c.fmtVd(node, v, depth), "[i]")
+				} else {
+					c.wl(nv, " := &", c.fmtVd(node, v, depth), "[i]")
+				}
 			}
 			c.wl("_ = ", nv)
 			err = c.writeNode(node.slct, node, recv, nv, "", depth+1, mode)
@@ -285,7 +293,7 @@ func (c *Compiler) writeNode(node, parent *node, recv, v, vsrc string, depth int
 			}
 			if mode == modeSet {
 				pfx := ""
-				if !node.slct.ptr && !c.isBuiltin(node.slct.typn) {
+				if node.slct.typ != typeSlice && !node.slct.ptr && !c.isBuiltin(node.slct.typn) {
 					pfx = "*"
 				}
 				c.wl(c.fmtVd(node, v, depth), "[i] = ", pfx, nv)

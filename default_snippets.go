@@ -43,3 +43,8 @@ func strToStrSnippet(_ string) string {
 	snippet := "!{var} = string(!{arg})\n"
 	return snippet
 }
+
+func anyToStrSnippet(_ string) string {
+	snippet := `!{var} = fmt.Sprintf("%#v", !{arg})` + "\n"
+	return snippet
+}

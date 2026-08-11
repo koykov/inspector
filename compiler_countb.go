@@ -3,6 +3,10 @@ package inspector
 import "strconv"
 
 func (c *Compiler) writeCountBytes(node *node, v string, depth int) error {
+	if node.typn == "any" || node.typn == "interface{}" {
+		return nil
+	}
+
 	if !node.hasb {
 		return nil
 	}
@@ -37,7 +41,7 @@ func (c *Compiler) writeCountBytes(node *node, v string, depth int) error {
 			ni := "i" + strconv.Itoa(depth)
 			c.wl("for ", ni, ":=0; ", ni, "<len(", c.fmtVnb(node, v, depth), "); ", ni, "++{")
 			nv := "x" + strconv.Itoa(depth)
-			if node.slct.ptr || c.isBuiltin(node.slct.typn) {
+			if node.slct.typ == typeSlice || node.slct.ptr || c.isBuiltin(node.slct.typn) {
 				c.wl(nv, " := ", c.fmtVd(node, v, depth), "[", ni, "]")
 			} else {
 				c.wl(nv, " := &", c.fmtVd(node, v, depth), "[", ni, "]")

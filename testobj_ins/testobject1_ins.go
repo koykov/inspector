@@ -10343,6 +10343,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.IntSlice); i1++ {
 			var b1 int32
 			x1 := (r.IntSlice)[i1]
+			_ = x1
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10356,6 +10357,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.IntPtrSlice); i1++ {
 			var b1 *int32
 			x1 := (r.IntPtrSlice)[i1]
+			_ = x1
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10370,6 +10372,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.IntSlicePtr); i1++ {
 				var b1 int32
 				x1 := (*r.IntSlicePtr)[i1]
+				_ = x1
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10385,6 +10388,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.IntPtrSlicePtr); i1++ {
 				var b1 *int32
 				x1 := (*r.IntPtrSlicePtr)[i1]
+				_ = x1
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10400,6 +10404,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.BytePtrSlice); i1++ {
 			var b1 *byte
 			x1 := (r.BytePtrSlice)[i1]
+			_ = x1
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10417,6 +10422,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.BytePtrSlicePtr); i1++ {
 				var b1 *byte
 				x1 := (*r.BytePtrSlicePtr)[i1]
+				_ = x1
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10431,6 +10437,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.FloatSlice); i1++ {
 			var b1 float32
 			x1 := (r.FloatSlice)[i1]
+			_ = x1
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10444,6 +10451,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.FloatPtrSlice); i1++ {
 			var b1 *float32
 			x1 := (r.FloatPtrSlice)[i1]
+			_ = x1
 			b1 = x1
 			buf1 = append(buf1, b1)
 		}
@@ -10458,6 +10466,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.FloatSlicePtr); i1++ {
 				var b1 float32
 				x1 := (*r.FloatSlicePtr)[i1]
+				_ = x1
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10473,6 +10482,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.FloatPtrSlicePtr); i1++ {
 				var b1 *float32
 				x1 := (*r.FloatPtrSlicePtr)[i1]
+				_ = x1
 				b1 = x1
 				buf1 = append(buf1, b1)
 			}
@@ -10487,6 +10497,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.StructSlice); i1++ {
 			var b1 testobj.TestStruct
 			x1 := &(r.StructSlice)[i1]
+			_ = x1
 			b1.A = x1.A
 			var c0 string
 			buf, c0 = inspector.BufferizeString(buf, string(x1.S))
@@ -10516,6 +10527,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.StructPtrSlice); i1++ {
 			var b1 testobj.TestStruct
 			x1 := (r.StructPtrSlice)[i1]
+			_ = x1
 			b1.A = x1.A
 			var c1 string
 			buf, c1 = inspector.BufferizeString(buf, string(x1.S))
@@ -10546,6 +10558,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.StructSlicePtr); i1++ {
 				var b1 testobj.TestStruct
 				x1 := &(*r.StructSlicePtr)[i1]
+				_ = x1
 				b1.A = x1.A
 				var c2 string
 				buf, c2 = inspector.BufferizeString(buf, string(x1.S))
@@ -10577,6 +10590,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			for i1 := 0; i1 < len(*r.StructPtrSlicePtr); i1++ {
 				var b1 testobj.TestStruct
 				x1 := (*r.StructPtrSlicePtr)[i1]
+				_ = x1
 				b1.A = x1.A
 				var c3 string
 				buf, c3 = inspector.BufferizeString(buf, string(x1.S))
@@ -10607,6 +10621,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		for i1 := 0; i1 < len(r.StructSliceLiteral); i1++ {
 			var b1 testobj.TestStruct
 			x1 := (r.StructSliceLiteral)[i1]
+			_ = x1
 			b1.A = x1.A
 			var c4 string
 			buf, c4 = inspector.BufferizeString(buf, string(x1.S))

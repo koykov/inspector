@@ -50,6 +50,8 @@ func init() {
 	RegisterInspector("bytes", StringsInspector{})
 	RegisterInspector("stringAnyMap", StringAnyMapInspector{})
 	RegisterInspector("map[string]any", StringAnyMapInspector{})
+	RegisterInspector("stringStringMap", StringStringMapInspector{})
+	RegisterInspector("map[string]string", StringStringMapInspector{})
 	RegisterInspector("reflect", ReflectInspector{})
 
 	// Register snippets to convert string to built-in types.
@@ -75,6 +77,10 @@ func init() {
 	RegisterStrToXFn("[]byte", strToBytesSnippet("[]byte"), imp)
 	RegisterStrToXFn("string", strToStrSnippet("string"), nil)
 	RegisterStrToXFn("byte", strToByteSnippet("byte"), []string{`"github.com/koykov/byteconv"`})
+
+	imp = []string{`"fmt"`}
+	RegisterStrToXFn("any", anyToStrSnippet("any"), imp)
+	RegisterStrToXFn("interface{}", anyToStrSnippet("interface{}"), imp)
 
 	// Register functions to typecast to built-in types.
 	RegisterAssignFn(AssignToBytes)

@@ -6,6 +6,10 @@ import (
 )
 
 func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, depth int) error {
+	if node.typn == "any" || node.typn == "interface{}" {
+		return nil
+	}
+
 	_ = parent
 	path = strings.Trim(path, ".")
 	if len(path) > 0 && len(node.name) > 0 {

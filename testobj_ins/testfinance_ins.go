@@ -574,6 +574,7 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 		for i1 := 0; i1 < len(r.History); i1++ {
 			var b1 testobj.TestHistory
 			x1 := &(r.History)[i1]
+			_ = x1
 			b1.DateUnix = x1.DateUnix
 			b1.Cost = x1.Cost
 			buf, b1.Comment = inspector.Bufferize(buf, x1.Comment)

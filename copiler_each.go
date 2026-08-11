@@ -3,6 +3,9 @@ package inspector
 import "strconv"
 
 func (c *Compiler) writeNodeEach(node_ *node, v string, depth int) error {
+	if node_.typn == "any" || node_.typn == "interface{}" {
+		return nil
+	}
 	if node_.ptr {
 		// Value may be nil on pointer types.
 		c.wl("if ", v, " == nil { return nil }")
