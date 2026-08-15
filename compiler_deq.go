@@ -38,7 +38,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 		for _, ch := range node.chld {
 			nlv, nrv := lv, rv
 			isBasic := ch.typ == typeBasic || (ch.typ == typeSlice && ch.typn == "[]byte")
-			if !isBasic {
+			if !isBasic || ch.ptr {
 				c.cntrDEQ++
 				nlv = "lx" + strconv.Itoa(c.cntrDEQ)
 				nrv = "rx" + strconv.Itoa(c.cntrDEQ)
@@ -78,7 +78,10 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 		}
 	case typeSlice:
 		if node.typn == "[]byte" {
-			nlv, nrv := lv+"."+node.name, rv+"."+node.name
+			nlv, nrv := lv, rv
+			if !node.ptr {
+				nlv, nrv = lv+"."+node.name, rv+"."+node.name
+			}
 			c.wl("if !bytes.Equal(", c.fmtVnb(node, nlv, depth), ",", c.fmtVnb(node, nrv, depth), ") && inspector.DEQMustCheck(\"", path, "\",opts){return false}")
 		} else {
 			nlv := c.fmtVnb(node, lv, depth)
@@ -104,7 +107,7 @@ func (c *Compiler) writeNodeDEQ(node, parent *node, recv, path, lv, rv string, d
 		}
 	case typeBasic:
 		plv, prv := lv, rv
-		if len(node.name) > 0 {
+		if len(node.name) > 0 && !node.ptr {
 			plv, prv = lv+"."+node.name, rv+"."+node.name
 		}
 		if node.ptr {

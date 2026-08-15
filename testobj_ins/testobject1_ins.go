@@ -9005,1145 +9005,1148 @@ func (i6 TestObject1Inspector) DeepEqualWithOptions(l, r any, opts *inspector.DE
 			}
 		}
 	}
-	if (lx == nil && rx != nil) || (lx != nil && rx == nil) {
-		return false
-	}
-	if lx != nil && rx != nil {
-		if !bytes.Equal(*lx.ByteSlicePtr, *rx.ByteSlicePtr) && inspector.DEQMustCheck("ByteSlicePtr", opts) {
-			return false
-		}
-	}
-	lx11 := lx.BytePtrSlicePtr
-	rx11 := rx.BytePtrSlicePtr
+	lx11 := lx.ByteSlicePtr
+	rx11 := rx.ByteSlicePtr
 	_, _ = lx11, rx11
 	if (lx11 == nil && rx11 != nil) || (lx11 != nil && rx11 == nil) {
 		return false
 	}
 	if lx11 != nil && rx11 != nil {
+		if !bytes.Equal(*lx11, *rx11) && inspector.DEQMustCheck("ByteSlicePtr", opts) {
+			return false
+		}
+	}
+	lx12 := lx.BytePtrSlicePtr
+	rx12 := rx.BytePtrSlicePtr
+	_, _ = lx12, rx12
+	if (lx12 == nil && rx12 != nil) || (lx12 != nil && rx12 == nil) {
+		return false
+	}
+	if lx12 != nil && rx12 != nil {
 		if inspector.DEQMustCheck("BytePtrSlicePtr", opts) {
-			if len(*lx11) != len(*rx11) {
+			if len(*lx12) != len(*rx12) {
 				return false
 			}
-			for i := 0; i < len(*lx11); i++ {
-				lx12 := (*lx11)[i]
-				rx12 := (*rx11)[i]
-				_, _ = lx12, rx12
-				if (lx12 == nil && rx12 != nil) || (lx12 != nil && rx12 == nil) {
+			for i := 0; i < len(*lx12); i++ {
+				lx13 := (*lx12)[i]
+				rx13 := (*rx12)[i]
+				_, _ = lx13, rx13
+				if (lx13 == nil && rx13 != nil) || (lx13 != nil && rx13 == nil) {
 					return false
 				}
-				if lx12 != nil && rx12 != nil {
-					if *lx12 != *rx12 {
+				if lx13 != nil && rx13 != nil {
+					if *lx13 != *rx13 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx13 := lx.FloatSlice
-	rx13 := rx.FloatSlice
-	_, _ = lx13, rx13
+	lx14 := lx.FloatSlice
+	rx14 := rx.FloatSlice
+	_, _ = lx14, rx14
 	if inspector.DEQMustCheck("FloatSlice", opts) {
-		if len(lx13) != len(rx13) {
+		if len(lx14) != len(rx14) {
 			return false
 		}
-		for i := 0; i < len(lx13); i++ {
-			lx14 := (lx13)[i]
-			rx14 := (rx13)[i]
-			_, _ = lx14, rx14
-			if lx14 != rx14 {
+		for i := 0; i < len(lx14); i++ {
+			lx15 := (lx14)[i]
+			rx15 := (rx14)[i]
+			_, _ = lx15, rx15
+			if lx15 != rx15 {
 				return false
 			}
 		}
 	}
-	lx15 := lx.FloatPtrSlice
-	rx15 := rx.FloatPtrSlice
-	_, _ = lx15, rx15
+	lx16 := lx.FloatPtrSlice
+	rx16 := rx.FloatPtrSlice
+	_, _ = lx16, rx16
 	if inspector.DEQMustCheck("FloatPtrSlice", opts) {
-		if len(lx15) != len(rx15) {
+		if len(lx16) != len(rx16) {
 			return false
 		}
-		for i := 0; i < len(lx15); i++ {
-			lx16 := (lx15)[i]
-			rx16 := (rx15)[i]
-			_, _ = lx16, rx16
-			if (lx16 == nil && rx16 != nil) || (lx16 != nil && rx16 == nil) {
+		for i := 0; i < len(lx16); i++ {
+			lx17 := (lx16)[i]
+			rx17 := (rx16)[i]
+			_, _ = lx17, rx17
+			if (lx17 == nil && rx17 != nil) || (lx17 != nil && rx17 == nil) {
 				return false
 			}
-			if lx16 != nil && rx16 != nil {
-				if *lx16 != *rx16 {
+			if lx17 != nil && rx17 != nil {
+				if *lx17 != *rx17 {
 					return false
 				}
 			}
 		}
 	}
-	lx17 := lx.FloatSlicePtr
-	rx17 := rx.FloatSlicePtr
-	_, _ = lx17, rx17
-	if (lx17 == nil && rx17 != nil) || (lx17 != nil && rx17 == nil) {
+	lx18 := lx.FloatSlicePtr
+	rx18 := rx.FloatSlicePtr
+	_, _ = lx18, rx18
+	if (lx18 == nil && rx18 != nil) || (lx18 != nil && rx18 == nil) {
 		return false
 	}
-	if lx17 != nil && rx17 != nil {
+	if lx18 != nil && rx18 != nil {
 		if inspector.DEQMustCheck("FloatSlicePtr", opts) {
-			if len(*lx17) != len(*rx17) {
+			if len(*lx18) != len(*rx18) {
 				return false
 			}
-			for i := 0; i < len(*lx17); i++ {
-				lx18 := (*lx17)[i]
-				rx18 := (*rx17)[i]
-				_, _ = lx18, rx18
-				if lx18 != rx18 {
+			for i := 0; i < len(*lx18); i++ {
+				lx19 := (*lx18)[i]
+				rx19 := (*rx18)[i]
+				_, _ = lx19, rx19
+				if lx19 != rx19 {
 					return false
 				}
 			}
 		}
 	}
-	lx19 := lx.FloatPtrSlicePtr
-	rx19 := rx.FloatPtrSlicePtr
-	_, _ = lx19, rx19
-	if (lx19 == nil && rx19 != nil) || (lx19 != nil && rx19 == nil) {
+	lx20 := lx.FloatPtrSlicePtr
+	rx20 := rx.FloatPtrSlicePtr
+	_, _ = lx20, rx20
+	if (lx20 == nil && rx20 != nil) || (lx20 != nil && rx20 == nil) {
 		return false
 	}
-	if lx19 != nil && rx19 != nil {
+	if lx20 != nil && rx20 != nil {
 		if inspector.DEQMustCheck("FloatPtrSlicePtr", opts) {
-			if len(*lx19) != len(*rx19) {
+			if len(*lx20) != len(*rx20) {
 				return false
 			}
-			for i := 0; i < len(*lx19); i++ {
-				lx20 := (*lx19)[i]
-				rx20 := (*rx19)[i]
-				_, _ = lx20, rx20
-				if (lx20 == nil && rx20 != nil) || (lx20 != nil && rx20 == nil) {
+			for i := 0; i < len(*lx20); i++ {
+				lx21 := (*lx20)[i]
+				rx21 := (*rx20)[i]
+				_, _ = lx21, rx21
+				if (lx21 == nil && rx21 != nil) || (lx21 != nil && rx21 == nil) {
 					return false
 				}
-				if lx20 != nil && rx20 != nil {
-					if *lx20 != *rx20 {
+				if lx21 != nil && rx21 != nil {
+					if *lx21 != *rx21 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx21 := lx.StructSlice
-	rx21 := rx.StructSlice
-	_, _ = lx21, rx21
+	lx22 := lx.StructSlice
+	rx22 := rx.StructSlice
+	_, _ = lx22, rx22
 	if inspector.DEQMustCheck("StructSlice", opts) {
-		if len(lx21) != len(rx21) {
+		if len(lx22) != len(rx22) {
 			return false
 		}
-		for i := 0; i < len(lx21); i++ {
-			lx22 := (lx21)[i]
-			rx22 := (rx21)[i]
-			_, _ = lx22, rx22
-			if lx22.A != rx22.A && inspector.DEQMustCheck("StructSlice.A", opts) {
+		for i := 0; i < len(lx22); i++ {
+			lx23 := (lx22)[i]
+			rx23 := (rx22)[i]
+			_, _ = lx23, rx23
+			if lx23.A != rx23.A && inspector.DEQMustCheck("StructSlice.A", opts) {
 				return false
 			}
-			if lx22.S != rx22.S && inspector.DEQMustCheck("StructSlice.S", opts) {
+			if lx23.S != rx23.S && inspector.DEQMustCheck("StructSlice.S", opts) {
 				return false
 			}
-			if !bytes.Equal(lx22.B, rx22.B) && inspector.DEQMustCheck("StructSlice.B", opts) {
+			if !bytes.Equal(lx23.B, rx23.B) && inspector.DEQMustCheck("StructSlice.B", opts) {
 				return false
 			}
-			if lx22.I != rx22.I && inspector.DEQMustCheck("StructSlice.I", opts) {
+			if lx23.I != rx23.I && inspector.DEQMustCheck("StructSlice.I", opts) {
 				return false
 			}
-			if lx22.I8 != rx22.I8 && inspector.DEQMustCheck("StructSlice.I8", opts) {
+			if lx23.I8 != rx23.I8 && inspector.DEQMustCheck("StructSlice.I8", opts) {
 				return false
 			}
-			if lx22.I16 != rx22.I16 && inspector.DEQMustCheck("StructSlice.I16", opts) {
+			if lx23.I16 != rx23.I16 && inspector.DEQMustCheck("StructSlice.I16", opts) {
 				return false
 			}
-			if lx22.I32 != rx22.I32 && inspector.DEQMustCheck("StructSlice.I32", opts) {
+			if lx23.I32 != rx23.I32 && inspector.DEQMustCheck("StructSlice.I32", opts) {
 				return false
 			}
-			if lx22.I64 != rx22.I64 && inspector.DEQMustCheck("StructSlice.I64", opts) {
+			if lx23.I64 != rx23.I64 && inspector.DEQMustCheck("StructSlice.I64", opts) {
 				return false
 			}
-			if lx22.U != rx22.U && inspector.DEQMustCheck("StructSlice.U", opts) {
+			if lx23.U != rx23.U && inspector.DEQMustCheck("StructSlice.U", opts) {
 				return false
 			}
-			if lx22.U8 != rx22.U8 && inspector.DEQMustCheck("StructSlice.U8", opts) {
+			if lx23.U8 != rx23.U8 && inspector.DEQMustCheck("StructSlice.U8", opts) {
 				return false
 			}
-			if lx22.U16 != rx22.U16 && inspector.DEQMustCheck("StructSlice.U16", opts) {
+			if lx23.U16 != rx23.U16 && inspector.DEQMustCheck("StructSlice.U16", opts) {
 				return false
 			}
-			if lx22.U32 != rx22.U32 && inspector.DEQMustCheck("StructSlice.U32", opts) {
+			if lx23.U32 != rx23.U32 && inspector.DEQMustCheck("StructSlice.U32", opts) {
 				return false
 			}
-			if lx22.U64 != rx22.U64 && inspector.DEQMustCheck("StructSlice.U64", opts) {
+			if lx23.U64 != rx23.U64 && inspector.DEQMustCheck("StructSlice.U64", opts) {
 				return false
 			}
-			if !inspector.EqualFloat32(lx22.F, rx22.F, opts) && inspector.DEQMustCheck("StructSlice.F", opts) {
+			if !inspector.EqualFloat32(lx23.F, rx23.F, opts) && inspector.DEQMustCheck("StructSlice.F", opts) {
 				return false
 			}
-			if !inspector.EqualFloat64(lx22.D, rx22.D, opts) && inspector.DEQMustCheck("StructSlice.D", opts) {
+			if !inspector.EqualFloat64(lx23.D, rx23.D, opts) && inspector.DEQMustCheck("StructSlice.D", opts) {
 				return false
 			}
 		}
 	}
-	lx23 := lx.StructPtrSlice
-	rx23 := rx.StructPtrSlice
-	_, _ = lx23, rx23
+	lx24 := lx.StructPtrSlice
+	rx24 := rx.StructPtrSlice
+	_, _ = lx24, rx24
 	if inspector.DEQMustCheck("StructPtrSlice", opts) {
-		if len(lx23) != len(rx23) {
+		if len(lx24) != len(rx24) {
 			return false
 		}
-		for i := 0; i < len(lx23); i++ {
-			lx24 := (lx23)[i]
-			rx24 := (rx23)[i]
-			_, _ = lx24, rx24
-			if (lx24 == nil && rx24 != nil) || (lx24 != nil && rx24 == nil) {
+		for i := 0; i < len(lx24); i++ {
+			lx25 := (lx24)[i]
+			rx25 := (rx24)[i]
+			_, _ = lx25, rx25
+			if (lx25 == nil && rx25 != nil) || (lx25 != nil && rx25 == nil) {
 				return false
 			}
-			if lx24 != nil && rx24 != nil {
-				if lx24.A != rx24.A && inspector.DEQMustCheck("StructPtrSlice.A", opts) {
+			if lx25 != nil && rx25 != nil {
+				if lx25.A != rx25.A && inspector.DEQMustCheck("StructPtrSlice.A", opts) {
 					return false
 				}
-				if lx24.S != rx24.S && inspector.DEQMustCheck("StructPtrSlice.S", opts) {
+				if lx25.S != rx25.S && inspector.DEQMustCheck("StructPtrSlice.S", opts) {
 					return false
 				}
-				if !bytes.Equal(lx24.B, rx24.B) && inspector.DEQMustCheck("StructPtrSlice.B", opts) {
+				if !bytes.Equal(lx25.B, rx25.B) && inspector.DEQMustCheck("StructPtrSlice.B", opts) {
 					return false
 				}
-				if lx24.I != rx24.I && inspector.DEQMustCheck("StructPtrSlice.I", opts) {
+				if lx25.I != rx25.I && inspector.DEQMustCheck("StructPtrSlice.I", opts) {
 					return false
 				}
-				if lx24.I8 != rx24.I8 && inspector.DEQMustCheck("StructPtrSlice.I8", opts) {
+				if lx25.I8 != rx25.I8 && inspector.DEQMustCheck("StructPtrSlice.I8", opts) {
 					return false
 				}
-				if lx24.I16 != rx24.I16 && inspector.DEQMustCheck("StructPtrSlice.I16", opts) {
+				if lx25.I16 != rx25.I16 && inspector.DEQMustCheck("StructPtrSlice.I16", opts) {
 					return false
 				}
-				if lx24.I32 != rx24.I32 && inspector.DEQMustCheck("StructPtrSlice.I32", opts) {
+				if lx25.I32 != rx25.I32 && inspector.DEQMustCheck("StructPtrSlice.I32", opts) {
 					return false
 				}
-				if lx24.I64 != rx24.I64 && inspector.DEQMustCheck("StructPtrSlice.I64", opts) {
+				if lx25.I64 != rx25.I64 && inspector.DEQMustCheck("StructPtrSlice.I64", opts) {
 					return false
 				}
-				if lx24.U != rx24.U && inspector.DEQMustCheck("StructPtrSlice.U", opts) {
+				if lx25.U != rx25.U && inspector.DEQMustCheck("StructPtrSlice.U", opts) {
 					return false
 				}
-				if lx24.U8 != rx24.U8 && inspector.DEQMustCheck("StructPtrSlice.U8", opts) {
+				if lx25.U8 != rx25.U8 && inspector.DEQMustCheck("StructPtrSlice.U8", opts) {
 					return false
 				}
-				if lx24.U16 != rx24.U16 && inspector.DEQMustCheck("StructPtrSlice.U16", opts) {
+				if lx25.U16 != rx25.U16 && inspector.DEQMustCheck("StructPtrSlice.U16", opts) {
 					return false
 				}
-				if lx24.U32 != rx24.U32 && inspector.DEQMustCheck("StructPtrSlice.U32", opts) {
+				if lx25.U32 != rx25.U32 && inspector.DEQMustCheck("StructPtrSlice.U32", opts) {
 					return false
 				}
-				if lx24.U64 != rx24.U64 && inspector.DEQMustCheck("StructPtrSlice.U64", opts) {
+				if lx25.U64 != rx25.U64 && inspector.DEQMustCheck("StructPtrSlice.U64", opts) {
 					return false
 				}
-				if !inspector.EqualFloat32(lx24.F, rx24.F, opts) && inspector.DEQMustCheck("StructPtrSlice.F", opts) {
+				if !inspector.EqualFloat32(lx25.F, rx25.F, opts) && inspector.DEQMustCheck("StructPtrSlice.F", opts) {
 					return false
 				}
-				if !inspector.EqualFloat64(lx24.D, rx24.D, opts) && inspector.DEQMustCheck("StructPtrSlice.D", opts) {
+				if !inspector.EqualFloat64(lx25.D, rx25.D, opts) && inspector.DEQMustCheck("StructPtrSlice.D", opts) {
 					return false
 				}
 			}
 		}
 	}
-	lx25 := lx.StructSlicePtr
-	rx25 := rx.StructSlicePtr
-	_, _ = lx25, rx25
-	if (lx25 == nil && rx25 != nil) || (lx25 != nil && rx25 == nil) {
+	lx26 := lx.StructSlicePtr
+	rx26 := rx.StructSlicePtr
+	_, _ = lx26, rx26
+	if (lx26 == nil && rx26 != nil) || (lx26 != nil && rx26 == nil) {
 		return false
 	}
-	if lx25 != nil && rx25 != nil {
+	if lx26 != nil && rx26 != nil {
 		if inspector.DEQMustCheck("StructSlicePtr", opts) {
-			if len(*lx25) != len(*rx25) {
+			if len(*lx26) != len(*rx26) {
 				return false
 			}
-			for i := 0; i < len(*lx25); i++ {
-				lx26 := (*lx25)[i]
-				rx26 := (*rx25)[i]
-				_, _ = lx26, rx26
-				if lx26.A != rx26.A && inspector.DEQMustCheck("StructSlicePtr.A", opts) {
+			for i := 0; i < len(*lx26); i++ {
+				lx27 := (*lx26)[i]
+				rx27 := (*rx26)[i]
+				_, _ = lx27, rx27
+				if lx27.A != rx27.A && inspector.DEQMustCheck("StructSlicePtr.A", opts) {
 					return false
 				}
-				if lx26.S != rx26.S && inspector.DEQMustCheck("StructSlicePtr.S", opts) {
+				if lx27.S != rx27.S && inspector.DEQMustCheck("StructSlicePtr.S", opts) {
 					return false
 				}
-				if !bytes.Equal(lx26.B, rx26.B) && inspector.DEQMustCheck("StructSlicePtr.B", opts) {
+				if !bytes.Equal(lx27.B, rx27.B) && inspector.DEQMustCheck("StructSlicePtr.B", opts) {
 					return false
 				}
-				if lx26.I != rx26.I && inspector.DEQMustCheck("StructSlicePtr.I", opts) {
+				if lx27.I != rx27.I && inspector.DEQMustCheck("StructSlicePtr.I", opts) {
 					return false
 				}
-				if lx26.I8 != rx26.I8 && inspector.DEQMustCheck("StructSlicePtr.I8", opts) {
+				if lx27.I8 != rx27.I8 && inspector.DEQMustCheck("StructSlicePtr.I8", opts) {
 					return false
 				}
-				if lx26.I16 != rx26.I16 && inspector.DEQMustCheck("StructSlicePtr.I16", opts) {
+				if lx27.I16 != rx27.I16 && inspector.DEQMustCheck("StructSlicePtr.I16", opts) {
 					return false
 				}
-				if lx26.I32 != rx26.I32 && inspector.DEQMustCheck("StructSlicePtr.I32", opts) {
+				if lx27.I32 != rx27.I32 && inspector.DEQMustCheck("StructSlicePtr.I32", opts) {
 					return false
 				}
-				if lx26.I64 != rx26.I64 && inspector.DEQMustCheck("StructSlicePtr.I64", opts) {
+				if lx27.I64 != rx27.I64 && inspector.DEQMustCheck("StructSlicePtr.I64", opts) {
 					return false
 				}
-				if lx26.U != rx26.U && inspector.DEQMustCheck("StructSlicePtr.U", opts) {
+				if lx27.U != rx27.U && inspector.DEQMustCheck("StructSlicePtr.U", opts) {
 					return false
 				}
-				if lx26.U8 != rx26.U8 && inspector.DEQMustCheck("StructSlicePtr.U8", opts) {
+				if lx27.U8 != rx27.U8 && inspector.DEQMustCheck("StructSlicePtr.U8", opts) {
 					return false
 				}
-				if lx26.U16 != rx26.U16 && inspector.DEQMustCheck("StructSlicePtr.U16", opts) {
+				if lx27.U16 != rx27.U16 && inspector.DEQMustCheck("StructSlicePtr.U16", opts) {
 					return false
 				}
-				if lx26.U32 != rx26.U32 && inspector.DEQMustCheck("StructSlicePtr.U32", opts) {
+				if lx27.U32 != rx27.U32 && inspector.DEQMustCheck("StructSlicePtr.U32", opts) {
 					return false
 				}
-				if lx26.U64 != rx26.U64 && inspector.DEQMustCheck("StructSlicePtr.U64", opts) {
+				if lx27.U64 != rx27.U64 && inspector.DEQMustCheck("StructSlicePtr.U64", opts) {
 					return false
 				}
-				if !inspector.EqualFloat32(lx26.F, rx26.F, opts) && inspector.DEQMustCheck("StructSlicePtr.F", opts) {
+				if !inspector.EqualFloat32(lx27.F, rx27.F, opts) && inspector.DEQMustCheck("StructSlicePtr.F", opts) {
 					return false
 				}
-				if !inspector.EqualFloat64(lx26.D, rx26.D, opts) && inspector.DEQMustCheck("StructSlicePtr.D", opts) {
+				if !inspector.EqualFloat64(lx27.D, rx27.D, opts) && inspector.DEQMustCheck("StructSlicePtr.D", opts) {
 					return false
 				}
 			}
 		}
 	}
-	lx27 := lx.StructPtrSlicePtr
-	rx27 := rx.StructPtrSlicePtr
-	_, _ = lx27, rx27
-	if (lx27 == nil && rx27 != nil) || (lx27 != nil && rx27 == nil) {
+	lx28 := lx.StructPtrSlicePtr
+	rx28 := rx.StructPtrSlicePtr
+	_, _ = lx28, rx28
+	if (lx28 == nil && rx28 != nil) || (lx28 != nil && rx28 == nil) {
 		return false
 	}
-	if lx27 != nil && rx27 != nil {
+	if lx28 != nil && rx28 != nil {
 		if inspector.DEQMustCheck("StructPtrSlicePtr", opts) {
-			if len(*lx27) != len(*rx27) {
+			if len(*lx28) != len(*rx28) {
 				return false
 			}
-			for i := 0; i < len(*lx27); i++ {
-				lx28 := (*lx27)[i]
-				rx28 := (*rx27)[i]
-				_, _ = lx28, rx28
-				if (lx28 == nil && rx28 != nil) || (lx28 != nil && rx28 == nil) {
+			for i := 0; i < len(*lx28); i++ {
+				lx29 := (*lx28)[i]
+				rx29 := (*rx28)[i]
+				_, _ = lx29, rx29
+				if (lx29 == nil && rx29 != nil) || (lx29 != nil && rx29 == nil) {
 					return false
 				}
-				if lx28 != nil && rx28 != nil {
-					if lx28.A != rx28.A && inspector.DEQMustCheck("StructPtrSlicePtr.A", opts) {
+				if lx29 != nil && rx29 != nil {
+					if lx29.A != rx29.A && inspector.DEQMustCheck("StructPtrSlicePtr.A", opts) {
 						return false
 					}
-					if lx28.S != rx28.S && inspector.DEQMustCheck("StructPtrSlicePtr.S", opts) {
+					if lx29.S != rx29.S && inspector.DEQMustCheck("StructPtrSlicePtr.S", opts) {
 						return false
 					}
-					if !bytes.Equal(lx28.B, rx28.B) && inspector.DEQMustCheck("StructPtrSlicePtr.B", opts) {
+					if !bytes.Equal(lx29.B, rx29.B) && inspector.DEQMustCheck("StructPtrSlicePtr.B", opts) {
 						return false
 					}
-					if lx28.I != rx28.I && inspector.DEQMustCheck("StructPtrSlicePtr.I", opts) {
+					if lx29.I != rx29.I && inspector.DEQMustCheck("StructPtrSlicePtr.I", opts) {
 						return false
 					}
-					if lx28.I8 != rx28.I8 && inspector.DEQMustCheck("StructPtrSlicePtr.I8", opts) {
+					if lx29.I8 != rx29.I8 && inspector.DEQMustCheck("StructPtrSlicePtr.I8", opts) {
 						return false
 					}
-					if lx28.I16 != rx28.I16 && inspector.DEQMustCheck("StructPtrSlicePtr.I16", opts) {
+					if lx29.I16 != rx29.I16 && inspector.DEQMustCheck("StructPtrSlicePtr.I16", opts) {
 						return false
 					}
-					if lx28.I32 != rx28.I32 && inspector.DEQMustCheck("StructPtrSlicePtr.I32", opts) {
+					if lx29.I32 != rx29.I32 && inspector.DEQMustCheck("StructPtrSlicePtr.I32", opts) {
 						return false
 					}
-					if lx28.I64 != rx28.I64 && inspector.DEQMustCheck("StructPtrSlicePtr.I64", opts) {
+					if lx29.I64 != rx29.I64 && inspector.DEQMustCheck("StructPtrSlicePtr.I64", opts) {
 						return false
 					}
-					if lx28.U != rx28.U && inspector.DEQMustCheck("StructPtrSlicePtr.U", opts) {
+					if lx29.U != rx29.U && inspector.DEQMustCheck("StructPtrSlicePtr.U", opts) {
 						return false
 					}
-					if lx28.U8 != rx28.U8 && inspector.DEQMustCheck("StructPtrSlicePtr.U8", opts) {
+					if lx29.U8 != rx29.U8 && inspector.DEQMustCheck("StructPtrSlicePtr.U8", opts) {
 						return false
 					}
-					if lx28.U16 != rx28.U16 && inspector.DEQMustCheck("StructPtrSlicePtr.U16", opts) {
+					if lx29.U16 != rx29.U16 && inspector.DEQMustCheck("StructPtrSlicePtr.U16", opts) {
 						return false
 					}
-					if lx28.U32 != rx28.U32 && inspector.DEQMustCheck("StructPtrSlicePtr.U32", opts) {
+					if lx29.U32 != rx29.U32 && inspector.DEQMustCheck("StructPtrSlicePtr.U32", opts) {
 						return false
 					}
-					if lx28.U64 != rx28.U64 && inspector.DEQMustCheck("StructPtrSlicePtr.U64", opts) {
+					if lx29.U64 != rx29.U64 && inspector.DEQMustCheck("StructPtrSlicePtr.U64", opts) {
 						return false
 					}
-					if !inspector.EqualFloat32(lx28.F, rx28.F, opts) && inspector.DEQMustCheck("StructPtrSlicePtr.F", opts) {
+					if !inspector.EqualFloat32(lx29.F, rx29.F, opts) && inspector.DEQMustCheck("StructPtrSlicePtr.F", opts) {
 						return false
 					}
-					if !inspector.EqualFloat64(lx28.D, rx28.D, opts) && inspector.DEQMustCheck("StructPtrSlicePtr.D", opts) {
+					if !inspector.EqualFloat64(lx29.D, rx29.D, opts) && inspector.DEQMustCheck("StructPtrSlicePtr.D", opts) {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx29 := lx.StructSliceLiteral
-	rx29 := rx.StructSliceLiteral
-	_, _ = lx29, rx29
+	lx30 := lx.StructSliceLiteral
+	rx30 := rx.StructSliceLiteral
+	_, _ = lx30, rx30
 	if inspector.DEQMustCheck("StructSliceLiteral", opts) {
-		if len(lx29) != len(rx29) {
+		if len(lx30) != len(rx30) {
 			return false
 		}
-		for i := 0; i < len(lx29); i++ {
-			lx30 := (lx29)[i]
-			rx30 := (rx29)[i]
-			_, _ = lx30, rx30
-			if (lx30 == nil && rx30 != nil) || (lx30 != nil && rx30 == nil) {
+		for i := 0; i < len(lx30); i++ {
+			lx31 := (lx30)[i]
+			rx31 := (rx30)[i]
+			_, _ = lx31, rx31
+			if (lx31 == nil && rx31 != nil) || (lx31 != nil && rx31 == nil) {
 				return false
 			}
-			if lx30 != nil && rx30 != nil {
-				if lx30.A != rx30.A && inspector.DEQMustCheck("StructSliceLiteral.A", opts) {
+			if lx31 != nil && rx31 != nil {
+				if lx31.A != rx31.A && inspector.DEQMustCheck("StructSliceLiteral.A", opts) {
 					return false
 				}
-				if lx30.S != rx30.S && inspector.DEQMustCheck("StructSliceLiteral.S", opts) {
+				if lx31.S != rx31.S && inspector.DEQMustCheck("StructSliceLiteral.S", opts) {
 					return false
 				}
-				if !bytes.Equal(lx30.B, rx30.B) && inspector.DEQMustCheck("StructSliceLiteral.B", opts) {
+				if !bytes.Equal(lx31.B, rx31.B) && inspector.DEQMustCheck("StructSliceLiteral.B", opts) {
 					return false
 				}
-				if lx30.I != rx30.I && inspector.DEQMustCheck("StructSliceLiteral.I", opts) {
+				if lx31.I != rx31.I && inspector.DEQMustCheck("StructSliceLiteral.I", opts) {
 					return false
 				}
-				if lx30.I8 != rx30.I8 && inspector.DEQMustCheck("StructSliceLiteral.I8", opts) {
+				if lx31.I8 != rx31.I8 && inspector.DEQMustCheck("StructSliceLiteral.I8", opts) {
 					return false
 				}
-				if lx30.I16 != rx30.I16 && inspector.DEQMustCheck("StructSliceLiteral.I16", opts) {
+				if lx31.I16 != rx31.I16 && inspector.DEQMustCheck("StructSliceLiteral.I16", opts) {
 					return false
 				}
-				if lx30.I32 != rx30.I32 && inspector.DEQMustCheck("StructSliceLiteral.I32", opts) {
+				if lx31.I32 != rx31.I32 && inspector.DEQMustCheck("StructSliceLiteral.I32", opts) {
 					return false
 				}
-				if lx30.I64 != rx30.I64 && inspector.DEQMustCheck("StructSliceLiteral.I64", opts) {
+				if lx31.I64 != rx31.I64 && inspector.DEQMustCheck("StructSliceLiteral.I64", opts) {
 					return false
 				}
-				if lx30.U != rx30.U && inspector.DEQMustCheck("StructSliceLiteral.U", opts) {
+				if lx31.U != rx31.U && inspector.DEQMustCheck("StructSliceLiteral.U", opts) {
 					return false
 				}
-				if lx30.U8 != rx30.U8 && inspector.DEQMustCheck("StructSliceLiteral.U8", opts) {
+				if lx31.U8 != rx31.U8 && inspector.DEQMustCheck("StructSliceLiteral.U8", opts) {
 					return false
 				}
-				if lx30.U16 != rx30.U16 && inspector.DEQMustCheck("StructSliceLiteral.U16", opts) {
+				if lx31.U16 != rx31.U16 && inspector.DEQMustCheck("StructSliceLiteral.U16", opts) {
 					return false
 				}
-				if lx30.U32 != rx30.U32 && inspector.DEQMustCheck("StructSliceLiteral.U32", opts) {
+				if lx31.U32 != rx31.U32 && inspector.DEQMustCheck("StructSliceLiteral.U32", opts) {
 					return false
 				}
-				if lx30.U64 != rx30.U64 && inspector.DEQMustCheck("StructSliceLiteral.U64", opts) {
+				if lx31.U64 != rx31.U64 && inspector.DEQMustCheck("StructSliceLiteral.U64", opts) {
 					return false
 				}
-				if !inspector.EqualFloat32(lx30.F, rx30.F, opts) && inspector.DEQMustCheck("StructSliceLiteral.F", opts) {
+				if !inspector.EqualFloat32(lx31.F, rx31.F, opts) && inspector.DEQMustCheck("StructSliceLiteral.F", opts) {
 					return false
 				}
-				if !inspector.EqualFloat64(lx30.D, rx30.D, opts) && inspector.DEQMustCheck("StructSliceLiteral.D", opts) {
+				if !inspector.EqualFloat64(lx31.D, rx31.D, opts) && inspector.DEQMustCheck("StructSliceLiteral.D", opts) {
 					return false
 				}
 			}
 		}
 	}
-	lx31 := lx.IntStringMap
-	rx31 := rx.IntStringMap
-	_, _ = lx31, rx31
+	lx32 := lx.IntStringMap
+	rx32 := rx.IntStringMap
+	_, _ = lx32, rx32
 	if inspector.DEQMustCheck("IntStringMap", opts) {
-		if len(lx31) != len(rx31) {
+		if len(lx32) != len(rx32) {
 			return false
 		}
-		for k := range lx31 {
-			lx32 := (lx31)[k]
-			rx32, ok32 := (rx31)[k]
-			_, _, _ = lx32, rx32, ok32
-			if !ok32 {
+		for k := range lx32 {
+			lx33 := (lx32)[k]
+			rx33, ok33 := (rx32)[k]
+			_, _, _ = lx33, rx33, ok33
+			if !ok33 {
 				return false
 			}
-			if lx32 != rx32 {
+			if lx33 != rx33 {
 				return false
 			}
 		}
 	}
-	lx33 := lx.IntStringPtrMap
-	rx33 := rx.IntStringPtrMap
-	_, _ = lx33, rx33
+	lx34 := lx.IntStringPtrMap
+	rx34 := rx.IntStringPtrMap
+	_, _ = lx34, rx34
 	if inspector.DEQMustCheck("IntStringPtrMap", opts) {
-		if len(lx33) != len(rx33) {
+		if len(lx34) != len(rx34) {
 			return false
 		}
-		for k := range lx33 {
-			lx34 := (lx33)[k]
-			rx34, ok34 := (rx33)[k]
-			_, _, _ = lx34, rx34, ok34
-			if !ok34 {
+		for k := range lx34 {
+			lx35 := (lx34)[k]
+			rx35, ok35 := (rx34)[k]
+			_, _, _ = lx35, rx35, ok35
+			if !ok35 {
 				return false
 			}
-			if (lx34 == nil && rx34 != nil) || (lx34 != nil && rx34 == nil) {
+			if (lx35 == nil && rx35 != nil) || (lx35 != nil && rx35 == nil) {
 				return false
 			}
-			if lx34 != nil && rx34 != nil {
-				if *lx34 != *rx34 {
+			if lx35 != nil && rx35 != nil {
+				if *lx35 != *rx35 {
 					return false
 				}
 			}
 		}
 	}
-	lx35 := lx.IntStringMapPtr
-	rx35 := rx.IntStringMapPtr
-	_, _ = lx35, rx35
-	if (lx35 == nil && rx35 != nil) || (lx35 != nil && rx35 == nil) {
+	lx36 := lx.IntStringMapPtr
+	rx36 := rx.IntStringMapPtr
+	_, _ = lx36, rx36
+	if (lx36 == nil && rx36 != nil) || (lx36 != nil && rx36 == nil) {
 		return false
 	}
-	if lx35 != nil && rx35 != nil {
+	if lx36 != nil && rx36 != nil {
 		if inspector.DEQMustCheck("IntStringMapPtr", opts) {
-			if len(*lx35) != len(*rx35) {
+			if len(*lx36) != len(*rx36) {
 				return false
 			}
-			for k := range *lx35 {
-				lx36 := (*lx35)[k]
-				rx36, ok36 := (*rx35)[k]
-				_, _, _ = lx36, rx36, ok36
-				if !ok36 {
+			for k := range *lx36 {
+				lx37 := (*lx36)[k]
+				rx37, ok37 := (*rx36)[k]
+				_, _, _ = lx37, rx37, ok37
+				if !ok37 {
 					return false
 				}
-				if lx36 != rx36 {
+				if lx37 != rx37 {
 					return false
 				}
 			}
 		}
 	}
-	lx37 := lx.IntStringPtrMapPtr
-	rx37 := rx.IntStringPtrMapPtr
-	_, _ = lx37, rx37
-	if (lx37 == nil && rx37 != nil) || (lx37 != nil && rx37 == nil) {
+	lx38 := lx.IntStringPtrMapPtr
+	rx38 := rx.IntStringPtrMapPtr
+	_, _ = lx38, rx38
+	if (lx38 == nil && rx38 != nil) || (lx38 != nil && rx38 == nil) {
 		return false
 	}
-	if lx37 != nil && rx37 != nil {
+	if lx38 != nil && rx38 != nil {
 		if inspector.DEQMustCheck("IntStringPtrMapPtr", opts) {
-			if len(*lx37) != len(*rx37) {
+			if len(*lx38) != len(*rx38) {
 				return false
 			}
-			for k := range *lx37 {
-				lx38 := (*lx37)[k]
-				rx38, ok38 := (*rx37)[k]
-				_, _, _ = lx38, rx38, ok38
-				if !ok38 {
+			for k := range *lx38 {
+				lx39 := (*lx38)[k]
+				rx39, ok39 := (*rx38)[k]
+				_, _, _ = lx39, rx39, ok39
+				if !ok39 {
 					return false
 				}
-				if (lx38 == nil && rx38 != nil) || (lx38 != nil && rx38 == nil) {
+				if (lx39 == nil && rx39 != nil) || (lx39 != nil && rx39 == nil) {
 					return false
 				}
-				if lx38 != nil && rx38 != nil {
-					if *lx38 != *rx38 {
+				if lx39 != nil && rx39 != nil {
+					if *lx39 != *rx39 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx39 := lx.IntPtrStringPtrMapPtr
-	rx39 := rx.IntPtrStringPtrMapPtr
-	_, _ = lx39, rx39
-	if (lx39 == nil && rx39 != nil) || (lx39 != nil && rx39 == nil) {
+	lx40 := lx.IntPtrStringPtrMapPtr
+	rx40 := rx.IntPtrStringPtrMapPtr
+	_, _ = lx40, rx40
+	if (lx40 == nil && rx40 != nil) || (lx40 != nil && rx40 == nil) {
 		return false
 	}
-	if lx39 != nil && rx39 != nil {
+	if lx40 != nil && rx40 != nil {
 		if inspector.DEQMustCheck("IntPtrStringPtrMapPtr", opts) {
-			if len(*lx39) != len(*rx39) {
+			if len(*lx40) != len(*rx40) {
 				return false
 			}
-			for k := range *lx39 {
-				lx40 := (*lx39)[k]
-				rx40, ok40 := (*rx39)[k]
-				_, _, _ = lx40, rx40, ok40
-				if !ok40 {
+			for k := range *lx40 {
+				lx41 := (*lx40)[k]
+				rx41, ok41 := (*rx40)[k]
+				_, _, _ = lx41, rx41, ok41
+				if !ok41 {
 					return false
 				}
-				if (lx40 == nil && rx40 != nil) || (lx40 != nil && rx40 == nil) {
+				if (lx41 == nil && rx41 != nil) || (lx41 != nil && rx41 == nil) {
 					return false
 				}
-				if lx40 != nil && rx40 != nil {
-					if *lx40 != *rx40 {
+				if lx41 != nil && rx41 != nil {
+					if *lx41 != *rx41 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx41 := lx.IntIntMapMap
-	rx41 := rx.IntIntMapMap
-	_, _ = lx41, rx41
+	lx42 := lx.IntIntMapMap
+	rx42 := rx.IntIntMapMap
+	_, _ = lx42, rx42
 	if inspector.DEQMustCheck("IntIntMapMap", opts) {
-		if len(lx41) != len(rx41) {
+		if len(lx42) != len(rx42) {
 			return false
 		}
-		for k := range lx41 {
-			lx42 := (lx41)[k]
-			rx42, ok42 := (rx41)[k]
-			_, _, _ = lx42, rx42, ok42
-			if !ok42 {
+		for k := range lx42 {
+			lx43 := (lx42)[k]
+			rx43, ok43 := (rx42)[k]
+			_, _, _ = lx43, rx43, ok43
+			if !ok43 {
 				return false
 			}
-			if len(lx42) != len(rx42) {
+			if len(lx43) != len(rx43) {
 				return false
 			}
-			for k := range lx42 {
-				lx43 := (lx42)[k]
-				rx43, ok43 := (rx42)[k]
-				_, _, _ = lx43, rx43, ok43
-				if !ok43 {
+			for k := range lx43 {
+				lx44 := (lx43)[k]
+				rx44, ok44 := (rx43)[k]
+				_, _, _ = lx44, rx44, ok44
+				if !ok44 {
 					return false
 				}
-				if lx43 != rx43 {
+				if lx44 != rx44 {
 					return false
 				}
 			}
 		}
 	}
-	lx44 := lx.StringFloatMap
-	rx44 := rx.StringFloatMap
-	_, _ = lx44, rx44
+	lx45 := lx.StringFloatMap
+	rx45 := rx.StringFloatMap
+	_, _ = lx45, rx45
 	if inspector.DEQMustCheck("StringFloatMap", opts) {
-		if len(lx44) != len(rx44) {
+		if len(lx45) != len(rx45) {
 			return false
 		}
-		for k := range lx44 {
-			lx45 := (lx44)[k]
-			rx45, ok45 := (rx44)[k]
-			_, _, _ = lx45, rx45, ok45
-			if !ok45 {
+		for k := range lx45 {
+			lx46 := (lx45)[k]
+			rx46, ok46 := (rx45)[k]
+			_, _, _ = lx46, rx46, ok46
+			if !ok46 {
 				return false
 			}
-			if lx45 != rx45 {
+			if lx46 != rx46 {
 				return false
 			}
 		}
 	}
-	lx46 := lx.StringFloatPtrMap
-	rx46 := rx.StringFloatPtrMap
-	_, _ = lx46, rx46
+	lx47 := lx.StringFloatPtrMap
+	rx47 := rx.StringFloatPtrMap
+	_, _ = lx47, rx47
 	if inspector.DEQMustCheck("StringFloatPtrMap", opts) {
-		if len(lx46) != len(rx46) {
+		if len(lx47) != len(rx47) {
 			return false
 		}
-		for k := range lx46 {
-			lx47 := (lx46)[k]
-			rx47, ok47 := (rx46)[k]
-			_, _, _ = lx47, rx47, ok47
-			if !ok47 {
+		for k := range lx47 {
+			lx48 := (lx47)[k]
+			rx48, ok48 := (rx47)[k]
+			_, _, _ = lx48, rx48, ok48
+			if !ok48 {
 				return false
 			}
-			if (lx47 == nil && rx47 != nil) || (lx47 != nil && rx47 == nil) {
+			if (lx48 == nil && rx48 != nil) || (lx48 != nil && rx48 == nil) {
 				return false
 			}
-			if lx47 != nil && rx47 != nil {
-				if *lx47 != *rx47 {
+			if lx48 != nil && rx48 != nil {
+				if *lx48 != *rx48 {
 					return false
 				}
 			}
 		}
 	}
-	lx48 := lx.StringFloatMapPtr
-	rx48 := rx.StringFloatMapPtr
-	_, _ = lx48, rx48
-	if (lx48 == nil && rx48 != nil) || (lx48 != nil && rx48 == nil) {
+	lx49 := lx.StringFloatMapPtr
+	rx49 := rx.StringFloatMapPtr
+	_, _ = lx49, rx49
+	if (lx49 == nil && rx49 != nil) || (lx49 != nil && rx49 == nil) {
 		return false
 	}
-	if lx48 != nil && rx48 != nil {
+	if lx49 != nil && rx49 != nil {
 		if inspector.DEQMustCheck("StringFloatMapPtr", opts) {
-			if len(*lx48) != len(*rx48) {
+			if len(*lx49) != len(*rx49) {
 				return false
 			}
-			for k := range *lx48 {
-				lx49 := (*lx48)[k]
-				rx49, ok49 := (*rx48)[k]
-				_, _, _ = lx49, rx49, ok49
-				if !ok49 {
+			for k := range *lx49 {
+				lx50 := (*lx49)[k]
+				rx50, ok50 := (*rx49)[k]
+				_, _, _ = lx50, rx50, ok50
+				if !ok50 {
 					return false
 				}
-				if lx49 != rx49 {
+				if lx50 != rx50 {
 					return false
 				}
 			}
 		}
 	}
-	lx50 := lx.StringFloatPtrMapPtr
-	rx50 := rx.StringFloatPtrMapPtr
-	_, _ = lx50, rx50
-	if (lx50 == nil && rx50 != nil) || (lx50 != nil && rx50 == nil) {
+	lx51 := lx.StringFloatPtrMapPtr
+	rx51 := rx.StringFloatPtrMapPtr
+	_, _ = lx51, rx51
+	if (lx51 == nil && rx51 != nil) || (lx51 != nil && rx51 == nil) {
 		return false
 	}
-	if lx50 != nil && rx50 != nil {
+	if lx51 != nil && rx51 != nil {
 		if inspector.DEQMustCheck("StringFloatPtrMapPtr", opts) {
-			if len(*lx50) != len(*rx50) {
+			if len(*lx51) != len(*rx51) {
 				return false
 			}
-			for k := range *lx50 {
-				lx51 := (*lx50)[k]
-				rx51, ok51 := (*rx50)[k]
-				_, _, _ = lx51, rx51, ok51
-				if !ok51 {
+			for k := range *lx51 {
+				lx52 := (*lx51)[k]
+				rx52, ok52 := (*rx51)[k]
+				_, _, _ = lx52, rx52, ok52
+				if !ok52 {
 					return false
 				}
-				if (lx51 == nil && rx51 != nil) || (lx51 != nil && rx51 == nil) {
+				if (lx52 == nil && rx52 != nil) || (lx52 != nil && rx52 == nil) {
 					return false
 				}
-				if lx51 != nil && rx51 != nil {
-					if *lx51 != *rx51 {
+				if lx52 != nil && rx52 != nil {
+					if *lx52 != *rx52 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx52 := lx.StringPtrFloatPtrMapPtr
-	rx52 := rx.StringPtrFloatPtrMapPtr
-	_, _ = lx52, rx52
-	if (lx52 == nil && rx52 != nil) || (lx52 != nil && rx52 == nil) {
+	lx53 := lx.StringPtrFloatPtrMapPtr
+	rx53 := rx.StringPtrFloatPtrMapPtr
+	_, _ = lx53, rx53
+	if (lx53 == nil && rx53 != nil) || (lx53 != nil && rx53 == nil) {
 		return false
 	}
-	if lx52 != nil && rx52 != nil {
+	if lx53 != nil && rx53 != nil {
 		if inspector.DEQMustCheck("StringPtrFloatPtrMapPtr", opts) {
-			if len(*lx52) != len(*rx52) {
+			if len(*lx53) != len(*rx53) {
 				return false
 			}
-			for k := range *lx52 {
-				lx53 := (*lx52)[k]
-				rx53, ok53 := (*rx52)[k]
-				_, _, _ = lx53, rx53, ok53
-				if !ok53 {
+			for k := range *lx53 {
+				lx54 := (*lx53)[k]
+				rx54, ok54 := (*rx53)[k]
+				_, _, _ = lx54, rx54, ok54
+				if !ok54 {
 					return false
 				}
-				if (lx53 == nil && rx53 != nil) || (lx53 != nil && rx53 == nil) {
+				if (lx54 == nil && rx54 != nil) || (lx54 != nil && rx54 == nil) {
 					return false
 				}
-				if lx53 != nil && rx53 != nil {
-					if *lx53 != *rx53 {
+				if lx54 != nil && rx54 != nil {
+					if *lx54 != *rx54 {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx54 := lx.FloatStructMap
-	rx54 := rx.FloatStructMap
-	_, _ = lx54, rx54
+	lx55 := lx.FloatStructMap
+	rx55 := rx.FloatStructMap
+	_, _ = lx55, rx55
 	if inspector.DEQMustCheck("FloatStructMap", opts) {
-		if len(lx54) != len(rx54) {
+		if len(lx55) != len(rx55) {
 			return false
 		}
-		for k := range lx54 {
-			lx55 := (lx54)[k]
-			rx55, ok55 := (rx54)[k]
-			_, _, _ = lx55, rx55, ok55
-			if !ok55 {
+		for k := range lx55 {
+			lx56 := (lx55)[k]
+			rx56, ok56 := (rx55)[k]
+			_, _, _ = lx56, rx56, ok56
+			if !ok56 {
 				return false
 			}
-			if lx55.A != rx55.A && inspector.DEQMustCheck("FloatStructMap.A", opts) {
+			if lx56.A != rx56.A && inspector.DEQMustCheck("FloatStructMap.A", opts) {
 				return false
 			}
-			if lx55.S != rx55.S && inspector.DEQMustCheck("FloatStructMap.S", opts) {
+			if lx56.S != rx56.S && inspector.DEQMustCheck("FloatStructMap.S", opts) {
 				return false
 			}
-			if !bytes.Equal(lx55.B, rx55.B) && inspector.DEQMustCheck("FloatStructMap.B", opts) {
+			if !bytes.Equal(lx56.B, rx56.B) && inspector.DEQMustCheck("FloatStructMap.B", opts) {
 				return false
 			}
-			if lx55.I != rx55.I && inspector.DEQMustCheck("FloatStructMap.I", opts) {
+			if lx56.I != rx56.I && inspector.DEQMustCheck("FloatStructMap.I", opts) {
 				return false
 			}
-			if lx55.I8 != rx55.I8 && inspector.DEQMustCheck("FloatStructMap.I8", opts) {
+			if lx56.I8 != rx56.I8 && inspector.DEQMustCheck("FloatStructMap.I8", opts) {
 				return false
 			}
-			if lx55.I16 != rx55.I16 && inspector.DEQMustCheck("FloatStructMap.I16", opts) {
+			if lx56.I16 != rx56.I16 && inspector.DEQMustCheck("FloatStructMap.I16", opts) {
 				return false
 			}
-			if lx55.I32 != rx55.I32 && inspector.DEQMustCheck("FloatStructMap.I32", opts) {
+			if lx56.I32 != rx56.I32 && inspector.DEQMustCheck("FloatStructMap.I32", opts) {
 				return false
 			}
-			if lx55.I64 != rx55.I64 && inspector.DEQMustCheck("FloatStructMap.I64", opts) {
+			if lx56.I64 != rx56.I64 && inspector.DEQMustCheck("FloatStructMap.I64", opts) {
 				return false
 			}
-			if lx55.U != rx55.U && inspector.DEQMustCheck("FloatStructMap.U", opts) {
+			if lx56.U != rx56.U && inspector.DEQMustCheck("FloatStructMap.U", opts) {
 				return false
 			}
-			if lx55.U8 != rx55.U8 && inspector.DEQMustCheck("FloatStructMap.U8", opts) {
+			if lx56.U8 != rx56.U8 && inspector.DEQMustCheck("FloatStructMap.U8", opts) {
 				return false
 			}
-			if lx55.U16 != rx55.U16 && inspector.DEQMustCheck("FloatStructMap.U16", opts) {
+			if lx56.U16 != rx56.U16 && inspector.DEQMustCheck("FloatStructMap.U16", opts) {
 				return false
 			}
-			if lx55.U32 != rx55.U32 && inspector.DEQMustCheck("FloatStructMap.U32", opts) {
+			if lx56.U32 != rx56.U32 && inspector.DEQMustCheck("FloatStructMap.U32", opts) {
 				return false
 			}
-			if lx55.U64 != rx55.U64 && inspector.DEQMustCheck("FloatStructMap.U64", opts) {
+			if lx56.U64 != rx56.U64 && inspector.DEQMustCheck("FloatStructMap.U64", opts) {
 				return false
 			}
-			if !inspector.EqualFloat32(lx55.F, rx55.F, opts) && inspector.DEQMustCheck("FloatStructMap.F", opts) {
+			if !inspector.EqualFloat32(lx56.F, rx56.F, opts) && inspector.DEQMustCheck("FloatStructMap.F", opts) {
 				return false
 			}
-			if !inspector.EqualFloat64(lx55.D, rx55.D, opts) && inspector.DEQMustCheck("FloatStructMap.D", opts) {
+			if !inspector.EqualFloat64(lx56.D, rx56.D, opts) && inspector.DEQMustCheck("FloatStructMap.D", opts) {
 				return false
 			}
 		}
 	}
-	lx56 := lx.FloatStructPtrMap
-	rx56 := rx.FloatStructPtrMap
-	_, _ = lx56, rx56
+	lx57 := lx.FloatStructPtrMap
+	rx57 := rx.FloatStructPtrMap
+	_, _ = lx57, rx57
 	if inspector.DEQMustCheck("FloatStructPtrMap", opts) {
-		if len(lx56) != len(rx56) {
+		if len(lx57) != len(rx57) {
 			return false
 		}
-		for k := range lx56 {
-			lx57 := (lx56)[k]
-			rx57, ok57 := (rx56)[k]
-			_, _, _ = lx57, rx57, ok57
-			if !ok57 {
+		for k := range lx57 {
+			lx58 := (lx57)[k]
+			rx58, ok58 := (rx57)[k]
+			_, _, _ = lx58, rx58, ok58
+			if !ok58 {
 				return false
 			}
-			if (lx57 == nil && rx57 != nil) || (lx57 != nil && rx57 == nil) {
+			if (lx58 == nil && rx58 != nil) || (lx58 != nil && rx58 == nil) {
 				return false
 			}
-			if lx57 != nil && rx57 != nil {
-				if lx57.A != rx57.A && inspector.DEQMustCheck("FloatStructPtrMap.A", opts) {
+			if lx58 != nil && rx58 != nil {
+				if lx58.A != rx58.A && inspector.DEQMustCheck("FloatStructPtrMap.A", opts) {
 					return false
 				}
-				if lx57.S != rx57.S && inspector.DEQMustCheck("FloatStructPtrMap.S", opts) {
+				if lx58.S != rx58.S && inspector.DEQMustCheck("FloatStructPtrMap.S", opts) {
 					return false
 				}
-				if !bytes.Equal(lx57.B, rx57.B) && inspector.DEQMustCheck("FloatStructPtrMap.B", opts) {
+				if !bytes.Equal(lx58.B, rx58.B) && inspector.DEQMustCheck("FloatStructPtrMap.B", opts) {
 					return false
 				}
-				if lx57.I != rx57.I && inspector.DEQMustCheck("FloatStructPtrMap.I", opts) {
+				if lx58.I != rx58.I && inspector.DEQMustCheck("FloatStructPtrMap.I", opts) {
 					return false
 				}
-				if lx57.I8 != rx57.I8 && inspector.DEQMustCheck("FloatStructPtrMap.I8", opts) {
+				if lx58.I8 != rx58.I8 && inspector.DEQMustCheck("FloatStructPtrMap.I8", opts) {
 					return false
 				}
-				if lx57.I16 != rx57.I16 && inspector.DEQMustCheck("FloatStructPtrMap.I16", opts) {
+				if lx58.I16 != rx58.I16 && inspector.DEQMustCheck("FloatStructPtrMap.I16", opts) {
 					return false
 				}
-				if lx57.I32 != rx57.I32 && inspector.DEQMustCheck("FloatStructPtrMap.I32", opts) {
+				if lx58.I32 != rx58.I32 && inspector.DEQMustCheck("FloatStructPtrMap.I32", opts) {
 					return false
 				}
-				if lx57.I64 != rx57.I64 && inspector.DEQMustCheck("FloatStructPtrMap.I64", opts) {
+				if lx58.I64 != rx58.I64 && inspector.DEQMustCheck("FloatStructPtrMap.I64", opts) {
 					return false
 				}
-				if lx57.U != rx57.U && inspector.DEQMustCheck("FloatStructPtrMap.U", opts) {
+				if lx58.U != rx58.U && inspector.DEQMustCheck("FloatStructPtrMap.U", opts) {
 					return false
 				}
-				if lx57.U8 != rx57.U8 && inspector.DEQMustCheck("FloatStructPtrMap.U8", opts) {
+				if lx58.U8 != rx58.U8 && inspector.DEQMustCheck("FloatStructPtrMap.U8", opts) {
 					return false
 				}
-				if lx57.U16 != rx57.U16 && inspector.DEQMustCheck("FloatStructPtrMap.U16", opts) {
+				if lx58.U16 != rx58.U16 && inspector.DEQMustCheck("FloatStructPtrMap.U16", opts) {
 					return false
 				}
-				if lx57.U32 != rx57.U32 && inspector.DEQMustCheck("FloatStructPtrMap.U32", opts) {
+				if lx58.U32 != rx58.U32 && inspector.DEQMustCheck("FloatStructPtrMap.U32", opts) {
 					return false
 				}
-				if lx57.U64 != rx57.U64 && inspector.DEQMustCheck("FloatStructPtrMap.U64", opts) {
+				if lx58.U64 != rx58.U64 && inspector.DEQMustCheck("FloatStructPtrMap.U64", opts) {
 					return false
 				}
-				if !inspector.EqualFloat32(lx57.F, rx57.F, opts) && inspector.DEQMustCheck("FloatStructPtrMap.F", opts) {
+				if !inspector.EqualFloat32(lx58.F, rx58.F, opts) && inspector.DEQMustCheck("FloatStructPtrMap.F", opts) {
 					return false
 				}
-				if !inspector.EqualFloat64(lx57.D, rx57.D, opts) && inspector.DEQMustCheck("FloatStructPtrMap.D", opts) {
+				if !inspector.EqualFloat64(lx58.D, rx58.D, opts) && inspector.DEQMustCheck("FloatStructPtrMap.D", opts) {
 					return false
 				}
 			}
 		}
 	}
-	lx58 := lx.FloatPtrStructMap
-	rx58 := rx.FloatPtrStructMap
-	_, _ = lx58, rx58
+	lx59 := lx.FloatPtrStructMap
+	rx59 := rx.FloatPtrStructMap
+	_, _ = lx59, rx59
 	if inspector.DEQMustCheck("FloatPtrStructMap", opts) {
-		if len(lx58) != len(rx58) {
+		if len(lx59) != len(rx59) {
 			return false
 		}
-		for k := range lx58 {
-			lx59 := (lx58)[k]
-			rx59, ok59 := (rx58)[k]
-			_, _, _ = lx59, rx59, ok59
-			if !ok59 {
+		for k := range lx59 {
+			lx60 := (lx59)[k]
+			rx60, ok60 := (rx59)[k]
+			_, _, _ = lx60, rx60, ok60
+			if !ok60 {
 				return false
 			}
-			if lx59.A != rx59.A && inspector.DEQMustCheck("FloatPtrStructMap.A", opts) {
+			if lx60.A != rx60.A && inspector.DEQMustCheck("FloatPtrStructMap.A", opts) {
 				return false
 			}
-			if lx59.S != rx59.S && inspector.DEQMustCheck("FloatPtrStructMap.S", opts) {
+			if lx60.S != rx60.S && inspector.DEQMustCheck("FloatPtrStructMap.S", opts) {
 				return false
 			}
-			if !bytes.Equal(lx59.B, rx59.B) && inspector.DEQMustCheck("FloatPtrStructMap.B", opts) {
+			if !bytes.Equal(lx60.B, rx60.B) && inspector.DEQMustCheck("FloatPtrStructMap.B", opts) {
 				return false
 			}
-			if lx59.I != rx59.I && inspector.DEQMustCheck("FloatPtrStructMap.I", opts) {
+			if lx60.I != rx60.I && inspector.DEQMustCheck("FloatPtrStructMap.I", opts) {
 				return false
 			}
-			if lx59.I8 != rx59.I8 && inspector.DEQMustCheck("FloatPtrStructMap.I8", opts) {
+			if lx60.I8 != rx60.I8 && inspector.DEQMustCheck("FloatPtrStructMap.I8", opts) {
 				return false
 			}
-			if lx59.I16 != rx59.I16 && inspector.DEQMustCheck("FloatPtrStructMap.I16", opts) {
+			if lx60.I16 != rx60.I16 && inspector.DEQMustCheck("FloatPtrStructMap.I16", opts) {
 				return false
 			}
-			if lx59.I32 != rx59.I32 && inspector.DEQMustCheck("FloatPtrStructMap.I32", opts) {
+			if lx60.I32 != rx60.I32 && inspector.DEQMustCheck("FloatPtrStructMap.I32", opts) {
 				return false
 			}
-			if lx59.I64 != rx59.I64 && inspector.DEQMustCheck("FloatPtrStructMap.I64", opts) {
+			if lx60.I64 != rx60.I64 && inspector.DEQMustCheck("FloatPtrStructMap.I64", opts) {
 				return false
 			}
-			if lx59.U != rx59.U && inspector.DEQMustCheck("FloatPtrStructMap.U", opts) {
+			if lx60.U != rx60.U && inspector.DEQMustCheck("FloatPtrStructMap.U", opts) {
 				return false
 			}
-			if lx59.U8 != rx59.U8 && inspector.DEQMustCheck("FloatPtrStructMap.U8", opts) {
+			if lx60.U8 != rx60.U8 && inspector.DEQMustCheck("FloatPtrStructMap.U8", opts) {
 				return false
 			}
-			if lx59.U16 != rx59.U16 && inspector.DEQMustCheck("FloatPtrStructMap.U16", opts) {
+			if lx60.U16 != rx60.U16 && inspector.DEQMustCheck("FloatPtrStructMap.U16", opts) {
 				return false
 			}
-			if lx59.U32 != rx59.U32 && inspector.DEQMustCheck("FloatPtrStructMap.U32", opts) {
+			if lx60.U32 != rx60.U32 && inspector.DEQMustCheck("FloatPtrStructMap.U32", opts) {
 				return false
 			}
-			if lx59.U64 != rx59.U64 && inspector.DEQMustCheck("FloatPtrStructMap.U64", opts) {
+			if lx60.U64 != rx60.U64 && inspector.DEQMustCheck("FloatPtrStructMap.U64", opts) {
 				return false
 			}
-			if !inspector.EqualFloat32(lx59.F, rx59.F, opts) && inspector.DEQMustCheck("FloatPtrStructMap.F", opts) {
+			if !inspector.EqualFloat32(lx60.F, rx60.F, opts) && inspector.DEQMustCheck("FloatPtrStructMap.F", opts) {
 				return false
 			}
-			if !inspector.EqualFloat64(lx59.D, rx59.D, opts) && inspector.DEQMustCheck("FloatPtrStructMap.D", opts) {
+			if !inspector.EqualFloat64(lx60.D, rx60.D, opts) && inspector.DEQMustCheck("FloatPtrStructMap.D", opts) {
 				return false
 			}
 		}
 	}
-	lx60 := lx.FloatPtrStructPtrMap
-	rx60 := rx.FloatPtrStructPtrMap
-	_, _ = lx60, rx60
+	lx61 := lx.FloatPtrStructPtrMap
+	rx61 := rx.FloatPtrStructPtrMap
+	_, _ = lx61, rx61
 	if inspector.DEQMustCheck("FloatPtrStructPtrMap", opts) {
-		if len(lx60) != len(rx60) {
+		if len(lx61) != len(rx61) {
 			return false
 		}
-		for k := range lx60 {
-			lx61 := (lx60)[k]
-			rx61, ok61 := (rx60)[k]
-			_, _, _ = lx61, rx61, ok61
-			if !ok61 {
+		for k := range lx61 {
+			lx62 := (lx61)[k]
+			rx62, ok62 := (rx61)[k]
+			_, _, _ = lx62, rx62, ok62
+			if !ok62 {
 				return false
 			}
-			if (lx61 == nil && rx61 != nil) || (lx61 != nil && rx61 == nil) {
+			if (lx62 == nil && rx62 != nil) || (lx62 != nil && rx62 == nil) {
 				return false
 			}
-			if lx61 != nil && rx61 != nil {
-				if lx61.A != rx61.A && inspector.DEQMustCheck("FloatPtrStructPtrMap.A", opts) {
+			if lx62 != nil && rx62 != nil {
+				if lx62.A != rx62.A && inspector.DEQMustCheck("FloatPtrStructPtrMap.A", opts) {
 					return false
 				}
-				if lx61.S != rx61.S && inspector.DEQMustCheck("FloatPtrStructPtrMap.S", opts) {
+				if lx62.S != rx62.S && inspector.DEQMustCheck("FloatPtrStructPtrMap.S", opts) {
 					return false
 				}
-				if !bytes.Equal(lx61.B, rx61.B) && inspector.DEQMustCheck("FloatPtrStructPtrMap.B", opts) {
+				if !bytes.Equal(lx62.B, rx62.B) && inspector.DEQMustCheck("FloatPtrStructPtrMap.B", opts) {
 					return false
 				}
-				if lx61.I != rx61.I && inspector.DEQMustCheck("FloatPtrStructPtrMap.I", opts) {
+				if lx62.I != rx62.I && inspector.DEQMustCheck("FloatPtrStructPtrMap.I", opts) {
 					return false
 				}
-				if lx61.I8 != rx61.I8 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I8", opts) {
+				if lx62.I8 != rx62.I8 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I8", opts) {
 					return false
 				}
-				if lx61.I16 != rx61.I16 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I16", opts) {
+				if lx62.I16 != rx62.I16 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I16", opts) {
 					return false
 				}
-				if lx61.I32 != rx61.I32 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I32", opts) {
+				if lx62.I32 != rx62.I32 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I32", opts) {
 					return false
 				}
-				if lx61.I64 != rx61.I64 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I64", opts) {
+				if lx62.I64 != rx62.I64 && inspector.DEQMustCheck("FloatPtrStructPtrMap.I64", opts) {
 					return false
 				}
-				if lx61.U != rx61.U && inspector.DEQMustCheck("FloatPtrStructPtrMap.U", opts) {
+				if lx62.U != rx62.U && inspector.DEQMustCheck("FloatPtrStructPtrMap.U", opts) {
 					return false
 				}
-				if lx61.U8 != rx61.U8 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U8", opts) {
+				if lx62.U8 != rx62.U8 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U8", opts) {
 					return false
 				}
-				if lx61.U16 != rx61.U16 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U16", opts) {
+				if lx62.U16 != rx62.U16 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U16", opts) {
 					return false
 				}
-				if lx61.U32 != rx61.U32 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U32", opts) {
+				if lx62.U32 != rx62.U32 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U32", opts) {
 					return false
 				}
-				if lx61.U64 != rx61.U64 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U64", opts) {
+				if lx62.U64 != rx62.U64 && inspector.DEQMustCheck("FloatPtrStructPtrMap.U64", opts) {
 					return false
 				}
-				if !inspector.EqualFloat32(lx61.F, rx61.F, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMap.F", opts) {
+				if !inspector.EqualFloat32(lx62.F, rx62.F, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMap.F", opts) {
 					return false
 				}
-				if !inspector.EqualFloat64(lx61.D, rx61.D, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMap.D", opts) {
+				if !inspector.EqualFloat64(lx62.D, rx62.D, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMap.D", opts) {
 					return false
 				}
 			}
 		}
 	}
-	lx62 := lx.FloatPtrStructPtrMapPtr
-	rx62 := rx.FloatPtrStructPtrMapPtr
-	_, _ = lx62, rx62
-	if (lx62 == nil && rx62 != nil) || (lx62 != nil && rx62 == nil) {
+	lx63 := lx.FloatPtrStructPtrMapPtr
+	rx63 := rx.FloatPtrStructPtrMapPtr
+	_, _ = lx63, rx63
+	if (lx63 == nil && rx63 != nil) || (lx63 != nil && rx63 == nil) {
 		return false
 	}
-	if lx62 != nil && rx62 != nil {
+	if lx63 != nil && rx63 != nil {
 		if inspector.DEQMustCheck("FloatPtrStructPtrMapPtr", opts) {
-			if len(*lx62) != len(*rx62) {
+			if len(*lx63) != len(*rx63) {
 				return false
 			}
-			for k := range *lx62 {
-				lx63 := (*lx62)[k]
-				rx63, ok63 := (*rx62)[k]
-				_, _, _ = lx63, rx63, ok63
-				if !ok63 {
+			for k := range *lx63 {
+				lx64 := (*lx63)[k]
+				rx64, ok64 := (*rx63)[k]
+				_, _, _ = lx64, rx64, ok64
+				if !ok64 {
 					return false
 				}
-				if (lx63 == nil && rx63 != nil) || (lx63 != nil && rx63 == nil) {
+				if (lx64 == nil && rx64 != nil) || (lx64 != nil && rx64 == nil) {
 					return false
 				}
-				if lx63 != nil && rx63 != nil {
-					if lx63.A != rx63.A && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.A", opts) {
+				if lx64 != nil && rx64 != nil {
+					if lx64.A != rx64.A && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.A", opts) {
 						return false
 					}
-					if lx63.S != rx63.S && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.S", opts) {
+					if lx64.S != rx64.S && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.S", opts) {
 						return false
 					}
-					if !bytes.Equal(lx63.B, rx63.B) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.B", opts) {
+					if !bytes.Equal(lx64.B, rx64.B) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.B", opts) {
 						return false
 					}
-					if lx63.I != rx63.I && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I", opts) {
+					if lx64.I != rx64.I && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I", opts) {
 						return false
 					}
-					if lx63.I8 != rx63.I8 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I8", opts) {
+					if lx64.I8 != rx64.I8 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I8", opts) {
 						return false
 					}
-					if lx63.I16 != rx63.I16 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I16", opts) {
+					if lx64.I16 != rx64.I16 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I16", opts) {
 						return false
 					}
-					if lx63.I32 != rx63.I32 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I32", opts) {
+					if lx64.I32 != rx64.I32 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I32", opts) {
 						return false
 					}
-					if lx63.I64 != rx63.I64 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I64", opts) {
+					if lx64.I64 != rx64.I64 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.I64", opts) {
 						return false
 					}
-					if lx63.U != rx63.U && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U", opts) {
+					if lx64.U != rx64.U && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U", opts) {
 						return false
 					}
-					if lx63.U8 != rx63.U8 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U8", opts) {
+					if lx64.U8 != rx64.U8 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U8", opts) {
 						return false
 					}
-					if lx63.U16 != rx63.U16 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U16", opts) {
+					if lx64.U16 != rx64.U16 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U16", opts) {
 						return false
 					}
-					if lx63.U32 != rx63.U32 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U32", opts) {
+					if lx64.U32 != rx64.U32 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U32", opts) {
 						return false
 					}
-					if lx63.U64 != rx63.U64 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U64", opts) {
+					if lx64.U64 != rx64.U64 && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.U64", opts) {
 						return false
 					}
-					if !inspector.EqualFloat32(lx63.F, rx63.F, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.F", opts) {
+					if !inspector.EqualFloat32(lx64.F, rx64.F, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.F", opts) {
 						return false
 					}
-					if !inspector.EqualFloat64(lx63.D, rx63.D, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.D", opts) {
+					if !inspector.EqualFloat64(lx64.D, rx64.D, opts) && inspector.DEQMustCheck("FloatPtrStructPtrMapPtr.D", opts) {
 						return false
 					}
 				}
 			}
 		}
 	}
-	lx64 := lx.NestedStruct
-	rx64 := rx.NestedStruct
-	_, _ = lx64, rx64
+	lx65 := lx.NestedStruct
+	rx65 := rx.NestedStruct
+	_, _ = lx65, rx65
 	if inspector.DEQMustCheck("NestedStruct", opts) {
-		if lx64.A != rx64.A && inspector.DEQMustCheck("NestedStruct.A", opts) {
+		if lx65.A != rx65.A && inspector.DEQMustCheck("NestedStruct.A", opts) {
 			return false
 		}
-		if lx64.S != rx64.S && inspector.DEQMustCheck("NestedStruct.S", opts) {
+		if lx65.S != rx65.S && inspector.DEQMustCheck("NestedStruct.S", opts) {
 			return false
 		}
-		if !bytes.Equal(lx64.B, rx64.B) && inspector.DEQMustCheck("NestedStruct.B", opts) {
+		if !bytes.Equal(lx65.B, rx65.B) && inspector.DEQMustCheck("NestedStruct.B", opts) {
 			return false
 		}
-		if lx64.I != rx64.I && inspector.DEQMustCheck("NestedStruct.I", opts) {
+		if lx65.I != rx65.I && inspector.DEQMustCheck("NestedStruct.I", opts) {
 			return false
 		}
-		if lx64.I8 != rx64.I8 && inspector.DEQMustCheck("NestedStruct.I8", opts) {
+		if lx65.I8 != rx65.I8 && inspector.DEQMustCheck("NestedStruct.I8", opts) {
 			return false
 		}
-		if lx64.I16 != rx64.I16 && inspector.DEQMustCheck("NestedStruct.I16", opts) {
+		if lx65.I16 != rx65.I16 && inspector.DEQMustCheck("NestedStruct.I16", opts) {
 			return false
 		}
-		if lx64.I32 != rx64.I32 && inspector.DEQMustCheck("NestedStruct.I32", opts) {
+		if lx65.I32 != rx65.I32 && inspector.DEQMustCheck("NestedStruct.I32", opts) {
 			return false
 		}
-		if lx64.I64 != rx64.I64 && inspector.DEQMustCheck("NestedStruct.I64", opts) {
+		if lx65.I64 != rx65.I64 && inspector.DEQMustCheck("NestedStruct.I64", opts) {
 			return false
 		}
-		if lx64.U != rx64.U && inspector.DEQMustCheck("NestedStruct.U", opts) {
+		if lx65.U != rx65.U && inspector.DEQMustCheck("NestedStruct.U", opts) {
 			return false
 		}
-		if lx64.U8 != rx64.U8 && inspector.DEQMustCheck("NestedStruct.U8", opts) {
+		if lx65.U8 != rx65.U8 && inspector.DEQMustCheck("NestedStruct.U8", opts) {
 			return false
 		}
-		if lx64.U16 != rx64.U16 && inspector.DEQMustCheck("NestedStruct.U16", opts) {
+		if lx65.U16 != rx65.U16 && inspector.DEQMustCheck("NestedStruct.U16", opts) {
 			return false
 		}
-		if lx64.U32 != rx64.U32 && inspector.DEQMustCheck("NestedStruct.U32", opts) {
+		if lx65.U32 != rx65.U32 && inspector.DEQMustCheck("NestedStruct.U32", opts) {
 			return false
 		}
-		if lx64.U64 != rx64.U64 && inspector.DEQMustCheck("NestedStruct.U64", opts) {
+		if lx65.U64 != rx65.U64 && inspector.DEQMustCheck("NestedStruct.U64", opts) {
 			return false
 		}
-		if !inspector.EqualFloat32(lx64.F, rx64.F, opts) && inspector.DEQMustCheck("NestedStruct.F", opts) {
+		if !inspector.EqualFloat32(lx65.F, rx65.F, opts) && inspector.DEQMustCheck("NestedStruct.F", opts) {
 			return false
 		}
-		if !inspector.EqualFloat64(lx64.D, rx64.D, opts) && inspector.DEQMustCheck("NestedStruct.D", opts) {
+		if !inspector.EqualFloat64(lx65.D, rx65.D, opts) && inspector.DEQMustCheck("NestedStruct.D", opts) {
 			return false
 		}
 	}
-	lx65 := lx.NestedStructPtr
-	rx65 := rx.NestedStructPtr
-	_, _ = lx65, rx65
-	if (lx65 == nil && rx65 != nil) || (lx65 != nil && rx65 == nil) {
+	lx66 := lx.NestedStructPtr
+	rx66 := rx.NestedStructPtr
+	_, _ = lx66, rx66
+	if (lx66 == nil && rx66 != nil) || (lx66 != nil && rx66 == nil) {
 		return false
 	}
-	if lx65 != nil && rx65 != nil {
+	if lx66 != nil && rx66 != nil {
 		if inspector.DEQMustCheck("NestedStructPtr", opts) {
-			if lx65.A != rx65.A && inspector.DEQMustCheck("NestedStructPtr.A", opts) {
+			if lx66.A != rx66.A && inspector.DEQMustCheck("NestedStructPtr.A", opts) {
 				return false
 			}
-			if lx65.S != rx65.S && inspector.DEQMustCheck("NestedStructPtr.S", opts) {
+			if lx66.S != rx66.S && inspector.DEQMustCheck("NestedStructPtr.S", opts) {
 				return false
 			}
-			if !bytes.Equal(lx65.B, rx65.B) && inspector.DEQMustCheck("NestedStructPtr.B", opts) {
+			if !bytes.Equal(lx66.B, rx66.B) && inspector.DEQMustCheck("NestedStructPtr.B", opts) {
 				return false
 			}
-			if lx65.I != rx65.I && inspector.DEQMustCheck("NestedStructPtr.I", opts) {
+			if lx66.I != rx66.I && inspector.DEQMustCheck("NestedStructPtr.I", opts) {
 				return false
 			}
-			if lx65.I8 != rx65.I8 && inspector.DEQMustCheck("NestedStructPtr.I8", opts) {
+			if lx66.I8 != rx66.I8 && inspector.DEQMustCheck("NestedStructPtr.I8", opts) {
 				return false
 			}
-			if lx65.I16 != rx65.I16 && inspector.DEQMustCheck("NestedStructPtr.I16", opts) {
+			if lx66.I16 != rx66.I16 && inspector.DEQMustCheck("NestedStructPtr.I16", opts) {
 				return false
 			}
-			if lx65.I32 != rx65.I32 && inspector.DEQMustCheck("NestedStructPtr.I32", opts) {
+			if lx66.I32 != rx66.I32 && inspector.DEQMustCheck("NestedStructPtr.I32", opts) {
 				return false
 			}
-			if lx65.I64 != rx65.I64 && inspector.DEQMustCheck("NestedStructPtr.I64", opts) {
+			if lx66.I64 != rx66.I64 && inspector.DEQMustCheck("NestedStructPtr.I64", opts) {
 				return false
 			}
-			if lx65.U != rx65.U && inspector.DEQMustCheck("NestedStructPtr.U", opts) {
+			if lx66.U != rx66.U && inspector.DEQMustCheck("NestedStructPtr.U", opts) {
 				return false
 			}
-			if lx65.U8 != rx65.U8 && inspector.DEQMustCheck("NestedStructPtr.U8", opts) {
+			if lx66.U8 != rx66.U8 && inspector.DEQMustCheck("NestedStructPtr.U8", opts) {
 				return false
 			}
-			if lx65.U16 != rx65.U16 && inspector.DEQMustCheck("NestedStructPtr.U16", opts) {
+			if lx66.U16 != rx66.U16 && inspector.DEQMustCheck("NestedStructPtr.U16", opts) {
 				return false
 			}
-			if lx65.U32 != rx65.U32 && inspector.DEQMustCheck("NestedStructPtr.U32", opts) {
+			if lx66.U32 != rx66.U32 && inspector.DEQMustCheck("NestedStructPtr.U32", opts) {
 				return false
 			}
-			if lx65.U64 != rx65.U64 && inspector.DEQMustCheck("NestedStructPtr.U64", opts) {
+			if lx66.U64 != rx66.U64 && inspector.DEQMustCheck("NestedStructPtr.U64", opts) {
 				return false
 			}
-			if !inspector.EqualFloat32(lx65.F, rx65.F, opts) && inspector.DEQMustCheck("NestedStructPtr.F", opts) {
+			if !inspector.EqualFloat32(lx66.F, rx66.F, opts) && inspector.DEQMustCheck("NestedStructPtr.F", opts) {
 				return false
 			}
-			if !inspector.EqualFloat64(lx65.D, rx65.D, opts) && inspector.DEQMustCheck("NestedStructPtr.D", opts) {
+			if !inspector.EqualFloat64(lx66.D, rx66.D, opts) && inspector.DEQMustCheck("NestedStructPtr.D", opts) {
 				return false
 			}
 		}
