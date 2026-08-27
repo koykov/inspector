@@ -318,7 +318,7 @@ func (i2 TestFloatPtrSliceInspector) countBytes(x *testobj.TestFloatPtrSlice) (c
 }
 
 func (i2 TestFloatPtrSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatPtrSlice) ([]byte, error) {
-	if len(*r) > 0 {
+	if *r != nil {
 		buf0 := (*l)
 		if buf0 == nil {
 			buf0 = make(testobj.TestFloatPtrSlice, 0, len(*r))

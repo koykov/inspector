@@ -1278,7 +1278,7 @@ func (i5 TestObjectInspector) cpy(buf []byte, l, r *testobj.TestObject) ([]byte,
 		l.Finance.MoneyOut = r.Finance.MoneyOut
 		l.Finance.Balance = r.Finance.Balance
 		l.Finance.AllowBuy = r.Finance.AllowBuy
-		if len(r.Finance.History) > 0 {
+		if r.Finance.History != nil {
 			buf2 := (l.Finance.History)
 			if buf2 == nil {
 				buf2 = make([]testobj.TestHistory, 0, len(r.Finance.History))

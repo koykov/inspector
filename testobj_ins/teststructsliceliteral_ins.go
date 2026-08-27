@@ -812,7 +812,7 @@ func (i12 TestStructSliceLiteralInspector) countBytes(x *testobj.TestStructSlice
 }
 
 func (i12 TestStructSliceLiteralInspector) cpy(buf []byte, l, r *testobj.TestStructSliceLiteral) ([]byte, error) {
-	if len(*r) > 0 {
+	if *r != nil {
 		buf0 := (*l)
 		if buf0 == nil {
 			buf0 = make(testobj.TestStructSliceLiteral, 0, len(*r))

@@ -314,8 +314,15 @@ func (i10 TestStringPtrFloatPtrMapInspector) cpy(buf []byte, l, r *testobj.TestS
 			_, _ = rk0, rv0
 			var lk0 *string
 			var c0 string
-			buf, c0 = inspector.BufferizeString(buf, string(*rk0))
-			*lk0 = string(c0)
+			if rk0 != nil {
+				buf, c0 = inspector.BufferizeString(buf, string(*rk0))
+			}
+			if lk0 == nil && rk0 != nil {
+				lk0 = new(string)
+			}
+			if lk0 != nil {
+				*lk0 = string(c0)
+			}
 			var lv0 *float64
 			lv0 = rv0
 			(*l)[lk0] = lv0

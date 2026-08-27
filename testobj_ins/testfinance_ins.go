@@ -566,7 +566,7 @@ func (i0 TestFinanceInspector) cpy(buf []byte, l, r *testobj.TestFinance) ([]byt
 	l.MoneyOut = r.MoneyOut
 	l.Balance = r.Balance
 	l.AllowBuy = r.AllowBuy
-	if len(r.History) > 0 {
+	if r.History != nil {
 		buf1 := (l.History)
 		if buf1 == nil {
 			buf1 = make([]testobj.TestHistory, 0, len(r.History))

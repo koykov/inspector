@@ -10338,7 +10338,7 @@ func (i6 TestObject1Inspector) countBytes(x *testobj.TestObject1) (c int) {
 }
 
 func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byte, error) {
-	if len(r.IntSlice) > 0 {
+	if r.IntSlice != nil {
 		buf1 := (l.IntSlice)
 		if buf1 == nil {
 			buf1 = make([]int32, 0, len(r.IntSlice))
@@ -10352,7 +10352,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 		l.IntSlice = buf1
 	}
-	if len(r.IntPtrSlice) > 0 {
+	if r.IntPtrSlice != nil {
 		buf1 := (l.IntPtrSlice)
 		if buf1 == nil {
 			buf1 = make([]*int32, 0, len(r.IntPtrSlice))
@@ -10367,7 +10367,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		l.IntPtrSlice = buf1
 	}
 	if r.IntSlicePtr != nil {
-		if len(*r.IntSlicePtr) > 0 {
+		if *r.IntSlicePtr != nil {
 			buf1 := (*l.IntSlicePtr)
 			if buf1 == nil {
 				buf1 = make([]int32, 0, len(*r.IntSlicePtr))
@@ -10383,7 +10383,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 	}
 	if r.IntPtrSlicePtr != nil {
-		if len(*r.IntPtrSlicePtr) > 0 {
+		if *r.IntPtrSlicePtr != nil {
 			buf1 := (*l.IntPtrSlicePtr)
 			if buf1 == nil {
 				buf1 = make([]*int32, 0, len(*r.IntPtrSlicePtr))
@@ -10399,7 +10399,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 	}
 	buf, l.ByteSlice = inspector.Bufferize(buf, r.ByteSlice)
-	if len(r.BytePtrSlice) > 0 {
+	if r.BytePtrSlice != nil {
 		buf1 := (l.BytePtrSlice)
 		if buf1 == nil {
 			buf1 = make([]*byte, 0, len(r.BytePtrSlice))
@@ -10417,7 +10417,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		buf, *l.ByteSlicePtr = inspector.Bufferize(buf, *r.ByteSlicePtr)
 	}
 	if r.BytePtrSlicePtr != nil {
-		if len(*r.BytePtrSlicePtr) > 0 {
+		if *r.BytePtrSlicePtr != nil {
 			buf1 := (*l.BytePtrSlicePtr)
 			if buf1 == nil {
 				buf1 = make([]*byte, 0, len(*r.BytePtrSlicePtr))
@@ -10432,7 +10432,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			l.BytePtrSlicePtr = &buf1
 		}
 	}
-	if len(r.FloatSlice) > 0 {
+	if r.FloatSlice != nil {
 		buf1 := (l.FloatSlice)
 		if buf1 == nil {
 			buf1 = make(testobj.TestFloatSlice, 0, len(r.FloatSlice))
@@ -10446,7 +10446,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 		l.FloatSlice = buf1
 	}
-	if len(r.FloatPtrSlice) > 0 {
+	if r.FloatPtrSlice != nil {
 		buf1 := (l.FloatPtrSlice)
 		if buf1 == nil {
 			buf1 = make(testobj.TestFloatPtrSlice, 0, len(r.FloatPtrSlice))
@@ -10461,7 +10461,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		l.FloatPtrSlice = buf1
 	}
 	if r.FloatSlicePtr != nil {
-		if len(*r.FloatSlicePtr) > 0 {
+		if *r.FloatSlicePtr != nil {
 			buf1 := (*l.FloatSlicePtr)
 			if buf1 == nil {
 				buf1 = make(testobj.TestFloatSlice, 0, len(*r.FloatSlicePtr))
@@ -10477,7 +10477,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 	}
 	if r.FloatPtrSlicePtr != nil {
-		if len(*r.FloatPtrSlicePtr) > 0 {
+		if *r.FloatPtrSlicePtr != nil {
 			buf1 := (*l.FloatPtrSlicePtr)
 			if buf1 == nil {
 				buf1 = make(testobj.TestFloatPtrSlice, 0, len(*r.FloatPtrSlicePtr))
@@ -10492,7 +10492,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			l.FloatPtrSlicePtr = &buf1
 		}
 	}
-	if len(r.StructSlice) > 0 {
+	if r.StructSlice != nil {
 		buf1 := (l.StructSlice)
 		if buf1 == nil {
 			buf1 = make([]testobj.TestStruct, 0, len(r.StructSlice))
@@ -10522,7 +10522,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 		l.StructSlice = buf1
 	}
-	if len(r.StructPtrSlice) > 0 {
+	if r.StructPtrSlice != nil {
 		buf1 := (l.StructPtrSlice)
 		if buf1 == nil {
 			buf1 = make([]*testobj.TestStruct, 0, len(r.StructPtrSlice))
@@ -10553,7 +10553,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		l.StructPtrSlice = buf1
 	}
 	if r.StructSlicePtr != nil {
-		if len(*r.StructSlicePtr) > 0 {
+		if *r.StructSlicePtr != nil {
 			buf1 := (*l.StructSlicePtr)
 			if buf1 == nil {
 				buf1 = make([]testobj.TestStruct, 0, len(*r.StructSlicePtr))
@@ -10585,7 +10585,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 		}
 	}
 	if r.StructPtrSlicePtr != nil {
-		if len(*r.StructPtrSlicePtr) > 0 {
+		if *r.StructPtrSlicePtr != nil {
 			buf1 := (*l.StructPtrSlicePtr)
 			if buf1 == nil {
 				buf1 = make([]*testobj.TestStruct, 0, len(*r.StructPtrSlicePtr))
@@ -10616,7 +10616,7 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			l.StructPtrSlicePtr = &buf1
 		}
 	}
-	if len(r.StructSliceLiteral) > 0 {
+	if r.StructSliceLiteral != nil {
 		buf1 := (l.StructSliceLiteral)
 		if buf1 == nil {
 			buf1 = make(testobj.TestStructSliceLiteral, 0, len(r.StructSliceLiteral))
@@ -10673,8 +10673,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 			lk1 = rk1
 			var lv1 *string
 			var c6 string
-			buf, c6 = inspector.BufferizeString(buf, string(*rv1))
-			*lv1 = string(c6)
+			if rv1 != nil {
+				buf, c6 = inspector.BufferizeString(buf, string(*rv1))
+			}
+			if lv1 == nil && rv1 != nil {
+				lv1 = new(string)
+			}
+			if lv1 != nil {
+				*lv1 = string(c6)
+			}
 			(l.IntStringPtrMap)[lk1] = lv1
 		}
 	}
@@ -10708,8 +10715,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lk1 = rk1
 				var lv1 *string
 				var c8 string
-				buf, c8 = inspector.BufferizeString(buf, string(*rv1))
-				*lv1 = string(c8)
+				if rv1 != nil {
+					buf, c8 = inspector.BufferizeString(buf, string(*rv1))
+				}
+				if lv1 == nil && rv1 != nil {
+					lv1 = new(string)
+				}
+				if lv1 != nil {
+					*lv1 = string(c8)
+				}
 				(*l.IntStringPtrMapPtr)[lk1] = lv1
 			}
 		}
@@ -10726,8 +10740,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				lk1 = rk1
 				var lv1 *string
 				var c9 string
-				buf, c9 = inspector.BufferizeString(buf, string(*rv1))
-				*lv1 = string(c9)
+				if rv1 != nil {
+					buf, c9 = inspector.BufferizeString(buf, string(*rv1))
+				}
+				if lv1 == nil && rv1 != nil {
+					lv1 = new(string)
+				}
+				if lv1 != nil {
+					*lv1 = string(c9)
+				}
 				(*l.IntPtrStringPtrMapPtr)[lk1] = lv1
 			}
 		}
@@ -10837,8 +10858,15 @@ func (i6 TestObject1Inspector) cpy(buf []byte, l, r *testobj.TestObject1) ([]byt
 				_, _ = rk1, rv1
 				var lk1 *string
 				var c14 string
-				buf, c14 = inspector.BufferizeString(buf, string(*rk1))
-				*lk1 = string(c14)
+				if rk1 != nil {
+					buf, c14 = inspector.BufferizeString(buf, string(*rk1))
+				}
+				if lk1 == nil && rk1 != nil {
+					lk1 = new(string)
+				}
+				if lk1 != nil {
+					*lk1 = string(c14)
+				}
 				var lv1 *float64
 				lv1 = rv1
 				(*l.StringPtrFloatPtrMapPtr)[lk1] = lv1
