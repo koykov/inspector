@@ -79,6 +79,9 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 				c.wl("}")
 			}
 		}
+		if node.pkg == "time" && node.typn == "Time" {
+			c.wl(l, "=", r)
+		}
 	case typeMap:
 		ln := "len(" + c.fmtVnb(node, r, depth) + ")"
 		c.wl("if ", ln, ">0 {")
@@ -108,7 +111,7 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 		if node.typn == "[]byte" {
 			c.wl("buf,", c.fmtVnb(node, l, depth), "=inspector.Bufferize(buf,", c.fmtVnb(node, r, depth), ")")
 		} else {
-			c.wl("if len(", c.fmtVnb(node, r, depth), ")>0{")
+			c.wl("if ", c.fmtVnb(node, r, depth), "!=nil{")
 			lb := "buf" + strconv.Itoa(depth)
 			c.wl(lb, ":=", c.fmtVd(node, l, depth))
 			c.wl("if ", lb, "==nil {")
@@ -141,9 +144,22 @@ func (c *Compiler) writeCopy(node *node, l, r string, depth int) error {
 			sname := "c" + strconv.Itoa(c.cntrCpy)
 			c.wl("var ", sname, " string")
 			c.cntrCpy++
+			if node.ptr {
+				c.wl("if ", r, "!=nil{")
+			}
 			c.wl("buf,", sname, "=inspector.BufferizeString(buf,string(", c.fmtVnb(node, r, depth), "))")
+			if node.ptr {
+				c.wl("}")
+			}
 			pname := c.fmtPtpfx(node.typn)
+			if node.ptr {
+				c.wl("if ", l, "==nil&&", r, "!=nil{", l, "=new(", node.typn, ")}")
+				c.wl("if ", l, "!=nil{")
+			}
 			c.wl(c.fmtVnb(node, l, depth), "=", pname, node.typn, "(", sname, ")")
+			if node.ptr {
+				c.wl("}")
+			}
 		} else {
 			c.wl(l, "=", r)
 		}

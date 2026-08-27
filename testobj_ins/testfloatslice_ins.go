@@ -316,7 +316,7 @@ func (i3 TestFloatSliceInspector) countBytes(x *testobj.TestFloatSlice) (c int) 
 }
 
 func (i3 TestFloatSliceInspector) cpy(buf []byte, l, r *testobj.TestFloatSlice) ([]byte, error) {
-	if len(*r) > 0 {
+	if *r != nil {
 		buf0 := (*l)
 		if buf0 == nil {
 			buf0 = make(testobj.TestFloatSlice, 0, len(*r))
