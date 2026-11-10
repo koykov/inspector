@@ -162,7 +162,7 @@ func (i StringStringMapInspector) DeepEqualWithOptions(l, r any, opts *DEQOption
 		}
 	}
 
-	return false
+	return true
 }
 
 func (i StringStringMapInspector) Unmarshal(p []byte, typ Encoding) (any, error) {
