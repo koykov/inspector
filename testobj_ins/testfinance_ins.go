@@ -688,6 +688,9 @@ func (i0 TestFinanceInspector) Append(src, value any, path ...string) (any, erro
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestFinance
 	_ = x
 	if p, ok := src.(**testobj.TestFinance); ok {
