@@ -1,5 +1,7 @@
 package inspector
 
+import "reflect"
+
 // AssignFn describes signature of assign function.
 //
 // Assigns src to dst with dynamic typecasting.
@@ -13,8 +15,9 @@ var (
 
 // RegisterAssignFn registers new assign function to the registry.
 func RegisterAssignFn(fn AssignFn) {
+	ptr := reflect.ValueOf(fn).Pointer()
 	for _, f := range assignFnRegistry {
-		if &f == &fn {
+		if reflect.ValueOf(f).Pointer() == ptr {
 			return
 		}
 	}
