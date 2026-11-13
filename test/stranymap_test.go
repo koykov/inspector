@@ -7,6 +7,7 @@ import (
 
 	"github.com/koykov/inspector"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type dummyIterator struct{}
@@ -140,6 +141,55 @@ func TestStringAnyMap(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, m, e)
 		})
+	})
+
+	t.Run("each", func(t *testing.T) {
+		var ins inspector.StringAnyMapInspector
+		m := map[string]any{"a": 1, "b": "x"}
+		var got int
+		require.NoError(t, ins.Each(m, func(i int, field string, value any) {
+			got++
+			assert.NotEmpty(t, field)
+		}))
+		assert.Equal(t, 2, got)
+
+		require.NoError(t, ins.Each(map[string]any(nil), func(int, string, any) {
+			t.Fatal("nil map must iterate zero times")
+		}))
+	})
+
+	t.Run("unmarshal", func(t *testing.T) {
+		var ins inspector.StringAnyMapInspector
+		v, err := ins.Unmarshal([]byte(`{"a":1}`), inspector.EncodingJSON)
+		require.NoError(t, err)
+		assert.Equal(t, map[string]any{"a": float64(1)}, v)
+
+		_, err = ins.Unmarshal(nil, inspector.Encoding(42))
+		require.ErrorIs(t, err, inspector.ErrUnknownEncodingType)
+	})
+
+	t.Run("copy deep", func(t *testing.T) {
+		var ins inspector.StringAnyMapInspector
+		src := map[string]any{"a": "x", "b": []byte("y"), "c": map[string]any{"d": "z"}}
+		cp, err := ins.Copy(src)
+		require.NoError(t, err)
+		assert.Equal(t, src, cp)
+
+		var dst map[string]any
+		require.ErrorIs(t, ins.CopyTo(src, dst, nil), inspector.ErrMustPointerType)
+	})
+
+	t.Run("capacity leaves map result untouched", func(t *testing.T) {
+		var ins inspector.StringAnyMapInspector
+		n := 42 // sentinel
+		require.NoError(t, ins.Capacity(map[string]any{"a": 1}, &n))
+		assert.Equal(t, 42, n)
+	})
+
+	t.Run("wrong type", func(t *testing.T) {
+		var ins inspector.StringAnyMapInspector
+		_, err := ins.Get(struct{}{}, "a")
+		require.ErrorIs(t, err, inspector.ErrUnsupportedType)
 	})
 }
 
