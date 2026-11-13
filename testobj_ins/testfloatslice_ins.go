@@ -384,6 +384,9 @@ func (i3 TestFloatSliceInspector) Append(src, value any, path ...string) (any, e
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestFloatSlice
 	_ = x
 	if p, ok := src.(**testobj.TestFloatSlice); ok {

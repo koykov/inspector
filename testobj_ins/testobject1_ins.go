@@ -12204,6 +12204,9 @@ func (i6 TestObject1Inspector) Append(src, value any, path ...string) (any, erro
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestObject1
 	_ = x
 	if p, ok := src.(**testobj.TestObject1); ok {

@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/koykov/inspector"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type testStringsIterator struct {
@@ -94,6 +96,51 @@ func TestStrings(t *testing.T) {
 		if len(ss1) != 0 && cap(ss1) != 3 {
 			t.FailNow()
 		}
+	})
+
+	t.Run("copy to string slice", func(t *testing.T) {
+		src := [][]byte{[]byte("a"), []byte("b")}
+		var dst []string
+		var ab inspector.ByteBuffer
+		require.NoError(t, ins.CopyTo(src, &dst, &ab))
+		assert.Equal(t, []string{"a", "b"}, dst)
+	})
+
+	t.Run("copy always strings", func(t *testing.T) {
+		cp, err := ins.Copy([][]byte{[]byte("a")})
+		require.NoError(t, err)
+		assert.Equal(t, []string{"a"}, cp)
+	})
+
+	t.Run("copy to wrong type", func(t *testing.T) {
+		require.ErrorIs(t, ins.CopyTo([]string{"a"}, []string{}, nil), inspector.ErrMustPointerType)
+		require.ErrorIs(t, ins.CopyTo([]string{"a"}, &struct{}{}, nil), inspector.ErrUnsupportedType)
+	})
+
+	t.Run("each is noop", func(t *testing.T) {
+		require.NoError(t, ins.Each([]string{"a"}, func(int, string, any) {
+			t.Fatal("no fields expected")
+		}))
+	})
+
+	t.Run("unmarshal", func(t *testing.T) {
+		v, err := ins.Unmarshal([]byte(`["a","b"]`), inspector.EncodingJSON)
+		require.NoError(t, err)
+		assert.Equal(t, &[]string{"a", "b"}, v)
+
+		_, err = ins.Unmarshal(nil, inspector.Encoding(42))
+		require.ErrorIs(t, err, inspector.ErrUnknownEncodingType)
+	})
+
+	t.Run("capacity only bytes", func(t *testing.T) {
+		var n int
+		require.NoError(t, ins.Capacity([]string{"a", "b"}, &n))
+		assert.Equal(t, 0, n)
+
+		pp := [][]byte{make([]byte, 2, 8)}
+		n = 0
+		require.NoError(t, ins.Capacity(pp, &n, "0"))
+		assert.Equal(t, 8, n) // cap(pp[0])
 	})
 }
 
