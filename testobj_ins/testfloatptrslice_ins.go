@@ -386,6 +386,9 @@ func (i2 TestFloatPtrSliceInspector) Append(src, value any, path ...string) (any
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestFloatPtrSlice
 	_ = x
 	if p, ok := src.(**testobj.TestFloatPtrSlice); ok {

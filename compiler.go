@@ -91,6 +91,9 @@ var (
 )
 
 func NewCompiler(conf *Config) (*Compiler, error) {
+	if conf == nil {
+		return nil, ErrNoConfig
+	}
 	cc := conf.Copy()
 	var source string
 	switch conf.Target {

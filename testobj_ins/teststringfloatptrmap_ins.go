@@ -382,6 +382,9 @@ func (i9 TestStringFloatPtrMapInspector) Append(src, value any, path ...string) 
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestStringFloatPtrMap
 	_ = x
 	if p, ok := src.(**testobj.TestStringFloatPtrMap); ok {

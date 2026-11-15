@@ -397,6 +397,9 @@ func (i4 TestHistoryInspector) Append(src, value any, path ...string) (any, erro
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestHistory
 	_ = x
 	if p, ok := src.(**testobj.TestHistory); ok {

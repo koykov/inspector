@@ -381,6 +381,9 @@ func (i8 TestStringFloatMapInspector) Append(src, value any, path ...string) (an
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestStringFloatMap
 	_ = x
 	if p, ok := src.(**testobj.TestStringFloatMap); ok {

@@ -381,6 +381,9 @@ func (i1 TestFlagInspector) Append(src, value any, path ...string) (any, error) 
 	if src == nil {
 		return src, nil
 	}
+	if len(path) == 0 {
+		return src, nil
+	}
 	var x *testobj.TestFlag
 	_ = x
 	if p, ok := src.(**testobj.TestFlag); ok {

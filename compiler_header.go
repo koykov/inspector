@@ -58,6 +58,7 @@ if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pnam
 
 func (c *Compiler) getFuncHeaderAppend(pname string) string {
 	return `if src == nil { return src, nil }
+if len(path)==0 { return src, nil }
 var x *` + pname + `
 _ = x
 if p, ok := src.(**` + pname + `); ok { x = *p } else if p, ok := src.(*` + pname + `); ok { x = p } else if v, ok := src.(` + pname + `); ok { x = &v } else { return src, nil }`

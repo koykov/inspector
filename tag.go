@@ -16,12 +16,13 @@ func parseTags(raw string) []Tag {
 	if len(raw) == 0 {
 		return nil
 	}
-	if m := reTagParse.FindStringSubmatch(raw); len(m) > 0 {
+	if m := reTagParse.FindAllStringSubmatch(raw, -1); len(m) > 0 {
 		var dst []Tag
-		for i := 0; i < len(m); i += 3 {
+		for i := 0; i < len(m); i++ {
+			mm := m[i]
 			var t Tag
-			t.Key = m[i+1]
-			if t.Options = strings.Split(m[i+2], ","); len(t.Options) > 0 {
+			t.Key = mm[1]
+			if t.Options = strings.Split(mm[2], ","); len(t.Options) > 0 {
 				t.Name = t.Options[0]
 				t.Options = t.Options[1:]
 			}
